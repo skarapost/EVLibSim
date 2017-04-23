@@ -1,0 +1,31 @@
+.root {
+    -fx-background-color:#e0e2e6;
+}
+
+.grid {
+    -fx-background-color:#e3e4e6;
+    -fx-background-radius: 15 15 15 15;
+    -fx-padding: 15 15 15 15;
+    -fx-hgap: 20;
+    -fx-vgap: 20;
+    -fx-border-style: solid;
+    -fx-border-width: 1.5;
+    -fx-border-radius: 15 15 15 15;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);
+    -fx-alignment: center;
+}
+
+.label {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+    -fx-effect: dropshadow( gaussian, rgba(255,255,255,0.5), 0, 0, 0, 1 );
+}
+
+#welcome {
+    -fx-font-size: 32px;
+    -fx-font-family: "Arial Black";
+    -fx-fill: #818181;
+    -fx-effect: innershadow( three-pass-box, rgba(0,0,0,0.7), 6, 0.0, 0, 2);
+    -fx-alignment: center;
+}
