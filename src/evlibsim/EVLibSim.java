@@ -1,11 +1,13 @@
 package evlibsim;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import EV.Battery;
 import EV.Driver;
 import EV.ElectricVehicle;
 import Events.ChargingEvent;
+import Events.DisChargingEvent;
 import Sources.*;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -723,6 +725,39 @@ public class EVLibSim extends Application
         });
         stationCreation.setOnAction((ActionEvent e) ->
         {
+            if(!fieldCompletionCheck())
+                return;
+            if (energies.size()==0)
+            {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Caution");
+                alert.setHeaderText(null);
+                alert.setContentText("Please choose at least one energy source.");
+                alert.showAndWait();
+                return;
+            }
+            if (Double.parseDouble(textfields.get(1).getText())<0 ||
+                    Double.parseDouble(textfields.get(2).getText())<0 ||
+                    Double.parseDouble(textfields.get(3).getText())<0 ||
+                    Double.parseDouble(textfields.get(4).getText())<0 ||
+                    Double.parseDouble(textfields.get(5).getText())<0 ||
+                    Double.parseDouble(textfields.get(6).getText())<0 ||
+                    Double.parseDouble(textfields.get(7).getText())<0 ||
+                    Double.parseDouble(textfields.get(8).getText())<0 ||
+                    Double.parseDouble(textfields.get(9).getText())<0 ||
+                    Double.parseDouble(textfields.get(10).getText())<0 ||
+                    Double.parseDouble(textfields.get(11).getText())<0 ||
+                    Double.parseDouble(textfields.get(12).getText())<0 ||
+                    Double.parseDouble(textfields.get(13).getText())<0 ||
+                    Double.parseDouble(textfields.get(14).getText())<0)
+            {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Caution");
+                alert.setHeaderText(null);
+                alert.setContentText("Please fill with positive numbers.");
+                alert.showAndWait();
+                return;
+            }
             ChargingStation s;
             s = new ChargingStation(textfields.get(0).getText());
             s.setUnitPrice(Double.parseDouble(textfields.get(6).getText()));
@@ -805,16 +840,8 @@ public class EVLibSim extends Application
             textfields.clear();
         });
         chargingEventCreation.setOnAction((ActionEvent e) -> {
-            for(TextField f: textfields) {
-                if (f.getText().isEmpty()||f.getText().equals(" ") || f.getText().equals("  ") || f.getText().equals("   ") || f.getText().equals("    ")) {
-                    Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setTitle("Caution");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Please fill all the fields. Numbers have to be >=0.");
-                    alert.showAndWait();
-                    return;
-                }
-            }
+            if(!fieldCompletionCheck())
+                return;
             if (!textfields.get(8).getText().equals("fast") && !textfields.get(8).getText().equals("slow"))
             {
                 System.out.println(textfields.get(8).getText());
@@ -933,8 +960,91 @@ public class EVLibSim extends Application
                 }
             }
         });
+        disChargingEventCreation.setOnAction((ActionEvent e) ->
+        {
+            if(!fieldCompletionCheck())
+                return;
+            if (Double.parseDouble(textfields.get(3).getText())<0||
+                    Double.parseDouble(textfields.get(4).getText())<0||
+                    Double.parseDouble(textfields.get(5).getText())<0||
+                    Double.parseDouble(textfields.get(6).getText())<0||
+                    Double.parseDouble(textfields.get(7).getText())<0) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Caution");
+                alert.setHeaderText(null);
+                alert.setContentText("Please fill with positive numbers.");
+                alert.showAndWait();
+                return;
+            }
+            if (Double.parseDouble(textfields.get(4).getText()) < Double.parseDouble(textfields.get(5).getText()))
+            {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Caution");
+                alert.setHeaderText(null);
+                alert.setContentText("The capacity cannot be smaller than the remaining amount.");
+                alert.showAndWait();
+                return;
+            }
+            if (Double.parseDouble(textfields.get(6).getText()) > (Double.parseDouble(textfields.get(5).getText())))
+            {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Caution");
+                alert.setHeaderText(null);
+                alert.setContentText("The given amount of energy cannot be greater than the remaining amount.");
+                alert.showAndWait();
+                return;
+            }
+            DisChargingEvent dsch;
+            Driver d = new Driver(textfields.get(1).getText());
+            Battery b = new Battery(Double.parseDouble(textfields.get(4).getText()), Double.parseDouble(textfields.get(5).getText()));
+            ElectricVehicle el = new ElectricVehicle(textfields.get(2).getText(), Integer.parseInt(textfields.get(3).getText()));
+            el.vehicleJoinBattery(b);
+            el.setDriver(d);
+            if (!Objects.equals(textfields.get(6).getText(), "0")) {
+                if(stations.size() != 0) {
+                    boolean flag = false;
+                    for (ChargingStation cs : stations)
+                        if (Objects.equals(cs.reName(), textfields.get(0).getText())) {
+                            dsch = new DisChargingEvent(cs, el, Double.parseDouble(textfields.get(6).getText()));
+                            dsch.preProcessing();
+                            dsch.execution();
+                            flag = true;
+                        }
+                    if(!flag)
+                    {
+                        Alert alert = new Alert(Alert.AlertType.WARNING);
+                        alert.setTitle("Caution");
+                        alert.setHeaderText(null);
+                        alert.setContentText("There is no any station with that name.");
+                        alert.showAndWait();
+                    }
+                }
+                else
+                {
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Caution");
+                    alert.setHeaderText(null);
+                    alert.setContentText("There is no any station.");
+                    alert.showAndWait();
+                }
+            }
+        });
     }
-    public void cleanScreen()
+    private boolean fieldCompletionCheck()
+    {
+        for(TextField f: textfields) {
+            if (f.getText().isEmpty()||f.getText().equals(" ") || f.getText().equals("  ") || f.getText().equals("   ") || f.getText().equals("    ")) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Caution");
+                alert.setHeaderText(null);
+                alert.setContentText("Please fill all the fields. Numbers have to be >=0.");
+                alert.showAndWait();
+                return false;
+            }
+        }
+        return true;
+    }
+    private void cleanScreen()
     {
         grid.getChildren().clear();
         root.setCenter(null);
