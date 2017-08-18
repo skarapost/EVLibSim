@@ -2,6 +2,10 @@ package evlibsim;
 
 import java.util.ArrayList;
 
+import EV.Battery;
+import EV.Driver;
+import EV.ElectricVehicle;
+import Events.ChargingEvent;
 import Sources.*;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -56,7 +60,7 @@ public class EVLibSim extends Application
         chargingEventCreation = new Button("Creation");
         disChargingEventCreation = new Button("Creation");
         parkingEventCreation = new Button("Creation");
-        exchangeCreation = new Button("Creation");
+        exchangeEventCreation = new Button("Creation");
         Scene scene = new Scene(root, 1350, 700);
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -105,6 +109,8 @@ public class EVLibSim extends Application
         edit.getItems().addAll(station, event, energy);
         scene.getStylesheets().add(EVLibSim.class.getResource("EVLibSim.css").toExternalForm());
         grid.getStyleClass().add("grid");
+
+        //RadioMenuItems
         about.setOnAction((ActionEvent e) -> 
         {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -501,10 +507,15 @@ public class EVLibSim extends Application
             boo = new TextField();
             grid.add(boo, 3, 4);
             textfields.add(boo);
-            foo = new Label("Name of station:");
+            foo = new Label("Kind of energy:");
             grid.add(foo, 0, 5);
             boo = new TextField();
             grid.add(boo, 1, 5);
+            textfields.add(boo);
+            foo = new Label("Money:");
+            grid.add(foo, 2, 5);
+            boo = new TextField();
+            grid.add(boo, 3, 5);
             textfields.add(boo);
             grid.add(chargingEventCreation, 0, 6);
             chargingEventCreation.setDefaultButton(true);
@@ -512,15 +523,163 @@ public class EVLibSim extends Application
         });
         discharging.setOnAction((ActionEvent e) -> {
             cleanScreen();
+            grid.setMaxSize(800, 500);
+            t = new Text("DisChargingEvent Creation");
+            t.setId("welcome");
+            grid.add(t, 0, 0, 4, 1);
+            TextField boo;
+            Label foo;
+            foo = new Label("Name of station:");
+            grid.add(foo, 0, 1);
+            boo = new TextField();
+            grid.add(boo, 1, 1);
+            textfields.add(boo);
+            foo = new Label("Driver's name:");
+            grid.add(foo, 2, 1);
+            boo = new TextField();
+            grid.add(boo, 3, 1);
+            textfields.add(boo);
+            foo = new Label("Vehicle's brand:");
+            grid.add(foo, 0, 2);
+            boo = new TextField();
+            grid.add(boo, 1, 2);
+            textfields.add(boo);
+            foo = new Label("Vehicle's cubism:");
+            grid.add(foo, 2, 2);
+            boo = new TextField();
+            grid.add(boo, 3, 2);
+            textfields.add(boo);
+            foo = new Label("Battery capacity:");
+            grid.add(foo, 0, 3);
+            boo = new TextField();
+            grid.add(boo, 1, 3);
+            textfields.add(boo);
+            foo = new Label("Battery remaining:");
+            grid.add(foo, 2, 3);
+            boo = new TextField();
+            grid.add(boo, 3, 3);
+            textfields.add(boo);
+            foo = new Label("Amount of energy:");
+            grid.add(foo, 0, 4);
+            boo = new TextField();
+            grid.add(boo, 1, 4);
+            textfields.add(boo);
+            foo = new Label("Waiting time:");
+            grid.add(foo, 2, 4);
+            boo = new TextField();
+            grid.add(boo, 3, 4);
+            textfields.add(boo);
+            grid.add(disChargingEventCreation, 0, 6);
+            disChargingEventCreation.setDefaultButton(true);
+            root.setCenter(grid);
         });
         exchange.setOnAction((ActionEvent e) ->
         {
             cleanScreen();
+            grid.setMaxSize(800, 500);
+            t = new Text("Battery Exchange Event Creation");
+            t.setId("welcome");
+            grid.add(t, 0, 0, 4, 1);
+            TextField boo;
+            Label foo;
+            foo = new Label("Name of station:");
+            grid.add(foo, 0, 1);
+            boo = new TextField();
+            grid.add(boo, 1, 1);
+            textfields.add(boo);
+            foo = new Label("Driver's name:");
+            grid.add(foo, 2, 1);
+            boo = new TextField();
+            grid.add(boo, 3, 1);
+            textfields.add(boo);
+            foo = new Label("Vehicle's brand:");
+            grid.add(foo, 0, 2);
+            boo = new TextField();
+            grid.add(boo, 1, 2);
+            textfields.add(boo);
+            foo = new Label("Vehicle's cubism:");
+            grid.add(foo, 2, 2);
+            boo = new TextField();
+            grid.add(boo, 3, 2);
+            textfields.add(boo);
+            foo = new Label("Battery capacity:");
+            grid.add(foo, 0, 3);
+            boo = new TextField();
+            grid.add(boo, 1, 3);
+            textfields.add(boo);
+            foo = new Label("Battery remaining:");
+            grid.add(foo, 2, 3);
+            boo = new TextField();
+            grid.add(boo, 3, 3);
+            textfields.add(boo);
+            foo = new Label("Waiting time:");
+            grid.add(foo, 0, 4);
+            boo = new TextField();
+            grid.add(boo, 1, 4);
+            textfields.add(boo);
+            grid.add(exchangeEventCreation, 0, 5);
+            exchangeEventCreation.setDefaultButton(true);
+            root.setCenter(grid);
         });
         parking.setOnAction((ActionEvent e) ->
         {
             cleanScreen();
+            grid.setMaxSize(800, 500);
+            t = new Text("ParkingEvent Creation");
+            t.setId("welcome");
+            grid.add(t, 0, 0, 4, 1);
+            TextField boo;
+            Label foo;
+            foo = new Label("Name of station:");
+            grid.add(foo, 0, 1);
+            boo = new TextField();
+            grid.add(boo, 1, 1);
+            textfields.add(boo);
+            foo = new Label("Driver's name:");
+            grid.add(foo, 2, 1);
+            boo = new TextField();
+            grid.add(boo, 3, 1);
+            textfields.add(boo);
+            foo = new Label("Vehicle's brand:");
+            grid.add(foo, 0, 2);
+            boo = new TextField();
+            grid.add(boo, 1, 2);
+            textfields.add(boo);
+            foo = new Label("Vehicle's cubism:");
+            grid.add(foo, 2, 2);
+            boo = new TextField();
+            grid.add(boo, 3, 2);
+            textfields.add(boo);
+            foo = new Label("Battery capacity:");
+            grid.add(foo, 0, 3);
+            boo = new TextField();
+            grid.add(boo, 1, 3);
+            textfields.add(boo);
+            foo = new Label("Battery remaining:");
+            grid.add(foo, 2, 3);
+            boo = new TextField();
+            grid.add(boo, 3, 3);
+            textfields.add(boo);
+            foo = new Label("Amount of energy:");
+            grid.add(foo, 0, 4);
+            boo = new TextField();
+            grid.add(boo, 1, 4);
+            textfields.add(boo);
+            foo = new Label("Waiting time:");
+            grid.add(foo, 2, 4);
+            boo = new TextField();
+            grid.add(boo, 3, 4);
+            textfields.add(boo);
+            foo = new Label("Parking time:");
+            grid.add(foo, 0, 5);
+            boo = new TextField();
+            grid.add(boo, 1, 5);
+            textfields.add(boo);
+            grid.add(parkingEventCreation, 0, 6);
+            parkingEventCreation.setDefaultButton(true);
+            root.setCenter(grid);
         });
+
         //Buttons
         chargerCreation.setOnAction((ActionEvent e) ->
         {
@@ -619,25 +778,160 @@ public class EVLibSim extends Application
             {
                 if (enr == "solar") {
                     en = new Solar(s);
-                    s.addEnergySource(en); }
+                    s.addEnergySource(en);
+                }
                 else if(enr == "geothermal") {
                     en = new Geothermal(s);
-                    s.addEnergySource(en); }
+                    s.addEnergySource(en);
+                }
                 else if(enr == "wind") {
                     en = new Wind(s);
-                    s.addEnergySource(en); }
+                    s.addEnergySource(en);
+                }
                 else if(enr == "wave") {
                     en = new Wave(s);
-                    s.addEnergySource(en); }
+                    s.addEnergySource(en);
+                }
                 else if(enr == "nonrenewable") {
                     en = new NonRenewable(s);
-                    s.addEnergySource(en); }
+                    s.addEnergySource(en);
+                }
                 else if(enr == "hydroelectric") {
                     en = new HydroElectric(s);
-                    s.addEnergySource(en); }
+                    s.addEnergySource(en);
+                }
             }
             stations.add(s);
             textfields.clear();
+        });
+        chargingEventCreation.setOnAction((ActionEvent e) -> {
+            for(TextField f: textfields) {
+                if (f.getText().isEmpty()||f.getText().equals(" ") || f.getText().equals("  ") || f.getText().equals("   ") || f.getText().equals("    ")) {
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Caution");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Please fill all the fields. Numbers have to be >=0.");
+                    alert.showAndWait();
+                    return;
+                }
+            }
+            if (!textfields.get(8).getText().equals("fast") && !textfields.get(8).getText().equals("slow"))
+            {
+                System.out.println(textfields.get(8).getText());
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Caution");
+                alert.setHeaderText(null);
+                alert.setContentText("Please put \"slow\" for a slow charging, or \"fast\" for a fast charging.");
+                alert.showAndWait();
+                return;
+            }
+            if (Double.parseDouble(textfields.get(3).getText())<0||
+                    Double.parseDouble(textfields.get(4).getText())<0||
+                    Double.parseDouble(textfields.get(5).getText())<0||
+                    Double.parseDouble(textfields.get(6).getText())<0||
+                    Double.parseDouble(textfields.get(7).getText())<0||
+                    Double.parseDouble(textfields.get(9).getText())<0)
+            {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Caution");
+                alert.setHeaderText(null);
+                alert.setContentText("Please fill with positive numbers.");
+                alert.showAndWait();
+                return;
+            }
+            if(Double.parseDouble(textfields.get(6).getText()) == 0)
+            {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Caution");
+                alert.setHeaderText(null);
+                alert.setContentText("The asking amount cannot be negative or zero");
+                alert.showAndWait();
+                return;
+            }
+            if (Double.parseDouble(textfields.get(4).getText()) < Double.parseDouble(textfields.get(5).getText()))
+            {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Caution");
+                alert.setHeaderText(null);
+                alert.setContentText("The capacity cannot be smaller than the remaining amount.");
+                alert.showAndWait();
+                return;
+            }
+            if (Double.parseDouble(textfields.get(6).getText()) > (Double.parseDouble(textfields.get(4).getText()) - Double.parseDouble(textfields.get(5).getText())))
+            {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Caution");
+                alert.setHeaderText(null);
+                alert.setContentText("The asking amount of energy cannot be greater than the remaining capacity.");
+                alert.showAndWait();
+                return;
+            }
+            ChargingEvent ch;
+            Driver d = new Driver(textfields.get(1).getText());
+            Battery b = new Battery(Double.parseDouble(textfields.get(4).getText()), Double.parseDouble(textfields.get(5).getText()));
+            ElectricVehicle el = new ElectricVehicle(textfields.get(2).getText(), Integer.parseInt(textfields.get(3).getText()));
+            el.vehicleJoinBattery(b);
+            el.setDriver(d);
+            if (textfields.get(6).getText() != "0") {
+                if(stations.size() != 0) {
+                    boolean flag = false;
+                    for (ChargingStation cs : stations)
+                        if (cs.reName() == textfields.get(0).getText()) {
+                            ch = new ChargingEvent(cs, el, Double.parseDouble(textfields.get(6).getText()), textfields.get(8).getText());
+                            ch.preProcessing();
+                            ch.execution();
+                            flag = true;
+                        }
+                    if(flag==false)
+                    {
+                        Alert alert = new Alert(Alert.AlertType.WARNING);
+                        alert.setTitle("Caution");
+                        alert.setHeaderText(null);
+                        alert.setContentText("There is no any station with that name.");
+                        alert.showAndWait();
+                        return;
+                    }
+                }
+                else
+                {
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Caution");
+                    alert.setHeaderText(null);
+                    alert.setContentText("There is no any station.");
+                    alert.showAndWait();
+                    return;
+                }
+            }
+            else if(textfields.get(9).getText() != "0") {
+                if(stations.size() != 0) {
+                    boolean flag = false;
+                    for (ChargingStation cs : stations)
+                        if (cs.reName() == textfields.get(0).getText()) {
+                            ch = new ChargingEvent(cs, el, textfields.get(8).getText(), Double.parseDouble(textfields.get(9).getText()));
+                            ch.preProcessing();
+                            ch.execution();
+                            flag = true;
+                        }
+                    if(flag==false)
+                    {
+                        Alert alert = new Alert(Alert.AlertType.WARNING);
+                        alert.setTitle("Caution");
+                        alert.setHeaderText(null);
+                        alert.setContentText("There is no any station with that name.");
+                        alert.showAndWait();
+                        return;
+                    }
+                }
+                else
+                {
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Caution");
+                    alert.setHeaderText(null);
+                    alert.setContentText("There is no any station.");
+                    alert.showAndWait();
+                    return;
+                }
+            }
         });
     }
     public void cleanScreen()
