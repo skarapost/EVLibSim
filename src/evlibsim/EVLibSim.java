@@ -12,7 +12,6 @@ import Events.ParkingEvent;
 import Sources.*;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.scene.control.*;
@@ -121,7 +120,8 @@ public class EVLibSim extends Application
 
         //MenuItems
         group.selectedToggleProperty().addListener((ObservableValue<? extends Toggle> ov, Toggle old_toggle, Toggle new_toggle) -> {
-            if (group.getSelectedToggle() != null) {
+            if (group.getSelectedToggle() != null)
+            {
                 group.getSelectedToggle().setSelected(true);
                 RadioMenuItem rmi = (RadioMenuItem) group.getSelectedToggle();
                 String name = rmi.getText();
@@ -129,7 +129,6 @@ public class EVLibSim extends Application
                     if(cs.reName() == name)
                         currentStation = cs;
             }
-            System.out.println(currentStation.reName());
         });
         about.setOnAction((ActionEvent e) ->
         {
@@ -402,7 +401,10 @@ public class EVLibSim extends Application
                     energies.remove("nonrenewable");
             });
         });
-        newCharger.setOnAction((ActionEvent e) -> {
+        newCharger.setOnAction((ActionEvent e) ->
+        {
+            if(!stationCheck())
+                return;
             cleanScreen();
             grid.setMaxSize(500, 300);
             t = new Text("Charger Creation");
@@ -415,71 +417,38 @@ public class EVLibSim extends Application
             boo = new TextField();
             grid.add(boo, 1, 1);
             textfields.add(boo);
-            foo = new Label("Name of station:");
-            grid.add(foo, 0, 2);
-            boo = new TextField();
-            grid.add(boo, 1, 2);
-            textfields.add(boo);
             grid.add(chargerCreation, 0, 3);
             chargerCreation.setDefaultButton(true);
             root.setCenter(grid);
         });
         newDisCharger.setOnAction((ActionEvent e) ->
         {
-            cleanScreen();
-            grid.setMaxSize(500, 300);
-            t = new Text("DisCharger Creation");
-            t.setId("welcome");
-            grid.add(t, 0, 0, 4, 1);
-            TextField boo;
-            Label foo;
-            foo = new Label("Name of station:");
-            grid.add(foo, 0, 1);
-            boo = new TextField();
-            grid.add(boo, 1, 1);
-            textfields.add(boo);
-            grid.add(dischargerCreation, 0, 2);
-            dischargerCreation.setDefaultButton(true);
-            root.setCenter(grid);
+            if(!stationCheck())
+                return;
+            DisCharger ch;
+            ch = new DisCharger(currentStation);
+            currentStation.addDisCharger(ch);
         });
         newExchangeHandler.setOnAction((ActionEvent e) ->
         {
-            cleanScreen();
-            grid.setMaxSize(500, 300);
-            t = new Text("ExchangeHandler Creation");
-            t.setId("welcome");
-            grid.add(t, 0, 0, 4, 1);
-            TextField boo;
-            Label foo;
-            foo = new Label("Name of station:");
-            grid.add(foo, 0, 1);
-            boo = new TextField();
-            grid.add(boo, 1, 1);
-            textfields.add(boo);
-            grid.add(exchangeCreation, 0, 2);
-            exchangeCreation.setDefaultButton(true);
-            root.setCenter(grid);
+            if(!stationCheck())
+                return;
+            ExchangeHandler ch;
+            ch = new ExchangeHandler(currentStation);
+            currentStation.addExchangeHandler(ch);
         });
         newParkingSlot.setOnAction((ActionEvent e) ->
         {
-            cleanScreen();
-            grid.setMaxSize(500, 300);
-            t = new Text("ParkingSlot Creation");
-            t.setId("welcome");
-            grid.add(t, 0, 0, 4, 1);
-            TextField boo;
-            Label foo;
-            foo = new Label("Name of station:");
-            grid.add(foo, 0, 1);
-            boo = new TextField();
-            grid.add(boo, 1, 1);
-            textfields.add(boo);
-            grid.add(parkingSlotCreation, 0, 2);
-            parkingSlotCreation.setDefaultButton(true);
-            root.setCenter(grid);
+            if(!stationCheck())
+                return;
+            ParkingSlot ch;
+            ch = new ParkingSlot(currentStation);
+            currentStation.addParkingSlot(ch);
         });
         charging.setOnAction((ActionEvent e) ->
         {
+            if(!stationCheck())
+                return;
             cleanScreen();
             grid.setMaxSize(800, 500);
             t = new Text("ChargingEvent Creation");
@@ -487,61 +456,59 @@ public class EVLibSim extends Application
             grid.add(t, 0, 0, 4, 1);
             TextField boo;
             Label foo;
-            foo = new Label("Name of station:");
+            foo = new Label("Driver's name:");
             grid.add(foo, 0, 1);
             boo = new TextField();
             grid.add(boo, 1, 1);
             textfields.add(boo);
-            foo = new Label("Driver's name:");
+            foo = new Label("Vehicle's brand:");
             grid.add(foo, 2, 1);
             boo = new TextField();
             grid.add(boo, 3, 1);
             textfields.add(boo);
-            foo = new Label("Vehicle's brand:");
+            foo = new Label("Vehicle's cubism:");
             grid.add(foo, 0, 2);
             boo = new TextField();
             grid.add(boo, 1, 2);
             textfields.add(boo);
-            foo = new Label("Vehicle's cubism:");
+            foo = new Label("Battery capacity:");
             grid.add(foo, 2, 2);
             boo = new TextField();
             grid.add(boo, 3, 2);
             textfields.add(boo);
-            foo = new Label("Battery capacity:");
+            foo = new Label("Battery remaining:");
             grid.add(foo, 0, 3);
             boo = new TextField();
             grid.add(boo, 1, 3);
             textfields.add(boo);
-            foo = new Label("Battery remaining:");
+            foo = new Label("Amount of energy:");
             grid.add(foo, 2, 3);
             boo = new TextField();
             grid.add(boo, 3, 3);
             textfields.add(boo);
-            foo = new Label("Amount of energy:");
+            foo = new Label("Waiting time:");
             grid.add(foo, 0, 4);
             boo = new TextField();
             grid.add(boo, 1, 4);
             textfields.add(boo);
-            foo = new Label("Waiting time:");
+            foo = new Label("Kind of charging:");
             grid.add(foo, 2, 4);
             boo = new TextField();
             grid.add(boo, 3, 4);
             textfields.add(boo);
-            foo = new Label("Kind of energy:");
+            foo = new Label("Money:");
             grid.add(foo, 0, 5);
             boo = new TextField();
             grid.add(boo, 1, 5);
-            textfields.add(boo);
-            foo = new Label("Money:");
-            grid.add(foo, 2, 5);
-            boo = new TextField();
-            grid.add(boo, 3, 5);
             textfields.add(boo);
             grid.add(chargingEventCreation, 0, 6);
             chargingEventCreation.setDefaultButton(true);
             root.setCenter(grid);
         });
-        discharging.setOnAction((ActionEvent e) -> {
+        discharging.setOnAction((ActionEvent e) ->
+        {
+            if(!stationCheck())
+                return;
             cleanScreen();
             grid.setMaxSize(800, 500);
             t = new Text("DisChargingEvent Creation");
@@ -549,52 +516,49 @@ public class EVLibSim extends Application
             grid.add(t, 0, 0, 4, 1);
             TextField boo;
             Label foo;
-            foo = new Label("Name of station:");
+            foo = new Label("Driver's name:");
             grid.add(foo, 0, 1);
             boo = new TextField();
             grid.add(boo, 1, 1);
             textfields.add(boo);
-            foo = new Label("Driver's name:");
+            foo = new Label("Vehicle's brand:");
             grid.add(foo, 2, 1);
             boo = new TextField();
             grid.add(boo, 3, 1);
             textfields.add(boo);
-            foo = new Label("Vehicle's brand:");
+            foo = new Label("Vehicle's cubism:");
             grid.add(foo, 0, 2);
             boo = new TextField();
             grid.add(boo, 1, 2);
             textfields.add(boo);
-            foo = new Label("Vehicle's cubism:");
+            foo = new Label("Battery capacity:");
             grid.add(foo, 2, 2);
             boo = new TextField();
             grid.add(boo, 3, 2);
             textfields.add(boo);
-            foo = new Label("Battery capacity:");
+            foo = new Label("Battery remaining:");
             grid.add(foo, 0, 3);
             boo = new TextField();
             grid.add(boo, 1, 3);
             textfields.add(boo);
-            foo = new Label("Battery remaining:");
+            foo = new Label("Amount of energy:");
             grid.add(foo, 2, 3);
             boo = new TextField();
             grid.add(boo, 3, 3);
             textfields.add(boo);
-            foo = new Label("Amount of energy:");
+            foo = new Label("Waiting time:");
             grid.add(foo, 0, 4);
             boo = new TextField();
             grid.add(boo, 1, 4);
             textfields.add(boo);
-            foo = new Label("Waiting time:");
-            grid.add(foo, 2, 4);
-            boo = new TextField();
-            grid.add(boo, 3, 4);
-            textfields.add(boo);
-            grid.add(disChargingEventCreation, 0, 6);
+            grid.add(disChargingEventCreation, 0, 5);
             disChargingEventCreation.setDefaultButton(true);
             root.setCenter(grid);
         });
         exchange.setOnAction((ActionEvent e) ->
         {
+            if(!stationCheck())
+                return;
             cleanScreen();
             grid.setMaxSize(800, 500);
             t = new Text("Battery Exchange Event Creation");
@@ -602,40 +566,35 @@ public class EVLibSim extends Application
             grid.add(t, 0, 0, 4, 1);
             TextField boo;
             Label foo;
-            foo = new Label("Name of station:");
+            foo = new Label("Driver's name:");
             grid.add(foo, 0, 1);
             boo = new TextField();
             grid.add(boo, 1, 1);
             textfields.add(boo);
-            foo = new Label("Driver's name:");
+            foo = new Label("Vehicle's brand:");
             grid.add(foo, 2, 1);
             boo = new TextField();
             grid.add(boo, 3, 1);
             textfields.add(boo);
-            foo = new Label("Vehicle's brand:");
+            foo = new Label("Vehicle's cubism:");
             grid.add(foo, 0, 2);
             boo = new TextField();
             grid.add(boo, 1, 2);
             textfields.add(boo);
-            foo = new Label("Vehicle's cubism:");
+            foo = new Label("Battery capacity:");
             grid.add(foo, 2, 2);
             boo = new TextField();
             grid.add(boo, 3, 2);
             textfields.add(boo);
-            foo = new Label("Battery capacity:");
+            foo = new Label("Battery remaining:");
             grid.add(foo, 0, 3);
             boo = new TextField();
             grid.add(boo, 1, 3);
             textfields.add(boo);
-            foo = new Label("Battery remaining:");
+            foo = new Label("Waiting time:");
             grid.add(foo, 2, 3);
             boo = new TextField();
             grid.add(boo, 3, 3);
-            textfields.add(boo);
-            foo = new Label("Waiting time:");
-            grid.add(foo, 0, 4);
-            boo = new TextField();
-            grid.add(boo, 1, 4);
             textfields.add(boo);
             grid.add(exchangeEventCreation, 0, 5);
             exchangeEventCreation.setDefaultButton(true);
@@ -643,6 +602,8 @@ public class EVLibSim extends Application
         });
         parking.setOnAction((ActionEvent e) ->
         {
+            if(!stationCheck())
+                return;
             cleanScreen();
             grid.setMaxSize(800, 500);
             t = new Text("ParkingEvent Creation");
@@ -650,52 +611,47 @@ public class EVLibSim extends Application
             grid.add(t, 0, 0, 4, 1);
             TextField boo;
             Label foo;
-            foo = new Label("Name of station:");
+            foo = new Label("Driver's name:");
             grid.add(foo, 0, 1);
             boo = new TextField();
             grid.add(boo, 1, 1);
             textfields.add(boo);
-            foo = new Label("Driver's name:");
+            foo = new Label("Vehicle's brand:");
             grid.add(foo, 2, 1);
             boo = new TextField();
             grid.add(boo, 3, 1);
             textfields.add(boo);
-            foo = new Label("Vehicle's brand:");
+            foo = new Label("Vehicle's cubism:");
             grid.add(foo, 0, 2);
             boo = new TextField();
             grid.add(boo, 1, 2);
             textfields.add(boo);
-            foo = new Label("Vehicle's cubism:");
+            foo = new Label("Battery capacity:");
             grid.add(foo, 2, 2);
             boo = new TextField();
             grid.add(boo, 3, 2);
             textfields.add(boo);
-            foo = new Label("Battery capacity:");
+            foo = new Label("Battery remaining:");
             grid.add(foo, 0, 3);
             boo = new TextField();
             grid.add(boo, 1, 3);
             textfields.add(boo);
-            foo = new Label("Battery remaining:");
+            foo = new Label("Amount of energy:");
             grid.add(foo, 2, 3);
             boo = new TextField();
             grid.add(boo, 3, 3);
             textfields.add(boo);
-            foo = new Label("Amount of energy:");
+            foo = new Label("Waiting time:");
             grid.add(foo, 0, 4);
             boo = new TextField();
             grid.add(boo, 1, 4);
             textfields.add(boo);
-            foo = new Label("Waiting time:");
+            foo = new Label("Parking time:");
             grid.add(foo, 2, 4);
             boo = new TextField();
             grid.add(boo, 3, 4);
             textfields.add(boo);
-            foo = new Label("Parking time:");
-            grid.add(foo, 0, 5);
-            boo = new TextField();
-            grid.add(boo, 1, 5);
-            textfields.add(boo);
-            grid.add(parkingEventCreation, 0, 6);
+            grid.add(parkingEventCreation, 0, 5);
             parkingEventCreation.setDefaultButton(true);
             root.setCenter(grid);
         });
@@ -709,44 +665,45 @@ public class EVLibSim extends Application
             Label foo;
             foo = new Label("Total energy:");
             grid.add(foo, 0, 1);
-            boo = new TextField();
+            boo = new TextField(Double.toString(currentStation.reTotalEnergy()));
             grid.add(boo, 1, 1);
             textfields.add(boo);
             foo = new Label("Solar energy:");
             grid.add(foo, 2, 1);
-            boo = new TextField();
+            boo = new TextField(Double.toString(currentStation.reSpecificAmount("solar")));
             grid.add(boo, 3, 1);
             textfields.add(boo);
             foo = new Label("Wind energy:");
             grid.add(foo, 0, 2);
-            boo = new TextField();
+            boo = new TextField(Double.toString(currentStation.reSpecificAmount("wind")));
             grid.add(boo, 1, 2);
             textfields.add(boo);
             foo = new Label("Wave energy:");
             grid.add(foo, 2, 2);
-            boo = new TextField();
+            boo = new TextField(Double.toString(currentStation.reSpecificAmount("wave")));
             grid.add(boo, 3, 2);
             textfields.add(boo);
             foo = new Label("Hydroelectric energy:");
             grid.add(foo, 0, 3);
-            boo = new TextField();
+            boo = new TextField(Double.toString(currentStation.reSpecificAmount("hydroelectric")));
             grid.add(boo, 1, 3);
             textfields.add(boo);
             foo = new Label("Non-renewable:");
             grid.add(foo, 2, 3);
-            boo = new TextField();
+            boo = new TextField(Double.toString(currentStation.reSpecificAmount("nonrenewable")));
             grid.add(boo, 3, 3);
             textfields.add(boo);
             foo = new Label("Geothermal energy:");
             grid.add(foo, 0, 4);
-            boo = new TextField();
+            boo = new TextField(Double.toString(currentStation.reSpecificAmount("geothermal")));
             grid.add(boo, 1, 4);
             textfields.add(boo);
             foo = new Label("Discharging energy:");
             grid.add(foo, 2, 4);
-            boo = new TextField();
+            boo = new TextField(Double.toString(currentStation.reSpecificAmount("discharging")));
             grid.add(boo, 3, 4);
             textfields.add(boo);
+            root.setCenter(grid);
         });
 
         //Buttons
@@ -755,24 +712,13 @@ public class EVLibSim extends Application
             Charger ch;
             ch = new Charger(currentStation, textfields.get(0).getText());
             currentStation.addCharger(ch);
-        });
-        dischargerCreation.setOnAction((ActionEvent e) ->
-        {
-            DisCharger ch;
-            ch = new DisCharger(currentStation);
-            currentStation.addDisCharger(ch);
-        });
-        exchangeCreation.setOnAction((ActionEvent e) ->
-        {
-            ExchangeHandler ch;
-            ch = new ExchangeHandler(currentStation);
-            currentStation.addExchangeHandler(ch);
-        });
-        parkingSlotCreation.setOnAction((ActionEvent e) ->
-        {
-            ParkingSlot ch;
-            ch = new ParkingSlot(currentStation);
-            currentStation.addParkingSlot(ch);
+            if(ch!=null) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Information");
+                alert.setHeaderText(null);
+                alert.setContentText("The charger was created.");
+                alert.showAndWait();
+            }
         });
         stationCreation.setOnAction((ActionEvent e) ->
         {
@@ -862,22 +808,22 @@ public class EVLibSim extends Application
             }
             EnergySource en;
             for (String enr : energies) {
-                if (enr == "solar") {
+                if (Objects.equals(enr, "solar")) {
                     en = new Solar(st);
                     st.addEnergySource(en);
-                } else if (enr == "geothermal") {
+                } else if (Objects.equals(enr, "geothermal")) {
                     en = new Geothermal(st);
                     st.addEnergySource(en);
-                } else if (enr == "wind") {
+                } else if (Objects.equals(enr, "wind")) {
                     en = new Wind(st);
                     st.addEnergySource(en);
-                } else if (enr == "wave") {
+                } else if (Objects.equals(enr, "wave")) {
                     en = new Wave(st);
                     st.addEnergySource(en);
-                } else if (enr == "nonrenewable") {
+                } else if (Objects.equals(enr, "nonrenewable")) {
                     en = new NonRenewable(st);
                     st.addEnergySource(en);
-                } else if (enr == "hydroelectric") {
+                } else if (Objects.equals(enr, "hydroelectric")) {
                     en = new HydroElectric(st);
                     st.addEnergySource(en);
                 }
@@ -888,12 +834,19 @@ public class EVLibSim extends Application
             s.getItems().add(cs);
             if(s.getItems().size() == 1)
                 cs.setSelected(true);
+            if(st!=null) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Information");
+                alert.setHeaderText(null);
+                alert.setContentText("The station was created.");
+                alert.showAndWait();
+            }
         });
         chargingEventCreation.setOnAction((ActionEvent e) -> {
             if (!fieldCompletionCheck())
                 return;
-            if (!textfields.get(8).getText().equals("fast") && !textfields.get(8).getText().equals("slow")) {
-                System.out.println(textfields.get(8).getText());
+            if (!textfields.get(7).getText().equals("fast") && !textfields.get(7).getText().equals("slow")) {
+                System.out.println(textfields.get(7).getText());
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle("Caution");
                 alert.setHeaderText(null);
@@ -905,8 +858,8 @@ public class EVLibSim extends Application
                     Double.parseDouble(textfields.get(4).getText()) < 0 ||
                     Double.parseDouble(textfields.get(5).getText()) < 0 ||
                     Double.parseDouble(textfields.get(6).getText()) < 0 ||
-                    Double.parseDouble(textfields.get(7).getText()) < 0 ||
-                    Double.parseDouble(textfields.get(9).getText()) < 0) {
+                    Double.parseDouble(textfields.get(8).getText()) < 0 ||
+                    Double.parseDouble(textfields.get(2).getText()) < 0) {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle("Caution");
                 alert.setHeaderText(null);
@@ -914,7 +867,7 @@ public class EVLibSim extends Application
                 alert.showAndWait();
                 return;
             }
-            if (Double.parseDouble(textfields.get(6).getText()) == 0) {
+            if (Double.parseDouble(textfields.get(5).getText()) == 0) {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle("Caution");
                 alert.setHeaderText(null);
@@ -922,7 +875,7 @@ public class EVLibSim extends Application
                 alert.showAndWait();
                 return;
             }
-            if (Double.parseDouble(textfields.get(4).getText()) < Double.parseDouble(textfields.get(5).getText())) {
+            if (Double.parseDouble(textfields.get(3).getText()) < Double.parseDouble(textfields.get(4).getText())) {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle("Caution");
                 alert.setHeaderText(null);
@@ -930,7 +883,7 @@ public class EVLibSim extends Application
                 alert.showAndWait();
                 return;
             }
-            if (Double.parseDouble(textfields.get(6).getText()) > (Double.parseDouble(textfields.get(4).getText()) - Double.parseDouble(textfields.get(5).getText()))) {
+            if (Double.parseDouble(textfields.get(5).getText()) > (Double.parseDouble(textfields.get(3).getText()) - Double.parseDouble(textfields.get(4).getText()))) {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle("Caution");
                 alert.setHeaderText(null);
@@ -938,21 +891,28 @@ public class EVLibSim extends Application
                 alert.showAndWait();
                 return;
             }
-            ChargingEvent ch;
-            Driver d = new Driver(textfields.get(1).getText());
-            Battery b = new Battery(Double.parseDouble(textfields.get(4).getText()), Double.parseDouble(textfields.get(5).getText()));
-            ElectricVehicle el = new ElectricVehicle(textfields.get(2).getText(), Integer.parseInt(textfields.get(3).getText()));
+            ChargingEvent ch = null;
+            Driver d = new Driver(textfields.get(0).getText());
+            Battery b = new Battery(Double.parseDouble(textfields.get(3).getText()), Double.parseDouble(textfields.get(4).getText()));
+            ElectricVehicle el = new ElectricVehicle(textfields.get(1).getText(), Integer.parseInt(textfields.get(2).getText()));
             el.vehicleJoinBattery(b);
             el.setDriver(d);
-            if (textfields.get(6).getText() != "0") {
-                ch = new ChargingEvent(currentStation, el, Double.parseDouble(textfields.get(6).getText()), textfields.get(8).getText());
+            if (textfields.get(5).getText() != "0") {
+                ch = new ChargingEvent(currentStation, el, Double.parseDouble(textfields.get(5).getText()), textfields.get(7).getText());
                 ch.preProcessing();
                 ch.execution();
             }
-            else if (textfields.get(9).getText() != "0") {
-                ch = new ChargingEvent(currentStation, el, textfields.get(8).getText(), Double.parseDouble(textfields.get(9).getText()));
+            else if (textfields.get(8).getText() != "0") {
+                ch = new ChargingEvent(currentStation, el, textfields.get(7).getText(), Double.parseDouble(textfields.get(8).getText()));
                 ch.preProcessing();
                 ch.execution();
+            }
+            if(ch!=null) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Information");
+                alert.setHeaderText(null);
+                alert.setContentText("The ChargingEvent was created.");
+                alert.showAndWait();
             }
         });
         disChargingEventCreation.setOnAction((ActionEvent e) ->
@@ -963,7 +923,7 @@ public class EVLibSim extends Application
                     Double.parseDouble(textfields.get(4).getText()) < 0 ||
                     Double.parseDouble(textfields.get(5).getText()) < 0 ||
                     Double.parseDouble(textfields.get(6).getText()) < 0 ||
-                    Double.parseDouble(textfields.get(7).getText()) < 0) {
+                    Double.parseDouble(textfields.get(2).getText()) < 0) {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle("Caution");
                 alert.setHeaderText(null);
@@ -971,7 +931,7 @@ public class EVLibSim extends Application
                 alert.showAndWait();
                 return;
             }
-            if (Double.parseDouble(textfields.get(4).getText()) < Double.parseDouble(textfields.get(5).getText())) {
+            if (Double.parseDouble(textfields.get(3).getText()) < Double.parseDouble(textfields.get(4).getText())) {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle("Caution");
                 alert.setHeaderText(null);
@@ -979,7 +939,7 @@ public class EVLibSim extends Application
                 alert.showAndWait();
                 return;
             }
-            if (Double.parseDouble(textfields.get(6).getText()) > (Double.parseDouble(textfields.get(5).getText()))) {
+            if (Double.parseDouble(textfields.get(5).getText()) > (Double.parseDouble(textfields.get(4).getText()))) {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle("Caution");
                 alert.setHeaderText(null);
@@ -987,16 +947,23 @@ public class EVLibSim extends Application
                 alert.showAndWait();
                 return;
             }
-            DisChargingEvent dsch;
-            Driver d = new Driver(textfields.get(1).getText());
-            Battery b = new Battery(Double.parseDouble(textfields.get(4).getText()), Double.parseDouble(textfields.get(5).getText()));
-            ElectricVehicle el = new ElectricVehicle(textfields.get(2).getText(), Integer.parseInt(textfields.get(3).getText()));
+            DisChargingEvent dsch = null;
+            Driver d = new Driver(textfields.get(0).getText());
+            Battery b = new Battery(Double.parseDouble(textfields.get(3).getText()), Double.parseDouble(textfields.get(4).getText()));
+            ElectricVehicle el = new ElectricVehicle(textfields.get(1).getText(), Integer.parseInt(textfields.get(2).getText()));
             el.vehicleJoinBattery(b);
             el.setDriver(d);
-            if (!Objects.equals(textfields.get(6).getText(), "0")) {
-                dsch = new DisChargingEvent(currentStation, el, Double.parseDouble(textfields.get(6).getText()));
+            if (!Objects.equals(textfields.get(5).getText(), "0")) {
+                dsch = new DisChargingEvent(currentStation, el, Double.parseDouble(textfields.get(5).getText()));
                 dsch.preProcessing();
                 dsch.execution();
+            }
+            if(dsch!=null) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Information");
+                alert.setHeaderText(null);
+                alert.setContentText("The DisChargingEvent was created.");
+                alert.showAndWait();
             }
         });
         exchangeEventCreation.setOnAction((ActionEvent e) -> {
@@ -1005,7 +972,7 @@ public class EVLibSim extends Application
             if (Double.parseDouble(textfields.get(3).getText()) < 0 ||
                     Double.parseDouble(textfields.get(4).getText()) < 0 ||
                     Double.parseDouble(textfields.get(5).getText()) < 0 ||
-                    Double.parseDouble(textfields.get(6).getText()) < 0) {
+                    Double.parseDouble(textfields.get(2).getText()) < 0) {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle("Caution");
                 alert.setHeaderText(null);
@@ -1013,7 +980,7 @@ public class EVLibSim extends Application
                 alert.showAndWait();
                 return;
             }
-            if (Double.parseDouble(textfields.get(4).getText()) < Double.parseDouble(textfields.get(5).getText())) {
+            if (Double.parseDouble(textfields.get(3).getText()) < Double.parseDouble(textfields.get(4).getText())) {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle("Caution");
                 alert.setHeaderText(null);
@@ -1021,15 +988,22 @@ public class EVLibSim extends Application
                 alert.showAndWait();
                 return;
             }
-            ChargingEvent ch;
-            Driver d = new Driver(textfields.get(1).getText());
-            Battery b = new Battery(Double.parseDouble(textfields.get(4).getText()), Double.parseDouble(textfields.get(5).getText()));
-            ElectricVehicle el = new ElectricVehicle(textfields.get(2).getText(), Integer.parseInt(textfields.get(3).getText()));
+            ChargingEvent ch = null;
+            Driver d = new Driver(textfields.get(0).getText());
+            Battery b = new Battery(Double.parseDouble(textfields.get(3).getText()), Double.parseDouble(textfields.get(4).getText()));
+            ElectricVehicle el = new ElectricVehicle(textfields.get(1).getText(), Integer.parseInt(textfields.get(2).getText()));
             el.vehicleJoinBattery(b);
             el.setDriver(d);
             ch = new ChargingEvent(currentStation, el);
             ch.preProcessing();
             ch.execution();
+            if(ch!=null) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Information");
+                alert.setHeaderText(null);
+                alert.setContentText("The ChargingEvent was created.");
+                alert.showAndWait();
+            }
         });
         parkingEventCreation.setOnAction((ActionEvent e) -> {
             if (!fieldCompletionCheck())
@@ -1039,7 +1013,7 @@ public class EVLibSim extends Application
                     Double.parseDouble(textfields.get(5).getText()) < 0 ||
                     Double.parseDouble(textfields.get(6).getText()) < 0 ||
                     Double.parseDouble(textfields.get(7).getText()) < 0 ||
-                    Double.parseDouble(textfields.get(8).getText()) < 0) {
+                    Double.parseDouble(textfields.get(2).getText()) < 0) {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle("Caution");
                 alert.setHeaderText(null);
@@ -1047,7 +1021,7 @@ public class EVLibSim extends Application
                 alert.showAndWait();
                 return;
             }
-            if (Double.parseDouble(textfields.get(4).getText()) < Double.parseDouble(textfields.get(5).getText())) {
+            if (Double.parseDouble(textfields.get(3).getText()) < Double.parseDouble(textfields.get(4).getText())) {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle("Caution");
                 alert.setHeaderText(null);
@@ -1055,19 +1029,19 @@ public class EVLibSim extends Application
                 alert.showAndWait();
                 return;
             }
-            ParkingEvent ch;
-            Driver d = new Driver(textfields.get(1).getText());
-            Battery b = new Battery(Double.parseDouble(textfields.get(4).getText()), Double.parseDouble(textfields.get(5).getText()));
-            ElectricVehicle el = new ElectricVehicle(textfields.get(2).getText(), Integer.parseInt(textfields.get(3).getText()));
+            ParkingEvent ch = null;
+            Driver d = new Driver(textfields.get(0).getText());
+            Battery b = new Battery(Double.parseDouble(textfields.get(3).getText()), Double.parseDouble(textfields.get(4).getText()));
+            ElectricVehicle el = new ElectricVehicle(textfields.get(1).getText(), Integer.parseInt(textfields.get(2).getText()));
             el.vehicleJoinBattery(b);
             el.setDriver(d);
-            if (textfields.get(6).getText() != "0") {
-                ch = new ParkingEvent(currentStation, el, Long.parseLong(textfields.get(8).getText()), Double.parseDouble(textfields.get(6).getText()));
-                ch.preprocessing();
+            if (!Objects.equals(textfields.get(5).getText(), "0")) {
+                ch = new ParkingEvent(currentStation, el, Long.parseLong(textfields.get(7).getText()), Double.parseDouble(textfields.get(5).getText()));
+                ch.preProcessing();
                 ch.execution();
-            } else if (textfields.get(8).getText() != "0") {
-                ch = new ParkingEvent(currentStation, el, Long.parseLong(textfields.get(8).getText()));
-                ch.preprocessing();
+            } else if (!Objects.equals(textfields.get(7).getText(), "0")) {
+                ch = new ParkingEvent(currentStation, el, Long.parseLong(textfields.get(7).getText()));
+                ch.preProcessing();
                 ch.execution();
             }
             else
@@ -1078,6 +1052,13 @@ public class EVLibSim extends Application
                 alert.setContentText("Please select at least a positive parking time.");
                 alert.showAndWait();
                 return;
+            }
+            if(ch!=null) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Information");
+                alert.setHeaderText(null);
+                alert.setContentText("The ParkingEvent was created.");
+                alert.showAndWait();
             }
         });
     }
@@ -1092,6 +1073,19 @@ public class EVLibSim extends Application
                 alert.showAndWait();
                 return false;
             }
+        }
+        return true;
+    }
+    private boolean stationCheck()
+    {
+        if(stations.size() == 0)
+        {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Caution");
+            alert.setHeaderText(null);
+            alert.setContentText("Please add a ChargingStation");
+            alert.showAndWait();
+            return false;
         }
         return true;
     }
