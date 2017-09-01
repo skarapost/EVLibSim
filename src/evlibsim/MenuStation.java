@@ -27,7 +27,7 @@ class MenuStation {
     private static final Button modifyStation = new Button("Modification");
     private static final Button batteryCreation = new Button("Creation");
     
-    public static Menu createStationMenu() {
+    static Menu createStationMenu() {
         station.getItems().addAll(newStation, new SeparatorMenuItem(), newCharger, newDisCharger, newExchangeHandler, newParkingSlot, new SeparatorMenuItem(), modifyChargingStation, new SeparatorMenuItem(), newBattery);
 
         newStation.setOnAction((ActionEvent e) ->
@@ -72,7 +72,7 @@ class MenuStation {
             foo = new Label("Energy sources:");
             EVLibSim.grid.add(foo, 0, 4);
             MenuBar sourc = new MenuBar();
-            sourc.setMaxWidth(120);
+            sourc.setMaxWidth(100);
             Menu src = new Menu("Energies");
             RadioMenuItem sol = new RadioMenuItem("Solar");
             RadioMenuItem win = new RadioMenuItem("Wind");
@@ -268,7 +268,8 @@ class MenuStation {
             EVLibSim.grid.add(boo, 1, 1);
             textfields.add(boo);
             MenuBar sourc = new MenuBar();
-            sourc.setMaxWidth(100);
+            sourc.setMaxWidth(70);
+            sourc.setStyle("-fx-border-radius: 15 15 15 15;");
             Menu src;
             foo = new Label("Charging fee per unit:");
             EVLibSim.grid.add(foo, 2, 1);
@@ -406,8 +407,8 @@ class MenuStation {
             st.setChargingRatioSlow(Double.parseDouble(textfields.get(11).getText()));
             st.setDisChargingRatio(Double.parseDouble(textfields.get(12).getText()));
             st.setInductiveChargingRatio(Double.parseDouble(textfields.get(13).getText()));
+            st.setAutomaticUpdateMode(automaticUpdate);
             st.setUpdateSpace(Integer.parseInt(textfields.get(14).getText()));
-            st.setUpdateMode(automaticUpdate);
             st.setAutomaticQueueHandling(automaticHandling);
             if (textfields.get(1).getText() != null) {
                 int len = Integer.parseInt(textfields.get(1).getText());
@@ -493,7 +494,7 @@ class MenuStation {
             currentStation.setInductiveChargingRatio((Double.parseDouble(textfields.get(8).getText())));
             currentStation.setUpdateSpace((Integer.parseInt(textfields.get(9).getText())));
             currentStation.setAutomaticQueueHandling(automaticHandling);
-            currentStation.setUpdateMode(automaticUpdate);
+            currentStation.setAutomaticUpdateMode(automaticUpdate);
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Information");
             alert.setHeaderText(null);

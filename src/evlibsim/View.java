@@ -1,11 +1,19 @@
 package evlibsim;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.geometry.Side;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 import static evlibsim.EVLibSim.*;
 
 class View {
+
     private static final MenuItem totalEnergy = new MenuItem("Total energy");
     static final MenuItem totalActivity = new MenuItem("Total Activity");
     private static final MenuItem queue = new MenuItem("Queue of events");
@@ -19,7 +27,7 @@ class View {
             if(!Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
-            grid.setMaxSize(1000, 900);
+            grid.setMaxSize(800, 600);
             energies.clear();
             t.setText("Waiting List");
             TextField boo;
@@ -40,6 +48,8 @@ class View {
             int j = 3;
             for(int i = 0; i < currentStation.reFast().reSize(); i++)
             {
+                foo = new Label("Id: " + currentStation.reFast().peek(i).reId());
+                grid.add(foo, 0, j++);
                 foo = new Label("Energy: " + currentStation.reFast().peek(i).reEnergyToBeReceived());
                 grid.add(foo, 0, j++);
                 foo = new Label("Brand: " + currentStation.reFast().peek(i).reElectricVehicle().reBrand());
@@ -54,6 +64,8 @@ class View {
             j = 3;
             for(int i = 0; i < currentStation.reSlow().reSize(); i++)
             {
+                foo = new Label("Id: " + currentStation.reSlow().peek(i).reId());
+                grid.add(foo, 1, j++);
                 foo = new Label("Energy: " + currentStation.reSlow().peek(i).reEnergyToBeReceived());
                 grid.add(foo, 1, j++);
                 foo = new Label("Brand: " + currentStation.reSlow().peek(i).reElectricVehicle().reBrand());
@@ -68,6 +80,8 @@ class View {
             j = 3;
             for(int i = 0; i < currentStation.reDischarging().rSize(); i++)
             {
+                foo = new Label("Id: " + currentStation.reDischarging().peek(i).reId());
+                grid.add(foo, 2, j++);
                 foo = new Label("Energy: " + currentStation.reDischarging().get(i).reEnergyAmount());
                 grid.add(foo, 2, j++);
                 foo = new Label("Brand: " + currentStation.reDischarging().get(i).reElectricVehicle().reBrand());
@@ -82,6 +96,8 @@ class View {
             j = 3;
             for(int i = 0; i < currentStation.reExchange().reSize(); i++)
             {
+                foo = new Label("Id: " + currentStation.reExchange().peek(i).reId());
+                grid.add(foo, 3, j++);
                 foo = new Label("Brand: " + currentStation.reExchange().peek(i).reElectricVehicle().reBrand());
                 grid.add(foo, 3, j++);
                 foo = new Label("Driver: " + currentStation.reExchange().peek(i).reElectricVehicle().reDriver().reName());
@@ -150,6 +166,91 @@ class View {
             grid.add(boo, 3, 4);
             textfields.add(boo);
             root.setCenter(grid);
+        });
+        totalActivity.setOnAction(e -> {
+            if(!Maintenance.stationCheck())
+                return;
+            Maintenance.cleanScreen();
+            VBox box = new VBox();
+            box.setPadding(new Insets(25, 15, 45, 15));
+            box.setSpacing(25);
+            box.getChildren().addAll(new Label(stationName.getText()),
+                    new Label(totalChargers.getText()),
+                    new Label(totalDisChargers.getText()),
+                    new Label(totalExchange.getText()),
+                    new Label(totalParkingSlots.getText()),
+                    new Label("Cars waiting for slow charging: " + String.valueOf(currentStation.reSlow().reSize())),
+                    new Label("Cars waiting for fast charging: " + String.valueOf(currentStation.reFast().reSize())),
+                    new Label("Cars waiting for discharging: " + String.valueOf(currentStation.reDischarging().rSize())),
+                    new Label("Cars waiting for battery exchange: " + String.valueOf(currentStation.reExchange().reSize())));
+            VBox buttons = new VBox();
+            buttons.setPadding(new Insets(45, 15, 15, 15));
+            buttons.setSpacing(25);
+            buttons.setAlignment(Pos.CENTER);
+            Button chargings = new Button("Chargings");
+            Button dischargings = new Button("DisChargings");
+            Button exchanges = new Button("Exchanges");
+            Button parkings = new Button("Parkings");
+            buttons.getChildren().addAll(chargings, dischargings, exchanges, parkings);
+            box.getChildren().addAll(buttons);
+            chargings.setPrefSize(150,30);
+            dischargings.setPrefSize(150, 30);
+            exchanges.setPrefSize(150, 30);
+            parkings.setPrefSize(150, 30);
+            ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
+            for(int i=0; i<currentStation.reSources().length; i++) {
+                switch (currentStation.reSources()[i]) {
+                    case "solar":
+                        if(currentStation.reSpecificAmount("solar") > 0) {
+                            pieChartData.add(new PieChart.Data("Solar", currentStation.reSpecificAmount("solar")));
+                            continue;
+                        }
+                        break;
+                    case "wind":
+                        if(currentStation.reSpecificAmount("wind") > 0) {
+                            pieChartData.add(new PieChart.Data("Wind", currentStation.reSpecificAmount("wind")));
+                            continue;
+                        }
+                        break;
+                    case "wave":
+                        if(currentStation.reSpecificAmount("wave") > 0) {
+                            pieChartData.add(new PieChart.Data("Wave", currentStation.reSpecificAmount("wave")));
+                            continue;
+                        }
+                        break;
+                    case "hydroelectric":
+                        if(currentStation.reSpecificAmount("hydroelectric") > 0) {
+                            pieChartData.add(new PieChart.Data("Hydro-Electric", currentStation.reSpecificAmount("hydroelectric")));
+                            continue;
+                        }
+                        break;
+                    case "nonrenewable":
+                        if(currentStation.reSpecificAmount("nonrenewable") > 0) {
+                            pieChartData.add(new PieChart.Data("Non-renewable", currentStation.reSpecificAmount("nonrenewable")));
+                            continue;
+                        }
+                        break;
+                    case "geothermal":
+                        if(currentStation.reSpecificAmount("geothermal") > 0) {
+                            pieChartData.add(new PieChart.Data("Geothermal", currentStation.reSpecificAmount("geothermal")));
+                            continue;
+                        }
+                        break;
+                    case "discharging":
+                        if(currentStation.reSpecificAmount("discharging") > 0) {
+                            pieChartData.add(new PieChart.Data("Discharging", currentStation.reSpecificAmount("discharging")));
+                            continue;
+                        }
+                        break;
+                }
+            }
+            final PieChart chart = new PieChart(pieChartData);
+            chart.setTitle("Energy Sources");
+            chart.setLabelLineLength(25);
+            chart.setClockwise(true);
+            buttons.getStyleClass().add("box");
+            root.setCenter(chart);
+            root.setLeft(box);
         });
         return view;
     }

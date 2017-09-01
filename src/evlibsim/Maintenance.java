@@ -8,7 +8,8 @@ import java.util.Optional;
 import static evlibsim.EVLibSim.*;
 
 class Maintenance {
-    public static boolean fieldCompletionCheck()
+
+    static boolean fieldCompletionCheck()
     {
         for(TextField f: textfields) {
             if (f.getText().isEmpty()||f.getText().equals(" ") || f.getText().equals("  ") || f.getText().equals("   ") || f.getText().equals("    ")) {
@@ -23,7 +24,7 @@ class Maintenance {
         return true;
     }
 
-    public static boolean stationCheck()
+    static boolean stationCheck()
     {
         if(stations.size() == 0)
         {
@@ -37,7 +38,7 @@ class Maintenance {
         return true;
     }
 
-    public static void cleanScreen()
+    static void cleanScreen()
     {
         grid.getChildren().clear();
         root.setCenter(null);
@@ -46,7 +47,7 @@ class Maintenance {
         textfields.clear();
     }
 
-    public static void energyAlert(String energySource)
+    static void energyAlert(String energySource)
     {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Caution");
@@ -55,7 +56,7 @@ class Maintenance {
         alert.showAndWait();
     }
 
-    public static void notEnergyAlert(String energySource)
+    static void notEnergyAlert(String energySource)
     {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Caution");
@@ -64,7 +65,7 @@ class Maintenance {
         alert.showAndWait();
     }
 
-    public static void completionMessage(String message)
+    static void completionMessage(String message)
     {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Caution");
@@ -73,7 +74,7 @@ class Maintenance {
         alert.showAndWait();
     }
 
-    public static boolean confirmCreation(String message)
+    static boolean confirmCreation(String message)
     {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle(message + " creation");
