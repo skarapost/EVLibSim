@@ -2,7 +2,7 @@
     -fx-background-color:#e0e2e6;
 }
 
-.grid, .box {
+.grid {
     -fx-background-color:#e3e4e6;
     -fx-background-radius: 15 15 15 15;
     -fx-padding: 15 15 15 15;
@@ -11,6 +11,29 @@
     -fx-border-radius: 15 15 15 15;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);
     -fx-alignment: center;
+}
+
+.box {
+    -fx-background-color:#e3e4e6;
+    -fx-background-radius: 15 15 15 15;
+    -fx-padding: 15 15 15 15;
+    -fx-spacing: 25;
+    -fx-alignment: center;
+    -fx-hgap: 20;
+    -fx-vgap: 20;
+    -fx-border-radius: 15 15 15 15;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);
+}
+
+.scroll-pane {
+    -fx-background-color: #e3e4e6;
+    -fx-background: #e3e4e6;
+    -fx-background-radius: 15 15 15 15;
+    -fx-padding: 15 15 15 15;
+    -fx-hgap: 20;
+    -fx-vgap: 20;
+    -fx-border-radius: 15 15 15 15;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);
 }
 
 .stationGrid {
@@ -22,26 +45,69 @@
     -fx-alignment: center;
 }
 
-.label {
-    -fx-font-size: 12px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #333333;
-    -fx-effect: dropshadow( gaussian, rgba(255,255,255,0.5), 0, 0, 0, 1 );
-}
-
 .button {
-    -fx-text-fill: white;
-    -fx-font-family: "Arial Narrow";
-    -fx-font-weight: bold;
-    -fx-background-color: linear-gradient(#61a2b1, #2A5058);
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);
+    -fx-background-color:
+            rgba(0,0,0,0.08),
+            linear-gradient(#9a9a9a, #909090),
+            linear-gradient(white 0%, #f3f3f3 50%, #ececec 51%, #f2f2f2 100%);
+    -fx-background-insets: 0 0 -1 0,0,1;
+    -fx-background-radius: 5,5,4;
+    -fx-padding: 3 30 3 30;
+    -fx-text-fill: #242d35;
+    -fx-font-size: 14px;
 }
 
 .button:hover {
-    -fx-background-color: linear-gradient(#2A5058, #61a2b1);
+    -fx-background-color: linear-gradient(#898989, #DDDFDC);
 }
 
+*{
+    -fx-my-menu-color: #FFFFFF;
+    -fx-my-menu-color-highlighted: #FFFFFF;
+    -fx-my-menu-font-color: #000000;
+    -fx-my-menu-font-color-highlighted: #DBDBDB;
+}
 
+.menu-bar {
+    -fx-background-color: -fx-my-menu-color;
+}
+
+.menu-bar > .container > .menu-button {
+    -fx-background-color: -fx-my-menu-color;
+}
+
+.menu-bar > .container > .menu-button > .label {
+    -fx-text-fill: -fx-my-menu-font-color;
+}
+
+.menu-item .label {
+    -fx-text-fill: -fx-my-menu-font-color;
+}
+
+.menu-bar > .container > .menu-button > .label:disabled {
+    -fx-opacity: 1.0;
+}
+
+.menu-bar > .container > .menu-button:hover,
+.menu-bar > .container > .menu-button:focused,
+.menu-bar > .container > .menu-button:showing,
+.menu-item:hover,
+.menu-item:focused,
+.menu-item:showing {
+    -fx-background-color: -fx-my-menu-color-highlighted;
+}
+
+.text-field {
+    -fx-background-insets: 0, 1, 2;
+    -fx-background-radius: 3, 2, 2;
+    -fx-padding: 0.25em 0.416667em  0.333333em 0.416667em;
+}
+
+.text-field:focused {
+    -fx-background-insets: -0.4, 1, 2;
+    -fx-background-radius: 3.4, 2, 2;
+    -fx-prompt-text-fill: transparent;
+}
 #welcome {
     -fx-font-size: 32px;
     -fx-font-family: "Arial Black";

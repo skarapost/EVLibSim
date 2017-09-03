@@ -1,5 +1,6 @@
 package evlibsim;
 
+import Station.Charger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -172,7 +173,11 @@ class View {
                 return;
             Maintenance.cleanScreen();
             VBox box = new VBox();
-            box.setPadding(new Insets(25, 15, 45, 15));
+            Button chargings = new Button("Chargings");
+            Button dischargings = new Button("DisChargings");
+            Button exchanges = new Button("Exchanges");
+            Button parkings = new Button("Parkings");
+            box.setPadding(new Insets(25));
             box.setSpacing(25);
             box.getChildren().addAll(new Label(stationName.getText()),
                     new Label(totalChargers.getText()),
@@ -182,21 +187,12 @@ class View {
                     new Label("Cars waiting for slow charging: " + String.valueOf(currentStation.reSlow().reSize())),
                     new Label("Cars waiting for fast charging: " + String.valueOf(currentStation.reFast().reSize())),
                     new Label("Cars waiting for discharging: " + String.valueOf(currentStation.reDischarging().rSize())),
-                    new Label("Cars waiting for battery exchange: " + String.valueOf(currentStation.reExchange().reSize())));
-            VBox buttons = new VBox();
-            buttons.setPadding(new Insets(45, 15, 15, 15));
-            buttons.setSpacing(25);
-            buttons.setAlignment(Pos.CENTER);
-            Button chargings = new Button("Chargings");
-            Button dischargings = new Button("DisChargings");
-            Button exchanges = new Button("Exchanges");
-            Button parkings = new Button("Parkings");
-            buttons.getChildren().addAll(chargings, dischargings, exchanges, parkings);
-            box.getChildren().addAll(buttons);
-            chargings.setPrefSize(150,30);
-            dischargings.setPrefSize(150, 30);
-            exchanges.setPrefSize(150, 30);
-            parkings.setPrefSize(150, 30);
+                    new Label("Cars waiting for battery exchange: " + String.valueOf(currentStation.reExchange().reSize())),
+                    chargings, dischargings, exchanges, parkings);
+            chargings.setPrefSize(170,30);
+            dischargings.setPrefSize(170, 30);
+            exchanges.setPrefSize(170, 30);
+            parkings.setPrefSize(170, 30);
             ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
             for(int i=0; i<currentStation.reSources().length; i++) {
                 switch (currentStation.reSources()[i]) {
@@ -248,9 +244,49 @@ class View {
             chart.setTitle("Energy Sources");
             chart.setLabelLineLength(25);
             chart.setClockwise(true);
-            buttons.getStyleClass().add("box");
             root.setCenter(chart);
             root.setLeft(box);
+            chargings.setOnAction(et -> {
+                Maintenance.cleanScreen();
+                ScrollPane scroll = new ScrollPane();
+                scroll.setMaxSize(950, 450);
+                VBox x;
+                Label boo;
+                int row = 0, column = 0;
+                for(Charger ch: currentStation.reChargers())
+                    if(ch.reBusy()&&ch.reChargingEvent().reCondition().equals("charging")) {
+                        x = new VBox();
+                        x.setPadding(new Insets(25));
+                        x.setSpacing(25);
+                        x.setAlignment(Pos.TOP_LEFT);
+                        boo = new Label("Id: " + ch.reChargingEvent().reId());
+                        x.getChildren().add(boo);
+                        boo = new Label("Driver: " + ch.reChargingEvent().reElectricVehicle().reDriver().reName());
+                        x.getChildren().add(boo);
+                        boo = new Label("Brand: " + ch.reChargingEvent().reElectricVehicle().reBrand());
+                        x.getChildren().add(boo);
+                        boo = new Label("Energy to be received: " + ch.reChargingEvent().reEnergyToBeReceived());
+                        x.getChildren().add(boo);
+                        boo = new Label("Kind: " + ch.reChargingEvent().reKind());
+                        x.getChildren().add(boo);
+                        ProgressBar bar = new ProgressBar();
+                        x.getChildren().add(bar);
+                        float progress = (float) ch.reChargingEvent().reElapsedChargingTime()/ch.reChargingEvent().reChargingTime();
+                        bar.setProgress(progress);
+                        if(column <= 2) {
+                            grid.add(x, column, row);
+                            ++column;
+                        }
+                        else
+                        {
+                            column = 0;
+                            ++row;
+                            grid.add(x, column, row);
+                        }
+                    }
+                scroll.setContent(grid);
+                root.setCenter(scroll);
+            });
         });
         return view;
     }
