@@ -8,10 +8,7 @@ import Events.DisChargingEvent;
 import Events.ParkingEvent;
 import Events.PricingPolicy;
 import javafx.scene.control.*;
-import javafx.scene.text.Text;
-import sun.applet.Main;
 
-import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -45,47 +42,47 @@ class Event {
             grid.add(t, 0, 0, 2, 1);
             TextField boo;
             Label foo;
-            foo = new Label("Driver's name:");
+            foo = new Label("Driver's name: ");
             grid.add(foo, 0, 1);
             boo = new TextField();
             grid.add(boo, 1, 1);
             textfields.add(boo);
-            foo = new Label("Vehicle's brand:");
+            foo = new Label("Vehicle's brand: ");
             grid.add(foo, 2, 1);
             boo = new TextField();
             grid.add(boo, 3, 1);
             textfields.add(boo);
-            foo = new Label("Vehicle's cubism:");
+            foo = new Label("Vehicle's cubism: ");
             grid.add(foo, 0, 2);
             boo = new TextField();
             grid.add(boo, 1, 2);
             textfields.add(boo);
-            foo = new Label("Battery capacity:");
+            foo = new Label("Battery capacity: ");
             grid.add(foo, 2, 2);
             boo = new TextField();
             grid.add(boo, 3, 2);
             textfields.add(boo);
-            foo = new Label("Battery remaining:");
+            foo = new Label("Battery remaining: ");
             grid.add(foo, 0, 3);
             boo = new TextField();
             grid.add(boo, 1, 3);
             textfields.add(boo);
-            foo = new Label("Amount of energy:");
+            foo = new Label("Amount of energy: ");
             grid.add(foo, 2, 3);
             boo = new TextField();
             grid.add(boo, 3, 3);
             textfields.add(boo);
-            foo = new Label("Waiting time:");
+            foo = new Label("Waiting time: ");
             grid.add(foo, 0, 4);
             boo = new TextField();
             grid.add(boo, 1, 4);
             textfields.add(boo);
-            foo = new Label("Kind of charging:");
+            foo = new Label("Kind of charging: ");
             grid.add(foo, 2, 4);
             boo = new TextField();
             grid.add(boo, 3, 4);
             textfields.add(boo);
-            foo = new Label("Money:");
+            foo = new Label("Money: ");
             grid.add(foo, 0, 5);
             boo = new TextField();
             grid.add(boo, 1, 5);
@@ -105,37 +102,37 @@ class Event {
             grid.add(t, 0, 0, 2, 1);
             TextField boo;
             Label foo;
-            foo = new Label("Driver's name:");
+            foo = new Label("Driver's name: ");
             grid.add(foo, 0, 1);
             boo = new TextField();
             grid.add(boo, 1, 1);
             textfields.add(boo);
-            foo = new Label("Vehicle's brand:");
+            foo = new Label("Vehicle's brand: ");
             grid.add(foo, 2, 1);
             boo = new TextField();
             grid.add(boo, 3, 1);
             textfields.add(boo);
-            foo = new Label("Vehicle's cubism:");
+            foo = new Label("Vehicle's cubism: ");
             grid.add(foo, 0, 2);
             boo = new TextField();
             grid.add(boo, 1, 2);
             textfields.add(boo);
-            foo = new Label("Battery capacity:");
+            foo = new Label("Battery capacity: ");
             grid.add(foo, 2, 2);
             boo = new TextField();
             grid.add(boo, 3, 2);
             textfields.add(boo);
-            foo = new Label("Battery remaining:");
+            foo = new Label("Battery remaining: ");
             grid.add(foo, 0, 3);
             boo = new TextField();
             grid.add(boo, 1, 3);
             textfields.add(boo);
-            foo = new Label("Amount of energy:");
+            foo = new Label("Amount of energy: ");
             grid.add(foo, 2, 3);
             boo = new TextField();
             grid.add(boo, 3, 3);
             textfields.add(boo);
-            foo = new Label("Waiting time:");
+            foo = new Label("Waiting time: ");
             grid.add(foo, 0, 4);
             boo = new TextField();
             grid.add(boo, 1, 4);
@@ -155,32 +152,32 @@ class Event {
             grid.add(t, 0, 0, 2, 1);
             TextField boo;
             Label foo;
-            foo = new Label("Driver's name:");
+            foo = new Label("Driver's name: ");
             grid.add(foo, 0, 1);
             boo = new TextField();
             grid.add(boo, 1, 1);
             textfields.add(boo);
-            foo = new Label("Vehicle's brand:");
+            foo = new Label("Vehicle's brand: ");
             grid.add(foo, 2, 1);
             boo = new TextField();
             grid.add(boo, 3, 1);
             textfields.add(boo);
-            foo = new Label("Vehicle's cubism:");
+            foo = new Label("Vehicle's cubism: ");
             grid.add(foo, 0, 2);
             boo = new TextField();
             grid.add(boo, 1, 2);
             textfields.add(boo);
-            foo = new Label("Battery capacity:");
+            foo = new Label("Battery capacity: ");
             grid.add(foo, 2, 2);
             boo = new TextField();
             grid.add(boo, 3, 2);
             textfields.add(boo);
-            foo = new Label("Battery remaining:");
+            foo = new Label("Battery remaining: ");
             grid.add(foo, 0, 3);
             boo = new TextField();
             grid.add(boo, 1, 3);
             textfields.add(boo);
-            foo = new Label("Waiting time:");
+            foo = new Label("Waiting time: ");
             grid.add(foo, 2, 3);
             boo = new TextField();
             grid.add(boo, 3, 3);
@@ -200,42 +197,42 @@ class Event {
             grid.add(t, 0, 0, 2, 1);
             TextField boo;
             Label foo;
-            foo = new Label("Driver's name:");
+            foo = new Label("Driver's name: ");
             grid.add(foo, 0, 1);
             boo = new TextField();
             grid.add(boo, 1, 1);
             textfields.add(boo);
-            foo = new Label("Vehicle's brand:");
+            foo = new Label("Vehicle's brand: ");
             grid.add(foo, 2, 1);
             boo = new TextField();
             grid.add(boo, 3, 1);
             textfields.add(boo);
-            foo = new Label("Vehicle's cubism:");
+            foo = new Label("Vehicle's cubism: ");
             grid.add(foo, 0, 2);
             boo = new TextField();
             grid.add(boo, 1, 2);
             textfields.add(boo);
-            foo = new Label("Battery capacity:");
+            foo = new Label("Battery capacity: ");
             grid.add(foo, 2, 2);
             boo = new TextField();
             grid.add(boo, 3, 2);
             textfields.add(boo);
-            foo = new Label("Battery remaining:");
+            foo = new Label("Battery remaining: ");
             grid.add(foo, 0, 3);
             boo = new TextField();
             grid.add(boo, 1, 3);
             textfields.add(boo);
-            foo = new Label("Amount of energy:");
+            foo = new Label("Amount of energy: ");
             grid.add(foo, 2, 3);
             boo = new TextField();
             grid.add(boo, 3, 3);
             textfields.add(boo);
-            foo = new Label("Waiting time:");
+            foo = new Label("Waiting time: ");
             grid.add(foo, 0, 4);
             boo = new TextField();
             grid.add(boo, 1, 4);
             textfields.add(boo);
-            foo = new Label("Parking time:");
+            foo = new Label("Parking time: ");
             grid.add(foo, 2, 4);
             boo = new TextField();
             grid.add(boo, 3, 4);
@@ -248,7 +245,7 @@ class Event {
             if (!Maintenance.stationCheck())
                 return;
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Pricing policy selection");
+            alert.setTitle("Information");
             alert.setHeaderText(null);
             alert.setContentText("Please select the kind of policy: ");
             ButtonType buttonTypeOne = new ButtonType("Stable space");
@@ -265,12 +262,12 @@ class Event {
             {
                 Maintenance.cleanScreen();
                 grid.add(t, 0, 0, 2, 1);
-                foo = new Label("Duration:");
+                foo = new Label("Duration: ");
                 grid.add(foo, 0, 1);
                 boo = new TextField();
                 grid.add(boo, 1, 1);
                 textfields.add(boo);
-                foo = new Label("Prices(Separated with comma):");
+                foo = new Label("Prices(Separated with comma): ");
                 grid.add(foo, 0, 2);
                 boo = new TextField();
                 grid.add(boo, 1, 2);
@@ -282,12 +279,12 @@ class Event {
             {
                 Maintenance.cleanScreen();
                 grid.add(t, 0, 0, 2, 1);
-                foo = new Label("Durations(Separated with comma):");
+                foo = new Label("Durations(Separated with comma): ");
                 grid.add(foo, 0, 1);
                 boo = new TextField();
                 grid.add(boo, 1, 1);
                 textfields.add(boo);
-                foo = new Label("Prices(Separated with comma):");
+                foo = new Label("Prices(Separated with comma): ");
                 grid.add(foo, 0, 2);
                 boo = new TextField();
                 grid.add(boo, 1, 2);
@@ -303,8 +300,8 @@ class Event {
             if (!Maintenance.fieldCompletionCheck())
                 return;
             if (!textfields.get(7).getText().equals("fast") && !textfields.get(7).getText().equals("slow")) {
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Caution");
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
                 alert.setHeaderText(null);
                 alert.setContentText("Please put \"slow\" for a slow charging, or \"fast\" for a fast charging.");
                 alert.showAndWait();
@@ -316,32 +313,32 @@ class Event {
                     Double.parseDouble(textfields.get(6).getText()) < 0 ||
                     Double.parseDouble(textfields.get(8).getText()) < 0 ||
                     Double.parseDouble(textfields.get(2).getText()) < 0) {
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Caution");
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
                 alert.setHeaderText(null);
                 alert.setContentText("Please fill with positive numbers or zero.");
                 alert.showAndWait();
                 return;
             }
             if (Double.parseDouble(textfields.get(5).getText()) == 0) {
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Caution");
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
                 alert.setHeaderText(null);
-                alert.setContentText("The asking amount cannot be negative or zero");
+                alert.setContentText("The asking amount cannot be negative or zero.");
                 alert.showAndWait();
                 return;
             }
             if (Double.parseDouble(textfields.get(3).getText()) < Double.parseDouble(textfields.get(4).getText())) {
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Caution");
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
                 alert.setHeaderText(null);
                 alert.setContentText("The capacity cannot be smaller than the remaining amount.");
                 alert.showAndWait();
                 return;
             }
             if (Double.parseDouble(textfields.get(5).getText()) > (Double.parseDouble(textfields.get(3).getText()) - Double.parseDouble(textfields.get(4).getText()))) {
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Caution");
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
                 alert.setHeaderText(null);
                 alert.setContentText("The asking amount of energy cannot be greater than the remaining capacity.");
                 alert.showAndWait();
@@ -377,24 +374,24 @@ class Event {
                     Double.parseDouble(textfields.get(5).getText()) < 0 ||
                     Double.parseDouble(textfields.get(6).getText()) < 0 ||
                     Double.parseDouble(textfields.get(2).getText()) < 0) {
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Caution");
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
                 alert.setHeaderText(null);
                 alert.setContentText("Please fill with positive numbers or zero.");
                 alert.showAndWait();
                 return;
             }
             if (Double.parseDouble(textfields.get(3).getText()) < Double.parseDouble(textfields.get(4).getText())) {
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Caution");
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
                 alert.setHeaderText(null);
                 alert.setContentText("The capacity cannot be smaller than the remaining amount.");
                 alert.showAndWait();
                 return;
             }
             if (Double.parseDouble(textfields.get(5).getText()) > (Double.parseDouble(textfields.get(4).getText()))) {
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Caution");
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
                 alert.setHeaderText(null);
                 alert.setContentText("The given amount of energy cannot be greater than the remaining amount.");
                 alert.showAndWait();
@@ -408,6 +405,7 @@ class Event {
             el.setDriver(d);
             if (!Objects.equals(textfields.get(5).getText(), "0")) {
                 dsch = new DisChargingEvent(currentStation, el, Double.parseDouble(textfields.get(5).getText()));
+                dsch.setWaitingTime(Long.parseLong(textfields.get(6).getText()));
                 dsch.preProcessing();
                 dsch.execution();
             }
@@ -421,16 +419,16 @@ class Event {
                     Double.parseDouble(textfields.get(4).getText()) < 0 ||
                     Double.parseDouble(textfields.get(5).getText()) < 0 ||
                     Double.parseDouble(textfields.get(2).getText()) < 0) {
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Caution");
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
                 alert.setHeaderText(null);
                 alert.setContentText("Please fill with positive numbers or zero.");
                 alert.showAndWait();
                 return;
             }
             if (Double.parseDouble(textfields.get(3).getText()) < Double.parseDouble(textfields.get(4).getText())) {
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Caution");
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
                 alert.setHeaderText(null);
                 alert.setContentText("The capacity cannot be smaller than the remaining amount.");
                 alert.showAndWait();
@@ -443,6 +441,7 @@ class Event {
             el.vehicleJoinBattery(b);
             el.setDriver(d);
             ch = new ChargingEvent(currentStation, el);
+            ch.setWaitingTime(Long.parseLong(textfields.get(5).getText()));
             ch.preProcessing();
             ch.execution();
             Maintenance.completionMessage("ChargingEvent");
@@ -457,16 +456,16 @@ class Event {
                     Double.parseDouble(textfields.get(6).getText()) < 0 ||
                     Double.parseDouble(textfields.get(7).getText()) < 0 ||
                     Double.parseDouble(textfields.get(2).getText()) < 0) {
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Caution");
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
                 alert.setHeaderText(null);
                 alert.setContentText("Please fill with positive numbers or zero.");
                 alert.showAndWait();
                 return;
             }
             if (Double.parseDouble(textfields.get(3).getText()) < Double.parseDouble(textfields.get(4).getText())) {
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Caution");
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
                 alert.setHeaderText(null);
                 alert.setContentText("The capacity cannot be smaller than the remaining amount.");
                 alert.showAndWait();
@@ -489,8 +488,8 @@ class Event {
             }
             else
             {
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Caution");
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
                 alert.setHeaderText(null);
                 alert.setContentText("Please select at least a positive parking time.");
                 alert.showAndWait();
@@ -527,8 +526,8 @@ class Event {
             String[] prices = textfields.get(1).getText().split(",");
             if(spaces.length != prices.length)
             {
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Warning");
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
                 alert.setHeaderText(null);
                 alert.setContentText("The number of time spaces and prices have to be equal.");
                 alert.showAndWait();

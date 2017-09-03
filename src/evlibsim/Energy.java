@@ -244,8 +244,8 @@ class Energy {
                 currentStation.updateStorage();
             else
             {
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Update Storage");
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
                 alert.setHeaderText(null);
                 alert.setContentText("No automatic update storage.");
                 alert.showAndWait();

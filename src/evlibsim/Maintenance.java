@@ -13,8 +13,8 @@ class Maintenance {
     {
         for(TextField f: textfields) {
             if (f.getText().isEmpty()||f.getText().equals(" ") || f.getText().equals("  ") || f.getText().equals("   ") || f.getText().equals("    ")) {
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Caution");
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
                 alert.setHeaderText(null);
                 alert.setContentText("Please fill all the fields. Numbers have to be >=0.");
                 alert.showAndWait();
@@ -28,8 +28,8 @@ class Maintenance {
     {
         if(stations.size() == 0)
         {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Caution");
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
             alert.setHeaderText(null);
             alert.setContentText("Please add a ChargingStation.");
             alert.showAndWait();
@@ -44,13 +44,14 @@ class Maintenance {
         root.setCenter(null);
         root.setLeft(null);
         root.setRight(null);
+        scroll.setContent(null);
         textfields.clear();
     }
 
     static void energyAlert(String energySource)
     {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Caution");
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
         alert.setHeaderText(null);
         alert.setContentText(energySource + " energy is already an option.");
         alert.showAndWait();
@@ -58,8 +59,8 @@ class Maintenance {
 
     static void notEnergyAlert(String energySource)
     {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Caution");
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
         alert.setHeaderText(null);
         alert.setContentText(energySource + " energy is not an option.");
         alert.showAndWait();
@@ -68,7 +69,7 @@ class Maintenance {
     static void completionMessage(String message)
     {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Caution");
+        alert.setTitle("Information");
         alert.setHeaderText(null);
         alert.setContentText("The " + message + " was created successfully.");
         alert.showAndWait();
@@ -84,4 +85,11 @@ class Maintenance {
         return option.get() == ButtonType.OK;
     }
 
+    static boolean checkEnergy(String energy)
+    {
+        for(String energ: currentStation.reSources())
+            if(energ.equals(energy))
+                return true;
+        return false;
+    }
 }

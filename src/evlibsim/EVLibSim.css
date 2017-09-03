@@ -15,24 +15,19 @@
 
 .box {
     -fx-background-color:#e3e4e6;
-    -fx-background-radius: 15 15 15 15;
     -fx-padding: 15 15 15 15;
     -fx-spacing: 25;
     -fx-alignment: center;
-    -fx-hgap: 20;
-    -fx-vgap: 20;
-    -fx-border-radius: 15 15 15 15;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);
 }
 
 .scroll-pane {
     -fx-background-color: #e3e4e6;
     -fx-background: #e3e4e6;
-    -fx-background-radius: 15 15 15 15;
+    -fx-background-radius: 5 5 5 5;
     -fx-padding: 15 15 15 15;
     -fx-hgap: 20;
     -fx-vgap: 20;
-    -fx-border-radius: 15 15 15 15;
+    -fx-border-radius: 5 5 5 5;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);
 }
 

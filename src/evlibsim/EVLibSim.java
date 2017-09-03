@@ -22,6 +22,7 @@ public class EVLibSim extends Application {
 
     static final BorderPane root = new BorderPane();
     static final GridPane grid = new GridPane();
+    static final ScrollPane scroll = new ScrollPane();
     private static final GridPane stationGrid = new GridPane();
     static final ArrayList<TextField> textfields = new ArrayList<>();
     static final ArrayList<ChargingStation> stations = new ArrayList<>();
@@ -35,6 +36,7 @@ public class EVLibSim extends Application {
     static final MenuItem startScreen = new MenuItem("Start Screen");
     static final Menu s = new Menu("Stations");
     private static final MenuItem exitMenuItem = new MenuItem("Exit");
+    private static final MenuItem about = new MenuItem("About");
     static final Label stationName = new Label();
     private static final Label energyAmount = new Label();
     static final Label totalChargers = new Label();
@@ -56,7 +58,7 @@ public class EVLibSim extends Application {
         root.setTop(menuBar);
         Menu file = new Menu("File");
         exitMenuItem.setOnAction(actionEvent -> Platform.exit());
-        file.getItems().addAll(startScreen, s, exitMenuItem);
+        file.getItems().addAll(startScreen, s, exitMenuItem, about);
         menuBar.getMenus().addAll(file, View.createViewMenu(),
                 MenuStation.createStationMenu(), Event.createEventMenu(),
                 Search.createSearchMenu(), Energy.createEnergyMenu());
@@ -104,7 +106,7 @@ public class EVLibSim extends Application {
                     }
             }
         });
-        newChargingStation.setOnAction(e -> MenuStation.newStation.fire());
+        newChargingStation.setOnAction(e -> MenuStation.newChargingStationMI.fire());
         showTotalActivity.setOnAction(e -> View.totalActivity.fire());
         report.setOnAction(e -> {
             if(!Maintenance.stationCheck())
@@ -116,6 +118,14 @@ public class EVLibSim extends Application {
                     "The name has to be a text(.txt) file: ");
             Optional<String> path = dialog.showAndWait();
             path.ifPresent(s -> currentStation.genReport(s));
+        });
+        about.setOnAction(e ->
+        {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information");
+            alert.setHeaderText(null);
+            alert.setContentText("Creator: Karapostolakis Sotirios\nemail: skarapos@outlook.com\nYear: 2017");
+            alert.showAndWait();
         });
 
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(5), ev -> {
