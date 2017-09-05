@@ -33,13 +33,10 @@ class Event {
     {
         charging.setOnAction(e ->
         {
-            if(!Maintenance.stationCheck())
+            if(Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
             grid.setMaxSize(800, 500);
-            t.setText("ChargingEvent Creation");
-            t.setId("welcome");
-            grid.add(t, 0, 0, 2, 1);
             TextField boo;
             Label foo;
             foo = new Label("Driver's name: ");
@@ -93,13 +90,10 @@ class Event {
         });
         discharging.setOnAction(e ->
         {
-            if(!Maintenance.stationCheck())
+            if(Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
             grid.setMaxSize(800, 500);
-            t.setText("DisChargingEvent Creation");
-            t.setId("welcome");
-            grid.add(t, 0, 0, 2, 1);
             TextField boo;
             Label foo;
             foo = new Label("Driver's name: ");
@@ -143,13 +137,10 @@ class Event {
         });
         exchange.setOnAction(e ->
         {
-            if(!Maintenance.stationCheck())
+            if(Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
             grid.setMaxSize(800, 500);
-            t.setText("Battery Exchange Event Creation");
-            t.setId("welcome");
-            grid.add(t, 0, 0, 2, 1);
             TextField boo;
             Label foo;
             foo = new Label("Driver's name: ");
@@ -188,13 +179,10 @@ class Event {
         });
         parking.setOnAction(e ->
         {
-            if(!Maintenance.stationCheck())
+            if(Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
             grid.setMaxSize(800, 500);
-            t.setText("ParkingEvent Creation");
-            t.setId("welcome");
-            grid.add(t, 0, 0, 2, 1);
             TextField boo;
             Label foo;
             foo = new Label("Driver's name: ");
@@ -242,7 +230,7 @@ class Event {
             root.setCenter(grid);
         });
         policy.setOnAction(e -> {
-            if (!Maintenance.stationCheck())
+            if (Maintenance.stationCheck())
                 return;
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Information");
@@ -253,51 +241,46 @@ class Event {
             ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
             alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo, buttonTypeCancel);
             Optional<ButtonType> result = alert.showAndWait();
-            t.setText("PricingPolicy Creation");
-            t.setId("welcome");
             TextField boo;
             Label foo;
             grid.setMaxSize(450, 300);
-            if(result.get() == buttonTypeOne)
-            {
-                Maintenance.cleanScreen();
-                grid.add(t, 0, 0, 2, 1);
-                foo = new Label("Duration: ");
-                grid.add(foo, 0, 1);
-                boo = new TextField();
-                grid.add(boo, 1, 1);
-                textfields.add(boo);
-                foo = new Label("Prices(Separated with comma): ");
-                grid.add(foo, 0, 2);
-                boo = new TextField();
-                grid.add(boo, 1, 2);
-                textfields.add(boo);
-                grid.add(policyCreation1, 0, 3);
-                policyCreation1.setDefaultButton(true);
-            }
-            else if(result.get() == buttonTypeTwo)
-            {
-                Maintenance.cleanScreen();
-                grid.add(t, 0, 0, 2, 1);
-                foo = new Label("Durations(Separated with comma): ");
-                grid.add(foo, 0, 1);
-                boo = new TextField();
-                grid.add(boo, 1, 1);
-                textfields.add(boo);
-                foo = new Label("Prices(Separated with comma): ");
-                grid.add(foo, 0, 2);
-                boo = new TextField();
-                grid.add(boo, 1, 2);
-                textfields.add(boo);
-                grid.add(policyCreation2, 0, 3);
-                policyCreation2.setDefaultButton(true);
+            if(result.isPresent()) {
+                if (result.get() == buttonTypeOne) {
+                    Maintenance.cleanScreen();
+                    foo = new Label("Duration: ");
+                    grid.add(foo, 0, 1);
+                    boo = new TextField();
+                    grid.add(boo, 1, 1);
+                    textfields.add(boo);
+                    foo = new Label("Prices(Separated with comma): ");
+                    grid.add(foo, 0, 2);
+                    boo = new TextField();
+                    grid.add(boo, 1, 2);
+                    textfields.add(boo);
+                    grid.add(policyCreation1, 0, 3);
+                    policyCreation1.setDefaultButton(true);
+                } else if (result.get() == buttonTypeTwo) {
+                    Maintenance.cleanScreen();
+                    foo = new Label("Durations(Separated with comma): ");
+                    grid.add(foo, 0, 1);
+                    boo = new TextField();
+                    grid.add(boo, 1, 1);
+                    textfields.add(boo);
+                    foo = new Label("Prices(Separated with comma): ");
+                    grid.add(foo, 0, 2);
+                    boo = new TextField();
+                    grid.add(boo, 1, 2);
+                    textfields.add(boo);
+                    grid.add(policyCreation2, 0, 3);
+                    policyCreation2.setDefaultButton(true);
+                }
             }
             root.setCenter(grid);
         });
 
         //Buttons
         chargingEventCreation.setOnAction(e -> {
-            if (!Maintenance.fieldCompletionCheck())
+            if (Maintenance.fieldCompletionCheck())
                 return;
             if (!textfields.get(7).getText().equals("fast") && !textfields.get(7).getText().equals("slow")) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -367,7 +350,7 @@ class Event {
         });
         disChargingEventCreation.setOnAction(e ->
         {
-            if (!Maintenance.fieldCompletionCheck())
+            if (Maintenance.fieldCompletionCheck())
                 return;
             if (Double.parseDouble(textfields.get(3).getText()) < 0 ||
                     Double.parseDouble(textfields.get(4).getText()) < 0 ||
@@ -413,7 +396,7 @@ class Event {
             startScreen.fire();
         });
         exchangeEventCreation.setOnAction(e -> {
-            if (!Maintenance.fieldCompletionCheck())
+            if (Maintenance.fieldCompletionCheck())
                 return;
             if (Double.parseDouble(textfields.get(3).getText()) < 0 ||
                     Double.parseDouble(textfields.get(4).getText()) < 0 ||
@@ -448,7 +431,7 @@ class Event {
             startScreen.fire();
         });
         parkingEventCreation.setOnAction(e -> {
-            if (!Maintenance.fieldCompletionCheck())
+            if (Maintenance.fieldCompletionCheck())
                 return;
             if (Double.parseDouble(textfields.get(3).getText()) < 0 ||
                     Double.parseDouble(textfields.get(4).getText()) < 0 ||
@@ -499,9 +482,9 @@ class Event {
             startScreen.fire();
         });
         policyCreation1.setOnAction(e -> {
-            if(!Maintenance.fieldCompletionCheck())
+            if(Maintenance.fieldCompletionCheck())
                 return;
-            if(!Maintenance.confirmCreation("PricingPolicy"))
+            if(Maintenance.confirmCreation("PricingPolicy"))
                 return;
             String text = textfields.get(1).getText().replaceAll("[^0-9,]+","");
             textfields.get(1).setText(text);
@@ -514,9 +497,9 @@ class Event {
             Maintenance.completionMessage("PricingPolicy");
         });
         policyCreation2.setOnAction(e -> {
-            if(!Maintenance.fieldCompletionCheck())
+            if(Maintenance.fieldCompletionCheck())
                 return;
-            if(!Maintenance.confirmCreation("PricingPolicy"))
+            if(Maintenance.confirmCreation("PricingPolicy"))
                 return;
             String text = textfields.get(0).getText().replaceAll("[^0-9,]+","");
             textfields.get(0).setText(text);

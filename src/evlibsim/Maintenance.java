@@ -18,10 +18,10 @@ class Maintenance {
                 alert.setHeaderText(null);
                 alert.setContentText("Please fill all the fields. Numbers have to be >=0.");
                 alert.showAndWait();
-                return false;
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
     static boolean stationCheck()
@@ -33,9 +33,9 @@ class Maintenance {
             alert.setHeaderText(null);
             alert.setContentText("Please add a ChargingStation.");
             alert.showAndWait();
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 
     static void cleanScreen()
@@ -43,7 +43,6 @@ class Maintenance {
         grid.getChildren().clear();
         root.setCenter(null);
         root.setLeft(null);
-        root.setRight(null);
         scroll.setContent(null);
         textfields.clear();
     }
@@ -75,14 +74,13 @@ class Maintenance {
         alert.showAndWait();
     }
 
-    static boolean confirmCreation(String message)
-    {
+    static boolean confirmCreation(String message) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle(message + " creation");
         alert.setHeaderText(null);
         alert.setContentText("Are you sure about the creation?");
         Optional<ButtonType> option = alert.showAndWait();
-        return option.get() == ButtonType.OK;
+        return !option.isPresent() || option.get() != ButtonType.OK;
     }
 
     static boolean checkEnergy(String energy)

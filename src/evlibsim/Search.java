@@ -23,12 +23,9 @@ class Search {
     {
         searchCharging.setOnAction(e -> {
             Maintenance.cleanScreen();
-            grid.setMaxSize(350, 280);
+            grid.setMaxSize(400, 280);
             TextField boo;
             Label foo;
-            t.setText("ChargingEvent Search");
-            t.setId("welcome");
-            grid.add(t, 0, 0, 2, 1);
             foo = new Label("Model of car: ");
             grid.add(foo, 0, 1);
             boo = new TextField();
@@ -53,12 +50,9 @@ class Search {
         });
         searchDisCharging.setOnAction(e -> {
             Maintenance.cleanScreen();
-            grid.setMaxSize(350, 280);
+            grid.setMaxSize(400, 280);
             TextField boo;
             Label foo;
-            t.setText("Discharging Event Search");
-            grid.add(t, 0, 0, 2, 1);
-            t.setId("welcome");
             foo = new Label("Model of car: ");
             grid.add(foo, 0, 1);
             boo = new TextField();
@@ -84,12 +78,9 @@ class Search {
         searchExchange.setOnAction(e ->
         {
             Maintenance.cleanScreen();
-            grid.setMaxSize(350, 280);
+            grid.setMaxSize(400, 280);
             TextField boo;
             Label foo;
-            t.setText("Exchange Event Search");
-            t.setId("welcome");
-            grid.add(t, 0, 0, 2, 1);
             foo = new Label("Model of car: ");
             grid.add(foo, 0, 1);
             boo = new TextField();
@@ -109,12 +100,9 @@ class Search {
 
         searchParking.setOnAction(e -> {
             Maintenance.cleanScreen();
-            grid.setMaxSize(350, 280);
+            grid.setMaxSize(400, 280);
             TextField boo;
             Label foo;
-            t.setText("ParkingEvent Search");
-            t.setId("welcome");
-            grid.add(t, 0, 0, 2, 1);
             foo = new Label("Model of car: ");
             grid.add(foo, 0, 1);
             boo = new TextField();

@@ -10,9 +10,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 
 import static evlibsim.EVLibSim.*;
 
@@ -20,7 +19,6 @@ class View {
 
     private static final Menu overview = new Menu("Station Overview");
     private static final Menu view = new Menu("View");
-    private static final MenuItem totalEnergy = new MenuItem("Total Energy");
     static final MenuItem totalActivity = new MenuItem("Overview");
     private static final MenuItem queue = new MenuItem("Queue of Events");
     private static final MenuItem chargingsMenuItem = new MenuItem("Chargings Events");
@@ -35,19 +33,16 @@ class View {
     static Menu createViewMenu()
     {
         overview.getItems().addAll(totalActivity, new SeparatorMenuItem(), chargingsMenuItem, dischargingsMenuItem, exchangesMenuItem, parkingsMenuItem);
-        view.getItems().addAll(overview, totalEnergy, queue);
+        view.getItems().addAll(overview, queue);
 
         queue.setOnAction(e -> {
-            if(!Maintenance.stationCheck())
+            if(Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
             grid.setMaxSize(800, 600);
             energies.clear();
-            t.setText("Waiting List");
             TextField boo;
             Label foo;
-            t.setId("welcome");
-            grid.add(t, 0, 0, 2, 1);
             foo = new Label("Name of charging station: ");
             grid.add(foo, 0, 1);
             boo = new TextField(currentStation.reName());
@@ -121,80 +116,8 @@ class View {
             }
             root.setCenter(grid);
         });
-        totalEnergy.setOnAction(e -> {
-            if(!Maintenance.stationCheck())
-                return;
-            Maintenance.cleanScreen();
-            grid.setMaxSize(800, 500);
-            t = new Text("Total Energy");
-            t.setId("welcome");
-            grid.add(t, 0, 0, 2, 1);
-            TextField boo;
-            Label foo;
-            foo = new Label("Total energy: ");
-            grid.add(foo, 0, 1);
-            boo = new TextField(String.valueOf(currentStation.reTotalEnergy()));
-            grid.add(boo, 1, 1);
-            textfields.add(boo);
-            if(Maintenance.checkEnergy("solar"))
-                foo = new Label("Solar*: ");
-            else
-                foo = new Label("Solar: ");
-            grid.add(foo, 2, 1);
-            boo = new TextField(String.valueOf(currentStation.reSpecificAmount("solar")));
-            grid.add(boo, 3, 1);
-            textfields.add(boo);
-            if(Maintenance.checkEnergy("wind"))
-                foo = new Label("Wind*: ");
-            else
-                foo = new Label("Wind: ");
-            grid.add(foo, 0, 2);
-            boo = new TextField(String.valueOf(currentStation.reSpecificAmount("wind")));
-            grid.add(boo, 1, 2);
-            textfields.add(boo);
-            if(Maintenance.checkEnergy("wave"))
-                foo = new Label("Wave*: ");
-            else
-                foo = new Label("Wave: ");
-            grid.add(foo, 2, 2);
-            boo = new TextField(String.valueOf(currentStation.reSpecificAmount("wave")));
-            grid.add(boo, 3, 2);
-            textfields.add(boo);
-            if(Maintenance.checkEnergy("hydroelectric"))
-                foo = new Label("Hydro-Electric*: ");
-            else
-                foo = new Label("Hydro-Electric: ");
-            grid.add(foo, 0, 3);
-            boo = new TextField(String.valueOf(currentStation.reSpecificAmount("hydroelectric")));
-            grid.add(boo, 1, 3);
-            textfields.add(boo);
-            if(Maintenance.checkEnergy("nonrenewable"))
-                foo = new Label("Non-Renewable*: ");
-            else
-                foo = new Label("Non-Renewable: ");
-            grid.add(foo, 2, 3);
-            boo = new TextField(String.valueOf(currentStation.reSpecificAmount("nonrenewable")));
-            grid.add(boo, 3, 3);
-            textfields.add(boo);
-            if(Maintenance.checkEnergy("geothermal"))
-                foo = new Label("Geothermal*: ");
-            else
-                foo = new Label("Geothermal: ");
-            grid.add(foo, 0, 4);
-            boo = new TextField(String.valueOf(currentStation.reSpecificAmount("geothermal")));
-            grid.add(boo, 1, 4);
-            textfields.add(boo);
-            foo = new Label("Discharging*: ");
-            grid.add(foo, 2, 4);
-            boo = new TextField(String.valueOf(currentStation.reSpecificAmount("discharging")));
-            grid.add(boo, 3, 4);
-            textfields.add(boo);
-            foo = new Label("*This source is an option for the station.");
-            grid.add(foo, 0, 5);
-            root.setCenter(grid);
-        });
         totalActivity.setOnAction(e -> {
-            if(!Maintenance.stationCheck())
+            if(Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
             VBox box = new VBox();
@@ -277,174 +200,189 @@ class View {
         chargings.setOnAction(et -> {
             Maintenance.cleanScreen();
             ScrollPane scroll = new ScrollPane();
-            scroll.setMaxSize(900, 600);
-            VBox x;
-            GridPane chGrid = new GridPane();
-            chGrid.setHgap(5);
-            chGrid.setVgap(5);
-            chGrid.setAlignment(Pos.TOP_LEFT);
+            scroll.setMaxSize(820, 650);
+            VBox x = new VBox();
+            x.setAlignment(Pos.CENTER);
+            HBox y = new HBox();
+            VBox z;
             Label boo;
-            int row = 0, column = 0;
+            int column = 0;
+            x.getChildren().add(y);
             for(Charger ch: currentStation.reChargers())
                 if(ch.reBusy()&&ch.reChargingEvent().reCondition().equals("charging")) {
-                    x = new VBox();
-                    x.setPadding(new Insets(5));
-                    x.setSpacing(25);
-                    x.setAlignment(Pos.TOP_LEFT);
+                    z = new VBox();
+                    z.setSpacing(25);
+                    z.setAlignment(Pos.TOP_LEFT);
+                    z.setPadding(new Insets(15, 15, 15, 15));
                     boo = new Label("Id: " + ch.reChargingEvent().reId());
-                    x.getChildren().add(boo);
+                    z.getChildren().add(boo);
                     boo = new Label("Driver: " + ch.reChargingEvent().reElectricVehicle().reDriver().reName());
-                    x.getChildren().add(boo);
+                    z.getChildren().add(boo);
                     boo = new Label("Brand: " + ch.reChargingEvent().reElectricVehicle().reBrand());
-                    x.getChildren().add(boo);
+                    z.getChildren().add(boo);
                     boo = new Label("Energy: " + ch.reChargingEvent().reEnergyToBeReceived());
-                    x.getChildren().add(boo);
+                    z.getChildren().add(boo);
                     boo = new Label("Kind: " + ch.reChargingEvent().reKind());
-                    x.getChildren().add(boo);
+                    z.getChildren().add(boo);
+                    boo = new Label("Cost: " + ch.reChargingEvent().reCost());
+                    z.getChildren().add(boo);
                     ProgressBar bar = new ProgressBar();
-                    x.getChildren().add(bar);
+                    z.getChildren().add(bar);
                     float progress = (float) ch.reChargingEvent().reElapsedChargingTime()/ch.reChargingEvent().reChargingTime();
                     bar.setProgress(progress);
-                    if(column <= 2) {
-                        chGrid.add(x, column, row);
+                    if(column <= 5) {
+                        y.getChildren().add(z);
                         ++column;
                     }
                     else
                     {
                         column = 0;
-                        ++row;
-                        chGrid.add(x, column, row);
+                        y = new HBox();
+                        y.getChildren().add(z);
+                        x.getChildren().add(y);
                     }
                 }
-            scroll.setContent(chGrid);
+            scroll.setContent(x);
             root.setCenter(scroll);
         });
         dischargings.setOnAction(et -> {
             Maintenance.cleanScreen();
             ScrollPane scroll = new ScrollPane();
-            scroll.setMaxSize(900, 600);
-            VBox x;
-            GridPane chGrid = new GridPane();
-            chGrid.setHgap(5);
-            chGrid.setVgap(5);
-            chGrid.setAlignment(Pos.TOP_LEFT);
+            scroll.setMaxSize(820, 650);
+            VBox x = new VBox();
+            x.setAlignment(Pos.CENTER);
+            HBox y = new HBox();
+            VBox z;
             Label boo;
-            int row = 0, column = 0;
+            int column = 0;
+            x.getChildren().add(y);
             for(DisCharger ch: currentStation.reDisChargers())
                 if(ch.reBusy()&&ch.reDisChargingEvent().reCondition().equals("discharging")) {
-                    x = new VBox();
-                    x.setPadding(new Insets(5));
-                    x.setSpacing(25);
-                    x.setAlignment(Pos.TOP_LEFT);
+                    z = new VBox();
+                    z.setSpacing(25);
+                    z.setAlignment(Pos.TOP_LEFT);
+                    z.setPadding(new Insets(15, 15, 15, 15));
                     boo = new Label("Id: " + ch.reDisChargingEvent().reId());
-                    x.getChildren().add(boo);
+                    z.getChildren().add(boo);
                     boo = new Label("Driver: " + ch.reDisChargingEvent().reElectricVehicle().reDriver().reName());
-                    x.getChildren().add(boo);
+                    z.getChildren().add(boo);
                     boo = new Label("Brand: " + ch.reDisChargingEvent().reElectricVehicle().reBrand());
-                    x.getChildren().add(boo);
+                    z.getChildren().add(boo);
                     boo = new Label("Energy: " + ch.reDisChargingEvent().reEnergyAmount());
-                    x.getChildren().add(boo);
+                    z.getChildren().add(boo);
+                    boo = new Label("Profit: " + ch.reDisChargingEvent().reProfit());
+                    z.getChildren().add(boo);
                     ProgressBar bar = new ProgressBar();
-                    x.getChildren().add(bar);
+                    z.getChildren().add(bar);
                     float progress = (float) ch.reDisChargingEvent().reElapsedDisChargingTime()/ch.reDisChargingEvent().reDisChargingTime();
                     bar.setProgress(progress);
-                    if(column <= 2) {
-                        chGrid.add(x, column, row);
+                    if(column <= 5) {
+                        y.getChildren().add(z);
                         ++column;
                     }
                     else
                     {
                         column = 0;
-                        ++row;
-                        chGrid.add(x, column, row);
+                        y = new HBox();
+                        y.getChildren().add(z);
+                        x.getChildren().add(y);
                     }
                 }
-            scroll.setContent(chGrid);
+            scroll.setContent(x);
             root.setCenter(scroll);
         });
         exchanges.setOnAction(et -> {
             Maintenance.cleanScreen();
             ScrollPane scroll = new ScrollPane();
-            scroll.setMaxSize(900, 600);
-            VBox x;
-            GridPane chGrid = new GridPane();
-            chGrid.setHgap(5);
-            chGrid.setVgap(5);
-            chGrid.setAlignment(Pos.TOP_LEFT);
+            scroll.setMaxSize(820, 650);
+            VBox x = new VBox();
+            x.setAlignment(Pos.CENTER);
+            HBox y = new HBox();
+            VBox z;
             Label boo;
-            int row = 0, column = 0;
+            int column = 0;
+            x.getChildren().add(y);
             for(ExchangeHandler ch: currentStation.reExchangeHandlers())
                 if(ch.reBusy()&&ch.reChargingEvent().reCondition().equals("exchange")) {
-                    x = new VBox();
-                    x.setPadding(new Insets(5));
-                    x.setSpacing(25);
-                    x.setAlignment(Pos.TOP_LEFT);
+                    z = new VBox();
+                    z.setSpacing(25);
+                    z.setAlignment(Pos.TOP_LEFT);
+                    z.setPadding(new Insets(15, 15, 15, 15));
                     boo = new Label("Id: " + ch.reChargingEvent().reId());
-                    x.getChildren().add(boo);
+                    z.getChildren().add(boo);
                     boo = new Label("Driver: " + ch.reChargingEvent().reElectricVehicle().reDriver().reName());
-                    x.getChildren().add(boo);
+                    z.getChildren().add(boo);
                     boo = new Label("Brand: " + ch.reChargingEvent().reElectricVehicle().reBrand());
-                    x.getChildren().add(boo);
+                    z.getChildren().add(boo);
+                    boo = new Label("Cost: " + ch.reChargingEvent().reCost());
+                    z.getChildren().add(boo);
                     ProgressBar bar = new ProgressBar();
-                    x.getChildren().add(bar);
+                    z.getChildren().add(bar);
                     float progress = (float) ch.reChargingEvent().reElapsedChargingTime()/ch.reChargingEvent().reChargingTime();
                     bar.setProgress(progress);
-                    if(column <= 2) {
-                        chGrid.add(x, column, row);
+                    if(column <= 5) {
+                        y.getChildren().add(z);
                         ++column;
                     }
                     else
                     {
                         column = 0;
-                        ++row;
-                        chGrid.add(x, column, row);
+                        y = new HBox();
+                        y.getChildren().add(z);
+                        x.getChildren().add(y);
                     }
                 }
-            scroll.setContent(chGrid);
+            scroll.setContent(x);
             root.setCenter(scroll);
         });
         parkings.setOnAction(et -> {
             Maintenance.cleanScreen();
-            scroll.setMaxSize(900, 600);
-            VBox x;
-            GridPane chGrid = new GridPane();
-            chGrid.setHgap(5);
-            chGrid.setVgap(5);
-            chGrid.setAlignment(Pos.TOP_LEFT);
+            ScrollPane scroll = new ScrollPane();
+            scroll.setMaxSize(820, 650);
+            VBox x = new VBox();
+            x.setAlignment(Pos.CENTER);
+            HBox y = new HBox();
+            VBox z;
             Label boo;
-            int row = 0, column = 0;
+            int column = 0;
+            x.getChildren().add(y);
             for(ParkingSlot ch: currentStation.reParkingSlots())
                 if(ch.reBusy()&&(ch.reParkingEvent().reCondition().equals("parking"))||ch.reParkingEvent().reCondition().equals("charging")) {
-                    x = new VBox();
-                    x.setPadding(new Insets(5));
-                    x.setSpacing(25);
-                    x.setAlignment(Pos.TOP_LEFT);
+                    z = new VBox();
+                    z.setPadding(new Insets(15));
+                    z.setSpacing(25);
+                    z.setAlignment(Pos.TOP_LEFT);
                     boo = new Label("Id: " + ch.reParkingEvent().reId());
-                    x.getChildren().add(boo);
+                    z.getChildren().add(boo);
                     boo = new Label("Driver: " + ch.reParkingEvent().reElectricVehicle().reDriver().reName());
-                    x.getChildren().add(boo);
+                    z.getChildren().add(boo);
                     boo = new Label("Brand: " + ch.reParkingEvent().reElectricVehicle().reBrand());
-                    x.getChildren().add(boo);
+                    z.getChildren().add(boo);
                     boo = new Label("Current Condition: " + ch.reParkingEvent().reCondition());
-                    x.getChildren().add(boo);
+                    z.getChildren().add(boo);
+                    boo = new Label("Cost: " + ch.reParkingEvent().reCost());
+                    z.getChildren().add(boo);
                     ProgressBar bar = new ProgressBar();
-                    x.getChildren().add(bar);
+                    z.getChildren().add(bar);
                     float progress;
                     if(ch.reParkingEvent().reCondition().equals("charging"))
                         progress = (float) ch.reParkingEvent().reElapsedChargingTime() / ch.reParkingEvent().reChargingTime();
                     else
                         progress = (float) ch.reParkingEvent().reElapsedParkingTime() / ch.reParkingEvent().reParkingTime();
                     bar.setProgress(progress);
-                        if (column <= 2) {
-                            chGrid.add(x, column, row);
-                            ++column;
-                        } else {
-                            column = 0;
-                            ++row;
-                            chGrid.add(x, column, row);
-                        }
+                    if(column <= 5) {
+                        y.getChildren().add(z);
+                        ++column;
+                    }
+                    else
+                    {
+                        column = 0;
+                        y = new HBox();
+                        y.getChildren().add(z);
+                        x.getChildren().add(y);
+                    }
                 }
-            scroll.setContent(chGrid);
+            scroll.setContent(x);
             root.setCenter(scroll);
         });
         return view;

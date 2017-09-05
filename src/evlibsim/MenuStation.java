@@ -5,7 +5,6 @@ import Sources.*;
 import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import Station.*;
 import java.util.Objects;
 import java.util.Optional;
@@ -34,9 +33,10 @@ class MenuStation {
     private static final MenuItem allParkingSlotsMI = new MenuItem("Show all ParkingSlots");
     private static final MenuItem modifyChargingStationMI = new MenuItem("Modify ChargingStation");
     private static final MenuItem newBatteryMI = new MenuItem("New Battery");
+    private static final MenuItem batteriesChargingMI = new MenuItem("Batteries Charging");
     private static boolean automaticHandling = true;
     private static boolean automaticUpdate = false;
-    private static RadioMenuItem cs;
+    static RadioMenuItem cs;
     private static final Button chargingStationCreationB = new Button("Creation");
     private static final Button chargerCreationB = new Button("Creation");
     private static final Button modifyStationB = new Button("Modification");
@@ -47,17 +47,16 @@ class MenuStation {
         disChargersM.getItems().addAll(newDisChargerMI, deleteDisChargerMI, allDisChargersMI);
         exchangeHandlersM.getItems().addAll(newExchangeHandlerMI, deleteExchangeHandlerMI, allExchangeHandlersMI);
         parkingSlotsM.getItems().addAll(newParkingSlotMI, deleteParkingSlotMI, allParkingSlotsMI);
-        stationM.getItems().addAll(newChargingStationMI, new SeparatorMenuItem(), chargersM, disChargersM, exchangeHandlersM, parkingSlotsM, new SeparatorMenuItem(), modifyChargingStationMI, new SeparatorMenuItem(), newBatteryMI);
+        stationM.getItems().addAll(newChargingStationMI, new SeparatorMenuItem(), chargersM, disChargersM,
+                exchangeHandlersM, parkingSlotsM, new SeparatorMenuItem(), modifyChargingStationMI,
+                new SeparatorMenuItem(), newBatteryMI, batteriesChargingMI);
 
         newChargingStationMI.setOnAction((ActionEvent e) ->
         {
             Maintenance.cleanScreen();
             EVLibSim.grid.setMaxSize(1000, 600);
-            t.setText("ChargingStation Creation");
             TextField boo;
             Label foo;
-            t.setId("welcome");
-            EVLibSim.grid.add(t, 0, 0, 2, 1);
             foo = new Label("Name: ");
             EVLibSim.grid.add(foo, 0, 1);
             boo = new TextField();
@@ -219,13 +218,10 @@ class MenuStation {
         });
         newChargerMI.setOnAction(e ->
         {
-            if (!Maintenance.stationCheck())
+            if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
             EVLibSim.grid.setMaxSize(500, 300);
-            t = new Text("Charger Creation");
-            t.setId("welcome");
-            EVLibSim.grid.add(t, 0, 0, 2, 1);
             TextField boo;
             Label foo;
             foo = new Label("Kind of charger: ");
@@ -239,9 +235,9 @@ class MenuStation {
         });
         newDisChargerMI.setOnAction(e ->
         {
-            if (!Maintenance.stationCheck())
+            if (Maintenance.stationCheck())
                 return;
-            if (!Maintenance.confirmCreation("DisCharger"))
+            if (Maintenance.confirmCreation("DisCharger"))
                 return;
             DisCharger ch;
             ch = new DisCharger(currentStation);
@@ -250,9 +246,9 @@ class MenuStation {
         });
         newExchangeHandlerMI.setOnAction(e ->
         {
-            if (!Maintenance.stationCheck())
+            if (Maintenance.stationCheck())
                 return;
-            if (!Maintenance.confirmCreation("ExchangeHandler"))
+            if (Maintenance.confirmCreation("ExchangeHandler"))
                 return;
             ExchangeHandler ch;
             ch = new ExchangeHandler(currentStation);
@@ -261,9 +257,9 @@ class MenuStation {
         });
         newParkingSlotMI.setOnAction(e ->
         {
-            if (!Maintenance.stationCheck())
+            if (Maintenance.stationCheck())
                 return;
-            if (!Maintenance.confirmCreation("ParkingSlot"))
+            if (Maintenance.confirmCreation("ParkingSlot"))
                 return;
             ParkingSlot ch;
             ch = new ParkingSlot(currentStation);
@@ -271,16 +267,13 @@ class MenuStation {
             Maintenance.completionMessage("ParkingSlot");
         });
         modifyChargingStationMI.setOnAction(e -> {
-            if (!Maintenance.stationCheck())
+            if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
             EVLibSim.grid.setMaxSize(1000, 600);
             EVLibSim.energies.clear();
-            t.setText("ChargingStation Modification");
             TextField boo;
             Label foo;
-            t.setId("welcome");
-            EVLibSim.grid.add(t, 0, 0, 2, 1);
             foo = new Label("Name of charging station: ");
             EVLibSim.grid.add(foo, 0, 1);
             boo = new TextField(currentStation.reName());
@@ -381,13 +374,21 @@ class MenuStation {
             dialog.setHeaderText(null);
             dialog.setContentText("Please add the id of the Charger: ");
             Optional<String> result = dialog.showAndWait();
-            int r = -1;
+            int r;
             if (result.isPresent()) {
                 r = Integer.parseInt(result.get());
                 Charger ch = currentStation.searchCharger(r);
-                if(ch != null)
+                if (ch != null)
                     if (!ch.reBusy())
+                    {
                         currentStation.deleteCharger(ch);
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Information");
+                        alert.setHeaderText(null);
+                        alert.setContentText("The deletion was successfull.");
+                        alert.showAndWait();
+                        startScreen.fire();
+                    }
                     else
                     {
                         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -412,13 +413,21 @@ class MenuStation {
             dialog.setHeaderText(null);
             dialog.setContentText("Please add the id of the DisCharger: ");
             Optional<String> result = dialog.showAndWait();
-            int r = -1;
+            int r;
             if (result.isPresent()) {
                 r = Integer.parseInt(result.get());
                 DisCharger dsch = currentStation.searchDischarger(r);
-                if(dsch != null)
+                if (dsch != null)
                     if (!dsch.reBusy())
+                    {
                         currentStation.deleteDisCharger(dsch);
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Information");
+                        alert.setHeaderText(null);
+                        alert.setContentText("The deletion was successfull.");
+                        alert.showAndWait();
+                        startScreen.fire();
+                    }
                     else
                     {
                         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -443,13 +452,20 @@ class MenuStation {
             dialog.setHeaderText(null);
             dialog.setContentText("Please add the id of the ExchangeHandler: ");
             Optional<String> result = dialog.showAndWait();
-            int r = -1;
+            int r;
             if (result.isPresent()) {
                 r = Integer.parseInt(result.get());
                 ExchangeHandler dsch = currentStation.searchExchangeHandler(r);
                 if(dsch != null)
-                    if (!dsch.reBusy())
+                    if (!dsch.reBusy()) {
                         currentStation.deleteExchangeHandler(dsch);
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Information");
+                        alert.setHeaderText(null);
+                        alert.setContentText("The deletion was successfull.");
+                        alert.showAndWait();
+                        startScreen.fire();
+                    }
                     else
                     {
                         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -474,13 +490,20 @@ class MenuStation {
             dialog.setHeaderText(null);
             dialog.setContentText("Please add the id of the ParkingSlot: ");
             Optional<String> result = dialog.showAndWait();
-            int r = -1;
+            int r;
             if (result.isPresent()) {
                 r = Integer.parseInt(result.get());
                 ParkingSlot dsch = currentStation.searchParkingSlot(r);
                 if(dsch != null)
-                    if (!dsch.reBusy())
+                    if (!dsch.reBusy()) {
                         currentStation.deleteParkingSlot(dsch);
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Information");
+                        alert.setHeaderText(null);
+                        alert.setContentText("The deletion was successfull.");
+                        alert.showAndWait();
+                        startScreen.fire();
+                    }
                     else
                     {
                         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -500,16 +523,13 @@ class MenuStation {
             }
         });
         allChargersMI.setOnAction(e -> {
-            if(!Maintenance.stationCheck())
+            if(Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
             VBox box = new VBox();
             box.getStyleClass().add("box");
             scroll.setMaxSize(500, 600);
             Label foo;
-            t.setText("Chargers");
-            box.getChildren().add(t);
-            t.setId("welcome");
             for(Charger ch: currentStation.reChargers()) {
                 foo = new Label("Id: " + ch.reId() + "     " + "Kind: " + ch.reKind() + "     " + "Occupied: " + ch.reBusy() + "     " + "Elapsed commit time: " + ch.reElapsedCommitTime());
                 box.getChildren().add(foo);
@@ -519,16 +539,13 @@ class MenuStation {
         });
 
         allDisChargersMI.setOnAction(e -> {
-            if(!Maintenance.stationCheck())
+            if(Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
             VBox box = new VBox();
             box.getStyleClass().add("box");
             scroll.setMaxSize(400, 600);
             Label foo;
-            t.setText("DisChargers");
-            box.getChildren().add(t);
-            t.setId("welcome");
             for(DisCharger ch: currentStation.reDisChargers()) {
                 foo = new Label("Id: " + ch.reId() + "     " + "Occupied: " + ch.reBusy() + "     " + "Elapsed commit time: " + ch.reElapsedCommitTime());
                 box.getChildren().add(foo);
@@ -537,16 +554,13 @@ class MenuStation {
             root.setCenter(scroll);
         });
         allExchangeHandlersMI.setOnAction(e -> {
-            if(!Maintenance.stationCheck())
+            if(Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
             VBox box = new VBox();
             box.getStyleClass().add("box");
             scroll.setMaxSize(400, 600);
             Label foo;
-            t.setText("ExchangeHandlers");
-            box.getChildren().add(t);
-            t.setId("welcome");
             for(ExchangeHandler ch: currentStation.reExchangeHandlers()) {
                 foo = new Label("Id: " + ch.reId() + "     " + "Occupied: " + ch.reBusy() + "     " + "Elapsed commit time: " + ch.reElapsedCommitTime());
                 box.getChildren().add(foo);
@@ -555,22 +569,35 @@ class MenuStation {
             root.setCenter(scroll);
         });
         allParkingSlotsMI.setOnAction(e -> {
-            if(!Maintenance.stationCheck())
+            if(Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
             VBox box = new VBox();
             box.getStyleClass().add("box");
             scroll.setMaxSize(400, 600);
             Label foo;
-            t.setText("ParkingSlots");
-            box.getChildren().add(t);
-            t.setId("welcome");
             for(ParkingSlot ch: currentStation.reParkingSlots()) {
                 foo = new Label("Id: " + ch.reId() + "     " + "Occupied: " + ch.reBusy() + "     " + "Elapsed commit time: " + ch.reElapsedCommitTime());
                 box.getChildren().add(foo);
             }
             scroll.setContent(box);
             root.setCenter(scroll);
+        });
+        batteriesChargingMI.setOnAction(e -> {
+            if(Maintenance.stationCheck())
+                return;
+            TextInputDialog dialog = new TextInputDialog();
+            dialog.setTitle("Information");
+            dialog.setHeaderText(null);
+            dialog.setContentText("Kind of charging: ");
+            Optional<String> result = dialog.showAndWait();
+            result.ifPresent(s -> currentStation.batteriesCharging(s));
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information");
+            alert.setHeaderText(null);
+            alert.setContentText("The chargings started.");
+            alert.showAndWait();
+            startScreen.fire();
         });
 
         chargerCreationB.setOnAction(e ->
@@ -583,7 +610,7 @@ class MenuStation {
         });
         chargingStationCreationB.setOnAction(e ->
         {
-            if (!Maintenance.fieldCompletionCheck())
+            if (Maintenance.fieldCompletionCheck())
                 return;
             if (energies.size() == 0) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -699,7 +726,7 @@ class MenuStation {
             startScreen.fire();
         });
         modifyStationB.setOnAction(e -> {
-            if (!Maintenance.fieldCompletionCheck())
+            if (Maintenance.fieldCompletionCheck())
                 return;
             currentStation.setUnitPrice(Double.parseDouble(textfields.get(1).getText()));
             currentStation.setDisUnitPrice(Double.parseDouble(textfields.get(2).getText()));
@@ -720,31 +747,28 @@ class MenuStation {
             startScreen.fire();
         });
         newBatteryMI.setOnAction(e -> {
-            if (!Maintenance.stationCheck())
+            if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
-            EVLibSim.grid.setMaxSize(800, 800);
-            t.setText("Battery Creation");
+            EVLibSim.grid.setMaxSize(400, 280);
             TextField boo;
             Label foo;
-            t.setId("welcome");
-            EVLibSim.grid.add(t, 0, 0, 2, 1);
             foo = new Label("Battery capacity: ");
             EVLibSim.grid.add(foo, 0, 1);
             boo = new TextField();
             EVLibSim.grid.add(boo, 1, 1);
             textfields.add(boo);
             foo = new Label("Battery remaining: ");
-            EVLibSim.grid.add(foo, 2, 1);
+            EVLibSim.grid.add(foo, 0, 2);
             boo = new TextField();
-            EVLibSim.grid.add(boo, 3, 1);
+            EVLibSim.grid.add(boo, 1, 2);
             textfields.add(boo);
-            EVLibSim.grid.add(batteryCreationB, 0, 2);
+            EVLibSim.grid.add(batteryCreationB, 0, 3);
             batteryCreationB.setDefaultButton(true);
             EVLibSim.root.setCenter(EVLibSim.grid);
         });
         batteryCreationB.setOnAction(e -> {
-            if (!Maintenance.fieldCompletionCheck())
+            if (Maintenance.fieldCompletionCheck())
                 return;
             if (Double.parseDouble(textfields.get(0).getText()) < Double.parseDouble(textfields.get(1).getText())) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -756,6 +780,8 @@ class MenuStation {
             }
             Battery bat = new Battery(Integer.parseInt(textfields.get(1).getText()), Integer.parseInt(textfields.get(0).getText()));
             currentStation.joinBattery(bat);
+            Maintenance.completionMessage("battery");
+            startScreen.fire();
         });
         return stationM;
     }
