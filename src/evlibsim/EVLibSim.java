@@ -1,5 +1,6 @@
 package evlibsim;
 
+import Sources.*;
 import Station.*;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -8,6 +9,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -17,7 +19,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
@@ -37,12 +38,18 @@ public class EVLibSim extends Application {
     static final ArrayList<ChargingStation> stations = new ArrayList<>();
     static ChargingStation currentStation;
     static final ArrayList<String> energies = new ArrayList<>();
+    private static MenuBar menuBar = new MenuBar();
     private static final Button newChargingStation = new Button("Station");
     private static final Button newEvent = new Button("Event");
     private static final Button newEnergy = new Button("Energy");
     private static final Button showTotalActivity = new Button("Activity");
     private static final Button report = new Button("Report");
+    private static final Button allEvents = new Button("All Events");
     private static final Button totalEnergy = new Button("Energy");
+    private static final Button searchChargingEvent = new Button("Ch/Event");
+    private static final Button searchDisChargingEvent = new Button("DisCh/Event");
+    private static final Button searchExchangeEvent = new Button("Ex/Event");
+    private static final Button searchParkingEvent = new Button("Par/Event");
     static final ToggleGroup group = new ToggleGroup();
     static final MenuItem startScreen = new MenuItem("Start Screen");
     static final Menu s = new Menu("Stations");
@@ -59,7 +66,16 @@ public class EVLibSim extends Application {
     static final Label totalExchange = new Label();
     static final Label totalParkingSlots = new Label();
     private Stage primaryStage;
-    private static final VBox miniBox = new VBox();
+    private static final VBox mBox = new VBox();
+    private static final VBox nBox = new VBox();
+    private static final VBox tBox = new VBox();
+    private static Button bt1 = new Button("ChargingEvent");
+    private static Button bt2 = new Button("DisChargingEvent");
+    private static Button bt3 = new Button("ExchangeEvent");
+    private static Button bt4 = new Button("ParkingEvent");
+    private static Button bt5 = new Button("New Amounts");
+    private static Button bt6 = new Button("New EnergySource");
+    private static Button bt7 = new Button("Delete EnergySource");
 
     public static void main(String[] args) {
         launch(args);
@@ -72,19 +88,23 @@ public class EVLibSim extends Application {
         this.primaryStage = primaryStage;
         primaryStage.setScene(scene);
         primaryStage.show();
-        MenuBar menuBar = new MenuBar();
-        miniBox.getChildren().addAll(report, showTotalActivity, totalEnergy);
-        miniBox.getStyleClass().add("mini-box");
-        miniBox.setMaxSize(200, 180);
-        root.setRight(miniBox);
-        BorderPane.setAlignment(miniBox, Pos.CENTER_RIGHT);
+        mBox.getStyleClass().add("mini-box");
+        mBox.getChildren().addAll(report, showTotalActivity, totalEnergy, allEvents);
+        mBox.setMaxSize(200, 180);
+        nBox.getChildren().addAll(searchChargingEvent, searchDisChargingEvent, searchExchangeEvent, searchParkingEvent);
+        nBox.getStyleClass().add("mini-box");
+        nBox.setMaxSize(200, 180);
+        BorderPane.setAlignment(tBox, Pos.CENTER_RIGHT);
+        tBox.getChildren().addAll(mBox, nBox);
+        tBox.setSpacing(100);
+        tBox.setAlignment(Pos.CENTER_RIGHT);
         root.setTop(menuBar);
+        root.setRight(tBox);
         Menu file = new Menu("File");
         exitMenuItem.setOnAction(actionEvent -> Platform.exit());
         file.getItems().addAll(newSession, open, save, saveAs, startScreen, s, about, exitMenuItem);
         menuBar.getMenus().addAll(file, View.createViewMenu(),
-                MenuStation.createStationMenu(), Event.createEventMenu(),
-                Search.createSearchMenu(), Energy.createEnergyMenu());
+                MenuStation.createStationMenu(), Event.createEventMenu(), Energy.createEnergyMenu());
         scene.getStylesheets().add(EVLibSim.class.getResource("EVLibSim.css").toExternalForm());
         grid.getStyleClass().add("grid");
         stationGrid.getStyleClass().add("stationGrid");
@@ -107,7 +127,6 @@ public class EVLibSim extends Application {
             grid.add(newChargingStation, 0, 0);
             grid.add(newEvent, 0, 1);
             grid.add(newEnergy, 0, 2);
-            BorderPane.setAlignment(grid, Pos.CENTER);
             grid.setAlignment(Pos.CENTER);
             root.setCenter(grid);
         });
@@ -146,7 +165,7 @@ public class EVLibSim extends Application {
             if(Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
-            grid.setMaxSize(800, 500);
+            grid.setMaxSize(600, 350);
             Label foo;
             foo = new Label("Total energy: ");
             grid.add(foo, 0, 1);
@@ -198,8 +217,171 @@ public class EVLibSim extends Application {
             grid.add(foo, 2, 4);
             foo = new Label(String.valueOf(currentStation.reSpecificAmount("discharging")));
             grid.add(foo, 3, 4);
-            foo = new Label("*This source is an option for the station.");
+            foo = new Label("*Selected");
             grid.add(foo, 0, 5);
+            root.setCenter(grid);
+        });
+        newEvent.setOnAction(e -> {
+            if(Maintenance.stationCheck())
+                return;
+            Maintenance.cleanScreen();
+            bt1.setPrefSize(220, 60);
+            bt2.setPrefSize(220, 60);
+            bt3.setPrefSize(220, 60);
+            bt4.setPrefSize(220, 60);
+            grid.setMaxSize(400, 400);
+            grid.setMinSize(400, 400);
+            grid.add(bt1, 0, 0);
+            grid.add(bt2, 0, 1);
+            grid.add(bt3, 0, 2);
+            grid.add(bt4, 0, 3);
+            root.setCenter(grid);
+        });
+        bt1.setOnAction(e -> Event.charging.fire());
+        bt2.setOnAction(e -> Event.discharging.fire());
+        bt3.setOnAction(e -> Event.exchange.fire());
+        bt4.setOnAction(e -> Event.parking.fire());
+        bt5.setOnAction(e -> Energy.newEnergyPackages.fire());
+        bt6.setOnAction(e -> {
+            Maintenance.cleanScreen();
+            grid.setMaxSize(320, 280);
+            grid.setMinSize(320, 280);
+            TextField foo;
+            grid.add(new Label("Kind of Energy: "), 0, 0);
+            foo = new TextField();
+            grid.add(foo, 1, 0);
+            textfields.add(foo);
+            grid.add(new Label("Initial Amount:"), 0, 1);
+            foo = new TextField();
+            grid.add(foo, 1, 1);
+            textfields.add(foo);
+            Button creation = new Button("Creation");
+            grid.add(creation, 0, 2);
+            creation.setDefaultButton(true);
+            root.setCenter(grid);
+            creation.setOnAction(et -> {
+                if(Maintenance.fieldCompletionCheck())
+                    return;
+                switch (textfields.get(0).getText())
+                {
+                    case "Solar":
+                        if(!Maintenance.checkEnergy("solar")) {
+                            currentStation.addEnergySource(new Solar(currentStation));
+                            if(Double.parseDouble(textfields.get(1).getText())>0)
+                                currentStation.searchEnergySource("solar").insertAmount(Double.parseDouble(textfields.get(1).getText()));
+                        }
+                        else
+                            Maintenance.energyAlert("Solar");
+                        break;
+                    case "Geothermal":
+                        if(!Maintenance.checkEnergy("geothermal")) {
+                            currentStation.addEnergySource(new Geothermal(currentStation));
+                            if(Double.parseDouble(textfields.get(1).getText())>0)
+                                currentStation.searchEnergySource("geothermal").insertAmount(Double.parseDouble(textfields.get(1).getText()));
+                        }
+                        else
+                            Maintenance.energyAlert("Geothermal");
+                        break;
+                    case "Wind":
+                        if(!Maintenance.checkEnergy("wind")) {
+                            currentStation.addEnergySource(new Wind(currentStation));
+                            if(Double.parseDouble(textfields.get(1).getText())>0)
+                                currentStation.searchEnergySource("wind").insertAmount(Double.parseDouble(textfields.get(1).getText()));
+                        }
+                        else
+                            Maintenance.energyAlert("Wind");
+                        break;
+                    case "Wave":
+                        if(!Maintenance.checkEnergy("wave")) {
+                            currentStation.addEnergySource(new Wave(currentStation));
+                            if(Double.parseDouble(textfields.get(1).getText())>0)
+                                currentStation.searchEnergySource("wave").insertAmount(Double.parseDouble(textfields.get(1).getText()));
+                        }
+                        else
+                            Maintenance.energyAlert("Wave");
+                        break;
+                    case "Hydro-Electric":
+                        if(!Maintenance.checkEnergy("hydroelectric")) {
+                            currentStation.addEnergySource(new HydroElectric(currentStation));
+                            if(Double.parseDouble(textfields.get(1).getText())>0)
+                                currentStation.searchEnergySource("hydroelectric").insertAmount(Double.parseDouble(textfields.get(1).getText()));
+                        }
+                        else
+                            Maintenance.energyAlert("Hydro-Electric");
+                        break;
+                    case "Non-Renewable":
+                        if(!Maintenance.checkEnergy("nonrenewable")) {
+                            currentStation.addEnergySource(new NonRenewable(currentStation));
+                            if(Double.parseDouble(textfields.get(1).getText())>0)
+                                currentStation.searchEnergySource("nonrenewable").insertAmount(Double.parseDouble(textfields.get(1).getText()));
+                        }
+                        else
+                            Maintenance.energyAlert("Non-Renewable");
+                        break;
+                }
+                startScreen.fire();
+            });
+        });
+        bt7.setOnAction(e -> {
+            TextInputDialog dialog = new TextInputDialog();
+            dialog.setTitle("Information");
+            dialog.setHeaderText(null);
+            dialog.setContentText("EnergySource: ");
+            Optional<String> result = dialog.showAndWait();
+            if(result.isPresent())
+                switch (result.get())
+                {
+                    case "Solar":
+                        if(Maintenance.checkEnergy("solar"))
+                            currentStation.deleteEnergySource(currentStation.searchEnergySource("solar"));
+                        else
+                            Maintenance.notEnergyAlert("Solar");
+                        break;
+                    case "Geothermal":
+                        if(Maintenance.checkEnergy("geothermal"))
+                            currentStation.deleteEnergySource(currentStation.searchEnergySource("geothermal"));
+                        else
+                            Maintenance.notEnergyAlert("Geothermal");
+                        break;
+                    case "Wind":
+                        if(Maintenance.checkEnergy("wind"))
+                            currentStation.deleteEnergySource(currentStation.searchEnergySource("wind"));
+                        else
+                            Maintenance.notEnergyAlert("Wind");
+                        break;
+                    case "Wave":
+                        if(Maintenance.checkEnergy("wave"))
+                            currentStation.deleteEnergySource(currentStation.searchEnergySource("wave"));
+                        else
+                            Maintenance.notEnergyAlert("Wave");
+                        break;
+                    case "Hydro-Electric":
+                        if(Maintenance.checkEnergy("hydroelectric"))
+                            currentStation.deleteEnergySource(currentStation.searchEnergySource("hydroelectric"));
+                        else
+                            Maintenance.notEnergyAlert("Hydro-Electric");
+                        break;
+                    case "Non-Renewable":
+                        if(Maintenance.checkEnergy("nonrenewable"))
+                            currentStation.deleteEnergySource(currentStation.searchEnergySource("nonrenewable"));
+                        else
+                            Maintenance.notEnergyAlert("Non-Renewable");
+                        break;
+                }
+                startScreen.fire();
+        });
+        newEnergy.setOnAction(e -> {
+            if(Maintenance.stationCheck())
+                return;
+            Maintenance.cleanScreen();
+            bt5.setPrefSize(220, 60);
+            bt6.setPrefSize(220, 60);
+            bt7.setPrefSize(220, 60);
+            grid.setMaxSize(400, 400);
+            grid.setMinSize(400, 400);
+            grid.add(bt5, 0, 0);
+            grid.add(bt6, 0, 1);
+            grid.add(bt7, 0, 2);
             root.setCenter(grid);
         });
         about.setOnAction(e ->
@@ -209,6 +391,18 @@ public class EVLibSim extends Application {
             alert.setHeaderText(null);
             alert.setContentText("Creator: Karapostolakis Sotirios\nemail: skarapos@outlook.com\nYear: 2017");
             alert.showAndWait();
+        });
+        searchChargingEvent.setOnAction(e -> {
+            Search.searchCharging.fire();
+        });
+        searchDisChargingEvent.setOnAction(e -> {
+            Search.searchDisCharging.fire();
+        });
+        searchExchangeEvent.setOnAction(e -> {
+            Search.searchExchange.fire();
+        });
+        searchParkingEvent.setOnAction(e -> {
+            Search.searchParking.fire();
         });
         open.setOnAction(e -> {
             FileChooser fileChooser = new FileChooser();

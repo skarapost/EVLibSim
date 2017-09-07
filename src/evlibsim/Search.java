@@ -10,10 +10,10 @@ import static evlibsim.EVLibSim.*;
 class Search {
 
     private static final Menu search = new Menu("Search");
-    private static final MenuItem searchCharging = new MenuItem("Search ChargingEvent");
-    private static final MenuItem searchDisCharging = new MenuItem("Search DisChargingEvent");
-    private static final MenuItem searchExchange = new MenuItem("Search Exchange Battery Event");
-    private static final MenuItem searchParking = new MenuItem("Search ParkingEvent");
+    static final MenuItem searchCharging = new MenuItem("Search ChargingEvent");
+    static final MenuItem searchDisCharging = new MenuItem("Search DisChargingEvent");
+    static final MenuItem searchExchange = new MenuItem("Search Exchange Battery Event");
+    static final MenuItem searchParking = new MenuItem("Search ParkingEvent");
     private static final Button searchChargingEvent = new Button("Search");
     private static final Button searchDisChargingEvent = new Button("Search");
     private static final Button searchExchangeEvent = new Button("Search");

@@ -17,7 +17,7 @@ class Energy {
     private static final Menu geothermal = new Menu("Geothermal energy");
     private static final Menu nonrenewable = new Menu("Nonrenewable energy");
     private static final MenuItem updateStorage = new MenuItem("Update Storage");
-    private static final MenuItem newEnergyPackages = new MenuItem("New amounts");
+    static final MenuItem newEnergyPackages = new MenuItem("New amounts");
     private static final MenuItem sortEnergies = new MenuItem("Sort Energies");
     private static final Button addEnergies = new Button("Add");
     private static final Button sort = new Button("Sort");
@@ -27,7 +27,7 @@ class Energy {
 
     static Menu createEnergyMenu()
     {
-        MenuItem newEnergy = new MenuItem("Hydroelectric energy");
+        MenuItem newEnergy = new MenuItem("Hydro-Electric energy");
         MenuItem newAmount = new MenuItem("New amount of hydroelectric energy");
         MenuItem deletion = new MenuItem("Energy removal");
         hydro.getItems().addAll(newEnergy, newAmount, deletion);
@@ -62,7 +62,7 @@ class Energy {
         newEnergies.add(newEnergy);
         newAmounts.add(newAmount);
         deletions.add(deletion);
-        newEnergy = new MenuItem("Nonrenewable energy");
+        newEnergy = new MenuItem("Non-Renewable energy");
         newAmount = new MenuItem("New amount of nonrenewable energy");
         deletion = new MenuItem("Energy removal");
         nonrenewable.getItems().addAll(newEnergy, newAmount, deletion);
@@ -101,18 +101,18 @@ class Energy {
                         currentStation.addEnergySource(energySource);
                     } else
                         Maintenance.energyAlert("Geothermal");
-                } else if (mi.getText().equals("Nonrenewable energy")) {
+                } else if (mi.getText().equals("Non-Renewable energy")) {
                     if ((currentStation.searchEnergySource("nonrenewable") == null)) {
                         energySource = new NonRenewable(currentStation);
                         currentStation.addEnergySource(energySource);
                     } else
-                        Maintenance.energyAlert("Nonrenewable");
+                        Maintenance.energyAlert("Non-Renewable");
                 } else {
                     if ((currentStation.searchEnergySource("hydroelectric") == null)) {
                         energySource = new HydroElectric(currentStation);
                         currentStation.addEnergySource(energySource);
                     } else
-                        Maintenance.energyAlert("Hydroelectric");
+                        Maintenance.energyAlert("Hydro-Electric");
                 }
             });
         }
@@ -260,7 +260,7 @@ class Energy {
             if(Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
-            grid.setMaxSize(800, 500);
+            grid.setMaxSize(600, 350);
             TextField boo;
             Label foo;
             boo = new TextField("0");
@@ -328,7 +328,9 @@ class Energy {
             foo = new Label("DisCharging*: ");
             grid.add(foo, 0, 4);
             grid.add(boo, 1, 4);
-            grid.add(sort, 0, 5);
+            foo = new Label("*Selected");
+            grid.add(foo, 0, 5, 2, 1);
+            grid.add(sort, 0, 6);
             sort.setDefaultButton(true);
             root.setCenter(grid);
         });

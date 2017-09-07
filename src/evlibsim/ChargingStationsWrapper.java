@@ -12,11 +12,11 @@ class ChargingStationsWrapper {
     private List<ChargingStation> stations;
 
     @XmlElement(name = "ChargingStation")
-    public List<ChargingStation> getChargingStations() {
+    List<ChargingStation> getChargingStations() {
         return stations;
     }
 
-    public void setChargingStations() {
+    void setChargingStations() {
         this.stations = EVLibSim.stations;
     }
 }

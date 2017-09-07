@@ -41,20 +41,10 @@ class View {
             Maintenance.cleanScreen();
             grid.setMaxSize(800, 600);
             energies.clear();
-            TextField boo;
             Label foo;
-            foo = new Label("Name of charging station: ");
-            grid.add(foo, 0, 1);
-            boo = new TextField(currentStation.reName());
-            grid.add(boo, 1, 1);
-            foo = new Label("Number in the waiting list: ");
-            grid.add(foo, 2, 1);
-            int total = currentStation.reFast().reSize() + currentStation.reSlow().reSize() + currentStation.reDischarging().rSize() + currentStation.reExchange().reSize();
-            boo = new TextField(String.valueOf(total));
-            grid.add(boo, 3, 1);
             foo = new Label("ChargingEvent(fast)");
-            grid.add(foo, 0, 2);
-            int j = 3;
+            grid.add(foo, 0, 0);
+            int j = 1;
             for(int i = 0; i < currentStation.reFast().reSize(); i++)
             {
                 foo = new Label("Id: " + currentStation.reFast().peek(i).reId());
@@ -69,8 +59,8 @@ class View {
                 grid.add(foo, 0, j++);
             }
             foo = new Label("ChargingEvent(slow)");
-            grid.add(foo, 1, 2);
-            j = 3;
+            grid.add(foo, 1, 0);
+            j = 1;
             for(int i = 0; i < currentStation.reSlow().reSize(); i++)
             {
                 foo = new Label("Id: " + currentStation.reSlow().peek(i).reId());
@@ -85,8 +75,8 @@ class View {
                 grid.add(foo, 1, j++);
             }
             foo = new Label("DisChargingEvent");
-            grid.add(foo, 2, 2);
-            j = 3;
+            grid.add(foo, 2, 0);
+            j = 1;
             for(int i = 0; i < currentStation.reDischarging().rSize(); i++)
             {
                 foo = new Label("Id: " + currentStation.reDischarging().peek(i).reId());
@@ -101,8 +91,8 @@ class View {
                 grid.add(foo, 2, j++);
             }
             foo = new Label("ChargingEvent(exchange)");
-            grid.add(foo, 3, 2);
-            j = 3;
+            grid.add(foo, 3, 0);
+            j = 1;
             for(int i = 0; i < currentStation.reExchange().reSize(); i++)
             {
                 foo = new Label("Id: " + currentStation.reExchange().peek(i).reId());
@@ -166,7 +156,7 @@ class View {
                         break;
                     case "nonrenewable":
                         if(currentStation.reSpecificAmount("nonrenewable") > 0) {
-                            pieChartData.add(new PieChart.Data("Non-renewable", currentStation.reSpecificAmount("nonrenewable")));
+                            pieChartData.add(new PieChart.Data("Non-Renewable", currentStation.reSpecificAmount("nonrenewable")));
                             continue;
                         }
                         break;
