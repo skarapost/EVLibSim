@@ -69,7 +69,7 @@ class Maintenance {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Information");
         alert.setHeaderText(null);
-        alert.setContentText("The " + message + " was created successfully.");
+        alert.setContentText("The " + message + " was successfull.");
         alert.showAndWait();
     }
 
@@ -84,7 +84,7 @@ class Maintenance {
 
     static boolean checkEnergy(String energy)
     {
-        for(String energ: currentStation.reSources())
+        for(String energ: currentStation.getSources())
             if(energ.equals(energy))
                 return true;
         return false;

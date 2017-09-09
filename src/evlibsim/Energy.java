@@ -78,39 +78,45 @@ class Energy {
                 MenuItem mi = (MenuItem) e.getSource();
                 EnergySource energySource;
                 if (mi.getText().equals("Wind energy")) {
-                    if ((currentStation.searchEnergySource("wind") == null)) {
+                    if ((currentStation.getEnergySource("wind") == null)) {
                         energySource = new Wind(currentStation);
                         currentStation.addEnergySource(energySource);
+                        Maintenance.completionMessage("energy insertion");
                     } else
                         Maintenance.energyAlert("Wind");
                 } else if (mi.getText().equals("Wave energy")) {
-                    if ((currentStation.searchEnergySource("wave") == null)) {
+                    if ((currentStation.getEnergySource("wave") == null)) {
                         energySource = new Wave(currentStation);
                         currentStation.addEnergySource(energySource);
+                        Maintenance.completionMessage("energy insertion");
                     } else
                         Maintenance.energyAlert("Wave");
                 } else if (mi.getText().equals("Solar energy")) {
-                    if ((currentStation.searchEnergySource("solar") == null)) {
+                    if ((currentStation.getEnergySource("solar") == null)) {
                         energySource = new Solar(currentStation);
                         currentStation.addEnergySource(energySource);
+                        Maintenance.completionMessage("energy insertion");
                     } else
                         Maintenance.energyAlert("Solar");
                 } else if (mi.getText().equals("Geothermal energy")) {
-                    if ((currentStation.searchEnergySource("geothermal") == null)) {
+                    if ((currentStation.getEnergySource("geothermal") == null)) {
                         energySource = new Geothermal(currentStation);
                         currentStation.addEnergySource(energySource);
+                        Maintenance.completionMessage("energy insertion");
                     } else
                         Maintenance.energyAlert("Geothermal");
                 } else if (mi.getText().equals("Non-Renewable energy")) {
-                    if ((currentStation.searchEnergySource("nonrenewable") == null)) {
+                    if ((currentStation.getEnergySource("nonrenewable") == null)) {
                         energySource = new NonRenewable(currentStation);
                         currentStation.addEnergySource(energySource);
+                        Maintenance.completionMessage("energy insertion");
                     } else
                         Maintenance.energyAlert("Non-Renewable");
                 } else {
-                    if ((currentStation.searchEnergySource("hydroelectric") == null)) {
+                    if ((currentStation.getEnergySource("hydroelectric") == null)) {
                         energySource = new HydroElectric(currentStation);
                         currentStation.addEnergySource(energySource);
+                        Maintenance.completionMessage("energy insertion");
                     } else
                         Maintenance.energyAlert("Hydro-Electric");
                 }
@@ -123,7 +129,7 @@ class Energy {
                 MenuItem mi = (MenuItem) e.getSource();
                 EnergySource energySource;
                 if (mi.getText().equals("New amount of wind energy")) {
-                    energySource = currentStation.searchEnergySource("wind");
+                    energySource = currentStation.getEnergySource("wind");
                     if ((energySource != null)) {
                         TextInputDialog dialog = new TextInputDialog();
                         dialog.setTitle("Addition of energy amount");
@@ -131,11 +137,12 @@ class Energy {
                         dialog.setContentText("New amount");
                         Optional<String> result = dialog.showAndWait();
                         result.ifPresent(s -> energySource.insertAmount(Double.parseDouble(s)));
+                        Maintenance.completionMessage("amount insertion");
                     }
                     else
                         Maintenance.notEnergyAlert("Wind");
                 } else if (mi.getText().equals("New amount of wave energy")) {
-                    energySource = currentStation.searchEnergySource("wave");
+                    energySource = currentStation.getEnergySource("wave");
                     if ((energySource != null)) {
                         TextInputDialog dialog = new TextInputDialog();
                         dialog.setTitle("Addition of energy amount");
@@ -143,11 +150,12 @@ class Energy {
                         dialog.setContentText("New amount");
                         Optional<String> result = dialog.showAndWait();
                         result.ifPresent(s -> energySource.insertAmount(Double.parseDouble(s)));
+                        Maintenance.completionMessage("amount insertion");
                     }
                     else
                         Maintenance.notEnergyAlert("Wave");
                 } else if (mi.getText().equals("New amount of solar energy")) {
-                    energySource = currentStation.searchEnergySource("solar");
+                    energySource = currentStation.getEnergySource("solar");
                     if ((energySource != null)) {
                         TextInputDialog dialog = new TextInputDialog();
                         dialog.setTitle("Addition of energy amount");
@@ -155,11 +163,12 @@ class Energy {
                         dialog.setContentText("New amount");
                         Optional<String> result = dialog.showAndWait();
                         result.ifPresent(s -> energySource.insertAmount(Double.parseDouble(s)));
+                        Maintenance.completionMessage("amount insertion");
                     }
                     else
                         Maintenance.notEnergyAlert("Solar");
                 } else if (mi.getText().equals("New amount of geothermal energy")) {
-                    energySource = currentStation.searchEnergySource("geothermal");
+                    energySource = currentStation.getEnergySource("geothermal");
                     if ((energySource != null)) {
                         TextInputDialog dialog = new TextInputDialog();
                         dialog.setTitle("Addition of energy amount");
@@ -167,11 +176,12 @@ class Energy {
                         dialog.setContentText("New amount");
                         Optional<String> result = dialog.showAndWait();
                         result.ifPresent(s -> energySource.insertAmount(Double.parseDouble(s)));
+                        Maintenance.completionMessage("amount insertion");
                     }
                     else
                         Maintenance.notEnergyAlert("Geothermal");
                 } else if (mi.getText().equals("New amount of nonrenewable energy")) {
-                    energySource = currentStation.searchEnergySource("nonrenewable");
+                    energySource = currentStation.getEnergySource("nonrenewable");
                     if ((energySource != null)) {
                         TextInputDialog dialog = new TextInputDialog();
                         dialog.setTitle("Addition of energy amount");
@@ -179,11 +189,12 @@ class Energy {
                         dialog.setContentText("New amount");
                         Optional<String> result = dialog.showAndWait();
                         result.ifPresent(s -> energySource.insertAmount(Double.parseDouble(s)));
+                        Maintenance.completionMessage("amount insertion");
                     }
                     else
                         Maintenance.notEnergyAlert("Nonrenewable");
                 } else {
-                    energySource = currentStation.searchEnergySource("hydroelectric");
+                    energySource = currentStation.getEnergySource("hydroelectric");
                     if ((energySource != null)) {
                         TextInputDialog dialog = new TextInputDialog();
                         dialog.setTitle("Addition of energy amount");
@@ -191,6 +202,7 @@ class Energy {
                         dialog.setContentText("New amount");
                         Optional<String> result = dialog.showAndWait();
                         result.ifPresent(s -> energySource.insertAmount(Double.parseDouble(s)));
+                        Maintenance.completionMessage("amount insertion");
                     }
                     else
                         Maintenance.notEnergyAlert("Hydroelectric");
@@ -204,37 +216,37 @@ class Energy {
                 MenuItem mi = (MenuItem) e.getSource();
                 EnergySource energySource;
                 if (mi.getText().equals("Remove wind energy")) {
-                    energySource = currentStation.searchEnergySource("wind");
+                    energySource = currentStation.getEnergySource("wind");
                     if (energySource != null)
                         currentStation.deleteEnergySource(energySource);
                     else
                         Maintenance.notEnergyAlert("Wind");
                 } else if (mi.getText().equals("Remove wave energy")) {
-                    energySource = currentStation.searchEnergySource("wave");
+                    energySource = currentStation.getEnergySource("wave");
                     if (energySource != null)
                         currentStation.deleteEnergySource(energySource);
                     else
                         Maintenance.notEnergyAlert("Wave");
                 } else if (mi.getText().equals("Remove solar energy")) {
-                    energySource = currentStation.searchEnergySource("solar");
+                    energySource = currentStation.getEnergySource("solar");
                     if (energySource != null)
                         currentStation.deleteEnergySource(energySource);
                     else
                         Maintenance.notEnergyAlert("Solar");
                 } else if (mi.getText().equals("Remove geothermal energy")) {
-                    energySource = currentStation.searchEnergySource("geothermal");
+                    energySource = currentStation.getEnergySource("geothermal");
                     if (energySource != null)
                         currentStation.deleteEnergySource(energySource);
                     else
                         Maintenance.notEnergyAlert("Geothermal");
                 } else if (mi.getText().equals("Remove nonrenewable energy")) {
-                    energySource = currentStation.searchEnergySource("nonrenewable");
+                    energySource = currentStation.getEnergySource("nonrenewable");
                     if (energySource != null)
                         currentStation.deleteEnergySource(energySource);
                     else
                         Maintenance.notEnergyAlert("Non-Renewable");
                 } else {
-                    energySource = currentStation.searchEnergySource("hydroelectric");
+                    energySource = currentStation.getEnergySource("hydroelectric");
                     if (energySource != null)
                         currentStation.deleteEnergySource(energySource);
                     else
@@ -245,8 +257,10 @@ class Energy {
         updateStorage.setOnAction((ActionEvent e) -> {
             if (Maintenance.stationCheck())
                 return;
-            if(!currentStation.reUpdateMode())
+            if(!currentStation.getUpdateMode()) {
                 currentStation.updateStorage();
+                Maintenance.completionMessage("storage update");
+            }
             else
             {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -408,30 +422,31 @@ class Energy {
             root.setCenter(grid);
         });
         addEnergies.setOnAction(e -> {
-            for(String en: currentStation.reSources())
+            for(String en: currentStation.getSources())
                 switch (en)
                 {
                     case "solar":
-                        currentStation.searchEnergySource("solar").insertAmount(Double.parseDouble(textfields.get(0).getText()));
+                        currentStation.getEnergySource("solar").insertAmount(Double.parseDouble(textfields.get(0).getText()));
                         break;
                     case "wind":
-                        currentStation.searchEnergySource("wind").insertAmount(Double.parseDouble(textfields.get(1).getText()));
+                        currentStation.getEnergySource("wind").insertAmount(Double.parseDouble(textfields.get(1).getText()));
                         break;
                     case "wave":
-                        currentStation.searchEnergySource("wave").insertAmount(Double.parseDouble(textfields.get(2).getText()));
+                        currentStation.getEnergySource("wave").insertAmount(Double.parseDouble(textfields.get(2).getText()));
                         break;
                     case "hydroelectric":
-                        currentStation.searchEnergySource("hydroelectric").insertAmount(Double.parseDouble(textfields.get(3).getText()));
+                        currentStation.getEnergySource("hydroelectric").insertAmount(Double.parseDouble(textfields.get(3).getText()));
                         break;
                     case "nonrenewable":
-                        currentStation.searchEnergySource("nonrenewable").insertAmount(Double.parseDouble(textfields.get(4).getText()));
+                        currentStation.getEnergySource("nonrenewable").insertAmount(Double.parseDouble(textfields.get(4).getText()));
                         break;
                     case "geothermal":
-                        currentStation.searchEnergySource("geothermal").insertAmount(Double.parseDouble(textfields.get(5).getText()));
+                        currentStation.getEnergySource("geothermal").insertAmount(Double.parseDouble(textfields.get(5).getText()));
                         break;
                     default:
                         break;
                 }
+            Maintenance.completionMessage("insertion of energy amounts");
         });
         sort.setOnAction(e -> {
             if(Maintenance.fieldCompletionCheck())
@@ -454,16 +469,16 @@ class Energy {
             }
             for(TextField a: textfields)
                 if(!a.isDisabled()) {
-                    if (Integer.parseInt(a.getText()) > currentStation.reSources().length || Integer.parseInt(a.getText()) < 1) {
+                    if (Integer.parseInt(a.getText()) > currentStation.getSources().length || Integer.parseInt(a.getText()) < 1) {
                         Alert alert = new Alert(Alert.AlertType.ERROR);
                         alert.setTitle("Error");
                         alert.setHeaderText(null);
-                        alert.setContentText("Please put numbers from 1-" + currentStation.reSources().length + ".");
+                        alert.setContentText("Please put numbers from 1-" + currentStation.getSources().length + ".");
                         alert.showAndWait();
                         return;
                     }
                 }
-            String[] sources = new String[currentStation.reSources().length];
+            String[] sources = new String[currentStation.getSources().length];
             if (!textfields.get(0).isDisabled())
                 sources[Integer.parseInt(textfields.get(0).getText()) - 1] = "solar";
             if (!textfields.get(1).isDisabled())
@@ -479,7 +494,7 @@ class Energy {
             if (!textfields.get(6).isDisabled())
                 sources[Integer.parseInt(textfields.get(6).getText()) - 1] = "discharging";
             currentStation.customEnergySorting(sources);
-            System.out.println(Arrays.toString(currentStation.reSources()));
+            Maintenance.completionMessage("sorting");
         });
         return energy;
     }

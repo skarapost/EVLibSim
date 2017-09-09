@@ -242,7 +242,7 @@ class MenuStation {
             DisCharger ch;
             ch = new DisCharger(currentStation);
             currentStation.addDisCharger(ch);
-            Maintenance.completionMessage("DisCharger");
+            Maintenance.completionMessage("DisCharger creation");
         });
         newExchangeHandlerMI.setOnAction(e ->
         {
@@ -253,7 +253,7 @@ class MenuStation {
             ExchangeHandler ch;
             ch = new ExchangeHandler(currentStation);
             currentStation.addExchangeHandler(ch);
-            Maintenance.completionMessage("ExchangeHandler");
+            Maintenance.completionMessage("ExchangeHandler creation");
         });
         newParkingSlotMI.setOnAction(e ->
         {
@@ -264,7 +264,7 @@ class MenuStation {
             ParkingSlot ch;
             ch = new ParkingSlot(currentStation);
             currentStation.addParkingSlot(ch);
-            Maintenance.completionMessage("ParkingSlot");
+            Maintenance.completionMessage("ParkingSlot creation");
         });
         modifyChargingStationMI.setOnAction(e -> {
             if (Maintenance.stationCheck())
@@ -276,7 +276,7 @@ class MenuStation {
             Label foo;
             foo = new Label("Name of charging station: ");
             EVLibSim.grid.add(foo, 0, 1);
-            boo = new TextField(currentStation.reName());
+            boo = new TextField(currentStation.getName());
             EVLibSim.grid.add(boo, 1, 1);
             textfields.add(boo);
             MenuBar sourc = new MenuBar();
@@ -285,42 +285,42 @@ class MenuStation {
             Menu src;
             foo = new Label("Charging fee per unit: ");
             EVLibSim.grid.add(foo, 2, 1);
-            boo = new TextField(Double.toString(currentStation.reUnitPrice()));
+            boo = new TextField(Double.toString(currentStation.getUnitPrice()));
             EVLibSim.grid.add(boo, 3, 1);
             textfields.add(boo);
             foo = new Label("DisCharging fee per unit: ");
             EVLibSim.grid.add(foo, 0, 2);
-            boo = new TextField(Double.toString(currentStation.reDisUnitPrice()));
+            boo = new TextField(Double.toString(currentStation.getDisUnitPrice()));
             EVLibSim.grid.add(boo, 1, 2);
             textfields.add(boo);
             foo = new Label("Battery exchange fee: ");
             EVLibSim.grid.add(foo, 2, 2);
-            boo = new TextField(Double.toString(currentStation.reExchangePrice()));
+            boo = new TextField(Double.toString(currentStation.getExchangePrice()));
             EVLibSim.grid.add(boo, 3, 2);
             textfields.add(boo);
             foo = new Label("Inductive fee per unit: ");
             EVLibSim.grid.add(foo, 0, 3);
-            boo = new TextField(Double.toString(currentStation.reInductivePrice()));
+            boo = new TextField(Double.toString(currentStation.getInductivePrice()));
             EVLibSim.grid.add(boo, 1, 3);
             textfields.add(boo);
             foo = new Label("Fast charging ratio: ");
             EVLibSim.grid.add(foo, 2, 3);
-            boo = new TextField(Double.toString(currentStation.reChargingRatioFast()));
+            boo = new TextField(Double.toString(currentStation.getChargingRatioFast()));
             EVLibSim.grid.add(boo, 3, 3);
             textfields.add(boo);
             foo = new Label("Slow charging ratio: ");
             EVLibSim.grid.add(foo, 0, 4);
-            boo = new TextField(Double.toString(currentStation.reChargingRatioSlow()));
+            boo = new TextField(Double.toString(currentStation.getChargingRatioSlow()));
             EVLibSim.grid.add(boo, 1, 4);
             textfields.add(boo);
             foo = new Label("Discharging ratio: ");
             EVLibSim.grid.add(foo, 2, 4);
-            boo = new TextField(Double.toString(currentStation.reDisChargingRatio()));
+            boo = new TextField(Double.toString(currentStation.getDisChargingRatio()));
             EVLibSim.grid.add(boo, 3, 4);
             textfields.add(boo);
             foo = new Label("Inductive charging ratio: ");
             EVLibSim.grid.add(foo, 0, 5);
-            boo = new TextField(Double.toString(currentStation.reInductiveRatio()));
+            boo = new TextField(Double.toString(currentStation.getInductiveRatio()));
             EVLibSim.grid.add(boo, 1, 5);
             textfields.add(boo);
             foo = new Label("Automatic energy update: ");
@@ -332,7 +332,7 @@ class MenuStation {
             RadioMenuItem te = new RadioMenuItem("True");
             RadioMenuItem fe = new RadioMenuItem("False");
             r.getToggles().addAll(te, fe);
-            if (currentStation.reUpdateMode())
+            if (currentStation.getUpdateMode())
                 te.setSelected(true);
             else
                 fe.setSelected(true);
@@ -348,7 +348,7 @@ class MenuStation {
             RadioMenuItem tr = new RadioMenuItem("True");
             RadioMenuItem fa = new RadioMenuItem("False");
             r.getToggles().addAll(tr, fa);
-            if (currentStation.reQueueHandling())
+            if (currentStation.getQueueHandling())
                 tr.setSelected(true);
             else
                 fa.setSelected(true);
@@ -357,7 +357,7 @@ class MenuStation {
             EVLibSim.grid.add(sourc, 1, 6);
             foo = new Label("Update space(millis): ");
             EVLibSim.grid.add(foo, 2, 6);
-            boo = new TextField(Long.toString(currentStation.reUpdateSpace()));
+            boo = new TextField(Long.toString(currentStation.getUpdateSpace()));
             EVLibSim.grid.add(boo, 3, 6);
             textfields.add(boo);
             EVLibSim.grid.add(modifyStationB, 0, 7);
@@ -379,15 +379,10 @@ class MenuStation {
                 r = Integer.parseInt(result.get());
                 Charger ch = currentStation.searchCharger(r);
                 if (ch != null)
-                    if (!ch.reBusy())
+                    if (!ch.getBusy())
                     {
                         currentStation.deleteCharger(ch);
-                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                        alert.setTitle("Information");
-                        alert.setHeaderText(null);
-                        alert.setContentText("The deletion was successfull.");
-                        alert.showAndWait();
-                        startScreen.fire();
+                        Maintenance.completionMessage("Charger deletion");
                     }
                     else
                     {
@@ -418,15 +413,10 @@ class MenuStation {
                 r = Integer.parseInt(result.get());
                 DisCharger dsch = currentStation.searchDischarger(r);
                 if (dsch != null)
-                    if (!dsch.reBusy())
+                    if (!dsch.getBusy())
                     {
                         currentStation.deleteDisCharger(dsch);
-                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                        alert.setTitle("Information");
-                        alert.setHeaderText(null);
-                        alert.setContentText("The deletion was successfull.");
-                        alert.showAndWait();
-                        startScreen.fire();
+                        Maintenance.completionMessage("DisCharger removal");
                     }
                     else
                     {
@@ -457,14 +447,9 @@ class MenuStation {
                 r = Integer.parseInt(result.get());
                 ExchangeHandler dsch = currentStation.searchExchangeHandler(r);
                 if(dsch != null)
-                    if (!dsch.reBusy()) {
+                    if (!dsch.getBusy()) {
                         currentStation.deleteExchangeHandler(dsch);
-                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                        alert.setTitle("Information");
-                        alert.setHeaderText(null);
-                        alert.setContentText("The deletion was successfull.");
-                        alert.showAndWait();
-                        startScreen.fire();
+                        Maintenance.completionMessage("ExchangeHandler removal");
                     }
                     else
                     {
@@ -495,14 +480,9 @@ class MenuStation {
                 r = Integer.parseInt(result.get());
                 ParkingSlot dsch = currentStation.searchParkingSlot(r);
                 if(dsch != null)
-                    if (!dsch.reBusy()) {
+                    if (!dsch.getBusy()) {
                         currentStation.deleteParkingSlot(dsch);
-                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                        alert.setTitle("Information");
-                        alert.setHeaderText(null);
-                        alert.setContentText("The deletion was successfull.");
-                        alert.showAndWait();
-                        startScreen.fire();
+                        Maintenance.completionMessage("ParkingSlot deletion");
                     }
                     else
                     {
@@ -530,8 +510,8 @@ class MenuStation {
             box.getStyleClass().add("box");
             scroll.setMaxSize(500, 600);
             Label foo;
-            for(Charger ch: currentStation.reChargers()) {
-                foo = new Label("Id: " + ch.reId() + "     " + "Kind: " + ch.reKind() + "     " + "Occupied: " + ch.reBusy() + "     " + "Elapsed commit time: " + ch.reElapsedCommitTime());
+            for(Charger ch: currentStation.getChargers()) {
+                foo = new Label("Id: " + ch.getId() + "     " + "Kind: " + ch.getKind() + "     " + "Occupied: " + ch.getBusy() + "     " + "Elapsed commit time: " + ch.reElapsedCommitTime());
                 box.getChildren().add(foo);
             }
             scroll.setContent(box);
@@ -546,8 +526,8 @@ class MenuStation {
             box.getStyleClass().add("box");
             scroll.setMaxSize(400, 600);
             Label foo;
-            for(DisCharger ch: currentStation.reDisChargers()) {
-                foo = new Label("Id: " + ch.reId() + "     " + "Occupied: " + ch.reBusy() + "     " + "Elapsed commit time: " + ch.reElapsedCommitTime());
+            for(DisCharger ch: currentStation.getDisChargers()) {
+                foo = new Label("Id: " + ch.getId() + "     " + "Occupied: " + ch.getBusy() + "     " + "Elapsed commit time: " + ch.getElapsedCommitTime());
                 box.getChildren().add(foo);
             }
             scroll.setContent(box);
@@ -561,8 +541,8 @@ class MenuStation {
             box.getStyleClass().add("box");
             scroll.setMaxSize(400, 600);
             Label foo;
-            for(ExchangeHandler ch: currentStation.reExchangeHandlers()) {
-                foo = new Label("Id: " + ch.reId() + "     " + "Occupied: " + ch.reBusy() + "     " + "Elapsed commit time: " + ch.reElapsedCommitTime());
+            for(ExchangeHandler ch: currentStation.getExchangeHandlers()) {
+                foo = new Label("Id: " + ch.getId() + "     " + "Occupied: " + ch.getBusy() + "     " + "Elapsed commit time: " + ch.getElapsedCommitTime());
                 box.getChildren().add(foo);
             }
             scroll.setContent(box);
@@ -576,8 +556,8 @@ class MenuStation {
             box.getStyleClass().add("box");
             scroll.setMaxSize(400, 600);
             Label foo;
-            for(ParkingSlot ch: currentStation.reParkingSlots()) {
-                foo = new Label("Id: " + ch.reId() + "     " + "Occupied: " + ch.reBusy() + "     " + "Elapsed commit time: " + ch.reElapsedCommitTime());
+            for(ParkingSlot ch: currentStation.getParkingSlots()) {
+                foo = new Label("Id: " + ch.getId() + "     " + "Occupied: " + ch.getBusy() + "     " + "Elapsed commit time: " + ch.getElapsedCommitTime());
                 box.getChildren().add(foo);
             }
             scroll.setContent(box);
@@ -597,7 +577,6 @@ class MenuStation {
             alert.setHeaderText(null);
             alert.setContentText("The chargings started.");
             alert.showAndWait();
-            startScreen.fire();
         });
 
         chargerCreationB.setOnAction(e ->
@@ -605,8 +584,7 @@ class MenuStation {
             Charger ch;
             ch = new Charger(currentStation, textfields.get(0).getText());
             currentStation.addCharger(ch);
-            Maintenance.completionMessage("Charger");
-            startScreen.fire();
+            Maintenance.completionMessage("Charger creation");
         });
         chargingStationCreationB.setOnAction(e ->
         {
@@ -717,13 +695,12 @@ class MenuStation {
                 }
             }
             stations.add(st);
-            cs = new RadioMenuItem(st.reName());
+            cs = new RadioMenuItem(st.getName());
             group.getToggles().add(cs);
             s.getItems().add(cs);
             if(s.getItems().size() == 1)
                 cs.setSelected(true);
-            Maintenance.completionMessage("ChargingStation");
-            startScreen.fire();
+            Maintenance.completionMessage("ChargingStation creation");
         });
         modifyStationB.setOnAction(e -> {
             if (Maintenance.fieldCompletionCheck())
@@ -739,12 +716,7 @@ class MenuStation {
             currentStation.setUpdateSpace((Integer.parseInt(textfields.get(9).getText())));
             currentStation.setAutomaticQueueHandling(automaticHandling);
             currentStation.setAutomaticUpdateMode(automaticUpdate);
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Information");
-            alert.setHeaderText(null);
-            alert.setContentText("The station was modified successfully.");
-            alert.showAndWait();
-            startScreen.fire();
+            Maintenance.completionMessage("modification of the ChargingStation");
         });
         newBatteryMI.setOnAction(e -> {
             if (Maintenance.stationCheck())
@@ -780,8 +752,7 @@ class MenuStation {
             }
             Battery bat = new Battery(Integer.parseInt(textfields.get(1).getText()), Integer.parseInt(textfields.get(0).getText()));
             currentStation.joinBattery(bat);
-            Maintenance.completionMessage("battery");
-            startScreen.fire();
+            Maintenance.completionMessage("Battery creation");
         });
         return stationM;
     }

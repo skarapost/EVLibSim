@@ -345,8 +345,7 @@ class Event {
                 ch.preProcessing();
                 ch.execution();
             }
-            Maintenance.completionMessage("ChargingEvent");
-            startScreen.fire();
+            Maintenance.completionMessage("ChargingEvent creation");
         });
         disChargingEventCreation.setOnAction(e ->
         {
@@ -392,8 +391,7 @@ class Event {
                 dsch.preProcessing();
                 dsch.execution();
             }
-            Maintenance.completionMessage("DisChargingEvent");
-            startScreen.fire();
+            Maintenance.completionMessage("DisChargingEvent creation");
         });
         exchangeEventCreation.setOnAction(e -> {
             if (Maintenance.fieldCompletionCheck())
@@ -427,8 +425,7 @@ class Event {
             ch.setWaitingTime(Long.parseLong(textfields.get(5).getText()));
             ch.preProcessing();
             ch.execution();
-            Maintenance.completionMessage("ChargingEvent");
-            startScreen.fire();
+            Maintenance.completionMessage("ChargingEvent creation");
         });
         parkingEventCreation.setOnAction(e -> {
             if (Maintenance.fieldCompletionCheck())
@@ -478,8 +475,7 @@ class Event {
                 alert.showAndWait();
                 return;
             }
-            Maintenance.completionMessage("ParkingEvent");
-            startScreen.fire();
+            Maintenance.completionMessage("ParkingEvent creation");
         });
         policyCreation1.setOnAction(e -> {
             if(Maintenance.fieldCompletionCheck())
@@ -494,7 +490,7 @@ class Event {
                 p[i] = Double.parseDouble(prices[i]);
             PricingPolicy policy = new PricingPolicy(currentStation, Long.parseLong(textfields.get(0).getText()), p);
             currentStation.setPricingPolicy(policy);
-            Maintenance.completionMessage("PricingPolicy");
+            Maintenance.completionMessage("PricingPolicy creation");
         });
         policyCreation2.setOnAction(e -> {
             if(Maintenance.fieldCompletionCheck())
@@ -527,7 +523,7 @@ class Event {
                 }
             PricingPolicy policy = new PricingPolicy(currentStation, sp);
             currentStation.setPricingPolicy(policy);
-            Maintenance.completionMessage("PricingPolicy");
+            Maintenance.completionMessage("PricingPolicy creation");
         });
         event.getItems().addAll(charging, discharging, exchange, parking, new SeparatorMenuItem(), policy);
         return event;

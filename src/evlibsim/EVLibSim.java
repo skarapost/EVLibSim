@@ -9,7 +9,6 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -51,7 +50,7 @@ public class EVLibSim extends Application {
     private static final Button searchExchangeEvent = new Button("Ex/Event");
     private static final Button searchParkingEvent = new Button("Par/Event");
     static final ToggleGroup group = new ToggleGroup();
-    static final MenuItem startScreen = new MenuItem("Start Screen");
+    private static final MenuItem startScreen = new MenuItem("Start Screen");
     static final Menu s = new Menu("Stations");
     private static final MenuItem newSession = new MenuItem("New");
     private static final MenuItem open = new MenuItem("Open");
@@ -88,6 +87,7 @@ public class EVLibSim extends Application {
         this.primaryStage = primaryStage;
         primaryStage.setScene(scene);
         primaryStage.show();
+        Search.createSearchMenu();
         mBox.getStyleClass().add("mini-box");
         mBox.getChildren().addAll(report, showTotalActivity, totalEnergy, allEvents);
         mBox.setMaxSize(200, 180);
@@ -137,14 +137,14 @@ public class EVLibSim extends Application {
                 RadioMenuItem rmi = (RadioMenuItem) group.getSelectedToggle();
                 String name = rmi.getText();
                 for (ChargingStation cs : stations)
-                    if (Objects.equals(cs.reName(), name)) {
+                    if (Objects.equals(cs.getName(), name)) {
                         currentStation = cs;
-                        stationName.setText("ChargingStation Name: " + currentStation.reName());
-                        energyAmount.setText("Total Energy: " + currentStation.reTotalEnergy());
-                        totalChargers.setText("Number of Chargers: " + currentStation.reChargers().length);
-                        totalDisChargers.setText("Number of DisChargers: " + currentStation.reDisChargers().length);
-                        totalExchange.setText("Number of ExchangeHandlers: " + currentStation.reExchangeHandlers().length);
-                        totalParkingSlots.setText("Number of ParkingSlots: " + currentStation.reParkingSlots().length);
+                        stationName.setText("ChargingStation Name: " + currentStation.getName());
+                        energyAmount.setText("Total Energy: " + currentStation.getTotalEnergy());
+                        totalChargers.setText("Number of Chargers: " + currentStation.getChargers().length);
+                        totalDisChargers.setText("Number of DisChargers: " + currentStation.getDisChargers().length);
+                        totalExchange.setText("Number of ExchangeHandlers: " + currentStation.getExchangeHandlers().length);
+                        totalParkingSlots.setText("Number of ParkingSlots: " + currentStation.getParkingSlots().length);
                     }
             }
         });
@@ -169,53 +169,53 @@ public class EVLibSim extends Application {
             Label foo;
             foo = new Label("Total energy: ");
             grid.add(foo, 0, 1);
-            foo = new Label(String.valueOf(currentStation.reTotalEnergy()));
+            foo = new Label(String.valueOf(currentStation.getTotalEnergy()));
             grid.add(foo, 1, 1);
             if(Maintenance.checkEnergy("solar"))
                 foo = new Label("Solar*: ");
             else
                 foo = new Label("Solar: ");
             grid.add(foo, 2, 1);
-            foo = new Label(String.valueOf(currentStation.reSpecificAmount("solar")));
+            foo = new Label(String.valueOf(currentStation.getSpecificAmount("solar")));
             grid.add(foo, 3, 1);
             if(Maintenance.checkEnergy("wind"))
                 foo = new Label("Wind*: ");
             else
                 foo = new Label("Wind: ");
             grid.add(foo, 0, 2);
-            foo = new Label(String.valueOf(currentStation.reSpecificAmount("wind")));
+            foo = new Label(String.valueOf(currentStation.getSpecificAmount("wind")));
             grid.add(foo, 1, 2);
             if(Maintenance.checkEnergy("wave"))
                 foo = new Label("Wave*: ");
             else
                 foo = new Label("Wave: ");
             grid.add(foo, 2, 2);
-            foo = new Label(String.valueOf(currentStation.reSpecificAmount("wave")));
+            foo = new Label(String.valueOf(currentStation.getSpecificAmount("wave")));
             grid.add(foo, 3, 2);
             if(Maintenance.checkEnergy("hydroelectric"))
                 foo = new Label("Hydro-Electric*: ");
             else
                 foo = new Label("Hydro-Electric: ");
             grid.add(foo, 0, 3);
-            foo = new Label(String.valueOf(currentStation.reSpecificAmount("hydroelectric")));
+            foo = new Label(String.valueOf(currentStation.getSpecificAmount("hydroelectric")));
             grid.add(foo, 1, 3);
             if(Maintenance.checkEnergy("nonrenewable"))
                 foo = new Label("Non-Renewable*: ");
             else
                 foo = new Label("Non-Renewable: ");
             grid.add(foo, 2, 3);
-            foo = new Label(String.valueOf(currentStation.reSpecificAmount("nonrenewable")));
+            foo = new Label(String.valueOf(currentStation.getSpecificAmount("nonrenewable")));
             grid.add(foo, 3, 3);
             if(Maintenance.checkEnergy("geothermal"))
                 foo = new Label("Geothermal*: ");
             else
                 foo = new Label("Geothermal: ");
             grid.add(foo, 0, 4);
-            foo = new Label(String.valueOf(currentStation.reSpecificAmount("geothermal")));
+            foo = new Label(String.valueOf(currentStation.getSpecificAmount("geothermal")));
             grid.add(foo, 1, 4);
             foo = new Label("Discharging*: ");
             grid.add(foo, 2, 4);
-            foo = new Label(String.valueOf(currentStation.reSpecificAmount("discharging")));
+            foo = new Label(String.valueOf(currentStation.getSpecificAmount("discharging")));
             grid.add(foo, 3, 4);
             foo = new Label("*Selected");
             grid.add(foo, 0, 5);
@@ -268,7 +268,8 @@ public class EVLibSim extends Application {
                         if(!Maintenance.checkEnergy("solar")) {
                             currentStation.addEnergySource(new Solar(currentStation));
                             if(Double.parseDouble(textfields.get(1).getText())>0)
-                                currentStation.searchEnergySource("solar").insertAmount(Double.parseDouble(textfields.get(1).getText()));
+                                currentStation.getEnergySource("solar").insertAmount(Double.parseDouble(textfields.get(1).getText()));
+                            Maintenance.completionMessage("energy addition");
                         }
                         else
                             Maintenance.energyAlert("Solar");
@@ -277,7 +278,8 @@ public class EVLibSim extends Application {
                         if(!Maintenance.checkEnergy("geothermal")) {
                             currentStation.addEnergySource(new Geothermal(currentStation));
                             if(Double.parseDouble(textfields.get(1).getText())>0)
-                                currentStation.searchEnergySource("geothermal").insertAmount(Double.parseDouble(textfields.get(1).getText()));
+                                currentStation.getEnergySource("geothermal").insertAmount(Double.parseDouble(textfields.get(1).getText()));
+                            Maintenance.completionMessage("energy addition");
                         }
                         else
                             Maintenance.energyAlert("Geothermal");
@@ -286,7 +288,8 @@ public class EVLibSim extends Application {
                         if(!Maintenance.checkEnergy("wind")) {
                             currentStation.addEnergySource(new Wind(currentStation));
                             if(Double.parseDouble(textfields.get(1).getText())>0)
-                                currentStation.searchEnergySource("wind").insertAmount(Double.parseDouble(textfields.get(1).getText()));
+                                currentStation.getEnergySource("wind").insertAmount(Double.parseDouble(textfields.get(1).getText()));
+                            Maintenance.completionMessage("energy addition");
                         }
                         else
                             Maintenance.energyAlert("Wind");
@@ -295,7 +298,8 @@ public class EVLibSim extends Application {
                         if(!Maintenance.checkEnergy("wave")) {
                             currentStation.addEnergySource(new Wave(currentStation));
                             if(Double.parseDouble(textfields.get(1).getText())>0)
-                                currentStation.searchEnergySource("wave").insertAmount(Double.parseDouble(textfields.get(1).getText()));
+                                currentStation.getEnergySource("wave").insertAmount(Double.parseDouble(textfields.get(1).getText()));
+                            Maintenance.completionMessage("energy addition");
                         }
                         else
                             Maintenance.energyAlert("Wave");
@@ -304,7 +308,8 @@ public class EVLibSim extends Application {
                         if(!Maintenance.checkEnergy("hydroelectric")) {
                             currentStation.addEnergySource(new HydroElectric(currentStation));
                             if(Double.parseDouble(textfields.get(1).getText())>0)
-                                currentStation.searchEnergySource("hydroelectric").insertAmount(Double.parseDouble(textfields.get(1).getText()));
+                                currentStation.getEnergySource("hydroelectric").insertAmount(Double.parseDouble(textfields.get(1).getText()));
+                            Maintenance.completionMessage("energy addition");
                         }
                         else
                             Maintenance.energyAlert("Hydro-Electric");
@@ -313,13 +318,13 @@ public class EVLibSim extends Application {
                         if(!Maintenance.checkEnergy("nonrenewable")) {
                             currentStation.addEnergySource(new NonRenewable(currentStation));
                             if(Double.parseDouble(textfields.get(1).getText())>0)
-                                currentStation.searchEnergySource("nonrenewable").insertAmount(Double.parseDouble(textfields.get(1).getText()));
+                                currentStation.getEnergySource("nonrenewable").insertAmount(Double.parseDouble(textfields.get(1).getText()));
+                            Maintenance.completionMessage("energy addition");
                         }
                         else
                             Maintenance.energyAlert("Non-Renewable");
                         break;
                 }
-                startScreen.fire();
             });
         });
         bt7.setOnAction(e -> {
@@ -332,43 +337,54 @@ public class EVLibSim extends Application {
                 switch (result.get())
                 {
                     case "Solar":
-                        if(Maintenance.checkEnergy("solar"))
-                            currentStation.deleteEnergySource(currentStation.searchEnergySource("solar"));
+                        if(Maintenance.checkEnergy("solar")) {
+                            currentStation.deleteEnergySource(currentStation.getEnergySource("solar"));
+                            Maintenance.completionMessage("energy removal");
+                        }
                         else
                             Maintenance.notEnergyAlert("Solar");
                         break;
                     case "Geothermal":
-                        if(Maintenance.checkEnergy("geothermal"))
-                            currentStation.deleteEnergySource(currentStation.searchEnergySource("geothermal"));
+                        if(Maintenance.checkEnergy("geothermal")) {
+                            currentStation.deleteEnergySource(currentStation.getEnergySource("geothermal"));
+                            Maintenance.completionMessage("energy removal");
+                        }
                         else
                             Maintenance.notEnergyAlert("Geothermal");
                         break;
                     case "Wind":
-                        if(Maintenance.checkEnergy("wind"))
-                            currentStation.deleteEnergySource(currentStation.searchEnergySource("wind"));
+                        if(Maintenance.checkEnergy("wind")) {
+                            currentStation.deleteEnergySource(currentStation.getEnergySource("wind"));
+                            Maintenance.completionMessage("energy removal");
+                        }
                         else
                             Maintenance.notEnergyAlert("Wind");
                         break;
                     case "Wave":
-                        if(Maintenance.checkEnergy("wave"))
-                            currentStation.deleteEnergySource(currentStation.searchEnergySource("wave"));
+                        if(Maintenance.checkEnergy("wave")) {
+                            currentStation.deleteEnergySource(currentStation.getEnergySource("wave"));
+                            Maintenance.completionMessage("energy removal");
+                        }
                         else
                             Maintenance.notEnergyAlert("Wave");
                         break;
                     case "Hydro-Electric":
-                        if(Maintenance.checkEnergy("hydroelectric"))
-                            currentStation.deleteEnergySource(currentStation.searchEnergySource("hydroelectric"));
+                        if(Maintenance.checkEnergy("hydroelectric")) {
+                            currentStation.deleteEnergySource(currentStation.getEnergySource("hydroelectric"));
+                            Maintenance.completionMessage("energy removal");
+                        }
                         else
                             Maintenance.notEnergyAlert("Hydro-Electric");
                         break;
                     case "Non-Renewable":
-                        if(Maintenance.checkEnergy("nonrenewable"))
-                            currentStation.deleteEnergySource(currentStation.searchEnergySource("nonrenewable"));
+                        if(Maintenance.checkEnergy("nonrenewable")) {
+                            currentStation.deleteEnergySource(currentStation.getEnergySource("nonrenewable"));
+                            Maintenance.completionMessage("energy removal");
+                        }
                         else
                             Maintenance.notEnergyAlert("Non-Renewable");
                         break;
                 }
-                startScreen.fire();
         });
         newEnergy.setOnAction(e -> {
             if(Maintenance.stationCheck())
@@ -393,15 +409,23 @@ public class EVLibSim extends Application {
             alert.showAndWait();
         });
         searchChargingEvent.setOnAction(e -> {
+            if (Maintenance.stationCheck())
+                return;
             Search.searchCharging.fire();
         });
         searchDisChargingEvent.setOnAction(e -> {
+            if(Maintenance.stationCheck())
+                return;
             Search.searchDisCharging.fire();
         });
         searchExchangeEvent.setOnAction(e -> {
+            if(Maintenance.stationCheck())
+                return;
             Search.searchExchange.fire();
         });
         searchParkingEvent.setOnAction(e -> {
+            if(Maintenance.stationCheck())
+                return;
             Search.searchParking.fire();
         });
         open.setOnAction(e -> {
@@ -457,12 +481,12 @@ public class EVLibSim extends Application {
             }
             else
             {
-                stationName.setText("ChargingStation Name: " + currentStation.reName());
-                energyAmount.setText("Total Energy: " + currentStation.reTotalEnergy());
-                totalChargers.setText("Number of Chargers: " + currentStation.reChargers().length);
-                totalDisChargers.setText("Number of DisChargers: " + currentStation.reDisChargers().length);
-                totalExchange.setText("Number of ExchangeHandlers: " + currentStation.reExchangeHandlers().length);
-                totalParkingSlots.setText("Number of ParkingSlots: " + currentStation.reParkingSlots().length);
+                stationName.setText("ChargingStation Name: " + currentStation.getName());
+                energyAmount.setText("Total Energy: " + currentStation.getTotalEnergy());
+                totalChargers.setText("Number of Chargers: " + currentStation.getChargers().length);
+                totalDisChargers.setText("Number of DisChargers: " + currentStation.getDisChargers().length);
+                totalExchange.setText("Number of ExchangeHandlers: " + currentStation.getExchangeHandlers().length);
+                totalParkingSlots.setText("Number of ParkingSlots: " + currentStation.getParkingSlots().length);
             }
         }));
         timeline.setCycleCount(Animation.INDEFINITE);
@@ -499,7 +523,7 @@ public class EVLibSim extends Application {
             s.getItems().clear();
             stations.addAll(wrapper.getChargingStations());
             for (ChargingStation station : stations) {
-                cs = new RadioMenuItem(station.reName());
+                cs = new RadioMenuItem(station.getName());
                 group.getToggles().add(cs);
                 s.getItems().add(cs);
                 if (s.getItems().size() == 1)

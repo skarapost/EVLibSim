@@ -45,15 +45,15 @@ class View {
             foo = new Label("ChargingEvent(fast)");
             grid.add(foo, 0, 0);
             int j = 1;
-            for(int i = 0; i < currentStation.reFast().reSize(); i++)
+            for(int i = 0; i < currentStation.getFast().size(); i++)
             {
-                foo = new Label("Id: " + currentStation.reFast().peek(i).reId());
+                foo = new Label("Id: " + currentStation.getFast().peek(i).getId());
                 grid.add(foo, 0, j++);
-                foo = new Label("Energy: " + currentStation.reFast().peek(i).reEnergyToBeReceived());
+                foo = new Label("Energy: " + currentStation.getFast().peek(i).getEnergyToBeReceived());
                 grid.add(foo, 0, j++);
-                foo = new Label("Brand: " + currentStation.reFast().peek(i).reElectricVehicle().reBrand());
+                foo = new Label("Brand: " + currentStation.getFast().peek(i).getElectricVehicle().getBrand());
                 grid.add(foo, 0, j++);
-                foo = new Label("Driver: " + currentStation.reFast().peek(i).reElectricVehicle().reDriver().reName());
+                foo = new Label("Driver: " + currentStation.getFast().peek(i).getElectricVehicle().getDriver().getName());
                 grid.add(foo, 0, j++);
                 foo = new Label();
                 grid.add(foo, 0, j++);
@@ -61,15 +61,15 @@ class View {
             foo = new Label("ChargingEvent(slow)");
             grid.add(foo, 1, 0);
             j = 1;
-            for(int i = 0; i < currentStation.reSlow().reSize(); i++)
+            for(int i = 0; i < currentStation.getSlow().size(); i++)
             {
-                foo = new Label("Id: " + currentStation.reSlow().peek(i).reId());
+                foo = new Label("Id: " + currentStation.getSlow().peek(i).getId());
                 grid.add(foo, 1, j++);
-                foo = new Label("Energy: " + currentStation.reSlow().peek(i).reEnergyToBeReceived());
+                foo = new Label("Energy: " + currentStation.getSlow().peek(i).getEnergyToBeReceived());
                 grid.add(foo, 1, j++);
-                foo = new Label("Brand: " + currentStation.reSlow().peek(i).reElectricVehicle().reBrand());
+                foo = new Label("Brand: " + currentStation.getSlow().peek(i).getElectricVehicle().getBrand());
                 grid.add(foo, 1, j++);
-                foo = new Label("Driver: " + currentStation.reSlow().peek(i).reElectricVehicle().reDriver().reName());
+                foo = new Label("Driver: " + currentStation.getSlow().peek(i).getElectricVehicle().getDriver().getName());
                 grid.add(foo, 1, j++);
                 foo = new Label();
                 grid.add(foo, 1, j++);
@@ -77,15 +77,15 @@ class View {
             foo = new Label("DisChargingEvent");
             grid.add(foo, 2, 0);
             j = 1;
-            for(int i = 0; i < currentStation.reDischarging().rSize(); i++)
+            for(int i = 0; i < currentStation.getDischarging().getSize(); i++)
             {
-                foo = new Label("Id: " + currentStation.reDischarging().peek(i).reId());
+                foo = new Label("Id: " + currentStation.getDischarging().peek(i).getId());
                 grid.add(foo, 2, j++);
-                foo = new Label("Energy: " + currentStation.reDischarging().get(i).reEnergyAmount());
+                foo = new Label("Energy: " + currentStation.getDischarging().get(i).getAmountOfEnergy());
                 grid.add(foo, 2, j++);
-                foo = new Label("Brand: " + currentStation.reDischarging().get(i).reElectricVehicle().reBrand());
+                foo = new Label("Brand: " + currentStation.getDischarging().get(i).getElectricVehicle().getBrand());
                 grid.add(foo, 2, j++);
-                foo = new Label("Driver: " + currentStation.reDischarging().get(i).reElectricVehicle().reDriver().reName());
+                foo = new Label("Driver: " + currentStation.getDischarging().get(i).getElectricVehicle().getDriver().getName());
                 grid.add(foo, 2, j++);
                 foo = new Label();
                 grid.add(foo, 2, j++);
@@ -93,13 +93,13 @@ class View {
             foo = new Label("ChargingEvent(exchange)");
             grid.add(foo, 3, 0);
             j = 1;
-            for(int i = 0; i < currentStation.reExchange().reSize(); i++)
+            for(int i = 0; i < currentStation.getExchange().size(); i++)
             {
-                foo = new Label("Id: " + currentStation.reExchange().peek(i).reId());
+                foo = new Label("Id: " + currentStation.getExchange().peek(i).getId());
                 grid.add(foo, 3, j++);
-                foo = new Label("Brand: " + currentStation.reExchange().peek(i).reElectricVehicle().reBrand());
+                foo = new Label("Brand: " + currentStation.getExchange().peek(i).getElectricVehicle().getBrand());
                 grid.add(foo, 3, j++);
-                foo = new Label("Driver: " + currentStation.reExchange().peek(i).reElectricVehicle().reDriver().reName());
+                foo = new Label("Driver: " + currentStation.getExchange().peek(i).getElectricVehicle().getDriver().getName());
                 grid.add(foo, 3, j++);
                 foo = new Label();
                 grid.add(foo, 3, j++);
@@ -118,57 +118,57 @@ class View {
                     new Label(totalDisChargers.getText()),
                     new Label(totalExchange.getText()),
                     new Label(totalParkingSlots.getText()),
-                    new Label("Cars waiting for slow charging: " + String.valueOf(currentStation.reSlow().reSize())),
-                    new Label("Cars waiting for fast charging: " + String.valueOf(currentStation.reFast().reSize())),
-                    new Label("Cars waiting for discharging: " + String.valueOf(currentStation.reDischarging().rSize())),
-                    new Label("Cars waiting for battery exchange: " + String.valueOf(currentStation.reExchange().reSize())),
+                    new Label("Cars waiting for slow charging: " + String.valueOf(currentStation.getSlow().size())),
+                    new Label("Cars waiting for fast charging: " + String.valueOf(currentStation.getFast().size())),
+                    new Label("Cars waiting for discharging: " + String.valueOf(currentStation.getDischarging().getSize())),
+                    new Label("Cars waiting for battery exchange: " + String.valueOf(currentStation.getExchange().size())),
                     chargings, dischargings, exchanges, parkings);
             chargings.setPrefSize(230,30);
             dischargings.setPrefSize(230, 30);
             exchanges.setPrefSize(230, 30);
             parkings.setPrefSize(230, 30);
             ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
-            for(int i=0; i<currentStation.reSources().length; i++) {
-                switch (currentStation.reSources()[i]) {
+            for(int i=0; i<currentStation.getSources().length; i++) {
+                switch (currentStation.getSources()[i]) {
                     case "solar":
-                        if(currentStation.reSpecificAmount("solar") > 0) {
-                            pieChartData.add(new PieChart.Data("Solar", currentStation.reSpecificAmount("solar")));
+                        if(currentStation.getSpecificAmount("solar") > 0) {
+                            pieChartData.add(new PieChart.Data("Solar", currentStation.getSpecificAmount("solar")));
                             continue;
                         }
                         break;
                     case "wind":
-                        if(currentStation.reSpecificAmount("wind") > 0) {
-                            pieChartData.add(new PieChart.Data("Wind", currentStation.reSpecificAmount("wind")));
+                        if(currentStation.getSpecificAmount("wind") > 0) {
+                            pieChartData.add(new PieChart.Data("Wind", currentStation.getSpecificAmount("wind")));
                             continue;
                         }
                         break;
                     case "wave":
-                        if(currentStation.reSpecificAmount("wave") > 0) {
-                            pieChartData.add(new PieChart.Data("Wave", currentStation.reSpecificAmount("wave")));
+                        if(currentStation.getSpecificAmount("wave") > 0) {
+                            pieChartData.add(new PieChart.Data("Wave", currentStation.getSpecificAmount("wave")));
                             continue;
                         }
                         break;
                     case "hydroelectric":
-                        if(currentStation.reSpecificAmount("hydroelectric") > 0) {
-                            pieChartData.add(new PieChart.Data("Hydro-Electric", currentStation.reSpecificAmount("hydroelectric")));
+                        if(currentStation.getSpecificAmount("hydroelectric") > 0) {
+                            pieChartData.add(new PieChart.Data("Hydro-Electric", currentStation.getSpecificAmount("hydroelectric")));
                             continue;
                         }
                         break;
                     case "nonrenewable":
-                        if(currentStation.reSpecificAmount("nonrenewable") > 0) {
-                            pieChartData.add(new PieChart.Data("Non-Renewable", currentStation.reSpecificAmount("nonrenewable")));
+                        if(currentStation.getSpecificAmount("nonrenewable") > 0) {
+                            pieChartData.add(new PieChart.Data("Non-Renewable", currentStation.getSpecificAmount("nonrenewable")));
                             continue;
                         }
                         break;
                     case "geothermal":
-                        if(currentStation.reSpecificAmount("geothermal") > 0) {
-                            pieChartData.add(new PieChart.Data("Geothermal", currentStation.reSpecificAmount("geothermal")));
+                        if(currentStation.getSpecificAmount("geothermal") > 0) {
+                            pieChartData.add(new PieChart.Data("Geothermal", currentStation.getSpecificAmount("geothermal")));
                             continue;
                         }
                         break;
                     case "discharging":
-                        if(currentStation.reSpecificAmount("discharging") > 0) {
-                            pieChartData.add(new PieChart.Data("Discharging", currentStation.reSpecificAmount("discharging")));
+                        if(currentStation.getSpecificAmount("discharging") > 0) {
+                            pieChartData.add(new PieChart.Data("Discharging", currentStation.getSpecificAmount("discharging")));
                             continue;
                         }
                         break;
@@ -198,27 +198,27 @@ class View {
             Label boo;
             int column = 0;
             x.getChildren().add(y);
-            for(Charger ch: currentStation.reChargers())
-                if(ch.reBusy()&&ch.reChargingEvent().reCondition().equals("charging")) {
+            for(Charger ch: currentStation.getChargers())
+                if(ch.getBusy()&&ch.getChargingEvent().getCondition().equals("charging")) {
                     z = new VBox();
                     z.setSpacing(25);
                     z.setAlignment(Pos.TOP_LEFT);
                     z.setPadding(new Insets(15, 15, 15, 15));
-                    boo = new Label("Id: " + ch.reChargingEvent().reId());
+                    boo = new Label("Id: " + ch.getChargingEvent().getId());
                     z.getChildren().add(boo);
-                    boo = new Label("Driver: " + ch.reChargingEvent().reElectricVehicle().reDriver().reName());
+                    boo = new Label("Driver: " + ch.getChargingEvent().getElectricVehicle().getDriver().getName());
                     z.getChildren().add(boo);
-                    boo = new Label("Brand: " + ch.reChargingEvent().reElectricVehicle().reBrand());
+                    boo = new Label("Brand: " + ch.getChargingEvent().getElectricVehicle().getBrand());
                     z.getChildren().add(boo);
-                    boo = new Label("Energy: " + ch.reChargingEvent().reEnergyToBeReceived());
+                    boo = new Label("Energy: " + ch.getChargingEvent().getEnergyToBeReceived());
                     z.getChildren().add(boo);
-                    boo = new Label("Kind: " + ch.reChargingEvent().reKind());
+                    boo = new Label("Kind: " + ch.getChargingEvent().getKind());
                     z.getChildren().add(boo);
-                    boo = new Label("Cost: " + ch.reChargingEvent().reCost());
+                    boo = new Label("Cost: " + ch.getChargingEvent().getCost());
                     z.getChildren().add(boo);
                     ProgressBar bar = new ProgressBar();
                     z.getChildren().add(bar);
-                    float progress = (float) ch.reChargingEvent().reElapsedChargingTime()/ch.reChargingEvent().reChargingTime();
+                    float progress = (float) ch.getChargingEvent().getElapsedChargingTime()/ch.getChargingEvent().getChargingTime();
                     bar.setProgress(progress);
                     if(column <= 5) {
                         y.getChildren().add(z);
@@ -246,25 +246,25 @@ class View {
             Label boo;
             int column = 0;
             x.getChildren().add(y);
-            for(DisCharger ch: currentStation.reDisChargers())
-                if(ch.reBusy()&&ch.reDisChargingEvent().reCondition().equals("discharging")) {
+            for(DisCharger ch: currentStation.getDisChargers())
+                if(ch.getBusy()&&ch.getDisChargingEvent().getCondition().equals("discharging")) {
                     z = new VBox();
                     z.setSpacing(25);
                     z.setAlignment(Pos.TOP_LEFT);
                     z.setPadding(new Insets(15, 15, 15, 15));
-                    boo = new Label("Id: " + ch.reDisChargingEvent().reId());
+                    boo = new Label("Id: " + ch.getDisChargingEvent().getId());
                     z.getChildren().add(boo);
-                    boo = new Label("Driver: " + ch.reDisChargingEvent().reElectricVehicle().reDriver().reName());
+                    boo = new Label("Driver: " + ch.getDisChargingEvent().getElectricVehicle().getDriver().getName());
                     z.getChildren().add(boo);
-                    boo = new Label("Brand: " + ch.reDisChargingEvent().reElectricVehicle().reBrand());
+                    boo = new Label("Brand: " + ch.getDisChargingEvent().getElectricVehicle().getBrand());
                     z.getChildren().add(boo);
-                    boo = new Label("Energy: " + ch.reDisChargingEvent().reEnergyAmount());
+                    boo = new Label("Energy: " + ch.getDisChargingEvent().getAmountOfEnergy());
                     z.getChildren().add(boo);
-                    boo = new Label("Profit: " + ch.reDisChargingEvent().reProfit());
+                    boo = new Label("Profit: " + ch.getDisChargingEvent().getProfit());
                     z.getChildren().add(boo);
                     ProgressBar bar = new ProgressBar();
                     z.getChildren().add(bar);
-                    float progress = (float) ch.reDisChargingEvent().reElapsedDisChargingTime()/ch.reDisChargingEvent().reDisChargingTime();
+                    float progress = (float) ch.getDisChargingEvent().getElapsedDisChargingTime()/ch.getDisChargingEvent().getDisChargingTime();
                     bar.setProgress(progress);
                     if(column <= 5) {
                         y.getChildren().add(z);
@@ -292,23 +292,23 @@ class View {
             Label boo;
             int column = 0;
             x.getChildren().add(y);
-            for(ExchangeHandler ch: currentStation.reExchangeHandlers())
-                if(ch.reBusy()&&ch.reChargingEvent().reCondition().equals("exchange")) {
+            for(ExchangeHandler ch: currentStation.getExchangeHandlers())
+                if(ch.getBusy()&&ch.getChargingEvent().getCondition().equals("exchange")) {
                     z = new VBox();
                     z.setSpacing(25);
                     z.setAlignment(Pos.TOP_LEFT);
                     z.setPadding(new Insets(15, 15, 15, 15));
-                    boo = new Label("Id: " + ch.reChargingEvent().reId());
+                    boo = new Label("Id: " + ch.getChargingEvent().getId());
                     z.getChildren().add(boo);
-                    boo = new Label("Driver: " + ch.reChargingEvent().reElectricVehicle().reDriver().reName());
+                    boo = new Label("Driver: " + ch.getChargingEvent().getElectricVehicle().getDriver().getName());
                     z.getChildren().add(boo);
-                    boo = new Label("Brand: " + ch.reChargingEvent().reElectricVehicle().reBrand());
+                    boo = new Label("Brand: " + ch.getChargingEvent().getElectricVehicle().getBrand());
                     z.getChildren().add(boo);
-                    boo = new Label("Cost: " + ch.reChargingEvent().reCost());
+                    boo = new Label("Cost: " + ch.getChargingEvent().getCost());
                     z.getChildren().add(boo);
                     ProgressBar bar = new ProgressBar();
                     z.getChildren().add(bar);
-                    float progress = (float) ch.reChargingEvent().reElapsedChargingTime()/ch.reChargingEvent().reChargingTime();
+                    float progress = (float) ch.getChargingEvent().getElapsedChargingTime()/ch.getChargingEvent().getChargingTime();
                     bar.setProgress(progress);
                     if(column <= 5) {
                         y.getChildren().add(z);
@@ -336,29 +336,29 @@ class View {
             Label boo;
             int column = 0;
             x.getChildren().add(y);
-            for(ParkingSlot ch: currentStation.reParkingSlots())
-                if(ch.reBusy()&&(ch.reParkingEvent().reCondition().equals("parking"))||ch.reParkingEvent().reCondition().equals("charging")) {
+            for(ParkingSlot ch: currentStation.getParkingSlots())
+                if(ch.getBusy()&&(ch.getParkingEvent().getCondition().equals("parking"))||ch.getParkingEvent().getCondition().equals("charging")) {
                     z = new VBox();
                     z.setPadding(new Insets(15));
                     z.setSpacing(25);
                     z.setAlignment(Pos.TOP_LEFT);
-                    boo = new Label("Id: " + ch.reParkingEvent().reId());
+                    boo = new Label("Id: " + ch.getParkingEvent().getId());
                     z.getChildren().add(boo);
-                    boo = new Label("Driver: " + ch.reParkingEvent().reElectricVehicle().reDriver().reName());
+                    boo = new Label("Driver: " + ch.getParkingEvent().getElectricVehicle().getDriver().getName());
                     z.getChildren().add(boo);
-                    boo = new Label("Brand: " + ch.reParkingEvent().reElectricVehicle().reBrand());
+                    boo = new Label("Brand: " + ch.getParkingEvent().getElectricVehicle().getBrand());
                     z.getChildren().add(boo);
-                    boo = new Label("Current Condition: " + ch.reParkingEvent().reCondition());
+                    boo = new Label("Current Condition: " + ch.getParkingEvent().getCondition());
                     z.getChildren().add(boo);
-                    boo = new Label("Cost: " + ch.reParkingEvent().reCost());
+                    boo = new Label("Cost: " + ch.getParkingEvent().getCost());
                     z.getChildren().add(boo);
                     ProgressBar bar = new ProgressBar();
                     z.getChildren().add(bar);
                     float progress;
-                    if(ch.reParkingEvent().reCondition().equals("charging"))
-                        progress = (float) ch.reParkingEvent().reElapsedChargingTime() / ch.reParkingEvent().reChargingTime();
+                    if(ch.getParkingEvent().getCondition().equals("charging"))
+                        progress = (float) ch.getParkingEvent().getElapsedChargingTime() / ch.getParkingEvent().getChargingTime();
                     else
-                        progress = (float) ch.reParkingEvent().reElapsedParkingTime() / ch.reParkingEvent().reParkingTime();
+                        progress = (float) ch.getParkingEvent().getElapsedParkingTime() / ch.getParkingEvent().getParkingTime();
                     bar.setProgress(progress);
                     if(column <= 5) {
                         y.getChildren().add(z);
