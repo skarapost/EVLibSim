@@ -25,7 +25,11 @@ import java.io.File;
 import java.util.*;
 import java.util.prefs.Preferences;
 
+import static evlibsim.History.*;
 import static evlibsim.MenuStation.cs;
+import static evlibsim.Overview.report;
+import static evlibsim.Overview.showTotalActivity;
+import static evlibsim.Overview.totalEnergy;
 
 public class EVLibSim extends Application {
 
@@ -41,14 +45,6 @@ public class EVLibSim extends Application {
     private static final Button newChargingStation = new Button("Station");
     private static final Button newEvent = new Button("Event");
     private static final Button newEnergy = new Button("Energy");
-    private static final Button showTotalActivity = new Button("Activity");
-    private static final Button report = new Button("Report");
-    private static final Button allEvents = new Button("All Events");
-    private static final Button totalEnergy = new Button("Energy");
-    private static final Button searchChargingEvent = new Button("Ch/Event");
-    private static final Button searchDisChargingEvent = new Button("DisCh/Event");
-    private static final Button searchExchangeEvent = new Button("Ex/Event");
-    private static final Button searchParkingEvent = new Button("Par/Event");
     static final ToggleGroup group = new ToggleGroup();
     private static final MenuItem startScreen = new MenuItem("Start Screen");
     static final Menu s = new Menu("Stations");
@@ -65,8 +61,6 @@ public class EVLibSim extends Application {
     static final Label totalExchange = new Label();
     static final Label totalParkingSlots = new Label();
     private Stage primaryStage;
-    private static final VBox mBox = new VBox();
-    private static final VBox nBox = new VBox();
     private static final VBox tBox = new VBox();
     private static Button bt1 = new Button("ChargingEvent");
     private static Button bt2 = new Button("DisChargingEvent");
@@ -87,30 +81,27 @@ public class EVLibSim extends Application {
         this.primaryStage = primaryStage;
         primaryStage.setScene(scene);
         primaryStage.show();
-        Search.createSearchMenu();
-        mBox.getStyleClass().add("mini-box");
-        mBox.getChildren().addAll(report, showTotalActivity, totalEnergy, allEvents);
-        mBox.setMaxSize(200, 180);
-        nBox.getChildren().addAll(searchChargingEvent, searchDisChargingEvent, searchExchangeEvent, searchParkingEvent);
-        nBox.getStyleClass().add("mini-box");
-        nBox.setMaxSize(200, 180);
+
         BorderPane.setAlignment(tBox, Pos.CENTER_RIGHT);
-        tBox.getChildren().addAll(mBox, nBox);
+        tBox.getChildren().addAll(Overview.createOverviewMenu(), History.createSearchMenu());
         tBox.setSpacing(100);
         tBox.setAlignment(Pos.CENTER_RIGHT);
+
         root.setTop(menuBar);
         root.setRight(tBox);
+
         Menu file = new Menu("File");
         exitMenuItem.setOnAction(actionEvent -> Platform.exit());
         file.getItems().addAll(newSession, open, save, saveAs, startScreen, s, about, exitMenuItem);
-        menuBar.getMenus().addAll(file, View.createViewMenu(),
-                MenuStation.createStationMenu(), Event.createEventMenu(), Energy.createEnergyMenu());
+        menuBar.getMenus().addAll(file, View.createViewMenu(), MenuStation.createStationMenu(), Event.createEventMenu(), Energy.createEnergyMenu());
         scene.getStylesheets().add(EVLibSim.class.getResource("EVLibSim.css").toExternalForm());
         grid.getStyleClass().add("grid");
         stationGrid.getStyleClass().add("stationGrid");
+
         newChargingStation.setPrefSize(220, 60);
         newEvent.setPrefSize(220, 60);
         newEnergy.setPrefSize(220, 60);
+
         stationGrid.add(stationName, 0, 0);
         stationGrid.add(energyAmount, 1, 0);
         stationGrid.add(totalChargers, 2, 0);
@@ -130,7 +121,9 @@ public class EVLibSim extends Application {
             grid.setAlignment(Pos.CENTER);
             root.setCenter(grid);
         });
+
         startScreen.fire();
+
         group.selectedToggleProperty().addListener((ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) -> {
             if (group.getSelectedToggle() != null) {
                 newValue.setSelected(true);
@@ -148,79 +141,9 @@ public class EVLibSim extends Application {
                     }
             }
         });
+
         newChargingStation.setOnAction(e -> MenuStation.newChargingStationMI.fire());
-        showTotalActivity.setOnAction(e -> View.totalActivity.fire());
-        report.setOnAction(e -> {
-            if(Maintenance.stationCheck())
-                return;
-            TextInputDialog dialog = new TextInputDialog();
-            dialog.setTitle("Path insertion");
-            dialog.setHeaderText(null);
-            dialog.setContentText("Please enter an absolute path. " +
-                    "The name has to be a text(.txt) file: ");
-            Optional<String> path = dialog.showAndWait();
-            path.ifPresent(s -> currentStation.genReport(s));
-        });
-        totalEnergy.setOnAction(e -> {
-            if(Maintenance.stationCheck())
-                return;
-            Maintenance.cleanScreen();
-            grid.setMaxSize(600, 350);
-            Label foo;
-            foo = new Label("Total energy: ");
-            grid.add(foo, 0, 1);
-            foo = new Label(String.valueOf(currentStation.getTotalEnergy()));
-            grid.add(foo, 1, 1);
-            if(Maintenance.checkEnergy("solar"))
-                foo = new Label("Solar*: ");
-            else
-                foo = new Label("Solar: ");
-            grid.add(foo, 2, 1);
-            foo = new Label(String.valueOf(currentStation.getSpecificAmount("solar")));
-            grid.add(foo, 3, 1);
-            if(Maintenance.checkEnergy("wind"))
-                foo = new Label("Wind*: ");
-            else
-                foo = new Label("Wind: ");
-            grid.add(foo, 0, 2);
-            foo = new Label(String.valueOf(currentStation.getSpecificAmount("wind")));
-            grid.add(foo, 1, 2);
-            if(Maintenance.checkEnergy("wave"))
-                foo = new Label("Wave*: ");
-            else
-                foo = new Label("Wave: ");
-            grid.add(foo, 2, 2);
-            foo = new Label(String.valueOf(currentStation.getSpecificAmount("wave")));
-            grid.add(foo, 3, 2);
-            if(Maintenance.checkEnergy("hydroelectric"))
-                foo = new Label("Hydro-Electric*: ");
-            else
-                foo = new Label("Hydro-Electric: ");
-            grid.add(foo, 0, 3);
-            foo = new Label(String.valueOf(currentStation.getSpecificAmount("hydroelectric")));
-            grid.add(foo, 1, 3);
-            if(Maintenance.checkEnergy("nonrenewable"))
-                foo = new Label("Non-Renewable*: ");
-            else
-                foo = new Label("Non-Renewable: ");
-            grid.add(foo, 2, 3);
-            foo = new Label(String.valueOf(currentStation.getSpecificAmount("nonrenewable")));
-            grid.add(foo, 3, 3);
-            if(Maintenance.checkEnergy("geothermal"))
-                foo = new Label("Geothermal*: ");
-            else
-                foo = new Label("Geothermal: ");
-            grid.add(foo, 0, 4);
-            foo = new Label(String.valueOf(currentStation.getSpecificAmount("geothermal")));
-            grid.add(foo, 1, 4);
-            foo = new Label("Discharging*: ");
-            grid.add(foo, 2, 4);
-            foo = new Label(String.valueOf(currentStation.getSpecificAmount("discharging")));
-            grid.add(foo, 3, 4);
-            foo = new Label("*Selected");
-            grid.add(foo, 0, 5);
-            root.setCenter(grid);
-        });
+
         newEvent.setOnAction(e -> {
             if(Maintenance.stationCheck())
                 return;
@@ -237,6 +160,7 @@ public class EVLibSim extends Application {
             grid.add(bt4, 0, 3);
             root.setCenter(grid);
         });
+
         bt1.setOnAction(e -> Event.charging.fire());
         bt2.setOnAction(e -> Event.discharging.fire());
         bt3.setOnAction(e -> Event.exchange.fire());
@@ -327,6 +251,7 @@ public class EVLibSim extends Application {
                 }
             });
         });
+
         bt7.setOnAction(e -> {
             TextInputDialog dialog = new TextInputDialog();
             dialog.setTitle("Information");
@@ -386,6 +311,7 @@ public class EVLibSim extends Application {
                         break;
                 }
         });
+
         newEnergy.setOnAction(e -> {
             if(Maintenance.stationCheck())
                 return;
@@ -400,6 +326,7 @@ public class EVLibSim extends Application {
             grid.add(bt7, 0, 2);
             root.setCenter(grid);
         });
+
         about.setOnAction(e ->
         {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -408,26 +335,7 @@ public class EVLibSim extends Application {
             alert.setContentText("Creator: Karapostolakis Sotirios\nemail: skarapos@outlook.com\nYear: 2017");
             alert.showAndWait();
         });
-        searchChargingEvent.setOnAction(e -> {
-            if (Maintenance.stationCheck())
-                return;
-            Search.searchCharging.fire();
-        });
-        searchDisChargingEvent.setOnAction(e -> {
-            if(Maintenance.stationCheck())
-                return;
-            Search.searchDisCharging.fire();
-        });
-        searchExchangeEvent.setOnAction(e -> {
-            if(Maintenance.stationCheck())
-                return;
-            Search.searchExchange.fire();
-        });
-        searchParkingEvent.setOnAction(e -> {
-            if(Maintenance.stationCheck())
-                return;
-            Search.searchParking.fire();
-        });
+
         open.setOnAction(e -> {
             FileChooser fileChooser = new FileChooser();
             // Set extension filter
@@ -440,12 +348,14 @@ public class EVLibSim extends Application {
                 loadStationsFromFile(f);
             }
         });
+
         newSession.setOnAction(e -> {
             stations.clear();
             s.getItems().clear();
             currentStation = null;
             setStationsFilePath(null);
         });
+
         save.setOnAction(e -> {
             File personFile = getStationsFilePath();
             if (personFile != null) {
@@ -454,6 +364,7 @@ public class EVLibSim extends Application {
                 saveAs.fire();
             }
         });
+
         saveAs.setOnAction(e -> {
             FileChooser fileChooser = new FileChooser();
             // Set extension filter
@@ -470,6 +381,7 @@ public class EVLibSim extends Application {
                 saveStationToFile(f);
             }
         });
+
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(5), ev -> {
             if(currentStation == null) {
                 stationName.setText("ChargingStation Name: -");
@@ -489,9 +401,12 @@ public class EVLibSim extends Application {
                 totalParkingSlots.setText("Number of ParkingSlots: " + currentStation.getParkingSlots().length);
             }
         }));
+
         timeline.setCycleCount(Animation.INDEFINITE);
+
         timeline.play();
     }
+
     private File getStationsFilePath() {
         Preferences prefs = Preferences.userNodeForPackage(EVLibSim.class);
         String filePath = prefs.get("filePath", null);
@@ -501,6 +416,7 @@ public class EVLibSim extends Application {
             return null;
         }
     }
+
     private void setStationsFilePath(File file) {
         Preferences prefs = Preferences.userNodeForPackage(EVLibSim.class);
         if (file != null) {
@@ -513,6 +429,7 @@ public class EVLibSim extends Application {
             this.primaryStage.setTitle("EVLibSim");
         }
     }
+
     private void loadStationsFromFile(File file) {
         try {
             JAXBContext context = JAXBContext.newInstance(ChargingStationsWrapper.class);
@@ -539,6 +456,7 @@ public class EVLibSim extends Application {
             alert.showAndWait();
         }
     }
+
     private void saveStationToFile(File file) {
         try {
             JAXBContext context = JAXBContext.newInstance(ChargingStationsWrapper.class);

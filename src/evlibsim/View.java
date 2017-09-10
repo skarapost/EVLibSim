@@ -21,14 +21,14 @@ class View {
     private static final Menu view = new Menu("View");
     static final MenuItem totalActivity = new MenuItem("Overview");
     private static final MenuItem queue = new MenuItem("Queue of Events");
-    private static final MenuItem chargingsMenuItem = new MenuItem("Chargings Events");
-    private static final MenuItem dischargingsMenuItem = new MenuItem("DisChargings Events");
-    private static final MenuItem exchangesMenuItem = new MenuItem("Battery Swapings Events");
-    private static final MenuItem parkingsMenuItem = new MenuItem("Parking Events");
-    private static final Button chargings = new Button("Chargings Events");
-    private static final Button dischargings = new Button("DisChargings Events");
-    private static final Button exchanges = new Button("Battery Exchanges Events");
-    private static final Button parkings = new Button("Parkings Events");
+    private static final MenuItem chargingsMenuItem = new MenuItem("ChargingEvent");
+    private static final MenuItem dischargingsMenuItem = new MenuItem("DisChargingEvent");
+    private static final MenuItem exchangesMenuItem = new MenuItem("BatterySwapingEvent");
+    private static final MenuItem parkingsMenuItem = new MenuItem("ParkingEvent");
+    private static final Button chargings = new Button("ChargingsEvent");
+    private static final Button dischargings = new Button("DisChargingEvent");
+    private static final Button exchanges = new Button("BatteryExchangeEvent");
+    private static final Button parkings = new Button("ParkingEvent");
 
     static Menu createViewMenu()
     {
@@ -337,7 +337,7 @@ class View {
             int column = 0;
             x.getChildren().add(y);
             for(ParkingSlot ch: currentStation.getParkingSlots())
-                if(ch.getBusy()&&(ch.getParkingEvent().getCondition().equals("parking"))||ch.getParkingEvent().getCondition().equals("charging")) {
+                if(ch.getBusy()&&(ch.getParkingEvent().getCondition().equals("parking")||ch.getParkingEvent().getCondition().equals("charging"))) {
                     z = new VBox();
                     z.setPadding(new Insets(15));
                     z.setSpacing(25);

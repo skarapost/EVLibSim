@@ -511,7 +511,7 @@ class MenuStation {
             scroll.setMaxSize(500, 600);
             Label foo;
             for(Charger ch: currentStation.getChargers()) {
-                foo = new Label("Id: " + ch.getId() + "     " + "Kind: " + ch.getKind() + "     " + "Occupied: " + ch.getBusy() + "     " + "Elapsed commit time: " + ch.reElapsedCommitTime());
+                foo = new Label("Id: " + ch.getId() + "     " + "Kind: " + ch.getKindOfCharging() + "     " + "Occupied: " + ch.getBusy() + "     " + "Elapsed commit time: " + ch.reElapsedCommitTime());
                 box.getChildren().add(foo);
             }
             scroll.setContent(box);
