@@ -14,10 +14,10 @@ import static evlibsim.EVLibSim.*;
 
 class History {
 
-    static final Button searchChargingEvent = new Button("ChargingLog");
-    static final Button searchDisChargingEvent = new Button("DisChargingLog");
-    static final Button searchExchangeEvent = new Button("ExchangeLog");
-    static final Button searchParkingEvent = new Button("ParkingLog");
+    private static final Button searchChargingEvent = new Button("ChargingLog");
+    private static final Button searchDisChargingEvent = new Button("DisChargingLog");
+    private static final Button searchExchangeEvent = new Button("ExchangeLog");
+    private static final Button searchParkingEvent = new Button("ParkingLog");
     private static final VBox nBox = new VBox();
 
     static VBox createSearchMenu()
@@ -54,7 +54,7 @@ class History {
                     energyToBeReceivedCol, conditionCol, maxWaitingTimeCol, costCol);
             idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
             askingAmountCol.setCellValueFactory(new PropertyValueFactory<>("amountOfEnergy"));
-            kindCol.setCellValueFactory(new PropertyValueFactory<>("kindOfEnergy"));
+            kindCol.setCellValueFactory(new PropertyValueFactory<>("kindOfCharging"));
             waitingTimeCol.setCellValueFactory(new PropertyValueFactory<>("waitingTime"));
             chargingTimeCol.setCellValueFactory(new PropertyValueFactory<>("chargingTime"));
             energyToBeReceivedCol.setCellValueFactory(new PropertyValueFactory<>("energyToBeReceived"));

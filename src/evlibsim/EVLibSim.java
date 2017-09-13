@@ -9,12 +9,14 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -22,14 +24,13 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.*;
 import java.util.prefs.Preferences;
 
-import static evlibsim.History.*;
 import static evlibsim.MenuStation.cs;
-import static evlibsim.Overview.report;
-import static evlibsim.Overview.showTotalActivity;
-import static evlibsim.Overview.totalEnergy;
 
 public class EVLibSim extends Application {
 
@@ -62,6 +63,8 @@ public class EVLibSim extends Application {
     static final Label totalParkingSlots = new Label();
     private Stage primaryStage;
     private static final VBox tBox = new VBox();
+    private static String energy;
+    private static TextArea ta = new TextArea();
     private static Button bt1 = new Button("ChargingEvent");
     private static Button bt2 = new Button("DisChargingEvent");
     private static Button bt3 = new Button("ExchangeEvent");
@@ -77,14 +80,22 @@ public class EVLibSim extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("EVLibSim");
-        Scene scene = new Scene(root, 1350, 800);
+        Scene scene = new Scene(root);
+        primaryStage.setMaximized(true);
         this.primaryStage = primaryStage;
         primaryStage.setScene(scene);
         primaryStage.show();
 
+        Console console = new Console(ta);
+        ta.setEditable(false);
+        ta.setMaxSize(220, 200);
+        PrintStream ps = new PrintStream(console, true);
+        System.setOut(ps);
+        System.setErr(ps);
+
         BorderPane.setAlignment(tBox, Pos.CENTER_RIGHT);
-        tBox.getChildren().addAll(Overview.createOverviewMenu(), History.createSearchMenu());
-        tBox.setSpacing(100);
+        tBox.getChildren().addAll(Overview.createOverviewMenu(), History.createSearchMenu(), ta);
+        tBox.setSpacing(50);
         tBox.setAlignment(Pos.CENTER_RIGHT);
 
         root.setTop(menuBar);
@@ -171,27 +182,64 @@ public class EVLibSim extends Application {
             grid.setMaxSize(320, 280);
             grid.setMinSize(320, 280);
             TextField foo;
-            grid.add(new Label("Kind of Energy: "), 0, 0);
-            foo = new TextField();
-            grid.add(foo, 1, 0);
-            textfields.add(foo);
+            grid.add(new Label("Energy sources: "), 0, 0);
+            MenuBar sourc = new MenuBar();
+            ToggleGroup f = new ToggleGroup();
+            sourc.setId("menubar");
+            sourc.setMaxWidth(100);
+            Menu src = new Menu("Choice");
+            RadioMenuItem sol = new RadioMenuItem("Solar");
+            RadioMenuItem win = new RadioMenuItem("Wind");
+            RadioMenuItem wav = new RadioMenuItem("Wave");
+            RadioMenuItem hyd = new RadioMenuItem("Hydroelectric");
+            RadioMenuItem non = new RadioMenuItem("Non-renewable");
+            RadioMenuItem geo = new RadioMenuItem("Geothermal");
+            src.getItems().addAll(sol, win, wav, hyd, non, geo);
+            sourc.getMenus().add(src);
+            sol.setSelected(true);
+            grid.add(sourc, 1, 0);
             grid.add(new Label("Initial Amount:"), 0, 1);
             foo = new TextField();
             grid.add(foo, 1, 1);
             textfields.add(foo);
             Button creation = new Button("Creation");
+            f.getToggles().addAll(sol, win, wav, hyd, geo, non);
             grid.add(creation, 0, 2);
             creation.setDefaultButton(true);
+            sol.setOnAction((ActionEvent et) -> {
+                if (sol.isSelected())
+                    energy = "solar";
+            });
+            win.setOnAction((ActionEvent et) -> {
+                if (win.isSelected())
+                    energy = "wind";
+            });
+            wav.setOnAction((ActionEvent et) -> {
+                if (wav.isSelected())
+                    energy = "wave";
+            });
+            hyd.setOnAction((ActionEvent et) -> {
+                if (hyd.isSelected())
+                    energy = "hydroelectric";
+            });
+            geo.setOnAction((ActionEvent et) -> {
+                if (geo.isSelected())
+                    energy = "geothermal";
+            });
+            non.setOnAction((ActionEvent et) -> {
+                if (non.isSelected())
+                    energy = "nonrenewable";
+            });
             root.setCenter(grid);
             creation.setOnAction(et -> {
                 if(Maintenance.fieldCompletionCheck())
                     return;
-                switch (textfields.get(0).getText())
+                switch (energy)
                 {
                     case "Solar":
                         if(!Maintenance.checkEnergy("solar")) {
                             currentStation.addEnergySource(new Solar(currentStation));
-                            if(Double.parseDouble(textfields.get(1).getText())>0)
+                            if(Double.parseDouble(textfields.get(0).getText())>0)
                                 currentStation.getEnergySource("solar").insertAmount(Double.parseDouble(textfields.get(1).getText()));
                             Maintenance.completionMessage("energy addition");
                         }
@@ -201,7 +249,7 @@ public class EVLibSim extends Application {
                     case "Geothermal":
                         if(!Maintenance.checkEnergy("geothermal")) {
                             currentStation.addEnergySource(new Geothermal(currentStation));
-                            if(Double.parseDouble(textfields.get(1).getText())>0)
+                            if(Double.parseDouble(textfields.get(0).getText())>0)
                                 currentStation.getEnergySource("geothermal").insertAmount(Double.parseDouble(textfields.get(1).getText()));
                             Maintenance.completionMessage("energy addition");
                         }
@@ -211,7 +259,7 @@ public class EVLibSim extends Application {
                     case "Wind":
                         if(!Maintenance.checkEnergy("wind")) {
                             currentStation.addEnergySource(new Wind(currentStation));
-                            if(Double.parseDouble(textfields.get(1).getText())>0)
+                            if(Double.parseDouble(textfields.get(0).getText())>0)
                                 currentStation.getEnergySource("wind").insertAmount(Double.parseDouble(textfields.get(1).getText()));
                             Maintenance.completionMessage("energy addition");
                         }
@@ -221,7 +269,7 @@ public class EVLibSim extends Application {
                     case "Wave":
                         if(!Maintenance.checkEnergy("wave")) {
                             currentStation.addEnergySource(new Wave(currentStation));
-                            if(Double.parseDouble(textfields.get(1).getText())>0)
+                            if(Double.parseDouble(textfields.get(0).getText())>0)
                                 currentStation.getEnergySource("wave").insertAmount(Double.parseDouble(textfields.get(1).getText()));
                             Maintenance.completionMessage("energy addition");
                         }
@@ -231,7 +279,7 @@ public class EVLibSim extends Application {
                     case "Hydro-Electric":
                         if(!Maintenance.checkEnergy("hydroelectric")) {
                             currentStation.addEnergySource(new HydroElectric(currentStation));
-                            if(Double.parseDouble(textfields.get(1).getText())>0)
+                            if(Double.parseDouble(textfields.get(0).getText())>0)
                                 currentStation.getEnergySource("hydroelectric").insertAmount(Double.parseDouble(textfields.get(1).getText()));
                             Maintenance.completionMessage("energy addition");
                         }
@@ -241,7 +289,7 @@ public class EVLibSim extends Application {
                     case "Non-Renewable":
                         if(!Maintenance.checkEnergy("nonrenewable")) {
                             currentStation.addEnergySource(new NonRenewable(currentStation));
-                            if(Double.parseDouble(textfields.get(1).getText())>0)
+                            if(Double.parseDouble(textfields.get(0).getText())>0)
                                 currentStation.getEnergySource("nonrenewable").insertAmount(Double.parseDouble(textfields.get(1).getText()));
                             Maintenance.completionMessage("energy addition");
                         }
@@ -253,7 +301,14 @@ public class EVLibSim extends Application {
         });
 
         bt7.setOnAction(e -> {
-            TextInputDialog dialog = new TextInputDialog();
+            List<String> choices = new ArrayList<>();
+            choices.add("Solar");
+            choices.add("Wind");
+            choices.add("Wave");
+            choices.add("Geothermal");
+            choices.add("Non-Renewable");
+            choices.add("Hydro-Electric");
+            ChoiceDialog<String> dialog = new ChoiceDialog<>("Solar", choices);
             dialog.setTitle("Information");
             dialog.setHeaderText(null);
             dialog.setContentText("EnergySource: ");
@@ -475,6 +530,22 @@ public class EVLibSim extends Application {
             alert.setHeaderText("Could not save data");
             alert.setContentText("Could not save data to file:\n" + file.getPath());
             alert.showAndWait();
+        }
+    }
+
+    private static class Console extends OutputStream
+    {
+        private TextArea output;
+
+        Console(TextArea ta)
+        {
+            this.output = ta;
+        }
+
+        @Override
+        public void write(int i) throws IOException
+        {
+            output.appendText(String.valueOf((char) i));
         }
     }
 }

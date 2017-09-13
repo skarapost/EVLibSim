@@ -34,6 +34,7 @@ class MenuStation {
     private static final MenuItem modifyChargingStationMI = new MenuItem("Modify ChargingStation");
     private static final MenuItem newBatteryMI = new MenuItem("New Battery");
     private static final MenuItem batteriesChargingMI = new MenuItem("Batteries Charging");
+    private static final MenuItem allBatteriesMI = new MenuItem("Station Batteries");
     private static boolean automaticHandling = true;
     private static boolean automaticUpdate = false;
     static RadioMenuItem cs;
@@ -49,7 +50,7 @@ class MenuStation {
         parkingSlotsM.getItems().addAll(newParkingSlotMI, deleteParkingSlotMI, allParkingSlotsMI);
         stationM.getItems().addAll(newChargingStationMI, new SeparatorMenuItem(), chargersM, disChargersM,
                 exchangeHandlersM, parkingSlotsM, new SeparatorMenuItem(), modifyChargingStationMI,
-                new SeparatorMenuItem(), newBatteryMI, batteriesChargingMI);
+                new SeparatorMenuItem(), newBatteryMI, batteriesChargingMI, allBatteriesMI);
 
         newChargingStationMI.setOnAction((ActionEvent e) ->
         {
@@ -90,6 +91,7 @@ class MenuStation {
             foo = new Label("Energy sources: ");
             EVLibSim.grid.add(foo, 0, 4);
             MenuBar sourc = new MenuBar();
+            sourc.setId("menubar");
             sourc.setMaxWidth(100);
             Menu src = new Menu("Energies");
             RadioMenuItem sol = new RadioMenuItem("Solar");
@@ -144,6 +146,7 @@ class MenuStation {
             foo = new Label("Automatic energy update: ");
             EVLibSim.grid.add(foo, 2, 8);
             sourc = new MenuBar();
+            sourc.setId("menubar");
             sourc.setMaxWidth(100);
             src = new Menu("Choice");
             ToggleGroup r = new ToggleGroup();
@@ -158,6 +161,7 @@ class MenuStation {
             EVLibSim.grid.add(foo, 0, 9);
             sourc = new MenuBar();
             sourc.setMaxWidth(100);
+            sourc.setId("menubar");
             src = new Menu("Choice");
             r = new ToggleGroup();
             RadioMenuItem tr = new RadioMenuItem("True");
@@ -172,7 +176,12 @@ class MenuStation {
             boo = new TextField("1000");
             EVLibSim.grid.add(boo, 3, 9);
             textfields.add(boo);
-            EVLibSim.grid.add(chargingStationCreationB, 0, 10);
+            foo = new Label("Battery exchange duration: ");
+            EVLibSim.grid.add(foo, 0, 10);
+            boo = new TextField("5000");
+            EVLibSim.grid.add(boo, 1, 10);
+            textfields.add(boo);
+            EVLibSim.grid.add(chargingStationCreationB, 0, 11);
             chargingStationCreationB.setDefaultButton(true);
             EVLibSim.root.setCenter(EVLibSim.grid);
             te.setOnAction((ActionEvent et) ->
@@ -280,8 +289,8 @@ class MenuStation {
             EVLibSim.grid.add(boo, 1, 1);
             textfields.add(boo);
             MenuBar sourc = new MenuBar();
+            sourc.setId("menubar");
             sourc.setMaxWidth(70);
-            sourc.setStyle("-fx-border-radius: 15 15 15 15;");
             Menu src;
             foo = new Label("Charging fee per unit: ");
             EVLibSim.grid.add(foo, 2, 1);
@@ -360,13 +369,16 @@ class MenuStation {
             boo = new TextField(Long.toString(currentStation.getUpdateSpace()));
             EVLibSim.grid.add(boo, 3, 6);
             textfields.add(boo);
-            EVLibSim.grid.add(modifyStationB, 0, 7);
+            foo = new Label("Battery exchange duration: ");
+            EVLibSim.grid.add(foo, 0, 7);
+            boo = new TextField("5000");
+            EVLibSim.grid.add(boo, 1, 7);
+            textfields.add(boo);
+            EVLibSim.grid.add(modifyStationB, 0, 8);
             modifyStationB.setDefaultButton(true);
             EVLibSim.root.setCenter(EVLibSim.grid);
-            te.setOnAction((ActionEvent et) ->
-                    automaticUpdate = te.isSelected());
-            tr.setOnAction((ActionEvent et) ->
-                    automaticHandling = tr.isSelected());
+            te.setOnAction((ActionEvent et) -> automaticUpdate = te.isSelected());
+            tr.setOnAction((ActionEvent et) -> automaticHandling = tr.isSelected());
         });
         deleteChargerMI.setOnAction(et -> {
             TextInputDialog dialog = new TextInputDialog();
@@ -508,7 +520,7 @@ class MenuStation {
             Maintenance.cleanScreen();
             VBox box = new VBox();
             box.getStyleClass().add("box");
-            scroll.setMaxSize(500, 600);
+            scroll.setMaxSize(600, 600);
             Label foo;
             for(Charger ch: currentStation.getChargers()) {
                 foo = new Label("Id: " + ch.getId() + "     " + "Kind: " + ch.getKindOfCharging() + "     " + "Occupied: " + ch.getBusy() + "     " + "Elapsed commit time: " + ch.reElapsedCommitTime());
@@ -524,7 +536,7 @@ class MenuStation {
             Maintenance.cleanScreen();
             VBox box = new VBox();
             box.getStyleClass().add("box");
-            scroll.setMaxSize(400, 600);
+            scroll.setMaxSize(600, 600);
             Label foo;
             for(DisCharger ch: currentStation.getDisChargers()) {
                 foo = new Label("Id: " + ch.getId() + "     " + "Occupied: " + ch.getBusy() + "     " + "Elapsed commit time: " + ch.getElapsedCommitTime());
@@ -539,7 +551,7 @@ class MenuStation {
             Maintenance.cleanScreen();
             VBox box = new VBox();
             box.getStyleClass().add("box");
-            scroll.setMaxSize(400, 600);
+            scroll.setMaxSize(600, 600);
             Label foo;
             for(ExchangeHandler ch: currentStation.getExchangeHandlers()) {
                 foo = new Label("Id: " + ch.getId() + "     " + "Occupied: " + ch.getBusy() + "     " + "Elapsed commit time: " + ch.getElapsedCommitTime());
@@ -554,10 +566,25 @@ class MenuStation {
             Maintenance.cleanScreen();
             VBox box = new VBox();
             box.getStyleClass().add("box");
-            scroll.setMaxSize(400, 600);
+            scroll.setMaxSize(600, 600);
             Label foo;
             for(ParkingSlot ch: currentStation.getParkingSlots()) {
                 foo = new Label("Id: " + ch.getId() + "     " + "Occupied: " + ch.getBusy() + "     " + "Elapsed commit time: " + ch.getElapsedCommitTime());
+                box.getChildren().add(foo);
+            }
+            scroll.setContent(box);
+            root.setCenter(scroll);
+        });
+        allBatteriesMI.setOnAction(e -> {
+            if(Maintenance.stationCheck())
+                return;
+            Maintenance.cleanScreen();
+            VBox box = new VBox();
+            box.getStyleClass().add("box");
+            scroll.setMaxSize(600, 600);
+            Label foo;
+            for(Battery b: currentStation.getBatteries()) {
+                foo = new Label("Id: " + b.getId() + "     " + "Capacity: " + b.getCapacity() + "     " + "Remaining Amount: " + b.getRemAmount() + "     " + "Maximum Chargings: " + b.getMaxNumberOfChargings());
                 box.getChildren().add(foo);
             }
             scroll.setContent(box);
@@ -611,7 +638,8 @@ class MenuStation {
                     Double.parseDouble(textfields.get(11).getText()) < 0 ||
                     Double.parseDouble(textfields.get(12).getText()) < 0 ||
                     Double.parseDouble(textfields.get(13).getText()) < 0 ||
-                    Double.parseDouble(textfields.get(14).getText()) < 0) {
+                    Double.parseDouble(textfields.get(14).getText()) < 0 ||
+                    Double.parseDouble(textfields.get(15).getText()) < 0) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setHeaderText(null);
@@ -629,6 +657,7 @@ class MenuStation {
             st.setChargingRatioSlow(Double.parseDouble(textfields.get(11).getText()));
             st.setDisChargingRatio(Double.parseDouble(textfields.get(12).getText()));
             st.setInductiveChargingRatio(Double.parseDouble(textfields.get(13).getText()));
+            st.setTimeofExchange(Long.parseLong(textfields.get(15).getText()));
             st.setAutomaticUpdateMode(automaticUpdate);
             st.setUpdateSpace(Integer.parseInt(textfields.get(14).getText()));
             st.setAutomaticQueueHandling(automaticHandling);
@@ -713,9 +742,10 @@ class MenuStation {
             currentStation.setChargingRatioSlow((Double.parseDouble(textfields.get(6).getText())));
             currentStation.setDisChargingRatio((Double.parseDouble(textfields.get(7).getText())));
             currentStation.setInductiveChargingRatio((Double.parseDouble(textfields.get(8).getText())));
-            currentStation.setUpdateSpace((Integer.parseInt(textfields.get(9).getText())));
-            currentStation.setAutomaticQueueHandling(automaticHandling);
             currentStation.setAutomaticUpdateMode(automaticUpdate);
+            currentStation.setUpdateSpace((Integer.parseInt(textfields.get(9).getText())));
+            currentStation.setTimeofExchange(Long.parseLong(textfields.get(10).getText()));
+            currentStation.setAutomaticQueueHandling(automaticHandling);
             Maintenance.completionMessage("modification of the ChargingStation");
         });
         newBatteryMI.setOnAction(e -> {
@@ -735,7 +765,12 @@ class MenuStation {
             boo = new TextField();
             EVLibSim.grid.add(boo, 1, 2);
             textfields.add(boo);
-            EVLibSim.grid.add(batteryCreationB, 0, 3);
+            foo = new Label("Maximum chargings: ");
+            EVLibSim.grid.add(foo, 0, 3);
+            boo = new TextField();
+            EVLibSim.grid.add(boo, 1, 3);
+            textfields.add(boo);
+            EVLibSim.grid.add(batteryCreationB, 0, 4);
             batteryCreationB.setDefaultButton(true);
             EVLibSim.root.setCenter(EVLibSim.grid);
         });
@@ -751,6 +786,7 @@ class MenuStation {
                 return;
             }
             Battery bat = new Battery(Integer.parseInt(textfields.get(1).getText()), Integer.parseInt(textfields.get(0).getText()));
+            bat.setMaxNumberOfChargings(Integer.parseInt(textfields.get(2).getText()));
             currentStation.joinBattery(bat);
             Maintenance.completionMessage("Battery creation");
         });

@@ -1,5 +1,7 @@
 package evlibsim;
 
+import Events.ChargingEvent;
+import Events.DisChargingEvent;
 import Station.Charger;
 import Station.DisCharger;
 import Station.ExchangeHandler;
@@ -45,15 +47,17 @@ class View {
             foo = new Label("ChargingEvent(fast)");
             grid.add(foo, 0, 0);
             int j = 1;
-            for(int i = 0; i < currentStation.getFast().size(); i++)
+            ChargingEvent et;
+            for(int i = 0; i < currentStation.getFast().getSize(); i++)
             {
-                foo = new Label("Id: " + currentStation.getFast().peek(i).getId());
+                et = (ChargingEvent) currentStation.getFast().get(i);
+                foo = new Label("Id: " + et.getId());
                 grid.add(foo, 0, j++);
-                foo = new Label("Energy: " + currentStation.getFast().peek(i).getEnergyToBeReceived());
+                foo = new Label("Energy: " + et.getEnergyToBeReceived());
                 grid.add(foo, 0, j++);
-                foo = new Label("Brand: " + currentStation.getFast().peek(i).getElectricVehicle().getBrand());
+                foo = new Label("Brand: " + et.getElectricVehicle().getBrand());
                 grid.add(foo, 0, j++);
-                foo = new Label("Driver: " + currentStation.getFast().peek(i).getElectricVehicle().getDriver().getName());
+                foo = new Label("Driver: " + et.getElectricVehicle().getDriver().getName());
                 grid.add(foo, 0, j++);
                 foo = new Label();
                 grid.add(foo, 0, j++);
@@ -61,15 +65,16 @@ class View {
             foo = new Label("ChargingEvent(slow)");
             grid.add(foo, 1, 0);
             j = 1;
-            for(int i = 0; i < currentStation.getSlow().size(); i++)
+            for(int i = 0; i < currentStation.getSlow().getSize(); i++)
             {
-                foo = new Label("Id: " + currentStation.getSlow().peek(i).getId());
+                et = (ChargingEvent) currentStation.getSlow().get(i);
+                foo = new Label("Id: " + et.getId());
                 grid.add(foo, 1, j++);
-                foo = new Label("Energy: " + currentStation.getSlow().peek(i).getEnergyToBeReceived());
+                foo = new Label("Energy: " + et.getEnergyToBeReceived());
                 grid.add(foo, 1, j++);
-                foo = new Label("Brand: " + currentStation.getSlow().peek(i).getElectricVehicle().getBrand());
+                foo = new Label("Brand: " + et.getElectricVehicle().getBrand());
                 grid.add(foo, 1, j++);
-                foo = new Label("Driver: " + currentStation.getSlow().peek(i).getElectricVehicle().getDriver().getName());
+                foo = new Label("Driver: " + et.getElectricVehicle().getDriver().getName());
                 grid.add(foo, 1, j++);
                 foo = new Label();
                 grid.add(foo, 1, j++);
@@ -77,15 +82,17 @@ class View {
             foo = new Label("DisChargingEvent");
             grid.add(foo, 2, 0);
             j = 1;
+            DisChargingEvent r;
             for(int i = 0; i < currentStation.getDischarging().getSize(); i++)
             {
-                foo = new Label("Id: " + currentStation.getDischarging().peek(i).getId());
+                r = (DisChargingEvent) currentStation.getDischarging().get(i);
+                foo = new Label("Id: " + r.getId());
                 grid.add(foo, 2, j++);
-                foo = new Label("Energy: " + currentStation.getDischarging().get(i).getAmountOfEnergy());
+                foo = new Label("Energy: " + r.getAmountOfEnergy());
                 grid.add(foo, 2, j++);
-                foo = new Label("Brand: " + currentStation.getDischarging().get(i).getElectricVehicle().getBrand());
+                foo = new Label("Brand: " + r.getElectricVehicle().getBrand());
                 grid.add(foo, 2, j++);
-                foo = new Label("Driver: " + currentStation.getDischarging().get(i).getElectricVehicle().getDriver().getName());
+                foo = new Label("Driver: " + r.getElectricVehicle().getDriver().getName());
                 grid.add(foo, 2, j++);
                 foo = new Label();
                 grid.add(foo, 2, j++);
@@ -93,13 +100,14 @@ class View {
             foo = new Label("ChargingEvent(exchange)");
             grid.add(foo, 3, 0);
             j = 1;
-            for(int i = 0; i < currentStation.getExchange().size(); i++)
+            for(int i = 0; i < currentStation.getExchange().getSize(); i++)
             {
-                foo = new Label("Id: " + currentStation.getExchange().peek(i).getId());
+                et = (ChargingEvent) currentStation.getExchange().get(i);
+                foo = new Label("Id: " + et.getId());
                 grid.add(foo, 3, j++);
-                foo = new Label("Brand: " + currentStation.getExchange().peek(i).getElectricVehicle().getBrand());
+                foo = new Label("Brand: " + et.getElectricVehicle().getBrand());
                 grid.add(foo, 3, j++);
-                foo = new Label("Driver: " + currentStation.getExchange().peek(i).getElectricVehicle().getDriver().getName());
+                foo = new Label("Driver: " + et.getElectricVehicle().getDriver().getName());
                 grid.add(foo, 3, j++);
                 foo = new Label();
                 grid.add(foo, 3, j++);
@@ -118,10 +126,10 @@ class View {
                     new Label(totalDisChargers.getText()),
                     new Label(totalExchange.getText()),
                     new Label(totalParkingSlots.getText()),
-                    new Label("Cars waiting for slow charging: " + String.valueOf(currentStation.getSlow().size())),
-                    new Label("Cars waiting for fast charging: " + String.valueOf(currentStation.getFast().size())),
+                    new Label("Cars waiting for slow charging: " + String.valueOf(currentStation.getSlow().getSize())),
+                    new Label("Cars waiting for fast charging: " + String.valueOf(currentStation.getFast().getSize())),
                     new Label("Cars waiting for discharging: " + String.valueOf(currentStation.getDischarging().getSize())),
-                    new Label("Cars waiting for battery exchange: " + String.valueOf(currentStation.getExchange().size())),
+                    new Label("Cars waiting for battery exchange: " + String.valueOf(currentStation.getExchange().getSize())),
                     chargings, dischargings, exchanges, parkings);
             chargings.setPrefSize(230,30);
             dischargings.setPrefSize(230, 30);
@@ -212,7 +220,7 @@ class View {
                     z.getChildren().add(boo);
                     boo = new Label("Energy: " + ch.getChargingEvent().getEnergyToBeReceived());
                     z.getChildren().add(boo);
-                    boo = new Label("Kind: " + ch.getChargingEvent().getKind());
+                    boo = new Label("Kind: " + ch.getChargingEvent().getKindOfCharging());
                     z.getChildren().add(boo);
                     boo = new Label("Cost: " + ch.getChargingEvent().getCost());
                     z.getChildren().add(boo);

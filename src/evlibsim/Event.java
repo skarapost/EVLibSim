@@ -28,6 +28,7 @@ class Event {
     private static final Button exchangeEventCreation = new Button("Creation");
     private static final Button policyCreation1 = new Button("Creation");
     private static final Button policyCreation2 = new Button("Creation");
+    private static String kindOfCharging;
 
     static Menu createEventMenu()
     {
@@ -49,44 +50,57 @@ class Event {
             boo = new TextField();
             grid.add(boo, 3, 1);
             textfields.add(boo);
-            foo = new Label("Vehicle's cubism: ");
+            foo = new Label("Battery capacity: ");
             grid.add(foo, 0, 2);
             boo = new TextField();
             grid.add(boo, 1, 2);
             textfields.add(boo);
-            foo = new Label("Battery capacity: ");
+            foo = new Label("Battery remaining: ");
             grid.add(foo, 2, 2);
             boo = new TextField();
             grid.add(boo, 3, 2);
             textfields.add(boo);
-            foo = new Label("Battery remaining: ");
+            foo = new Label("Amount of energy: ");
             grid.add(foo, 0, 3);
             boo = new TextField();
             grid.add(boo, 1, 3);
             textfields.add(boo);
-            foo = new Label("Amount of energy: ");
+            foo = new Label("Waiting time: ");
             grid.add(foo, 2, 3);
             boo = new TextField();
             grid.add(boo, 3, 3);
             textfields.add(boo);
-            foo = new Label("Waiting time: ");
-            grid.add(foo, 0, 4);
-            boo = new TextField();
-            grid.add(boo, 1, 4);
-            textfields.add(boo);
-            foo = new Label("Kind of charging: ");
+            foo = new Label("Kind of Charging: ");
+            EVLibSim.grid.add(foo, 0, 4);
+            MenuBar sourc = new MenuBar();
+            sourc.setId("menubar");
+            sourc.setMaxWidth(100);
+            Menu src = new Menu("Kinds");
+            ToggleGroup r = new ToggleGroup();
+            RadioMenuItem slow = new RadioMenuItem("slow");
+            RadioMenuItem fast = new RadioMenuItem("fast");
+            r.getToggles().addAll(slow, fast);
+            slow.setSelected(true);
+            kindOfCharging = "slow";
+            src.getItems().addAll(slow, fast);
+            sourc.getMenus().add(src);
+            grid.add(sourc, 1, 4);
+            foo = new Label("Money: ");
             grid.add(foo, 2, 4);
             boo = new TextField();
             grid.add(boo, 3, 4);
             textfields.add(boo);
-            foo = new Label("Money: ");
-            grid.add(foo, 0, 5);
-            boo = new TextField();
-            grid.add(boo, 1, 5);
-            textfields.add(boo);
-            grid.add(chargingEventCreation, 0, 6);
+            grid.add(chargingEventCreation, 0, 5);
             chargingEventCreation.setDefaultButton(true);
             root.setCenter(grid);
+            slow.setOnAction(ew -> {
+                if (slow.isSelected())
+                    kindOfCharging = "slow";
+            });
+            fast.setOnAction(ew -> {
+                if (fast.isSelected())
+                    kindOfCharging = "fast";
+            });
         });
         discharging.setOnAction(e ->
         {
@@ -106,32 +120,27 @@ class Event {
             boo = new TextField();
             grid.add(boo, 3, 1);
             textfields.add(boo);
-            foo = new Label("Vehicle's cubism: ");
+            foo = new Label("Battery capacity: ");
             grid.add(foo, 0, 2);
             boo = new TextField();
             grid.add(boo, 1, 2);
             textfields.add(boo);
-            foo = new Label("Battery capacity: ");
+            foo = new Label("Battery remaining: ");
             grid.add(foo, 2, 2);
             boo = new TextField();
             grid.add(boo, 3, 2);
             textfields.add(boo);
-            foo = new Label("Battery remaining: ");
+            foo = new Label("Amount of energy: ");
             grid.add(foo, 0, 3);
             boo = new TextField();
             grid.add(boo, 1, 3);
             textfields.add(boo);
-            foo = new Label("Amount of energy: ");
+            foo = new Label("Waiting time: ");
             grid.add(foo, 2, 3);
             boo = new TextField();
             grid.add(boo, 3, 3);
             textfields.add(boo);
-            foo = new Label("Waiting time: ");
-            grid.add(foo, 0, 4);
-            boo = new TextField();
-            grid.add(boo, 1, 4);
-            textfields.add(boo);
-            grid.add(disChargingEventCreation, 0, 5);
+            grid.add(disChargingEventCreation, 0, 4);
             disChargingEventCreation.setDefaultButton(true);
             root.setCenter(grid);
         });
@@ -153,27 +162,22 @@ class Event {
             boo = new TextField();
             grid.add(boo, 3, 1);
             textfields.add(boo);
-            foo = new Label("Vehicle's cubism: ");
+            foo = new Label("Battery capacity: ");
             grid.add(foo, 0, 2);
             boo = new TextField();
             grid.add(boo, 1, 2);
             textfields.add(boo);
-            foo = new Label("Battery capacity: ");
+            foo = new Label("Battery remaining: ");
             grid.add(foo, 2, 2);
             boo = new TextField();
             grid.add(boo, 3, 2);
             textfields.add(boo);
-            foo = new Label("Battery remaining: ");
+            foo = new Label("Waiting time: ");
             grid.add(foo, 0, 3);
             boo = new TextField();
             grid.add(boo, 1, 3);
             textfields.add(boo);
-            foo = new Label("Waiting time: ");
-            grid.add(foo, 2, 3);
-            boo = new TextField();
-            grid.add(boo, 3, 3);
-            textfields.add(boo);
-            grid.add(exchangeEventCreation, 0, 5);
+            grid.add(exchangeEventCreation, 0, 4);
             exchangeEventCreation.setDefaultButton(true);
             root.setCenter(grid);
         });
@@ -195,37 +199,27 @@ class Event {
             boo = new TextField();
             grid.add(boo, 3, 1);
             textfields.add(boo);
-            foo = new Label("Vehicle's cubism: ");
+            foo = new Label("Battery capacity: ");
             grid.add(foo, 0, 2);
             boo = new TextField();
             grid.add(boo, 1, 2);
             textfields.add(boo);
-            foo = new Label("Battery capacity: ");
+            foo = new Label("Battery remaining: ");
             grid.add(foo, 2, 2);
             boo = new TextField();
             grid.add(boo, 3, 2);
             textfields.add(boo);
-            foo = new Label("Battery remaining: ");
+            foo = new Label("Amount of energy: ");
             grid.add(foo, 0, 3);
             boo = new TextField();
             grid.add(boo, 1, 3);
             textfields.add(boo);
-            foo = new Label("Amount of energy: ");
+            foo = new Label("Parking time: ");
             grid.add(foo, 2, 3);
             boo = new TextField();
             grid.add(boo, 3, 3);
             textfields.add(boo);
-            foo = new Label("Waiting time: ");
-            grid.add(foo, 0, 4);
-            boo = new TextField();
-            grid.add(boo, 1, 4);
-            textfields.add(boo);
-            foo = new Label("Parking time: ");
-            grid.add(foo, 2, 4);
-            boo = new TextField();
-            grid.add(boo, 3, 4);
-            textfields.add(boo);
-            grid.add(parkingEventCreation, 0, 5);
+            grid.add(parkingEventCreation, 0, 4);
             parkingEventCreation.setDefaultButton(true);
             root.setCenter(grid);
         });
@@ -282,20 +276,11 @@ class Event {
         chargingEventCreation.setOnAction(e -> {
             if (Maintenance.fieldCompletionCheck())
                 return;
-            if (!textfields.get(7).getText().equals("fast") && !textfields.get(7).getText().equals("slow")) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText(null);
-                alert.setContentText("Please put \"slow\" for a slow charging, or \"fast\" for a fast charging.");
-                alert.showAndWait();
-                return;
-            }
-            if (Double.parseDouble(textfields.get(3).getText()) < 0 ||
+            if (Double.parseDouble(textfields.get(2).getText()) < 0 ||
+                    Double.parseDouble(textfields.get(3).getText()) < 0 ||
                     Double.parseDouble(textfields.get(4).getText()) < 0 ||
                     Double.parseDouble(textfields.get(5).getText()) < 0 ||
-                    Double.parseDouble(textfields.get(6).getText()) < 0 ||
-                    Double.parseDouble(textfields.get(8).getText()) < 0 ||
-                    Double.parseDouble(textfields.get(2).getText()) < 0) {
+                    Double.parseDouble(textfields.get(6).getText()) < 0) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setHeaderText(null);
@@ -303,7 +288,7 @@ class Event {
                 alert.showAndWait();
                 return;
             }
-            if (Double.parseDouble(textfields.get(5).getText()) == 0) {
+            if (Double.parseDouble(textfields.get(4).getText()) == 0) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setHeaderText(null);
@@ -311,7 +296,7 @@ class Event {
                 alert.showAndWait();
                 return;
             }
-            if (Double.parseDouble(textfields.get(3).getText()) < Double.parseDouble(textfields.get(4).getText())) {
+            if (Double.parseDouble(textfields.get(2).getText()) < Double.parseDouble(textfields.get(3).getText())) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setHeaderText(null);
@@ -319,7 +304,7 @@ class Event {
                 alert.showAndWait();
                 return;
             }
-            if (Double.parseDouble(textfields.get(5).getText()) > (Double.parseDouble(textfields.get(3).getText()) - Double.parseDouble(textfields.get(4).getText()))) {
+            if (Double.parseDouble(textfields.get(4).getText()) > (Double.parseDouble(textfields.get(2).getText()) - Double.parseDouble(textfields.get(3).getText()))) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setHeaderText(null);
@@ -329,19 +314,19 @@ class Event {
             }
             ChargingEvent ch;
             Driver d = new Driver(textfields.get(0).getText());
-            Battery b = new Battery(Double.parseDouble(textfields.get(4).getText()), Double.parseDouble(textfields.get(3).getText()));
-            ElectricVehicle el = new ElectricVehicle(textfields.get(1).getText(), Integer.parseInt(textfields.get(2).getText()));
-            el.vehicleJoinBattery(b);
+            Battery b = new Battery(Double.parseDouble(textfields.get(3).getText()), Double.parseDouble(textfields.get(2).getText()));
+            ElectricVehicle el = new ElectricVehicle(textfields.get(1).getText());
+            el.setBattery(b);
             el.setDriver(d);
-            if (!Objects.equals(textfields.get(5).getText(), "0")) {
-                ch = new ChargingEvent(currentStation, el, Double.parseDouble(textfields.get(5).getText()), textfields.get(7).getText());
-                ch.setWaitingTime(Long.parseLong(textfields.get(6).getText()));
+            if (!Objects.equals(textfields.get(4).getText(), "0")) {
+                ch = new ChargingEvent(currentStation, el, Double.parseDouble(textfields.get(4).getText()), kindOfCharging);
+                ch.setWaitingTime(Long.parseLong(textfields.get(5).getText()));
                 ch.preProcessing();
                 ch.execution();
             }
-            else if (!Objects.equals(textfields.get(8).getText(), "0")) {
-                ch = new ChargingEvent(currentStation, el, textfields.get(7).getText(), Double.parseDouble(textfields.get(8).getText()));
-                ch.setWaitingTime(Long.parseLong(textfields.get(6).getText()));
+            else if (!Objects.equals(textfields.get(6).getText(), "0")) {
+                ch = new ChargingEvent(currentStation, el, kindOfCharging, Double.parseDouble(textfields.get(6).getText()));
+                ch.setWaitingTime(Long.parseLong(textfields.get(5).getText()));
                 ch.preProcessing();
                 ch.execution();
             }
@@ -351,11 +336,10 @@ class Event {
         {
             if (Maintenance.fieldCompletionCheck())
                 return;
-            if (Double.parseDouble(textfields.get(3).getText()) < 0 ||
+            if (Double.parseDouble(textfields.get(2).getText()) < 0 ||
+                    Double.parseDouble(textfields.get(3).getText()) < 0 ||
                     Double.parseDouble(textfields.get(4).getText()) < 0 ||
-                    Double.parseDouble(textfields.get(5).getText()) < 0 ||
-                    Double.parseDouble(textfields.get(6).getText()) < 0 ||
-                    Double.parseDouble(textfields.get(2).getText()) < 0) {
+                    Double.parseDouble(textfields.get(5).getText()) < 0) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setHeaderText(null);
@@ -363,7 +347,7 @@ class Event {
                 alert.showAndWait();
                 return;
             }
-            if (Double.parseDouble(textfields.get(3).getText()) < Double.parseDouble(textfields.get(4).getText())) {
+            if (Double.parseDouble(textfields.get(2).getText()) < Double.parseDouble(textfields.get(3).getText())) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setHeaderText(null);
@@ -371,7 +355,7 @@ class Event {
                 alert.showAndWait();
                 return;
             }
-            if (Double.parseDouble(textfields.get(5).getText()) > (Double.parseDouble(textfields.get(4).getText()))) {
+            if (Double.parseDouble(textfields.get(4).getText()) > (Double.parseDouble(textfields.get(3).getText()))) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setHeaderText(null);
@@ -381,13 +365,13 @@ class Event {
             }
             DisChargingEvent dsch;
             Driver d = new Driver(textfields.get(0).getText());
-            Battery b = new Battery(Double.parseDouble(textfields.get(4).getText()), Double.parseDouble(textfields.get(3).getText()));
-            ElectricVehicle el = new ElectricVehicle(textfields.get(1).getText(), Integer.parseInt(textfields.get(2).getText()));
-            el.vehicleJoinBattery(b);
+            Battery b = new Battery(Double.parseDouble(textfields.get(3).getText()), Double.parseDouble(textfields.get(2).getText()));
+            ElectricVehicle el = new ElectricVehicle(textfields.get(1).getText());
+            el.setBattery(b);
             el.setDriver(d);
-            if (!Objects.equals(textfields.get(5).getText(), "0")) {
-                dsch = new DisChargingEvent(currentStation, el, Double.parseDouble(textfields.get(5).getText()));
-                dsch.setWaitingTime(Long.parseLong(textfields.get(6).getText()));
+            if (!Objects.equals(textfields.get(4).getText(), "0")) {
+                dsch = new DisChargingEvent(currentStation, el, Double.parseDouble(textfields.get(4).getText()));
+                dsch.setWaitingTime(Long.parseLong(textfields.get(5).getText()));
                 dsch.preProcessing();
                 dsch.execution();
             }
@@ -396,10 +380,9 @@ class Event {
         exchangeEventCreation.setOnAction(e -> {
             if (Maintenance.fieldCompletionCheck())
                 return;
-            if (Double.parseDouble(textfields.get(3).getText()) < 0 ||
-                    Double.parseDouble(textfields.get(4).getText()) < 0 ||
-                    Double.parseDouble(textfields.get(5).getText()) < 0 ||
-                    Double.parseDouble(textfields.get(2).getText()) < 0) {
+            if (Double.parseDouble(textfields.get(2).getText()) < 0 ||
+                    Double.parseDouble(textfields.get(3).getText()) < 0 ||
+                    Double.parseDouble(textfields.get(4).getText()) < 0) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setHeaderText(null);
@@ -407,7 +390,7 @@ class Event {
                 alert.showAndWait();
                 return;
             }
-            if (Double.parseDouble(textfields.get(3).getText()) < Double.parseDouble(textfields.get(4).getText())) {
+            if (Double.parseDouble(textfields.get(2).getText()) < Double.parseDouble(textfields.get(3).getText())) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setHeaderText(null);
@@ -417,12 +400,12 @@ class Event {
             }
             ChargingEvent ch;
             Driver d = new Driver(textfields.get(0).getText());
-            Battery b = new Battery(Double.parseDouble(textfields.get(4).getText()), Double.parseDouble(textfields.get(3).getText()));
-            ElectricVehicle el = new ElectricVehicle(textfields.get(1).getText(), Integer.parseInt(textfields.get(2).getText()));
-            el.vehicleJoinBattery(b);
+            Battery b = new Battery(Double.parseDouble(textfields.get(3).getText()), Double.parseDouble(textfields.get(2).getText()));
+            ElectricVehicle el = new ElectricVehicle(textfields.get(1).getText());
+            el.setBattery(b);
             el.setDriver(d);
             ch = new ChargingEvent(currentStation, el);
-            ch.setWaitingTime(Long.parseLong(textfields.get(5).getText()));
+            ch.setWaitingTime(Long.parseLong(textfields.get(4).getText()));
             ch.preProcessing();
             ch.execution();
             Maintenance.completionMessage("ChargingEvent creation");
@@ -430,12 +413,10 @@ class Event {
         parkingEventCreation.setOnAction(e -> {
             if (Maintenance.fieldCompletionCheck())
                 return;
-            if (Double.parseDouble(textfields.get(3).getText()) < 0 ||
+            if (Double.parseDouble(textfields.get(2).getText()) < 0 ||
+                    Double.parseDouble(textfields.get(3).getText()) < 0 ||
                     Double.parseDouble(textfields.get(4).getText()) < 0 ||
-                    Double.parseDouble(textfields.get(5).getText()) < 0 ||
-                    Double.parseDouble(textfields.get(6).getText()) < 0 ||
-                    Double.parseDouble(textfields.get(7).getText()) < 0 ||
-                    Double.parseDouble(textfields.get(2).getText()) < 0) {
+                    Double.parseDouble(textfields.get(5).getText()) < 0) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setHeaderText(null);
@@ -443,7 +424,7 @@ class Event {
                 alert.showAndWait();
                 return;
             }
-            if (Double.parseDouble(textfields.get(3).getText()) < Double.parseDouble(textfields.get(4).getText())) {
+            if (Double.parseDouble(textfields.get(2).getText()) < Double.parseDouble(textfields.get(3).getText())) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setHeaderText(null);
@@ -451,18 +432,27 @@ class Event {
                 alert.showAndWait();
                 return;
             }
+            if (Double.parseDouble(textfields.get(2).getText()) < Double.parseDouble(textfields.get(3).getText()) +
+                    Double.parseDouble(textfields.get(4).getText())) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText(null);
+                alert.setContentText("Please select a smaller amount.");
+                alert.showAndWait();
+                return;
+            }
             ParkingEvent ch;
             Driver d = new Driver(textfields.get(0).getText());
-            Battery b = new Battery(Double.parseDouble(textfields.get(3).getText()), Double.parseDouble(textfields.get(4).getText()));
-            ElectricVehicle el = new ElectricVehicle(textfields.get(1).getText(), Integer.parseInt(textfields.get(2).getText()));
-            el.vehicleJoinBattery(b);
+            Battery b = new Battery(Double.parseDouble(textfields.get(3).getText()), Double.parseDouble(textfields.get(2).getText()));
+            ElectricVehicle el = new ElectricVehicle(textfields.get(1).getText());
+            el.setBattery(b);
             el.setDriver(d);
-            if (!Objects.equals(textfields.get(5).getText(), "0")) {
-                ch = new ParkingEvent(currentStation, el, Long.parseLong(textfields.get(7).getText()), Double.parseDouble(textfields.get(5).getText()));
+            if (!Objects.equals(textfields.get(4).getText(), "0")) {
+                ch = new ParkingEvent(currentStation, el, Long.parseLong(textfields.get(5).getText()), Double.parseDouble(textfields.get(4).getText()));
                 ch.preProcessing();
                 ch.execution();
-            } else if (!Objects.equals(textfields.get(7).getText(), "0")) {
-                ch = new ParkingEvent(currentStation, el, Long.parseLong(textfields.get(7).getText()));
+            } else if (!Objects.equals(textfields.get(5).getText(), "0")) {
+                ch = new ParkingEvent(currentStation, el, Long.parseLong(textfields.get(5).getText()));
                 ch.preProcessing();
                 ch.execution();
             }

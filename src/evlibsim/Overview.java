@@ -12,10 +12,10 @@ import static evlibsim.EVLibSim.currentStation;
 import static evlibsim.EVLibSim.grid;
 import static evlibsim.EVLibSim.root;
 
-public class Overview {
-    static final Button showTotalActivity = new Button("Activity");
-    static final Button report = new Button("Report");
-    static final Button totalEnergy = new Button("Energy");
+class Overview {
+    private static final Button showTotalActivity = new Button("Activity");
+    private static final Button report = new Button("Report");
+    private static final Button totalEnergy = new Button("Energy");
     private static final VBox mBox = new VBox();
 
     static VBox createOverviewMenu() {

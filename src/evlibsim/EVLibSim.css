@@ -4,19 +4,23 @@
 
 .grid {
     -fx-background-color:#e3e4e6;
-    -fx-background-radius: 15 15 15 15;
+    -fx-background-radius: 5 5 5 5;
     -fx-padding: 15 15 15 15;
     -fx-hgap: 20;
     -fx-vgap: 20;
-    -fx-border-radius: 15 15 15 15;
+    -fx-border-radius: 5 5 5 5;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);
     -fx-alignment: center;
 }
 
 .box {
     -fx-background-color:#e3e4e6;
-    -fx-padding: 15 15 15 15;
+    -fx-padding: 5 5 5 5;
     -fx-spacing: 25;
+    -fx-alignment: center;
+}
+
+#menubar {
     -fx-alignment: center;
 }
 
@@ -25,9 +29,14 @@
     -fx-padding: 15 15 15 15;
     -fx-spacing: 25;
     -fx-alignment: center;
-    -fx-border-radius: 15 0 0 15;
+    -fx-border-radius: 5 0 0 5;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);
-    -fx-background-radius: 15 0 0 15;
+    -fx-background-radius: 5 0 0 5;
+}
+
+
+.text-area, .text-area .viewport, .text-area .content {
+    -fx-background-color: transparent;
 }
 
 .scroll-pane {
@@ -56,7 +65,7 @@
             linear-gradient(#9a9a9a, #909090),
             linear-gradient(white 0%, #f3f3f3 50%, #ececec 51%, #f2f2f2 100%);
     -fx-background-insets: 0 0 -1 0,0,1;
-    -fx-background-radius: 5,5,4;
+    -fx-background-radius: 5, 5, 4;
     -fx-padding: 3 30 3 30;
     -fx-text-fill: #242d35;
     -fx-font-size: 14px;
@@ -113,6 +122,7 @@
     -fx-background-radius: 3.4, 2, 2;
     -fx-prompt-text-fill: transparent;
 }
+
 #welcome {
     -fx-font-size: 32px;
     -fx-font-family: "Arial Black";
