@@ -1,12 +1,7 @@
 package evlibsim;
 
-import EV.Battery;
-import EV.Driver;
-import EV.ElectricVehicle;
-import Events.ChargingEvent;
-import Events.DisChargingEvent;
-import Events.ParkingEvent;
-import Events.PricingPolicy;
+import EVLib.EV.*;
+import EVLib.Events.*;
 import javafx.scene.control.*;
 
 import java.util.Objects;
@@ -237,7 +232,7 @@ class Event {
             Optional<ButtonType> result = alert.showAndWait();
             TextField boo;
             Label foo;
-            grid.setMaxSize(450, 300);
+            grid.setMaxSize(500, 300);
             if(result.isPresent()) {
                 if (result.get() == buttonTypeOne) {
                     Maintenance.cleanScreen();
@@ -478,7 +473,7 @@ class Event {
             double[] p = new double[prices.length];
             for(int i=0; i<prices.length; i++)
                 p[i] = Double.parseDouble(prices[i]);
-            PricingPolicy policy = new PricingPolicy(currentStation, Long.parseLong(textfields.get(0).getText()), p);
+            PricingPolicy policy = new PricingPolicy(Long.parseLong(textfields.get(0).getText()), p);
             currentStation.setPricingPolicy(policy);
             Maintenance.completionMessage("PricingPolicy creation");
         });
@@ -511,7 +506,7 @@ class Event {
                     else
                         sp[j][i] = Double.parseDouble(prices[j]);
                 }
-            PricingPolicy policy = new PricingPolicy(currentStation, sp);
+            PricingPolicy policy = new PricingPolicy(sp);
             currentStation.setPricingPolicy(policy);
             Maintenance.completionMessage("PricingPolicy creation");
         });

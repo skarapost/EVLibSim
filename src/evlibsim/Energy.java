@@ -1,6 +1,6 @@
 package evlibsim;
 
-import Sources.*;
+import EVLib.Sources.*;
 import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 
@@ -79,42 +79,42 @@ class Energy {
                 EnergySource energySource;
                 if (mi.getText().equals("Wind energy")) {
                     if ((currentStation.getEnergySource("wind") == null)) {
-                        energySource = new Wind(currentStation);
+                        energySource = new Wind();
                         currentStation.addEnergySource(energySource);
                         Maintenance.completionMessage("energy insertion");
                     } else
                         Maintenance.energyAlert("Wind");
                 } else if (mi.getText().equals("Wave energy")) {
                     if ((currentStation.getEnergySource("wave") == null)) {
-                        energySource = new Wave(currentStation);
+                        energySource = new Wave();
                         currentStation.addEnergySource(energySource);
                         Maintenance.completionMessage("energy insertion");
                     } else
                         Maintenance.energyAlert("Wave");
                 } else if (mi.getText().equals("Solar energy")) {
                     if ((currentStation.getEnergySource("solar") == null)) {
-                        energySource = new Solar(currentStation);
+                        energySource = new Solar();
                         currentStation.addEnergySource(energySource);
                         Maintenance.completionMessage("energy insertion");
                     } else
                         Maintenance.energyAlert("Solar");
                 } else if (mi.getText().equals("Geothermal energy")) {
                     if ((currentStation.getEnergySource("geothermal") == null)) {
-                        energySource = new Geothermal(currentStation);
+                        energySource = new Geothermal();
                         currentStation.addEnergySource(energySource);
                         Maintenance.completionMessage("energy insertion");
                     } else
                         Maintenance.energyAlert("Geothermal");
                 } else if (mi.getText().equals("Non-Renewable energy")) {
                     if ((currentStation.getEnergySource("nonrenewable") == null)) {
-                        energySource = new NonRenewable(currentStation);
+                        energySource = new NonRenewable();
                         currentStation.addEnergySource(energySource);
                         Maintenance.completionMessage("energy insertion");
                     } else
                         Maintenance.energyAlert("Non-Renewable");
                 } else {
                     if ((currentStation.getEnergySource("hydroelectric") == null)) {
-                        energySource = new HydroElectric(currentStation);
+                        energySource = new HydroElectric();
                         currentStation.addEnergySource(energySource);
                         Maintenance.completionMessage("energy insertion");
                     } else

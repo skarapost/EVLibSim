@@ -1,11 +1,7 @@
 package evlibsim;
 
-import Events.ChargingEvent;
-import Events.DisChargingEvent;
-import Station.Charger;
-import Station.DisCharger;
-import Station.ExchangeHandler;
-import Station.ParkingSlot;
+import EVLib.Events.*;
+import EVLib.Station.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -27,7 +23,7 @@ class View {
     private static final MenuItem dischargingsMenuItem = new MenuItem("DisChargingEvent");
     private static final MenuItem exchangesMenuItem = new MenuItem("BatterySwapingEvent");
     private static final MenuItem parkingsMenuItem = new MenuItem("ParkingEvent");
-    private static final Button chargings = new Button("ChargingsEvent");
+    private static final Button chargings = new Button("ChargingEvent");
     private static final Button dischargings = new Button("DisChargingEvent");
     private static final Button exchanges = new Button("BatteryExchangeEvent");
     private static final Button parkings = new Button("ParkingEvent");

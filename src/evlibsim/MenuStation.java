@@ -1,11 +1,11 @@
 package evlibsim;
 
-import EV.Battery;
-import Sources.*;
+import EVLib.EV.Battery;
+import EVLib.Sources.*;
 import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
-import Station.*;
+import EVLib.Station.*;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -704,22 +704,22 @@ class MenuStation {
             EnergySource en;
             for (String enr : energies) {
                 if (Objects.equals(enr, "solar")) {
-                    en = new Solar(st);
+                    en = new Solar();
                     st.addEnergySource(en);
                 } else if (Objects.equals(enr, "geothermal")) {
-                    en = new Geothermal(st);
+                    en = new Geothermal();
                     st.addEnergySource(en);
                 } else if (Objects.equals(enr, "wind")) {
-                    en = new Wind(st);
+                    en = new Wind();
                     st.addEnergySource(en);
                 } else if (Objects.equals(enr, "wave")) {
-                    en = new Wave(st);
+                    en = new Wave();
                     st.addEnergySource(en);
                 } else if (Objects.equals(enr, "nonrenewable")) {
-                    en = new NonRenewable(st);
+                    en = new NonRenewable();
                     st.addEnergySource(en);
                 } else if (Objects.equals(enr, "hydroelectric")) {
-                    en = new HydroElectric(st);
+                    en = new HydroElectric();
                     st.addEnergySource(en);
                 }
             }

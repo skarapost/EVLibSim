@@ -77,7 +77,7 @@
 
 *{
     -fx-my-menu-color: #FFFFFF;
-    -fx-my-menu-color-highlighted: #FFFFFF;
+    -fx-my-menu-color-highlighted: #E8E8E8;
     -fx-my-menu-font-color: #000000;
     -fx-my-menu-font-color-highlighted: #DBDBDB;
 }
@@ -109,6 +109,8 @@
 .menu-item:focused,
 .menu-item:showing {
     -fx-background-color: -fx-my-menu-color-highlighted;
+    -fx-border-radius: 5 5 5 5;
+    -fx-background-radius: 5 5 5 5;
 }
 
 .text-field {

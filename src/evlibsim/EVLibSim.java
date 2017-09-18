@@ -1,7 +1,11 @@
 package evlibsim;
 
-import Sources.*;
-import Station.*;
+import EVLib.EV.Battery;
+import EVLib.Events.ChargingEvent;
+import EVLib.Events.DisChargingEvent;
+import EVLib.Events.ParkingEvent;
+import EVLib.Sources.*;
+import EVLib.Station.*;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -9,28 +13,18 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintStream;
-import java.util.*;
-import java.util.prefs.Preferences;
 
-import static evlibsim.MenuStation.cs;
+import java.io.*;
+import java.util.*;
 
 public class EVLibSim extends Application {
 
@@ -49,8 +43,7 @@ public class EVLibSim extends Application {
     static final ToggleGroup group = new ToggleGroup();
     private static final MenuItem startScreen = new MenuItem("Start Screen");
     static final Menu s = new Menu("Stations");
-    private static final MenuItem newSession = new MenuItem("New");
-    private static final MenuItem open = new MenuItem("Open");
+    private static final MenuItem load = new MenuItem("Load");
     private static final MenuItem save = new MenuItem("Save");
     private static final MenuItem saveAs = new MenuItem("Save as...");
     private static final MenuItem exitMenuItem = new MenuItem("Exit");
@@ -61,7 +54,6 @@ public class EVLibSim extends Application {
     static final Label totalDisChargers = new Label();
     static final Label totalExchange = new Label();
     static final Label totalParkingSlots = new Label();
-    private Stage primaryStage;
     private static final VBox tBox = new VBox();
     private static String energy;
     private static TextArea ta = new TextArea();
@@ -82,7 +74,6 @@ public class EVLibSim extends Application {
         primaryStage.setTitle("EVLibSim");
         Scene scene = new Scene(root);
         primaryStage.setMaximized(true);
-        this.primaryStage = primaryStage;
         primaryStage.setScene(scene);
         primaryStage.show();
 
@@ -103,7 +94,7 @@ public class EVLibSim extends Application {
 
         Menu file = new Menu("File");
         exitMenuItem.setOnAction(actionEvent -> Platform.exit());
-        file.getItems().addAll(newSession, open, save, saveAs, startScreen, s, about, exitMenuItem);
+        file.getItems().addAll(startScreen, new SeparatorMenuItem(), load, save, saveAs, new SeparatorMenuItem(), s, about, exitMenuItem);
         menuBar.getMenus().addAll(file, View.createViewMenu(), MenuStation.createStationMenu(), Event.createEventMenu(), Energy.createEnergyMenu());
         scene.getStylesheets().add(EVLibSim.class.getResource("EVLibSim.css").toExternalForm());
         grid.getStyleClass().add("grid");
@@ -238,7 +229,7 @@ public class EVLibSim extends Application {
                 {
                     case "Solar":
                         if(!Maintenance.checkEnergy("solar")) {
-                            currentStation.addEnergySource(new Solar(currentStation));
+                            currentStation.addEnergySource(new Solar());
                             if(Double.parseDouble(textfields.get(0).getText())>0)
                                 currentStation.getEnergySource("solar").insertAmount(Double.parseDouble(textfields.get(1).getText()));
                             Maintenance.completionMessage("energy addition");
@@ -248,7 +239,7 @@ public class EVLibSim extends Application {
                         break;
                     case "Geothermal":
                         if(!Maintenance.checkEnergy("geothermal")) {
-                            currentStation.addEnergySource(new Geothermal(currentStation));
+                            currentStation.addEnergySource(new Geothermal());
                             if(Double.parseDouble(textfields.get(0).getText())>0)
                                 currentStation.getEnergySource("geothermal").insertAmount(Double.parseDouble(textfields.get(1).getText()));
                             Maintenance.completionMessage("energy addition");
@@ -258,7 +249,7 @@ public class EVLibSim extends Application {
                         break;
                     case "Wind":
                         if(!Maintenance.checkEnergy("wind")) {
-                            currentStation.addEnergySource(new Wind(currentStation));
+                            currentStation.addEnergySource(new Wind());
                             if(Double.parseDouble(textfields.get(0).getText())>0)
                                 currentStation.getEnergySource("wind").insertAmount(Double.parseDouble(textfields.get(1).getText()));
                             Maintenance.completionMessage("energy addition");
@@ -268,7 +259,7 @@ public class EVLibSim extends Application {
                         break;
                     case "Wave":
                         if(!Maintenance.checkEnergy("wave")) {
-                            currentStation.addEnergySource(new Wave(currentStation));
+                            currentStation.addEnergySource(new Wave());
                             if(Double.parseDouble(textfields.get(0).getText())>0)
                                 currentStation.getEnergySource("wave").insertAmount(Double.parseDouble(textfields.get(1).getText()));
                             Maintenance.completionMessage("energy addition");
@@ -278,7 +269,7 @@ public class EVLibSim extends Application {
                         break;
                     case "Hydro-Electric":
                         if(!Maintenance.checkEnergy("hydroelectric")) {
-                            currentStation.addEnergySource(new HydroElectric(currentStation));
+                            currentStation.addEnergySource(new HydroElectric());
                             if(Double.parseDouble(textfields.get(0).getText())>0)
                                 currentStation.getEnergySource("hydroelectric").insertAmount(Double.parseDouble(textfields.get(1).getText()));
                             Maintenance.completionMessage("energy addition");
@@ -288,7 +279,7 @@ public class EVLibSim extends Application {
                         break;
                     case "Non-Renewable":
                         if(!Maintenance.checkEnergy("nonrenewable")) {
-                            currentStation.addEnergySource(new NonRenewable(currentStation));
+                            currentStation.addEnergySource(new NonRenewable());
                             if(Double.parseDouble(textfields.get(0).getText())>0)
                                 currentStation.getEnergySource("nonrenewable").insertAmount(Double.parseDouble(textfields.get(1).getText()));
                             Maintenance.completionMessage("energy addition");
@@ -391,50 +382,17 @@ public class EVLibSim extends Application {
             alert.showAndWait();
         });
 
-        open.setOnAction(e -> {
-            FileChooser fileChooser = new FileChooser();
-            // Set extension filter
-            FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(
-                    "XML files (*.xml)", "*.xml");
-            fileChooser.getExtensionFilters().add(extFilter);
-            // Show open file dialog
-            File f = fileChooser.showOpenDialog(this.primaryStage);
-            if (f != null) {
-                loadStationsFromFile(f);
-            }
-        });
-
-        newSession.setOnAction(e -> {
-            stations.clear();
-            s.getItems().clear();
-            currentStation = null;
-            setStationsFilePath(null);
-        });
-
-        save.setOnAction(e -> {
-            File personFile = getStationsFilePath();
-            if (personFile != null) {
-                saveStationToFile(personFile);
-            } else {
-                saveAs.fire();
-            }
-        });
-
         saveAs.setOnAction(e -> {
             FileChooser fileChooser = new FileChooser();
-            // Set extension filter
-            FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(
-                    "XML files (*.xml)", "*.xml");
-            fileChooser.getExtensionFilters().add(extFilter);
-            // Show save file dialog
-            File f = fileChooser.showSaveDialog(this.primaryStage);
-            if (f != null) {
-                // Make sure it has the correct extension
-                if (!f.getPath().endsWith(".xml")) {
-                    f = new File(f.getPath() + ".xml");
+            fileChooser.setTitle("Save File");
+            fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text Files", "*.txt"));
+            File selectedFile = fileChooser.showSaveDialog(primaryStage);
+            if (selectedFile != null)
+                try {
+                    saveFile(selectedFile);
+                } catch (FileNotFoundException e1) {
+                    e1.printStackTrace();
                 }
-                saveStationToFile(f);
-            }
         });
 
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(5), ev -> {
@@ -462,74 +420,80 @@ public class EVLibSim extends Application {
         timeline.play();
     }
 
-    private File getStationsFilePath() {
-        Preferences prefs = Preferences.userNodeForPackage(EVLibSim.class);
-        String filePath = prefs.get("filePath", null);
-        if (filePath != null) {
-            return new File(filePath);
-        } else {
-            return null;
-        }
-    }
-
-    private void setStationsFilePath(File file) {
-        Preferences prefs = Preferences.userNodeForPackage(EVLibSim.class);
-        if (file != null) {
-            prefs.put("filePath", file.getPath());
-            // Update the stage title.
-            this.primaryStage.setTitle("EVLibSim - " + file.getName());
-        } else {
-            prefs.remove("filePath");
-            // Update the stage title.
-            this.primaryStage.setTitle("EVLibSim");
-        }
-    }
-
-    private void loadStationsFromFile(File file) {
+    private void saveFile(File selectedFile) throws FileNotFoundException {
+        BufferedWriter writer;
         try {
-            JAXBContext context = JAXBContext.newInstance(ChargingStationsWrapper.class);
-            Unmarshaller um = context.createUnmarshaller();
-            // Reading XML from the file and unmarshalling.
-            ChargingStationsWrapper wrapper = (ChargingStationsWrapper) um.unmarshal(file);
-            stations.clear();
-            s.getItems().clear();
-            stations.addAll(wrapper.getChargingStations());
-            for (ChargingStation station : stations) {
-                cs = new RadioMenuItem(station.getName());
-                group.getToggles().add(cs);
-                s.getItems().add(cs);
-                if (s.getItems().size() == 1)
-                    cs.setSelected(true);
+            writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(selectedFile.getPath(), false), "utf-8"));
+            String line = null;
+            for(ChargingStation st: stations) {
+                line = "st" + "," + st.getId() + "," + st.getName() + "," + st.getChargers() + "," + st.getDisChargers() + ","
+                        + st.getExchangeHandlers() + "," + st.getParkingSlots() + "," + st.getChargingRatioSlow() + "," + st.getChargingRatioFast() + ","
+                        + st.getDisChargingRatio() + "," + st.getInductiveRatio() + "," + st.getUnitPrice() + "," + st.getDisUnitPrice() + ","
+                        + st.getInductivePrice() + "," + st.getInductivePrice() + "," + st.getExchangePrice() + "," + st.getUpdateSpace() + ","
+                        + st.getUpdateMode() + "," + st.getTimeOfExchange() + "," + st.getQueueHandling() + "," + st.getDeamon() + ","
+                        + "Sources" + ",";
+                for(String s: st.getSources())
+                    line += s + "," + String.valueOf(st.getSpecificAmount("s")) + ",";
+                line += "Batteries";
+                for (Battery bat: st.getBatteries())
+                    line += "," + bat.getId() + "," + bat.getRemAmount() + "," + bat.getCapacity() + "," + bat.getNumberOfChargings() + ","
+                            + bat.getMaxNumberOfChargings() + "," + bat.getActive();
+                line += System.getProperty("line.separator");
+                writer.write(line);
             }
-            // Save the file path to the registry.
-            setStationsFilePath(file);
-        } catch (Exception e) { // catches ANY exception
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Could not load data");
-            alert.setContentText("Could not load data from file:\n" + file.getPath());
-            alert.showAndWait();
-        }
-    }
-
-    private void saveStationToFile(File file) {
-        try {
-            JAXBContext context = JAXBContext.newInstance(ChargingStationsWrapper.class);
-            Marshaller m = context.createMarshaller();
-            m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-            // Wrapping our person data.
-            ChargingStationsWrapper wrapper = new ChargingStationsWrapper();
-            wrapper.setChargingStations();
-            // Marshalling and saving XML to the file.
-            m.marshal(wrapper, file);
-            // Save the file path to the registry.
-            setStationsFilePath(file);
-        } catch (Exception e) { // catches ANY exception
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Could not save data");
-            alert.setContentText("Could not save data to file:\n" + file.getPath());
-            alert.showAndWait();
+            for(ChargingEvent event:ChargingEvent.chargingLog)
+            {
+                line += "ch" + "," + event.getId() + "," + event.getStation().getName() + "," + event.getElectricVehicle().getId() + ","
+                        + event.getElectricVehicle().getBrand() + "," + event.getElectricVehicle().getBattery().getId() + ","
+                        + event.getElectricVehicle().getBattery().getRemAmount() + "," + event.getElectricVehicle().getBattery().getCapacity() + ","
+                        + event.getElectricVehicle().getBattery().getNumberOfChargings() + "," + event.getElectricVehicle().getBattery().getMaxNumberOfChargings() + ","
+                        + event.getElectricVehicle().getBattery().getActive() + "," + event.getElectricVehicle().getDriver().getId() + "," + event.getElectricVehicle().getDriver().getName() + ","
+                        + event.getElectricVehicle().getDriver().getDebt() + "," + event.getElectricVehicle().getDriver().getProfit() + "," + event.getAmountOfEnergy() + ","
+                        + event.getEnergyToBeReceived() + "," + event.getKindOfCharging() + "," + event.getChargingTime() + "," + event.getMaxWaitingTime() + ","
+                        + event.getWaitingTime() + "," + event.getCost();
+                line += System.getProperty("line.separator");
+                writer.write(line);
+            }
+            for(DisChargingEvent event: DisChargingEvent.dischargingLog)
+            {
+                line += "dis" + "," + event.getId() + "," + event.getStation().getName() + "," + event.getElectricVehicle().getId() + ","
+                        + event.getElectricVehicle().getBrand() + "," + event.getElectricVehicle().getBattery().getId() + ","
+                        + event.getElectricVehicle().getBattery().getRemAmount() + "," + event.getElectricVehicle().getBattery().getCapacity() + ","
+                        + event.getElectricVehicle().getBattery().getNumberOfChargings() + "," + event.getElectricVehicle().getBattery().getMaxNumberOfChargings() + ","
+                        + event.getElectricVehicle().getBattery().getActive() + "," + event.getElectricVehicle().getDriver().getId() + "," + event.getElectricVehicle().getDriver().getName() + ","
+                        + event.getElectricVehicle().getDriver().getDebt() + "," + event.getElectricVehicle().getDriver().getProfit() + "," + event.getAmountOfEnergy() + ","
+                        + event.getDisChargingTime() + "," + event.getMaxWaitingTime() + "," + event.getWaitingTime() + "," + event.getProfit();
+                line += System.getProperty("line.separator");
+                writer.write(line);
+            }
+            for(ChargingEvent event: ChargingEvent.exchangeLog)
+            {
+                line += "ex" + "," + event.getId() + "," + event.getStation().getName() + "," + event.getElectricVehicle().getId() + ","
+                        + event.getElectricVehicle().getBrand() + "," + event.getElectricVehicle().getBattery().getId() + ","
+                        + event.getElectricVehicle().getBattery().getRemAmount() + "," + event.getElectricVehicle().getBattery().getCapacity() + ","
+                        + event.getElectricVehicle().getBattery().getNumberOfChargings() + "," + event.getElectricVehicle().getBattery().getMaxNumberOfChargings() + ","
+                        + event.getElectricVehicle().getBattery().getActive() + "," + event.getElectricVehicle().getDriver().getId() + "," + event.getElectricVehicle().getDriver().getName() + ","
+                        + event.getElectricVehicle().getDriver().getDebt() + "," + event.getElectricVehicle().getDriver().getProfit() + ","
+                        + event.getMaxWaitingTime() + "," + event.getWaitingTime() + "," + event.getCost();
+                line += System.getProperty("line.separator");
+                writer.write(line);
+            }
+            for(ParkingEvent event: ParkingEvent.parkLog)
+            {
+                line += "ex" + "," + event.getId() + "," + event.getStation().getName() + "," + event.getElectricVehicle().getId() + ","
+                        + event.getElectricVehicle().getBrand() + "," + event.getElectricVehicle().getBattery().getId() + ","
+                        + event.getElectricVehicle().getBattery().getRemAmount() + "," + event.getElectricVehicle().getBattery().getCapacity() + ","
+                        + event.getElectricVehicle().getBattery().getNumberOfChargings() + "," + event.getElectricVehicle().getBattery().getMaxNumberOfChargings() + ","
+                        + event.getElectricVehicle().getBattery().getActive() + "," + event.getElectricVehicle().getDriver().getId() + "," + event.getElectricVehicle().getDriver().getName() + ","
+                        + event.getElectricVehicle().getDriver().getDebt() + "," + event.getElectricVehicle().getDriver().getProfit() + "," + event.getParkingTime() + ","
+                        + event.getAmountOfEnergy() + "," + event.getEnergyToBeReceived() + "," + event.getChargingTime() + "," + event.getCost();
+                line += System.getProperty("line.separator");
+                writer.write(line);
+            }
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
