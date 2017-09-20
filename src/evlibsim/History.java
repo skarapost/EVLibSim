@@ -27,7 +27,7 @@ class History {
         title.setStyle("-fx-font-weight: bold;");
         nBox.getChildren().addAll(title, searchChargingEvent, History.searchDisChargingEvent,
                 History.searchExchangeEvent, History.searchParkingEvent);
-        nBox.setMaxSize(220, 180);
+        nBox.setMaxSize(300, 180);
 
         searchChargingEvent.setPrefSize(220, 50);
         searchDisChargingEvent.setPrefSize(220, 50);

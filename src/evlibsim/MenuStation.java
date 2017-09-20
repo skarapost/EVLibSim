@@ -230,13 +230,18 @@ class MenuStation {
             if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
-            EVLibSim.grid.setMaxSize(500, 300);
+            EVLibSim.grid.setMaxSize(400, 400);
             TextField boo;
             Label foo;
-            foo = new Label("Kind of charger: ");
+            foo = new Label("Kind: ");
             EVLibSim.grid.add(foo, 0, 1);
             boo = new TextField();
             EVLibSim.grid.add(boo, 1, 1);
+            textfields.add(boo);
+            foo = new Label("Name: ");
+            EVLibSim.grid.add(foo, 0, 2);
+            boo = new TextField();
+            EVLibSim.grid.add(boo, 1, 2);
             textfields.add(boo);
             EVLibSim.grid.add(chargerCreationB, 0, 3);
             chargerCreationB.setDefaultButton(true);
@@ -246,34 +251,52 @@ class MenuStation {
         {
             if (Maintenance.stationCheck())
                 return;
-            if (Maintenance.confirmCreation("DisCharger"))
-                return;
-            DisCharger ch;
-            ch = new DisCharger(currentStation);
-            currentStation.addDisCharger(ch);
-            Maintenance.completionMessage("DisCharger creation");
+            TextInputDialog alert = new TextInputDialog();
+            alert.setTitle("Name for DisCharger");
+            alert.setHeaderText(null);
+            alert.setContentText("Please give a name: ");
+            Optional<String> result = alert.showAndWait();
+            if(result.isPresent()) {
+                DisCharger ch;
+                ch = new DisCharger(currentStation);
+                ch.setName(result.get());
+                currentStation.addDisCharger(ch);
+                Maintenance.completionMessage("DisCharger creation");
+            }
         });
         newExchangeHandlerMI.setOnAction(e ->
         {
             if (Maintenance.stationCheck())
                 return;
-            if (Maintenance.confirmCreation("ExchangeHandler"))
-                return;
-            ExchangeHandler ch;
-            ch = new ExchangeHandler(currentStation);
-            currentStation.addExchangeHandler(ch);
-            Maintenance.completionMessage("ExchangeHandler creation");
+            TextInputDialog alert = new TextInputDialog();
+            alert.setTitle("Name for ExchangeHandler");
+            alert.setHeaderText(null);
+            alert.setContentText("Please give a name: ");
+            Optional<String> result = alert.showAndWait();
+            if(result.isPresent()) {
+                ExchangeHandler ch;
+                ch = new ExchangeHandler(currentStation);
+                ch.setName(result.get());
+                currentStation.addExchangeHandler(ch);
+                Maintenance.completionMessage("ExchangeHandler creation");
+            }
         });
         newParkingSlotMI.setOnAction(e ->
         {
             if (Maintenance.stationCheck())
                 return;
-            if (Maintenance.confirmCreation("ParkingSlot"))
-                return;
-            ParkingSlot ch;
-            ch = new ParkingSlot(currentStation);
-            currentStation.addParkingSlot(ch);
-            Maintenance.completionMessage("ParkingSlot creation");
+            TextInputDialog alert = new TextInputDialog();
+            alert.setTitle("Name for ParkingSlot");
+            alert.setHeaderText(null);
+            alert.setContentText("Please give a name: ");
+            Optional<String> result = alert.showAndWait();
+            if(result.isPresent()) {
+                ParkingSlot ch;
+                ch = new ParkingSlot(currentStation);
+                ch.setName(result.get());
+                currentStation.addParkingSlot(ch);
+                Maintenance.completionMessage("ParkingSlot creation");
+            }
         });
         modifyChargingStationMI.setOnAction(e -> {
             if (Maintenance.stationCheck())
@@ -523,7 +546,7 @@ class MenuStation {
             scroll.setMaxSize(500, 600);
             Label foo;
             for(Charger ch: currentStation.getChargers()) {
-                foo = new Label("Id: " + ch.getId() + "     " + "Kind: " + ch.getKindOfCharging() + "     " + "Occupied: " + (ch.getChargingEvent() == null) + "     ");
+                foo = new Label("Id: " + ch.getId() + "     " + "Name: " + ch.getName() + "     " + "Kind: " + ch.getKindOfCharging() + "     " + "Occupied: " + (ch.getChargingEvent() == null));
                 box.getChildren().add(foo);
             }
             scroll.setContent(box);
@@ -539,7 +562,7 @@ class MenuStation {
             scroll.setMaxSize(500, 600);
             Label foo;
             for(DisCharger ch: currentStation.getDisChargers()) {
-                foo = new Label("Id: " + ch.getId() + "     " + "Occupied: " + (ch.getDisChargingEvent() == null) + "     ");
+                foo = new Label("Id: " + ch.getId() + "     " + "Name: " + ch.getName() + "     " + "Occupied: " + (ch.getDisChargingEvent() == null) + "     ");
                 box.getChildren().add(foo);
             }
             scroll.setContent(box);
@@ -554,7 +577,7 @@ class MenuStation {
             scroll.setMaxSize(500, 600);
             Label foo;
             for(ExchangeHandler ch: currentStation.getExchangeHandlers()) {
-                foo = new Label("Id: " + ch.getId() + "     " + "Occupied: " + (ch.getChargingEvent() == null) + "     ");
+                foo = new Label("Id: " + ch.getId() + "     " + "Name: " + ch.getName() + "     " + "Occupied: " + (ch.getChargingEvent() == null) + "     ");
                 box.getChildren().add(foo);
             }
             scroll.setContent(box);
@@ -569,7 +592,7 @@ class MenuStation {
             scroll.setMaxSize(500, 600);
             Label foo;
             for(ParkingSlot ch: currentStation.getParkingSlots()) {
-                foo = new Label("Id: " + ch.getId() + "     " + "Occupied: " + (ch.getParkingEvent() == null) + "     ");
+                foo = new Label("Id: " + ch.getId() + "     " + "Name: " + ch.getName() + "     " + "Occupied: " + (ch.getParkingEvent() == null) + "     ");
                 box.getChildren().add(foo);
             }
             scroll.setContent(box);
@@ -611,6 +634,7 @@ class MenuStation {
             Charger ch;
             ch = new Charger(currentStation, textfields.get(0).getText());
             currentStation.addCharger(ch);
+            ch.setName(textfields.get(1).getText());
             Maintenance.completionMessage("Charger creation");
         });
         chargingStationCreationB.setOnAction(e ->
@@ -747,6 +771,8 @@ class MenuStation {
             currentStation.setUpdateSpace((Integer.parseInt(textfields.get(9).getText())));
             currentStation.setTimeofExchange(Long.parseLong(textfields.get(10).getText()));
             currentStation.setAutomaticQueueHandling(automaticHandling);
+            cs = (RadioMenuItem) group.getSelectedToggle();
+            cs.setText(currentStation.getName());
             Maintenance.completionMessage("modification of the ChargingStation");
         });
         newBatteryMI.setOnAction(e -> {

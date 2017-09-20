@@ -23,7 +23,7 @@ class Overview {
         Text title = new Text("Overview");
         title.setStyle("-fx-font-weight: bold;");
         mBox.getChildren().addAll(title, report, showTotalActivity, totalEnergy);
-        mBox.setMaxSize(220, 150);
+        mBox.setMaxSize(300, 150);
         showTotalActivity.setOnAction(e -> View.totalActivity.fire());
 
         showTotalActivity.setPrefSize(220, 50);

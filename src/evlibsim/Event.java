@@ -283,11 +283,11 @@ class Event {
                 alert.showAndWait();
                 return;
             }
-            if (Double.parseDouble(textfields.get(4).getText()) == 0) {
+            if (Double.parseDouble(textfields.get(4).getText()) == 0 && Double.parseDouble(textfields.get(6).getText()) == 0) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setHeaderText(null);
-                alert.setContentText("The asking amount cannot be negative or zero.");
+                alert.setContentText("Money and asking amount cannot be both zero.");
                 alert.showAndWait();
                 return;
             }
@@ -497,16 +497,13 @@ class Event {
                 alert.showAndWait();
                 return;
             }
-            double[][] sp = new double[spaces.length][2];
-            for(int i=0; i<2; i++)
-                for (int j=0; j<prices.length; j++)
-                {
-                    if (i==0)
-                        sp[j][i] = Double.parseDouble(spaces[j]);
-                    else
-                        sp[j][i] = Double.parseDouble(prices[j]);
-                }
-            PricingPolicy policy = new PricingPolicy(sp);
+            long[] s = new long[spaces.length];
+            double[] p = new double[prices.length];
+            for(int i=0; i<spaces.length; i++) {
+                s[i] = Long.parseLong(spaces[i]);
+                p[i] = Double.parseDouble(prices[i]);
+            }
+            PricingPolicy policy = new PricingPolicy(s, p);
             currentStation.setPricingPolicy(policy);
             Maintenance.completionMessage("PricingPolicy creation");
         });

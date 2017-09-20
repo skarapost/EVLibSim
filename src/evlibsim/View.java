@@ -114,6 +114,9 @@ class View {
             if(Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
+            Label title = new Label("Running Events");
+            title.setAlignment(Pos.CENTER);
+            title.setStyle("-fx-font-weight: bold;");
             VBox box = new VBox();
             box.setPadding(new Insets(25));
             box.setSpacing(25);
@@ -126,6 +129,7 @@ class View {
                     new Label("Cars waiting for fast charging: " + String.valueOf(currentStation.getFast().getSize())),
                     new Label("Cars waiting for discharging: " + String.valueOf(currentStation.getDischarging().getSize())),
                     new Label("Cars waiting for battery exchange: " + String.valueOf(currentStation.getExchange().getSize())),
+                    title,
                     chargings, dischargings, exchanges, parkings);
             chargings.setPrefSize(230,30);
             dischargings.setPrefSize(230, 30);

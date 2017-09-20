@@ -266,7 +266,7 @@ class Energy {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setHeaderText(null);
-                alert.setContentText("No automatic update storage.");
+                alert.setContentText("Automatic update storage.");
                 alert.showAndWait();
             }
         });
@@ -421,6 +421,7 @@ class Energy {
             grid.add(foo, 0, 5, 2, 1);
             root.setCenter(grid);
         });
+
         addEnergies.setOnAction(e -> {
             for(String en: currentStation.getSources())
                 switch (en)
