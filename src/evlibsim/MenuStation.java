@@ -105,22 +105,22 @@ class MenuStation {
             EVLibSim.grid.add(sourc, 1, 4);
             foo = new Label("Charging fee per unit: ");
             EVLibSim.grid.add(foo, 2, 4);
-            boo = new TextField("1");
+            boo = new TextField("1.0");
             EVLibSim.grid.add(boo, 3, 4);
             textfields.add(boo);
             foo = new Label("DisCharging fee per unit: ");
             EVLibSim.grid.add(foo, 0, 5);
-            boo = new TextField("1");
+            boo = new TextField("1.0");
             EVLibSim.grid.add(boo, 1, 5);
             textfields.add(boo);
-            foo = new Label("Battery exchange fee per unit: ");
+            foo = new Label("Battery exchange fee: ");
             EVLibSim.grid.add(foo, 2, 5);
-            boo = new TextField("1");
+            boo = new TextField("1.0");
             EVLibSim.grid.add(boo, 3, 5);
             textfields.add(boo);
             foo = new Label("Inductive charging fee per unit: ");
             EVLibSim.grid.add(foo, 0, 6);
-            boo = new TextField("1");
+            boo = new TextField("1.0");
             EVLibSim.grid.add(boo, 1, 6);
             textfields.add(boo);
             foo = new Label("Fast charging ratio: ");
@@ -391,7 +391,7 @@ class MenuStation {
                 r = Integer.parseInt(result.get());
                 Charger ch = currentStation.searchCharger(r);
                 if (ch != null)
-                    if (!ch.getBusy())
+                    if (ch.getChargingEvent() == null)
                     {
                         currentStation.deleteCharger(ch);
                         Maintenance.completionMessage("Charger deletion");
@@ -425,7 +425,7 @@ class MenuStation {
                 r = Integer.parseInt(result.get());
                 DisCharger dsch = currentStation.searchDischarger(r);
                 if (dsch != null)
-                    if (!dsch.getBusy())
+                    if (dsch.getDisChargingEvent() == null)
                     {
                         currentStation.deleteDisCharger(dsch);
                         Maintenance.completionMessage("DisCharger removal");
@@ -459,7 +459,7 @@ class MenuStation {
                 r = Integer.parseInt(result.get());
                 ExchangeHandler dsch = currentStation.searchExchangeHandler(r);
                 if(dsch != null)
-                    if (!dsch.getBusy()) {
+                    if (dsch.getChargingEvent() == null) {
                         currentStation.deleteExchangeHandler(dsch);
                         Maintenance.completionMessage("ExchangeHandler removal");
                     }
@@ -492,7 +492,7 @@ class MenuStation {
                 r = Integer.parseInt(result.get());
                 ParkingSlot dsch = currentStation.searchParkingSlot(r);
                 if(dsch != null)
-                    if (!dsch.getBusy()) {
+                    if (dsch.getParkingEvent() == null) {
                         currentStation.deleteParkingSlot(dsch);
                         Maintenance.completionMessage("ParkingSlot deletion");
                     }
@@ -520,10 +520,10 @@ class MenuStation {
             Maintenance.cleanScreen();
             VBox box = new VBox();
             box.getStyleClass().add("box");
-            scroll.setMaxSize(600, 600);
+            scroll.setMaxSize(500, 600);
             Label foo;
             for(Charger ch: currentStation.getChargers()) {
-                foo = new Label("Id: " + ch.getId() + "     " + "Kind: " + ch.getKindOfCharging() + "     " + "Occupied: " + ch.getBusy() + "     " + "Elapsed commit time: " + ch.reElapsedCommitTime());
+                foo = new Label("Id: " + ch.getId() + "     " + "Kind: " + ch.getKindOfCharging() + "     " + "Occupied: " + (ch.getChargingEvent() == null) + "     ");
                 box.getChildren().add(foo);
             }
             scroll.setContent(box);
@@ -536,10 +536,10 @@ class MenuStation {
             Maintenance.cleanScreen();
             VBox box = new VBox();
             box.getStyleClass().add("box");
-            scroll.setMaxSize(600, 600);
+            scroll.setMaxSize(500, 600);
             Label foo;
             for(DisCharger ch: currentStation.getDisChargers()) {
-                foo = new Label("Id: " + ch.getId() + "     " + "Occupied: " + ch.getBusy() + "     " + "Elapsed commit time: " + ch.getElapsedCommitTime());
+                foo = new Label("Id: " + ch.getId() + "     " + "Occupied: " + (ch.getDisChargingEvent() == null) + "     ");
                 box.getChildren().add(foo);
             }
             scroll.setContent(box);
@@ -551,10 +551,10 @@ class MenuStation {
             Maintenance.cleanScreen();
             VBox box = new VBox();
             box.getStyleClass().add("box");
-            scroll.setMaxSize(600, 600);
+            scroll.setMaxSize(500, 600);
             Label foo;
             for(ExchangeHandler ch: currentStation.getExchangeHandlers()) {
-                foo = new Label("Id: " + ch.getId() + "     " + "Occupied: " + ch.getBusy() + "     " + "Elapsed commit time: " + ch.getElapsedCommitTime());
+                foo = new Label("Id: " + ch.getId() + "     " + "Occupied: " + (ch.getChargingEvent() == null) + "     ");
                 box.getChildren().add(foo);
             }
             scroll.setContent(box);
@@ -566,10 +566,10 @@ class MenuStation {
             Maintenance.cleanScreen();
             VBox box = new VBox();
             box.getStyleClass().add("box");
-            scroll.setMaxSize(600, 600);
+            scroll.setMaxSize(500, 600);
             Label foo;
             for(ParkingSlot ch: currentStation.getParkingSlots()) {
-                foo = new Label("Id: " + ch.getId() + "     " + "Occupied: " + ch.getBusy() + "     " + "Elapsed commit time: " + ch.getElapsedCommitTime());
+                foo = new Label("Id: " + ch.getId() + "     " + "Occupied: " + (ch.getParkingEvent() == null) + "     ");
                 box.getChildren().add(foo);
             }
             scroll.setContent(box);
@@ -734,6 +734,7 @@ class MenuStation {
         modifyStationB.setOnAction(e -> {
             if (Maintenance.fieldCompletionCheck())
                 return;
+            currentStation.setName(textfields.get(0).getText());
             currentStation.setUnitPrice(Double.parseDouble(textfields.get(1).getText()));
             currentStation.setDisUnitPrice(Double.parseDouble(textfields.get(2).getText()));
             currentStation.setExchangePrice(Double.parseDouble(textfields.get(3).getText()));

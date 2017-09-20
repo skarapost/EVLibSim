@@ -49,7 +49,7 @@ class View {
                 et = (ChargingEvent) currentStation.getFast().get(i);
                 foo = new Label("Id: " + et.getId());
                 grid.add(foo, 0, j++);
-                foo = new Label("Energy: " + et.getEnergyToBeReceived());
+                foo = new Label("Energy: " + et.getAmountOfEnergy());
                 grid.add(foo, 0, j++);
                 foo = new Label("Brand: " + et.getElectricVehicle().getBrand());
                 grid.add(foo, 0, j++);
@@ -66,7 +66,7 @@ class View {
                 et = (ChargingEvent) currentStation.getSlow().get(i);
                 foo = new Label("Id: " + et.getId());
                 grid.add(foo, 1, j++);
-                foo = new Label("Energy: " + et.getEnergyToBeReceived());
+                foo = new Label("Energy: " + et.getAmountOfEnergy());
                 grid.add(foo, 1, j++);
                 foo = new Label("Brand: " + et.getElectricVehicle().getBrand());
                 grid.add(foo, 1, j++);
@@ -203,7 +203,7 @@ class View {
             int column = 0;
             x.getChildren().add(y);
             for(Charger ch: currentStation.getChargers())
-                if(ch.getBusy()&&ch.getChargingEvent().getCondition().equals("charging")) {
+                if((ch.getChargingEvent()!=null)&&ch.getChargingEvent().getCondition().equals("charging")) {
                     z = new VBox();
                     z.setSpacing(25);
                     z.setAlignment(Pos.TOP_LEFT);
@@ -251,7 +251,7 @@ class View {
             int column = 0;
             x.getChildren().add(y);
             for(DisCharger ch: currentStation.getDisChargers())
-                if(ch.getBusy()&&ch.getDisChargingEvent().getCondition().equals("discharging")) {
+                if((ch.getDisChargingEvent()!=null)&&ch.getDisChargingEvent().getCondition().equals("discharging")) {
                     z = new VBox();
                     z.setSpacing(25);
                     z.setAlignment(Pos.TOP_LEFT);
@@ -297,7 +297,7 @@ class View {
             int column = 0;
             x.getChildren().add(y);
             for(ExchangeHandler ch: currentStation.getExchangeHandlers())
-                if(ch.getBusy()&&ch.getChargingEvent().getCondition().equals("exchange")) {
+                if((ch.getChargingEvent()!=null)&&ch.getChargingEvent().getCondition().equals("exchange")) {
                     z = new VBox();
                     z.setSpacing(25);
                     z.setAlignment(Pos.TOP_LEFT);
@@ -341,7 +341,7 @@ class View {
             int column = 0;
             x.getChildren().add(y);
             for(ParkingSlot ch: currentStation.getParkingSlots())
-                if(ch.getBusy()&&(ch.getParkingEvent().getCondition().equals("parking")||ch.getParkingEvent().getCondition().equals("charging"))) {
+                if((ch.getParkingEvent()!=null)&&(ch.getParkingEvent().getCondition().equals("parking")||ch.getParkingEvent().getCondition().equals("charging"))) {
                     z = new VBox();
                     z.setPadding(new Insets(15));
                     z.setSpacing(25);

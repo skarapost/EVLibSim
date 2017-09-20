@@ -1,6 +1,8 @@
 package evlibsim;
 
 import EVLib.EV.Battery;
+import EVLib.EV.Driver;
+import EVLib.EV.ElectricVehicle;
 import EVLib.Events.ChargingEvent;
 import EVLib.Events.DisChargingEvent;
 import EVLib.Events.ParkingEvent;
@@ -21,10 +23,13 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.util.Duration;
 
 import java.io.*;
 import java.util.*;
+
+import static evlibsim.MenuStation.cs;
 
 public class EVLibSim extends Application {
 
@@ -64,6 +69,7 @@ public class EVLibSim extends Application {
     private static Button bt5 = new Button("New Amounts");
     private static Button bt6 = new Button("New EnergySource");
     private static Button bt7 = new Button("Delete EnergySource");
+    private File f = null;
 
     public static void main(String[] args) {
         launch(args);
@@ -93,7 +99,23 @@ public class EVLibSim extends Application {
         root.setRight(tBox);
 
         Menu file = new Menu("File");
-        exitMenuItem.setOnAction(actionEvent -> Platform.exit());
+        exitMenuItem.setOnAction(e -> {
+            for(ChargingStation st: stations) {
+                for (Charger ch : st.getChargers())
+                    if (ch.getChargingEvent() != null)
+                        ch.stopCharger();
+                for (DisCharger ch : st.getDisChargers())
+                    if (ch.getDisChargingEvent() != null)
+                        ch.stopDisCharger();
+                for (ExchangeHandler h : st.getExchangeHandlers())
+                    if (h.getChargingEvent() != null)
+                        h.stopExchangeHandler();
+                for (ParkingSlot h : st.getParkingSlots())
+                    if (h.getParkingEvent() != null)
+                        h.stopParkingSlot();
+            }
+            Platform.exit();
+        });
         file.getItems().addAll(startScreen, new SeparatorMenuItem(), load, save, saveAs, new SeparatorMenuItem(), s, about, exitMenuItem);
         menuBar.getMenus().addAll(file, View.createViewMenu(), MenuStation.createStationMenu(), Event.createEventMenu(), Energy.createEnergyMenu());
         scene.getStylesheets().add(EVLibSim.class.getResource("EVLibSim.css").toExternalForm());
@@ -385,14 +407,84 @@ public class EVLibSim extends Application {
         saveAs.setOnAction(e -> {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Save File");
-            fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text Files", "*.txt"));
+            fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text Files(.txt)", "*.txt"));
             File selectedFile = fileChooser.showSaveDialog(primaryStage);
             if (selectedFile != null)
                 try {
                     saveFile(selectedFile);
+                    f = selectedFile;
+                    primaryStage.setTitle("EVLibSim - [" + f.getPath() + "]");
                 } catch (FileNotFoundException e1) {
                     e1.printStackTrace();
                 }
+        });
+
+        save.setOnAction(e -> {
+            if(f == null)
+                saveAs.fire();
+            else
+                try {
+                    saveFile(f);
+                } catch (FileNotFoundException e1) {
+                    e1.printStackTrace();
+                }
+        });
+
+        load.setOnAction(e -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Open File");
+            fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text Files(.txt)", "*.txt"));
+            File selectedFile = fileChooser.showOpenDialog(primaryStage);
+            if(selectedFile != null)
+                try {
+                    openFile(selectedFile);
+                    f = selectedFile;
+                    primaryStage.setTitle("EVLibSim - [" + selectedFile.getPath() + "]");
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+        });
+
+
+        primaryStage.addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, e -> {
+            ThreadGroup currentGroup = Thread.currentThread().getThreadGroup();
+            int noThreads = currentGroup.activeCount();
+            Thread[] lsThreads = new Thread[noThreads];
+            currentGroup.enumerate(lsThreads);
+            for (int i=0; i<noThreads; i++)
+                if(lsThreads[i].getName().contains("Charger")||lsThreads[i].getName().contains("DisCharger")||lsThreads[i].getName().contains("ExchangeHandler")||lsThreads[i].getName().contains("ParkingSlot"))
+                {
+                    e.consume();
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Information");
+                    alert.setHeaderText(null);
+                    alert.getButtonTypes().add(ButtonType.CANCEL);
+                    alert.setContentText("There are still some tasks running.\nDo you want to close the application?");
+                    Optional<ButtonType> result = alert.showAndWait();
+                    if(result.isPresent())
+                        if(result.get() == ButtonType.OK) {
+                            for(ChargingStation st: stations) {
+                                for (Charger ch : st.getChargers())
+                                    if (ch.getChargingEvent() != null)
+                                        ch.stopCharger();
+                                for (DisCharger ch : st.getDisChargers())
+                                    if (ch.getDisChargingEvent() != null)
+                                        ch.stopDisCharger();
+                                for (ExchangeHandler h : st.getExchangeHandlers())
+                                    if (h.getChargingEvent() != null)
+                                        h.stopExchangeHandler();
+                                for (ParkingSlot h : st.getParkingSlots())
+                                    if (h.getParkingEvent() != null)
+                                        h.stopParkingSlot();
+                            }
+                            Platform.exit();
+                        }
+                        else if(result.get() == ButtonType.CANCEL) {
+                            alert.hide();
+                            break;
+                        }
+                }
+
         });
 
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(5), ev -> {
@@ -420,25 +512,227 @@ public class EVLibSim extends Application {
         timeline.play();
     }
 
+    private void openFile(File selectedFile) throws IOException {
+        BufferedReader in = new BufferedReader(new FileReader(selectedFile));
+        String line;
+        String[] tokens;
+        ChargingEvent event;
+        DisChargingEvent disEvent;
+        ParkingEvent event1;
+        ChargingStation st;
+        Battery bat;
+        ElectricVehicle vehicle;
+        Driver driver;
+        int counter = 0;
+        stations.clear();
+        s.getItems().clear();
+        currentStation = null;
+        group.getToggles().clear();
+        ChargingEvent.chargingLog.clear();
+        DisChargingEvent.dischargingLog.clear();
+        ChargingEvent.exchangeLog.clear();
+        ParkingEvent.parkLog.clear();
+        //Prophets of Rage - living on 110
+        while ((line = in.readLine()) != null)
+        {
+            tokens = line.split(",");
+            if(tokens[0].equals("st"))
+            {
+                st = new ChargingStation(tokens[2]);
+                st.setId(Integer.parseInt(tokens[1]));
+                for(int i=0; i < Integer.parseInt(tokens[3]); i++)
+                    st.addCharger(new Charger(st, "fast"));
+                for(int i=0; i < Integer.parseInt(tokens[4]); i++)
+                    st.addCharger(new Charger(st, "slow"));
+                for(int i=0; i < Integer.parseInt(tokens[5]); i++)
+                    st.addDisCharger(new DisCharger(st));
+                for(int i=0; i < Integer.parseInt(tokens[6]); i++)
+                    st.addExchangeHandler(new ExchangeHandler(st));
+                for(int i=0; i < Integer.parseInt(tokens[7]); i++)
+                    st.addParkingSlot(new ParkingSlot(st));
+                st.setChargingRatioSlow(Double.parseDouble(tokens[8]));
+                st.setChargingRatioFast(Double.parseDouble(tokens[9]));
+                st.setDisChargingRatio(Double.parseDouble(tokens[10]));
+                st.setInductiveChargingRatio(Double.parseDouble(tokens[11]));
+                st.setUnitPrice(Double.parseDouble(tokens[12]));
+                st.setDisUnitPrice(Double.parseDouble(tokens[13]));
+                st.setInductivePrice(Double.parseDouble(tokens[14]));
+                st.setExchangePrice(Double.parseDouble(tokens[15]));
+                st.setAutomaticUpdateMode(Boolean.parseBoolean(tokens[17]));
+                st.setUpdateSpace(Integer.parseInt(tokens[16]));
+                st.setTimeofExchange(Long.parseLong(tokens[18]));
+                st.setAutomaticQueueHandling(Boolean.parseBoolean(tokens[19]));
+                st.setDeamon(Boolean.parseBoolean(tokens[20]));
+                counter = 22;
+                while(!tokens[counter].equals("Batteries"))
+                {
+                    switch (tokens[counter]) {
+                        case "solar":
+                            st.addEnergySource(new Solar());
+                            break;
+                        case "wind":
+                            st.addEnergySource(new Wind());
+                            break;
+                        case "wave":
+                            st.addEnergySource(new Wave());
+                            break;
+                        case "hydroelectric":
+                            st.addEnergySource(new HydroElectric());
+                            break;
+                        case "geothermal":
+                            st.addEnergySource(new Geothermal());
+                            break;
+                        case "nonrenewable":
+                            st.addEnergySource(new NonRenewable());
+                            break;
+                    }
+                    st.setSpecificAmount(tokens[counter], Double.parseDouble(tokens[counter + 1]));
+                    counter += 2;
+                }
+                while((counter + 1) < tokens.length)
+                {
+                    bat = new Battery(Double.parseDouble(tokens[counter + 2]), Double.parseDouble(tokens[counter + 3]));
+                    bat.setId(Integer.parseInt(tokens[counter + 1]));
+                    bat.setNumberOfChargings(Integer.parseInt(tokens[counter + 4]));
+                    bat.setMaxNumberOfChargings(Integer.parseInt(tokens[counter + 5]));
+                    bat.setActive(Boolean.parseBoolean(tokens[counter + 6]));
+                    st.joinBattery(bat);
+                    counter += 6;
+                }
+                stations.add(st);
+                cs = new RadioMenuItem(st.getName());
+                group.getToggles().add(cs);
+                s.getItems().add(cs);
+                if(s.getItems().size() == 1)
+                    cs.setSelected(true);
+            }
+            else if (tokens[0].equals("ch"))
+            {
+                driver = new Driver(tokens[12]);
+                driver.setDebt(Double.parseDouble(tokens[13]));
+                driver.setProfit(Double.parseDouble(tokens[14]));
+                driver.setId(Integer.parseInt(tokens[11]));
+                vehicle = new ElectricVehicle(tokens[4]);
+                vehicle.setDriver(driver);
+                vehicle.setId(Integer.parseInt(tokens[3]));
+                bat = new Battery(Double.parseDouble(tokens[6]), Double.parseDouble(tokens[7]));
+                bat.setId(5);
+                bat.setNumberOfChargings(Integer.parseInt(tokens[8]));
+                bat.setMaxNumberOfChargings(Integer.parseInt(tokens[9]));
+                bat.setActive(Boolean.parseBoolean(tokens[10]));
+                vehicle.setBattery(bat);
+                event = new ChargingEvent(searchStation(tokens[2]) ,vehicle, Double.parseDouble(tokens[15]), tokens[17]);
+                event.setId(Integer.parseInt(tokens[1]));
+                event.setEnergyToBeReceived(Double.parseDouble(tokens[16]));
+                event.setCondition("finished");
+                event.setChargingTime(Long.parseLong(tokens[18]));
+                event.setMaxWaitingTime(Long.parseLong(tokens[19]));
+                event.setWaitingTime(Long.parseLong(tokens[20]));
+                event.setCost(Double.parseDouble(tokens[21]));
+                ChargingEvent.chargingLog.add(event);
+            }
+            else if (tokens[0].equals("dis"))
+            {
+                driver = new Driver(tokens[12]);
+                driver.setDebt(Double.parseDouble(tokens[13]));
+                driver.setProfit(Double.parseDouble(tokens[14]));
+                driver.setId(Integer.parseInt(tokens[11]));
+                vehicle = new ElectricVehicle(tokens[4]);
+                vehicle.setDriver(driver);
+                vehicle.setId(Integer.parseInt(tokens[3]));
+                bat = new Battery(Double.parseDouble(tokens[6]), Double.parseDouble(tokens[7]));
+                bat.setId(5);
+                bat.setNumberOfChargings(Integer.parseInt(tokens[8]));
+                bat.setMaxNumberOfChargings(Integer.parseInt(tokens[9]));
+                bat.setActive(Boolean.parseBoolean(tokens[10]));
+                vehicle.setBattery(bat);
+                disEvent = new DisChargingEvent(searchStation(tokens[2]) ,vehicle, Double.parseDouble(tokens[15]));
+                disEvent.setId(Integer.parseInt(tokens[1]));
+                disEvent.setCondition("finished");
+                disEvent.setDisChargingTime(Long.parseLong(tokens[16]));
+                disEvent.setMaxWaitingTime(Long.parseLong(tokens[17]));
+                disEvent.setWaitingTime(Long.parseLong(tokens[18]));
+                disEvent.setProfit(Double.parseDouble(tokens[19]));
+                DisChargingEvent.dischargingLog.add(disEvent);
+            }
+            else if (tokens[0].equals("ex"))
+            {
+                driver = new Driver(tokens[12]);
+                driver.setDebt(Double.parseDouble(tokens[13]));
+                driver.setProfit(Double.parseDouble(tokens[14]));
+                driver.setId(Integer.parseInt(tokens[11]));
+                vehicle = new ElectricVehicle(tokens[4]);
+                vehicle.setDriver(driver);
+                vehicle.setId(Integer.parseInt(tokens[3]));
+                bat = new Battery(Double.parseDouble(tokens[6]), Double.parseDouble(tokens[7]));
+                bat.setId(5);
+                bat.setNumberOfChargings(Integer.parseInt(tokens[8]));
+                bat.setMaxNumberOfChargings(Integer.parseInt(tokens[9]));
+                bat.setActive(Boolean.parseBoolean(tokens[10]));
+                vehicle.setBattery(bat);
+                event = new ChargingEvent(searchStation(tokens[2]) ,vehicle);
+                event.setId(Integer.parseInt(tokens[1]));
+                event.setCondition("finished");
+                event.setMaxWaitingTime(Long.parseLong(tokens[15]));
+                event.setWaitingTime(Long.parseLong(tokens[16]));
+                event.setCost(Double.parseDouble(tokens[17]));
+                ChargingEvent.exchangeLog.add(event);
+            }
+            else
+            {
+                driver = new Driver(tokens[12]);
+                driver.setDebt(Double.parseDouble(tokens[13]));
+                driver.setProfit(Double.parseDouble(tokens[14]));
+                driver.setId(Integer.parseInt(tokens[11]));
+                vehicle = new ElectricVehicle(tokens[4]);
+                vehicle.setDriver(driver);
+                vehicle.setId(Integer.parseInt(tokens[3]));
+                bat = new Battery(Double.parseDouble(tokens[6]), Double.parseDouble(tokens[7]));
+                bat.setId(5);
+                bat.setNumberOfChargings(Integer.parseInt(tokens[8]));
+                bat.setMaxNumberOfChargings(Integer.parseInt(tokens[9]));
+                bat.setActive(Boolean.parseBoolean(tokens[10]));
+                vehicle.setBattery(bat);
+                event1 = new ParkingEvent(searchStation(tokens[2]) ,vehicle,
+                        Long.parseLong(tokens[15]), Double.parseDouble(tokens[16]));
+                event1.setId(Integer.parseInt(tokens[1]));
+                event1.setCondition("finished");
+                event1.setEnergyToBeReceived(Double.parseDouble(tokens[17]));
+                event1.setCost(Double.parseDouble(tokens[19]));
+                event1.setChargingTime(Long.parseLong(tokens[18]));
+                ParkingEvent.parkLog.add(event1);
+            }
+        }
+        in.close();
+    }
+
+    private ChargingStation searchStation(String name)
+    {
+        for(ChargingStation st: stations)
+            if(name.equals(st.getName()))
+                return st;
+        return stations.get(0);
+    }
+
     private void saveFile(File selectedFile) throws FileNotFoundException {
-        BufferedWriter writer;
+        OutputStreamWriter writer = null;
         try {
-            writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(selectedFile.getPath(), false), "utf-8"));
+            writer = new OutputStreamWriter(new FileOutputStream(selectedFile.getPath(), false), "utf-8");
             String line = null;
             for(ChargingStation st: stations) {
-                line = "st" + "," + st.getId() + "," + st.getName() + "," + st.getChargers() + "," + st.getDisChargers() + ","
-                        + st.getExchangeHandlers() + "," + st.getParkingSlots() + "," + st.getChargingRatioSlow() + "," + st.getChargingRatioFast() + ","
+                line = "st" + "," + st.getId() + "," + st.getName() + "," + st.FAST_CHARGERS + "," + st.SLOW_CHARGERS + "," + st.getDisChargers().length + ","
+                        + st.getExchangeHandlers().length + "," + st.getParkingSlots().length + "," + st.getChargingRatioSlow() + "," + st.getChargingRatioFast() + ","
                         + st.getDisChargingRatio() + "," + st.getInductiveRatio() + "," + st.getUnitPrice() + "," + st.getDisUnitPrice() + ","
-                        + st.getInductivePrice() + "," + st.getInductivePrice() + "," + st.getExchangePrice() + "," + st.getUpdateSpace() + ","
+                        + st.getInductivePrice() + "," + st.getExchangePrice() + "," + st.getUpdateSpace() + ","
                         + st.getUpdateMode() + "," + st.getTimeOfExchange() + "," + st.getQueueHandling() + "," + st.getDeamon() + ","
                         + "Sources" + ",";
                 for(String s: st.getSources())
-                    line += s + "," + String.valueOf(st.getSpecificAmount("s")) + ",";
+                    line = line + s + "," + st.getSpecificAmount(s) + ",";
                 line += "Batteries";
                 for (Battery bat: st.getBatteries())
-                    line += "," + bat.getId() + "," + bat.getRemAmount() + "," + bat.getCapacity() + "," + bat.getNumberOfChargings() + ","
+                    line = line + "," + bat.getId() + "," + bat.getRemAmount() + "," + bat.getCapacity() + "," + bat.getNumberOfChargings() + ","
                             + bat.getMaxNumberOfChargings() + "," + bat.getActive();
-                line += System.getProperty("line.separator");
+                line = line + System.getProperty("line.separator");
                 writer.write(line);
             }
             for(ChargingEvent event:ChargingEvent.chargingLog)
@@ -490,6 +784,7 @@ public class EVLibSim extends Application {
                 line += System.getProperty("line.separator");
                 writer.write(line);
             }
+            writer.close();
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         } catch (IOException e) {
