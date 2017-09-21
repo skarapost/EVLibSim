@@ -3,7 +3,12 @@ package evlibsim;
 import EVLib.EV.Battery;
 import EVLib.Sources.*;
 import javafx.event.ActionEvent;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import EVLib.Station.*;
 import java.util.Objects;
@@ -14,27 +19,23 @@ import static evlibsim.EVLibSim.*;
 class MenuStation {
     
     private static final Menu stationM = new Menu("Station");
-    static final MenuItem newChargingStationMI = new MenuItem("New Charging Station");
+    static final MenuItem newChargingStationMI = new MenuItem("New Station");
     private static final Menu chargersM = new Menu("Charger");
     private static final MenuItem newChargerMI = new MenuItem("New Charger");
-    private static final MenuItem deleteChargerMI = new MenuItem("Delete Charger");
-    private static final MenuItem allChargersMI = new MenuItem("Show all Chargers");
+    private static final MenuItem allChargersMI = new MenuItem("All Chargers");
     private static final Menu disChargersM = new Menu("DisCharger");
     private static final MenuItem newDisChargerMI = new MenuItem("New DisCharger");
-    private static final MenuItem deleteDisChargerMI = new MenuItem("Delete DisCharger");
-    private static final MenuItem allDisChargersMI = new MenuItem("Show all DisChargers");
+    private static final MenuItem allDisChargersMI = new MenuItem("All DisChargers");
     private static final Menu exchangeHandlersM =new Menu("ExchangeHandler");
     private static final MenuItem newExchangeHandlerMI = new MenuItem("New ExchangeHandler");
-    private static final MenuItem deleteExchangeHandlerMI = new MenuItem("Delete ExchangeHandler");
-    private static final MenuItem allExchangeHandlersMI = new MenuItem("Show all ExchangeHandlers");
-    private static final Menu parkingSlotsM = new Menu("ParkingSlots");
+    private static final MenuItem allExchangeHandlersMI = new MenuItem("All ExchangeHandlers");
+    private static final Menu parkingSlotsM = new Menu("ParkingSlot");
     private static final MenuItem newParkingSlotMI = new MenuItem("New ParkingSlot");
-    private static final MenuItem deleteParkingSlotMI = new MenuItem("Delete ParkingSlot");
-    private static final MenuItem allParkingSlotsMI = new MenuItem("Show all ParkingSlots");
-    private static final MenuItem modifyChargingStationMI = new MenuItem("Modify ChargingStation");
+    private static final MenuItem allParkingSlotsMI = new MenuItem("All ParkingSlots");
+    private static final MenuItem modifyChargingStationMI = new MenuItem("Modify Station");
     private static final MenuItem newBatteryMI = new MenuItem("New Battery");
     private static final MenuItem batteriesChargingMI = new MenuItem("Batteries Charging");
-    private static final MenuItem allBatteriesMI = new MenuItem("Station Batteries");
+    private static final MenuItem allBatteriesMI = new MenuItem("Batteries");
     private static boolean automaticHandling = true;
     private static boolean automaticUpdate = false;
     static RadioMenuItem cs;
@@ -42,15 +43,18 @@ class MenuStation {
     private static final Button chargerCreationB = new Button("Creation");
     private static final Button modifyStationB = new Button("Modification");
     private static final Button batteryCreationB = new Button("Creation");
+    private static Image image = new Image(MenuStation.class.getResourceAsStream("d.png"));
+    private static Button delete;
     
     static Menu createStationMenu() {
-        chargersM.getItems().addAll(newChargerMI, deleteChargerMI, allChargersMI);
-        disChargersM.getItems().addAll(newDisChargerMI, deleteDisChargerMI, allDisChargersMI);
-        exchangeHandlersM.getItems().addAll(newExchangeHandlerMI, deleteExchangeHandlerMI, allExchangeHandlersMI);
-        parkingSlotsM.getItems().addAll(newParkingSlotMI, deleteParkingSlotMI, allParkingSlotsMI);
+        chargersM.getItems().addAll(newChargerMI, allChargersMI);
+        disChargersM.getItems().addAll(newDisChargerMI, allDisChargersMI);
+        exchangeHandlersM.getItems().addAll(newExchangeHandlerMI, allExchangeHandlersMI);
+        parkingSlotsM.getItems().addAll(newParkingSlotMI, allParkingSlotsMI);
         stationM.getItems().addAll(newChargingStationMI, new SeparatorMenuItem(), chargersM, disChargersM,
                 exchangeHandlersM, parkingSlotsM, new SeparatorMenuItem(), modifyChargingStationMI,
                 new SeparatorMenuItem(), newBatteryMI, batteriesChargingMI, allBatteriesMI);
+
 
         newChargingStationMI.setOnAction((ActionEvent e) ->
         {
@@ -394,7 +398,7 @@ class MenuStation {
             textfields.add(boo);
             foo = new Label("Battery exchange duration: ");
             EVLibSim.grid.add(foo, 0, 7);
-            boo = new TextField("5000");
+            boo = new TextField(Long.toString(currentStation.getTimeOfExchange()));
             EVLibSim.grid.add(boo, 1, 7);
             textfields.add(boo);
             EVLibSim.grid.add(modifyStationB, 0, 8);
@@ -403,17 +407,35 @@ class MenuStation {
             te.setOnAction((ActionEvent et) -> automaticUpdate = te.isSelected());
             tr.setOnAction((ActionEvent et) -> automaticHandling = tr.isSelected());
         });
-        deleteChargerMI.setOnAction(et -> {
-            TextInputDialog dialog = new TextInputDialog();
-            dialog.setTitle("Charger Removal");
-            dialog.setHeaderText(null);
-            dialog.setContentText("Please add the id of the Charger: ");
-            Optional<String> result = dialog.showAndWait();
-            int r;
-            if (result.isPresent()) {
-                r = Integer.parseInt(result.get());
-                Charger ch = currentStation.searchCharger(r);
-                if (ch != null)
+
+        allChargersMI.setOnAction(e -> {
+            if(Maintenance.stationCheck())
+                return;
+            Maintenance.cleanScreen();
+            VBox box = new VBox();
+            HBox z;
+            box.setAlignment(Pos.CENTER);
+            box.setSpacing(15);
+            scroll.setMaxSize(600, 600);
+            Label foo;
+            for(Charger ch: currentStation.getChargers()) {
+                z = new HBox();
+                z.setSpacing(15);
+                z.setAlignment(Pos.TOP_LEFT);
+                z.setPadding(new Insets(5, 5, 5, 5));
+                foo = new Label("Id: " + ch.getId());
+                z.getChildren().add(foo);
+                foo = new Label("Name: " + ch.getName());
+                z.getChildren().add(foo);
+                foo = new Label("Kind: " + ch.getKindOfCharging());
+                z.getChildren().add(foo);
+                foo = new Label("Occupied: " + (ch.getChargingEvent() != null));
+                z.getChildren().add(foo);
+                delete = new Button();
+                delete.setMaxSize(image.getWidth(), image.getHeight());
+                delete.setMinSize(image.getWidth(), image.getHeight());
+                delete.setGraphic(new ImageView(image));
+                delete.setOnAction(et -> {
                     if (ch.getChargingEvent() == null)
                     {
                         currentStation.deleteCharger(ch);
@@ -427,127 +449,10 @@ class MenuStation {
                         alert.setContentText("Charger is busy now. It cannot be deleted.");
                         alert.showAndWait();
                     }
-                else
-                {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Error");
-                    alert.setHeaderText(null);
-                    alert.setContentText("There is no Charger with such id.");
-                    alert.showAndWait();
-                }
-            }
-        });
-        deleteDisChargerMI.setOnAction(et -> {
-            TextInputDialog dialog = new TextInputDialog();
-            dialog.setTitle("DisCharger Removal");
-            dialog.setHeaderText(null);
-            dialog.setContentText("Please add the id of the DisCharger: ");
-            Optional<String> result = dialog.showAndWait();
-            int r;
-            if (result.isPresent()) {
-                r = Integer.parseInt(result.get());
-                DisCharger dsch = currentStation.searchDischarger(r);
-                if (dsch != null)
-                    if (dsch.getDisChargingEvent() == null)
-                    {
-                        currentStation.deleteDisCharger(dsch);
-                        Maintenance.completionMessage("DisCharger removal");
-                    }
-                    else
-                    {
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Error");
-                        alert.setHeaderText(null);
-                        alert.setContentText("DisCharger is busy now. It cannot be deleted.");
-                        alert.showAndWait();
-                    }
-                else
-                {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Error");
-                    alert.setHeaderText(null);
-                    alert.setContentText("There is no DisCharger with such id.");
-                    alert.showAndWait();
-                }
-            }
-        });
-        deleteExchangeHandlerMI.setOnAction(et -> {
-            TextInputDialog dialog = new TextInputDialog();
-            dialog.setTitle("ExchangeHandler Removal");
-            dialog.setHeaderText(null);
-            dialog.setContentText("Please add the id of the ExchangeHandler: ");
-            Optional<String> result = dialog.showAndWait();
-            int r;
-            if (result.isPresent()) {
-                r = Integer.parseInt(result.get());
-                ExchangeHandler dsch = currentStation.searchExchangeHandler(r);
-                if(dsch != null)
-                    if (dsch.getChargingEvent() == null) {
-                        currentStation.deleteExchangeHandler(dsch);
-                        Maintenance.completionMessage("ExchangeHandler removal");
-                    }
-                    else
-                    {
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Error");
-                        alert.setHeaderText(null);
-                        alert.setContentText("ExchangeHandler is busy now. It cannot be deleted.");
-                        alert.showAndWait();
-                    }
-                else
-                {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Error");
-                    alert.setHeaderText(null);
-                    alert.setContentText("There is no ExchangeHandler with such id.");
-                    alert.showAndWait();
-                }
-            }
-        });
-        deleteParkingSlotMI.setOnAction(et -> {
-            TextInputDialog dialog = new TextInputDialog();
-            dialog.setTitle("ParkingSlot Removal");
-            dialog.setHeaderText(null);
-            dialog.setContentText("Please add the id of the ParkingSlot: ");
-            Optional<String> result = dialog.showAndWait();
-            int r;
-            if (result.isPresent()) {
-                r = Integer.parseInt(result.get());
-                ParkingSlot dsch = currentStation.searchParkingSlot(r);
-                if(dsch != null)
-                    if (dsch.getParkingEvent() == null) {
-                        currentStation.deleteParkingSlot(dsch);
-                        Maintenance.completionMessage("ParkingSlot deletion");
-                    }
-                    else
-                    {
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Error");
-                        alert.setHeaderText(null);
-                        alert.setContentText("ParkingSlot is busy now. It cannot be deleted.");
-                        alert.showAndWait();
-                    }
-                else
-                {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Error");
-                    alert.setHeaderText(null);
-                    alert.setContentText("There is no ParkingSlot with such id.");
-                    alert.showAndWait();
-                }
-            }
-        });
-        allChargersMI.setOnAction(e -> {
-            if(Maintenance.stationCheck())
-                return;
-            Maintenance.cleanScreen();
-            VBox box = new VBox();
-            box.getStyleClass().add("box");
-            scroll.setMaxSize(500, 600);
-            Label foo;
-            for(Charger ch: currentStation.getChargers()) {
-                foo = new Label("Id: " + ch.getId() + "     " + "Name: " + ch.getName() + "     " + "Kind: " + ch.getKindOfCharging() + "     " + "Occupied: " + (ch.getChargingEvent() == null));
-                box.getChildren().add(foo);
+                    allChargersMI.fire();
+                });
+                z.getChildren().add(delete);
+                box.getChildren().add(z);
             }
             scroll.setContent(box);
             root.setCenter(scroll);
@@ -558,12 +463,44 @@ class MenuStation {
                 return;
             Maintenance.cleanScreen();
             VBox box = new VBox();
-            box.getStyleClass().add("box");
-            scroll.setMaxSize(500, 600);
+            HBox z;
+            box.setAlignment(Pos.CENTER);
+            box.setSpacing(15);
+            scroll.setMaxSize(600, 600);
             Label foo;
             for(DisCharger ch: currentStation.getDisChargers()) {
-                foo = new Label("Id: " + ch.getId() + "     " + "Name: " + ch.getName() + "     " + "Occupied: " + (ch.getDisChargingEvent() == null) + "     ");
-                box.getChildren().add(foo);
+                z = new HBox();
+                z.setSpacing(15);
+                z.setAlignment(Pos.TOP_LEFT);
+                z.setPadding(new Insets(5, 5, 5, 5));
+                foo = new Label("Id: " + ch.getId());
+                z.getChildren().add(foo);
+                foo = new Label("Name: " + ch.getName());
+                z.getChildren().add(foo);
+                foo = new Label("Occupied: " + (ch.getDisChargingEvent() != null));
+                z.getChildren().add(foo);
+                delete = new Button();
+                delete.setMaxSize(image.getWidth(), image.getHeight());
+                delete.setMinSize(image.getWidth(), image.getHeight());
+                delete.setGraphic(new ImageView(image));
+                delete.setOnAction(et -> {
+                    if (ch.getDisChargingEvent() == null)
+                    {
+                        currentStation.deleteDisCharger(ch);
+                        Maintenance.completionMessage("DisCharger deletion");
+                    }
+                    else
+                    {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Error");
+                        alert.setHeaderText(null);
+                        alert.setContentText("DisCharger is busy now. It cannot be deleted.");
+                        alert.showAndWait();
+                    }
+                    allDisChargersMI.fire();
+                });
+                z.getChildren().add(delete);
+                box.getChildren().add(z);
             }
             scroll.setContent(box);
             root.setCenter(scroll);
@@ -573,12 +510,44 @@ class MenuStation {
                 return;
             Maintenance.cleanScreen();
             VBox box = new VBox();
-            box.getStyleClass().add("box");
-            scroll.setMaxSize(500, 600);
+            HBox z;
+            box.setAlignment(Pos.CENTER);
+            box.setSpacing(15);
+            scroll.setMaxSize(600, 600);
             Label foo;
             for(ExchangeHandler ch: currentStation.getExchangeHandlers()) {
-                foo = new Label("Id: " + ch.getId() + "     " + "Name: " + ch.getName() + "     " + "Occupied: " + (ch.getChargingEvent() == null) + "     ");
-                box.getChildren().add(foo);
+                z = new HBox();
+                z.setSpacing(15);
+                z.setAlignment(Pos.TOP_LEFT);
+                z.setPadding(new Insets(5, 5, 5, 5));
+                foo = new Label("Id: " + ch.getId());
+                z.getChildren().add(foo);
+                foo = new Label("Name: " + ch.getName());
+                z.getChildren().add(foo);
+                foo = new Label("Occupied: " + (ch.getChargingEvent() != null));
+                z.getChildren().add(foo);
+                delete = new Button();
+                delete.setMaxSize(image.getWidth(), image.getHeight());
+                delete.setMinSize(image.getWidth(), image.getHeight());
+                delete.setGraphic(new ImageView(image));
+                delete.setOnAction(et -> {
+                    if (ch.getChargingEvent() == null)
+                    {
+                        currentStation.deleteExchangeHandler(ch);
+                        Maintenance.completionMessage("ExchangeHandler deletion");
+                    }
+                    else
+                    {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Error");
+                        alert.setHeaderText(null);
+                        alert.setContentText("ExchangeHandler is busy now. It cannot be deleted.");
+                        alert.showAndWait();
+                    }
+                    allExchangeHandlersMI.fire();
+                });
+                z.getChildren().add(delete);
+                box.getChildren().add(z);
             }
             scroll.setContent(box);
             root.setCenter(scroll);
@@ -588,12 +557,44 @@ class MenuStation {
                 return;
             Maintenance.cleanScreen();
             VBox box = new VBox();
-            box.getStyleClass().add("box");
-            scroll.setMaxSize(500, 600);
+            HBox z;
+            box.setAlignment(Pos.CENTER);
+            box.setSpacing(15);
+            scroll.setMaxSize(600, 600);
             Label foo;
             for(ParkingSlot ch: currentStation.getParkingSlots()) {
-                foo = new Label("Id: " + ch.getId() + "     " + "Name: " + ch.getName() + "     " + "Occupied: " + (ch.getParkingEvent() == null) + "     ");
-                box.getChildren().add(foo);
+                z = new HBox();
+                z.setSpacing(15);
+                z.setAlignment(Pos.TOP_LEFT);
+                z.setPadding(new Insets(5, 5, 5, 5));
+                foo = new Label("Id: " + ch.getId());
+                z.getChildren().add(foo);
+                foo = new Label("Name: " + ch.getName());
+                z.getChildren().add(foo);
+                foo = new Label("Occupied: " + (ch.getParkingEvent() != null));
+                z.getChildren().add(foo);
+                delete = new Button();
+                delete.setMaxSize(image.getWidth(), image.getHeight());
+                delete.setMinSize(image.getWidth(), image.getHeight());
+                delete.setGraphic(new ImageView(image));
+                delete.setOnAction(et -> {
+                    if (ch.getParkingEvent() == null)
+                    {
+                        currentStation.deleteParkingSlot(ch);
+                        Maintenance.completionMessage("ParkingSlot deletion");
+                    }
+                    else
+                    {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Error");
+                        alert.setHeaderText(null);
+                        alert.setContentText("ParkingSlot is busy now. It cannot be deleted.");
+                        alert.showAndWait();
+                    }
+                    allParkingSlotsMI.fire();
+                });
+                z.getChildren().add(delete);
+                box.getChildren().add(z);
             }
             scroll.setContent(box);
             root.setCenter(scroll);
@@ -603,12 +604,34 @@ class MenuStation {
                 return;
             Maintenance.cleanScreen();
             VBox box = new VBox();
-            box.getStyleClass().add("box");
+            HBox z;
+            box.setAlignment(Pos.CENTER);
+            box.setSpacing(15);
             scroll.setMaxSize(600, 600);
             Label foo;
             for(Battery b: currentStation.getBatteries()) {
-                foo = new Label("Id: " + b.getId() + "     " + "Capacity: " + b.getCapacity() + "     " + "Remaining Amount: " + b.getRemAmount() + "     " + "Maximum Chargings: " + b.getMaxNumberOfChargings());
-                box.getChildren().add(foo);
+                z = new HBox();
+                z.setSpacing(15);
+                z.setAlignment(Pos.TOP_LEFT);
+                z.setPadding(new Insets(5, 5, 5, 5));
+                foo = new Label("Id: " + b.getId());
+                z.getChildren().add(foo);
+                foo = new Label("Capacity: " + b.getCapacity());
+                z.getChildren().add(foo);
+                foo = new Label("Remaining Amount: " + b.getRemAmount());
+                z.getChildren().add(foo);
+                foo = new Label("Maximum Chargings: " + b.getMaxNumberOfChargings());
+                z.getChildren().add(foo);
+                delete = new Button();
+                delete.setMaxSize(image.getWidth(), image.getHeight());
+                delete.setMinSize(image.getWidth(), image.getHeight());
+                delete.setGraphic(new ImageView(image));
+                delete.setOnAction(et -> {
+                    currentStation.deleteBattery(b);
+                    allChargersMI.fire();
+                });
+                z.getChildren().add(delete);
+                box.getChildren().add(z);
             }
             scroll.setContent(box);
             root.setCenter(scroll);

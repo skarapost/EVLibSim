@@ -74,6 +74,24 @@ class Maintenance {
         alert.showAndWait();
     }
 
+    static void queueInsertion()
+    {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Information");
+        alert.setHeaderText(null);
+        alert.setContentText("The event was inserted in the waiting list.");
+        alert.showAndWait();
+    }
+
+    static void noExecution()
+    {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Information");
+        alert.setHeaderText(null);
+        alert.setContentText("The event cannot be executed.");
+        alert.showAndWait();
+    }
+
     static boolean confirmCreation(String message) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle(message + " creation");

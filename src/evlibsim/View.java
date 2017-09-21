@@ -34,81 +34,104 @@ class View {
         view.getItems().addAll(overview, queue);
 
         queue.setOnAction(e -> {
-            if(Maintenance.stationCheck())
-                return;
             Maintenance.cleanScreen();
-            grid.setMaxSize(800, 600);
-            energies.clear();
+            ScrollPane scroll = new ScrollPane();
+            scroll.setMaxSize(700, 650);
+            VBox x = new VBox();
+            x.setAlignment(Pos.CENTER);
+            x.setSpacing(15);
+            HBox z;
             Label foo;
-            foo = new Label("ChargingEvent(fast)");
-            grid.add(foo, 0, 0);
-            int j = 1;
             ChargingEvent et;
+            DisChargingEvent r;
             for(int i = 0; i < currentStation.getFast().getSize(); i++)
             {
                 et = (ChargingEvent) currentStation.getFast().get(i);
+                z = new HBox();
+                z.setSpacing(15);
+                z.setAlignment(Pos.TOP_LEFT);
+                z.setPadding(new Insets(5, 5, 5, 5));
+                foo = new Label("Charging");
+                z.getChildren().add(foo);
                 foo = new Label("Id: " + et.getId());
-                grid.add(foo, 0, j++);
-                foo = new Label("Energy: " + et.getAmountOfEnergy());
-                grid.add(foo, 0, j++);
-                foo = new Label("Brand: " + et.getElectricVehicle().getBrand());
-                grid.add(foo, 0, j++);
+                z.getChildren().add(foo);
                 foo = new Label("Driver: " + et.getElectricVehicle().getDriver().getName());
-                grid.add(foo, 0, j++);
-                foo = new Label();
-                grid.add(foo, 0, j++);
+                z.getChildren().add(foo);
+                foo = new Label("Brand: " + et.getElectricVehicle().getBrand());
+                z.getChildren().add(foo);
+                foo = new Label("Energy: " + et.getEnergyToBeReceived());
+                z.getChildren().add(foo);
+                foo = new Label("Kind: " + et.getKindOfCharging());
+                z.getChildren().add(foo);
+                foo = new Label("Cost: " + et.getCost());
+                z.getChildren().add(foo);
+                x.getChildren().add(z);
             }
-            foo = new Label("ChargingEvent(slow)");
-            grid.add(foo, 1, 0);
-            j = 1;
             for(int i = 0; i < currentStation.getSlow().getSize(); i++)
             {
                 et = (ChargingEvent) currentStation.getSlow().get(i);
+                z = new HBox();
+                z.setSpacing(15);
+                z.setAlignment(Pos.TOP_LEFT);
+                z.setPadding(new Insets(5, 5, 5, 5));
+                foo = new Label("DisCharging");
+                z.getChildren().add(foo);
                 foo = new Label("Id: " + et.getId());
-                grid.add(foo, 1, j++);
-                foo = new Label("Energy: " + et.getAmountOfEnergy());
-                grid.add(foo, 1, j++);
-                foo = new Label("Brand: " + et.getElectricVehicle().getBrand());
-                grid.add(foo, 1, j++);
+                z.getChildren().add(foo);
                 foo = new Label("Driver: " + et.getElectricVehicle().getDriver().getName());
-                grid.add(foo, 1, j++);
-                foo = new Label();
-                grid.add(foo, 1, j++);
+                z.getChildren().add(foo);
+                foo = new Label("Brand: " + et.getElectricVehicle().getBrand());
+                z.getChildren().add(foo);
+                foo = new Label("Energy: " + et.getEnergyToBeReceived());
+                z.getChildren().add(foo);
+                foo = new Label("Kind: " + et.getKindOfCharging());
+                z.getChildren().add(foo);
+                foo = new Label("Cost: " + et.getCost());
+                z.getChildren().add(foo);
+                x.getChildren().add(z);
             }
-            foo = new Label("DisChargingEvent");
-            grid.add(foo, 2, 0);
-            j = 1;
-            DisChargingEvent r;
             for(int i = 0; i < currentStation.getDischarging().getSize(); i++)
             {
                 r = (DisChargingEvent) currentStation.getDischarging().get(i);
+                z = new HBox();
+                z.setSpacing(15);
+                z.setAlignment(Pos.TOP_LEFT);
+                z.setPadding(new Insets(5, 5, 5, 5));
+                foo = new Label("Exchange");
+                z.getChildren().add(foo);
                 foo = new Label("Id: " + r.getId());
-                grid.add(foo, 2, j++);
-                foo = new Label("Energy: " + r.getAmountOfEnergy());
-                grid.add(foo, 2, j++);
-                foo = new Label("Brand: " + r.getElectricVehicle().getBrand());
-                grid.add(foo, 2, j++);
+                z.getChildren().add(foo);
                 foo = new Label("Driver: " + r.getElectricVehicle().getDriver().getName());
-                grid.add(foo, 2, j++);
-                foo = new Label();
-                grid.add(foo, 2, j++);
+                z.getChildren().add(foo);
+                foo = new Label("Brand: " + r.getElectricVehicle().getBrand());
+                z.getChildren().add(foo);
+                foo = new Label("Energy: " + r.getAmountOfEnergy());
+                z.getChildren().add(foo);
+                foo = new Label("Profit: " + r.getProfit());
+                z.getChildren().add(foo);
+                x.getChildren().add(z);
             }
-            foo = new Label("ChargingEvent(exchange)");
-            grid.add(foo, 3, 0);
-            j = 1;
             for(int i = 0; i < currentStation.getExchange().getSize(); i++)
             {
                 et = (ChargingEvent) currentStation.getExchange().get(i);
+                z = new HBox();
+                z.setSpacing(15);
+                z.setAlignment(Pos.TOP_LEFT);
+                z.setPadding(new Insets(5, 5, 5, 5));
+                foo = new Label("Parking");
+                z.getChildren().add(foo);
                 foo = new Label("Id: " + et.getId());
-                grid.add(foo, 3, j++);
-                foo = new Label("Brand: " + et.getElectricVehicle().getBrand());
-                grid.add(foo, 3, j++);
+                z.getChildren().add(foo);
                 foo = new Label("Driver: " + et.getElectricVehicle().getDriver().getName());
-                grid.add(foo, 3, j++);
-                foo = new Label();
-                grid.add(foo, 3, j++);
+                z.getChildren().add(foo);
+                foo = new Label("Brand: " + et.getElectricVehicle().getBrand());
+                z.getChildren().add(foo);
+                foo = new Label("Cost: " + et.getCost());
+                z.getChildren().add(foo);
+                x.getChildren().add(z);
             }
-            root.setCenter(grid);
+            scroll.setContent(x);
+            root.setCenter(scroll);
         });
         totalActivity.setOnAction(e -> {
             if(Maintenance.stationCheck())
@@ -198,20 +221,18 @@ class View {
         chargings.setOnAction(et -> {
             Maintenance.cleanScreen();
             ScrollPane scroll = new ScrollPane();
-            scroll.setMaxSize(820, 650);
+            scroll.setMaxSize(700, 650);
             VBox x = new VBox();
             x.setAlignment(Pos.CENTER);
-            HBox y = new HBox();
-            VBox z;
+            x.setSpacing(15);
+            HBox z;
             Label boo;
-            int column = 0;
-            x.getChildren().add(y);
             for(Charger ch: currentStation.getChargers())
                 if((ch.getChargingEvent()!=null)&&ch.getChargingEvent().getCondition().equals("charging")) {
-                    z = new VBox();
-                    z.setSpacing(25);
+                    z = new HBox();
+                    z.setSpacing(15);
                     z.setAlignment(Pos.TOP_LEFT);
-                    z.setPadding(new Insets(15, 15, 15, 15));
+                    z.setPadding(new Insets(5, 5, 5, 5));
                     boo = new Label("Id: " + ch.getChargingEvent().getId());
                     z.getChildren().add(boo);
                     boo = new Label("Driver: " + ch.getChargingEvent().getElectricVehicle().getDriver().getName());
@@ -228,17 +249,7 @@ class View {
                     z.getChildren().add(bar);
                     float progress = (float) ch.getChargingEvent().getElapsedChargingTime()/ch.getChargingEvent().getChargingTime();
                     bar.setProgress(progress);
-                    if(column <= 5) {
-                        y.getChildren().add(z);
-                        ++column;
-                    }
-                    else
-                    {
-                        column = 0;
-                        y = new HBox();
-                        y.getChildren().add(z);
-                        x.getChildren().add(y);
-                    }
+                    x.getChildren().add(z);
                 }
             scroll.setContent(x);
             root.setCenter(scroll);
@@ -246,20 +257,18 @@ class View {
         dischargings.setOnAction(et -> {
             Maintenance.cleanScreen();
             ScrollPane scroll = new ScrollPane();
-            scroll.setMaxSize(820, 650);
+            scroll.setMaxSize(700, 650);
             VBox x = new VBox();
             x.setAlignment(Pos.CENTER);
-            HBox y = new HBox();
-            VBox z;
+            x.setSpacing(15);
+            HBox z;
             Label boo;
-            int column = 0;
-            x.getChildren().add(y);
             for(DisCharger ch: currentStation.getDisChargers())
                 if((ch.getDisChargingEvent()!=null)&&ch.getDisChargingEvent().getCondition().equals("discharging")) {
-                    z = new VBox();
-                    z.setSpacing(25);
+                    z = new HBox();
+                    z.setSpacing(15);
                     z.setAlignment(Pos.TOP_LEFT);
-                    z.setPadding(new Insets(15, 15, 15, 15));
+                    z.setPadding(new Insets(5, 5, 5, 5));
                     boo = new Label("Id: " + ch.getDisChargingEvent().getId());
                     z.getChildren().add(boo);
                     boo = new Label("Driver: " + ch.getDisChargingEvent().getElectricVehicle().getDriver().getName());
@@ -274,17 +283,7 @@ class View {
                     z.getChildren().add(bar);
                     float progress = (float) ch.getDisChargingEvent().getElapsedDisChargingTime()/ch.getDisChargingEvent().getDisChargingTime();
                     bar.setProgress(progress);
-                    if(column <= 5) {
-                        y.getChildren().add(z);
-                        ++column;
-                    }
-                    else
-                    {
-                        column = 0;
-                        y = new HBox();
-                        y.getChildren().add(z);
-                        x.getChildren().add(y);
-                    }
+                    x.getChildren().add(z);
                 }
             scroll.setContent(x);
             root.setCenter(scroll);
@@ -292,20 +291,18 @@ class View {
         exchanges.setOnAction(et -> {
             Maintenance.cleanScreen();
             ScrollPane scroll = new ScrollPane();
-            scroll.setMaxSize(820, 650);
+            scroll.setMaxSize(700, 650);
             VBox x = new VBox();
             x.setAlignment(Pos.CENTER);
-            HBox y = new HBox();
-            VBox z;
+            x.setSpacing(15);
+            HBox z;
             Label boo;
-            int column = 0;
-            x.getChildren().add(y);
             for(ExchangeHandler ch: currentStation.getExchangeHandlers())
-                if((ch.getChargingEvent()!=null)&&ch.getChargingEvent().getCondition().equals("exchange")) {
-                    z = new VBox();
-                    z.setSpacing(25);
+                if((ch.getChargingEvent()!=null)&&ch.getChargingEvent().getCondition().equals("swapping")) {
+                    z = new HBox();
+                    z.setSpacing(15);
                     z.setAlignment(Pos.TOP_LEFT);
-                    z.setPadding(new Insets(15, 15, 15, 15));
+                    z.setPadding(new Insets(5, 5, 5, 5));
                     boo = new Label("Id: " + ch.getChargingEvent().getId());
                     z.getChildren().add(boo);
                     boo = new Label("Driver: " + ch.getChargingEvent().getElectricVehicle().getDriver().getName());
@@ -318,17 +315,7 @@ class View {
                     z.getChildren().add(bar);
                     float progress = (float) ch.getChargingEvent().getElapsedChargingTime()/ch.getChargingEvent().getChargingTime();
                     bar.setProgress(progress);
-                    if(column <= 5) {
-                        y.getChildren().add(z);
-                        ++column;
-                    }
-                    else
-                    {
-                        column = 0;
-                        y = new HBox();
-                        y.getChildren().add(z);
-                        x.getChildren().add(y);
-                    }
+                    x.getChildren().add(z);
                 }
             scroll.setContent(x);
             root.setCenter(scroll);
@@ -336,27 +323,25 @@ class View {
         parkings.setOnAction(et -> {
             Maintenance.cleanScreen();
             ScrollPane scroll = new ScrollPane();
-            scroll.setMaxSize(820, 650);
+            scroll.setMaxSize(700, 650);
             VBox x = new VBox();
             x.setAlignment(Pos.CENTER);
-            HBox y = new HBox();
-            VBox z;
+            x.setSpacing(15);
+            HBox z;
             Label boo;
-            int column = 0;
-            x.getChildren().add(y);
             for(ParkingSlot ch: currentStation.getParkingSlots())
                 if((ch.getParkingEvent()!=null)&&(ch.getParkingEvent().getCondition().equals("parking")||ch.getParkingEvent().getCondition().equals("charging"))) {
-                    z = new VBox();
-                    z.setPadding(new Insets(15));
-                    z.setSpacing(25);
+                    z = new HBox();
+                    z.setSpacing(15);
                     z.setAlignment(Pos.TOP_LEFT);
+                    z.setPadding(new Insets(5, 5, 5, 5));
                     boo = new Label("Id: " + ch.getParkingEvent().getId());
                     z.getChildren().add(boo);
                     boo = new Label("Driver: " + ch.getParkingEvent().getElectricVehicle().getDriver().getName());
                     z.getChildren().add(boo);
                     boo = new Label("Brand: " + ch.getParkingEvent().getElectricVehicle().getBrand());
                     z.getChildren().add(boo);
-                    boo = new Label("Current Condition: " + ch.getParkingEvent().getCondition());
+                    boo = new Label("Condition: " + ch.getParkingEvent().getCondition());
                     z.getChildren().add(boo);
                     boo = new Label("Cost: " + ch.getParkingEvent().getCost());
                     z.getChildren().add(boo);
@@ -368,17 +353,7 @@ class View {
                     else
                         progress = (float) ch.getParkingEvent().getElapsedParkingTime() / ch.getParkingEvent().getParkingTime();
                     bar.setProgress(progress);
-                    if(column <= 5) {
-                        y.getChildren().add(z);
-                        ++column;
-                    }
-                    else
-                    {
-                        column = 0;
-                        y = new HBox();
-                        y.getChildren().add(z);
-                        x.getChildren().add(y);
-                    }
+                    x.getChildren().add(z);
                 }
             scroll.setContent(x);
             root.setCenter(scroll);

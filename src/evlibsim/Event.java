@@ -313,17 +313,22 @@ class Event {
             ElectricVehicle el = new ElectricVehicle(textfields.get(1).getText());
             el.setBattery(b);
             el.setDriver(d);
-            if (!Objects.equals(textfields.get(4).getText(), "0")) {
+            if (!Objects.equals(textfields.get(4).getText(), "0"))
                 ch = new ChargingEvent(currentStation, el, Double.parseDouble(textfields.get(4).getText()), kindOfCharging);
-                ch.setWaitingTime(Long.parseLong(textfields.get(5).getText()));
-                ch.preProcessing();
-                ch.execution();
-            }
-            else if (!Objects.equals(textfields.get(6).getText(), "0")) {
+            else
                 ch = new ChargingEvent(currentStation, el, kindOfCharging, Double.parseDouble(textfields.get(6).getText()));
-                ch.setWaitingTime(Long.parseLong(textfields.get(5).getText()));
-                ch.preProcessing();
+            ch.setWaitingTime(Long.parseLong(textfields.get(5).getText()));
+            ch.preProcessing();
+            if(ch.getCondition().equals("charging"))
                 ch.execution();
+            else if(ch.getCondition().equals("wait")){
+                Maintenance.queueInsertion();
+                return;
+            }
+            else
+            {
+                Maintenance.noExecution();
+                return;
             }
             Maintenance.completionMessage("ChargingEvent creation");
         });
@@ -368,6 +373,17 @@ class Event {
                 dsch = new DisChargingEvent(currentStation, el, Double.parseDouble(textfields.get(4).getText()));
                 dsch.setWaitingTime(Long.parseLong(textfields.get(5).getText()));
                 dsch.preProcessing();
+                if(dsch.getCondition().equals("discharging"))
+                    dsch.execution();
+                else if(dsch.getCondition().equals("wait")){
+                    Maintenance.queueInsertion();
+                    return;
+                }
+                else
+                {
+                    Maintenance.noExecution();
+                    return;
+                }
                 dsch.execution();
             }
             Maintenance.completionMessage("DisChargingEvent creation");
@@ -402,7 +418,16 @@ class Event {
             ch = new ChargingEvent(currentStation, el);
             ch.setWaitingTime(Long.parseLong(textfields.get(4).getText()));
             ch.preProcessing();
-            ch.execution();
+            if(ch.getCondition().equals("swapping"))
+                ch.execution();
+            else if(ch.getCondition().equals("wait")){
+                Maintenance.queueInsertion();
+                return;
+            }
+            else {
+                Maintenance.noExecution();
+                return;
+            }
             Maintenance.completionMessage("ChargingEvent creation");
         });
         parkingEventCreation.setOnAction(e -> {
@@ -445,11 +470,21 @@ class Event {
             if (!Objects.equals(textfields.get(4).getText(), "0")) {
                 ch = new ParkingEvent(currentStation, el, Long.parseLong(textfields.get(5).getText()), Double.parseDouble(textfields.get(4).getText()));
                 ch.preProcessing();
-                ch.execution();
+                if(ch.getCondition().equals("parking") || ch.getCondition().equals("charging"))
+                    ch.execution();
+                else {
+                    Maintenance.noExecution();
+                    return;
+                }
             } else if (!Objects.equals(textfields.get(5).getText(), "0")) {
                 ch = new ParkingEvent(currentStation, el, Long.parseLong(textfields.get(5).getText()));
                 ch.preProcessing();
-                ch.execution();
+                if(ch.getCondition().equals("parking") || ch.getCondition().equals("charging"))
+                    ch.execution();
+                else {
+                    Maintenance.noExecution();
+                    return;
+                }
             }
             else
             {
