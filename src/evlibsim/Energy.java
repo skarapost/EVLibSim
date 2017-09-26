@@ -10,23 +10,23 @@ import static evlibsim.EVLibSim.*;
 
 class Energy {
 
-    private static Menu energy = new Menu("Energy");
+    private static final Menu energy = new Menu("Energy");
     private static final MenuItem updateStorage = new MenuItem("Update Storage");
     static final MenuItem newEnergyPackages = new MenuItem("New amounts");
     private static final MenuItem sortEnergies = new MenuItem("Sort Energies");
     private static final Button addEnergies = new Button("Add");
     private static final Button sort = new Button("Sort");
-    private static MenuItem newEnergy = new MenuItem("New EnergySource");
-    private static MenuItem deletion = new MenuItem("Remove EnergySource");
+    static final MenuItem newEnergySource = new MenuItem("New EnergySource");
+    static final MenuItem deleteEnergySource = new MenuItem("Remove EnergySource");
 
     static Menu createEnergyMenu()
     {
-        energy.getItems().addAll(newEnergy, deletion, new SeparatorMenuItem(),
+        energy.getItems().addAll(newEnergySource, deleteEnergySource, new SeparatorMenuItem(),
                 newEnergyPackages, updateStorage, new SeparatorMenuItem(), sortEnergies);
 
-        newEnergy.setOnAction(e -> {
+        newEnergySource.setOnAction(e -> {
             List<String> energies = new ArrayList<>();
-            String[] a = {"solar", "wind", "wave", "nonrenewable", "hydroelectric", "geothermal", "discharging"};
+            String[] a = {"Solar", "Wind", "Wave", "Nonrenewable", "Hydroelectric", "Geothermal", "DisCharging"};
             String[] b = currentStation.getSources();
             List<String> aL = Arrays.asList(a);
             List<String> bL = Arrays.asList(b);
@@ -35,72 +35,68 @@ class Energy {
             Set<String> uncommon = new HashSet<>(aL);
             uncommon.addAll(bL);
             uncommon.removeAll(common);
-            uncommon.forEach(en -> energies.add(en));
-            ChoiceDialog<String> dialog = new ChoiceDialog<String>(energies.get(0), energies);
+            energies.addAll(uncommon);
+            ChoiceDialog<String> dialog = new ChoiceDialog<>(energies.get(0), energies);
             dialog.setTitle("EnergySource Insertion");
             dialog.setHeaderText(null);
             dialog.setContentText("Choose an EnergySource: ");
             Optional<String> result = dialog.showAndWait();
-            if(result.isPresent())
-            {
-                switch (result.get())
-                {
-                    case "solar":
+            result.ifPresent(s -> {
+                switch (s) {
+                    case "Solar":
                         currentStation.addEnergySource(new Solar());
                         break;
-                    case "nonrenewable":
-                        currentStation.addEnergySource(new NonRenewable());
+                    case "Nonrenewable":
+                        currentStation.addEnergySource(new Nonrenewable());
                         break;
-                    case "geothermal":
+                    case "Geothermal":
                         currentStation.addEnergySource(new Geothermal());
                         break;
-                    case "wind":
+                    case "Wind":
                         currentStation.addEnergySource(new Wind());
                         break;
-                    case "wave":
+                    case "Wave":
                         currentStation.addEnergySource(new Wave());
                         break;
-                    case "hydroelectric":
-                        currentStation.addEnergySource(new HydroElectric());
+                    case "Hydroelectric":
+                        currentStation.addEnergySource(new Hydroelectric());
                         break;
                 }
                 Maintenance.completionMessage("EnergySource insertion");
-            }
+            });
         });
 
-        deletion.setOnAction(e -> {
+        deleteEnergySource.setOnAction(e -> {
             ArrayList<String> energies = new ArrayList<>(Arrays.asList(currentStation.getSources()));
-            energies.remove("discharging");
+            energies.remove("DisCharging");
             ChoiceDialog<String> dialog = new ChoiceDialog<>(energies.get(0), energies);
             dialog.setTitle("EnergySource Removal");
             dialog.setHeaderText(null);
             dialog.setContentText("Choose an EnergySource: ");
             Optional<String> result = dialog.showAndWait();
-            if(result.isPresent())
-            {
-                switch (result.get())
-                {
-                    case "solar":
-                        currentStation.deleteEnergySource(currentStation.getEnergySource("solar"));
+            result.ifPresent(s -> {
+                switch (s) {
+                    case "Solar":
+                        currentStation.deleteEnergySource(currentStation.getEnergySource("Solar"));
                         break;
-                    case "nonrenewable":
-                        currentStation.deleteEnergySource(currentStation.getEnergySource("nonrenewable"));
+                    case "Nonrenewable":
+                        currentStation.deleteEnergySource(currentStation.getEnergySource("Nonrenewable"));
                         break;
-                    case "geothermal":
-                        currentStation.deleteEnergySource(currentStation.getEnergySource("geothermal"));
+                    case "Geothermal":
+                        currentStation.deleteEnergySource(currentStation.getEnergySource("Geothermal"));
                         break;
-                    case "wind":
-                        currentStation.deleteEnergySource(currentStation.getEnergySource("wind"));
+                    case "Wind":
+                        currentStation.deleteEnergySource(currentStation.getEnergySource("Wind"));
                         break;
-                    case "wave":
-                        currentStation.deleteEnergySource(currentStation.getEnergySource("wave"));
+                    case "Wave":
+                        currentStation.deleteEnergySource(currentStation.getEnergySource("Wave"));
                         break;
-                    case "hydroelectric":
-                        currentStation.deleteEnergySource(currentStation.getEnergySource("hydroelectric"));
+                    case "Hydroelectric":
+                        currentStation.deleteEnergySource(currentStation.getEnergySource("Hydroelectric"));
                         break;
                 }
                 Maintenance.completionMessage("EnergySource removal");
-            }
+            });
         });
 
         updateStorage.setOnAction((ActionEvent e) -> {
@@ -123,12 +119,12 @@ class Energy {
             if(Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
-            grid.setMaxSize(600, 350);
+            grid.setMaxSize(700, 300);
             TextField boo;
             Label foo;
             boo = new TextField("0");
             textfields.add(boo);
-            if (Maintenance.checkEnergy("solar"))
+            if (Maintenance.checkEnergy("Solar"))
                 foo = new Label("Solar*: ");
             else {
                 foo = new Label("Solar: ");
@@ -138,7 +134,7 @@ class Energy {
             grid.add(boo, 1, 1);
             boo = new TextField("0");
             textfields.add(boo);
-            if (Maintenance.checkEnergy("wind")) {
+            if (Maintenance.checkEnergy("Wind")) {
                 foo = new Label("Wind*: ");
             } else {
                 foo = new Label("Wind: ");
@@ -148,7 +144,7 @@ class Energy {
             grid.add(boo, 3, 1);
             boo = new TextField("0");
             textfields.add(boo);
-            if (Maintenance.checkEnergy("wave"))
+            if (Maintenance.checkEnergy("Wave"))
                 foo = new Label("Wave*: ");
             else {
                 foo = new Label("Wave: ");
@@ -158,27 +154,27 @@ class Energy {
             grid.add(boo, 1, 2);
             boo = new TextField("0");
             textfields.add(boo);
-            if(Maintenance.checkEnergy("hydroelectric"))
-                foo = new Label("Hydro-Electric*: ");
+            if(Maintenance.checkEnergy("Hydroelectric"))
+                foo = new Label("Hydroelectric*: ");
             else {
-                foo = new Label("Hydro-Electric: ");
+                foo = new Label("Hydroelectric: ");
                 boo.setDisable(true);
             }
             grid.add(foo, 2, 2);
             grid.add(boo, 3, 2);
             boo = new TextField("0");
             textfields.add(boo);
-            if(Maintenance.checkEnergy("nonrenewable"))
-                foo = new Label("Non-Renewable*: ");
+            if(Maintenance.checkEnergy("Nonrenewable"))
+                foo = new Label("Nonrenewable*: ");
             else {
-                foo = new Label("Non-Renewable: ");
+                foo = new Label("Nonrenewable: ");
                 boo.setDisable(true);
             }
             grid.add(foo, 0, 3);
             grid.add(boo, 1, 3);
             boo = new TextField("0");
             textfields.add(boo);
-            if(Maintenance.checkEnergy("geothermal"))
+            if(Maintenance.checkEnergy("Geothermal"))
                 foo = new Label("Geothermal*: ");
             else {
                 foo = new Label("Geothermal: ");
@@ -201,12 +197,12 @@ class Energy {
             if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
-            grid.setMaxSize(800, 500);
+            grid.setMaxSize(700, 300);
             TextField boo;
             Label foo;
             boo = new TextField("0");
             textfields.add(boo);
-            if (Maintenance.checkEnergy("solar"))
+            if (Maintenance.checkEnergy("Solar"))
                 foo = new Label("Solar*: ");
             else {
                 foo = new Label("Solar: ");
@@ -216,7 +212,7 @@ class Energy {
             grid.add(boo, 1, 1);
             boo = new TextField("0");
             textfields.add(boo);
-            if (Maintenance.checkEnergy("wind")) {
+            if (Maintenance.checkEnergy("Wind")) {
                 foo = new Label("Wind*: ");
             } else {
                 foo = new Label("Wind: ");
@@ -226,7 +222,7 @@ class Energy {
             grid.add(boo, 3, 1);
             boo = new TextField("0");
             textfields.add(boo);
-            if (Maintenance.checkEnergy("wave"))
+            if (Maintenance.checkEnergy("Wave"))
                 foo = new Label("Wave*: ");
             else {
                 foo = new Label("Wave: ");
@@ -236,27 +232,27 @@ class Energy {
             grid.add(boo, 1, 2);
             boo = new TextField("0");
             textfields.add(boo);
-            if(Maintenance.checkEnergy("hydroelectric"))
-                foo = new Label("Hydro-Electric*: ");
+            if(Maintenance.checkEnergy("Hydroelectric"))
+                foo = new Label("Hydroelectric*: ");
             else {
-                foo = new Label("Hydro-Electric: ");
+                foo = new Label("Hydroelectric: ");
                 boo.setDisable(true);
             }
             grid.add(foo, 2, 2);
             grid.add(boo, 3, 2);
             boo = new TextField("0");
             textfields.add(boo);
-            if(Maintenance.checkEnergy("nonrenewable"))
-                foo = new Label("Non-Renewable*: ");
+            if(Maintenance.checkEnergy("Nonrenewable"))
+                foo = new Label("Nonrenewable*: ");
             else {
-                foo = new Label("Non-Renewable: ");
+                foo = new Label("Nonrenewable: ");
                 boo.setDisable(true);
             }
             grid.add(foo, 0, 3);
             grid.add(boo, 1, 3);
             boo = new TextField("0");
             textfields.add(boo);
-            if(Maintenance.checkEnergy("geothermal"))
+            if(Maintenance.checkEnergy("Geothermal"))
                 foo = new Label("Geothermal*: ");
             else {
                 foo = new Label("Geothermal: ");
@@ -275,28 +271,29 @@ class Energy {
             for(String en: currentStation.getSources())
                 switch (en)
                 {
-                    case "solar":
-                        currentStation.getEnergySource("solar").insertAmount(Double.parseDouble(textfields.get(0).getText()));
+                    case "Solar":
+                        currentStation.getEnergySource("Solar").insertAmount(Double.parseDouble(textfields.get(0).getText()));
                         break;
-                    case "wind":
-                        currentStation.getEnergySource("wind").insertAmount(Double.parseDouble(textfields.get(1).getText()));
+                    case "Wind":
+                        currentStation.getEnergySource("Wind").insertAmount(Double.parseDouble(textfields.get(1).getText()));
                         break;
-                    case "wave":
-                        currentStation.getEnergySource("wave").insertAmount(Double.parseDouble(textfields.get(2).getText()));
+                    case "Wave":
+                        currentStation.getEnergySource("Wave").insertAmount(Double.parseDouble(textfields.get(2).getText()));
                         break;
-                    case "hydroelectric":
-                        currentStation.getEnergySource("hydroelectric").insertAmount(Double.parseDouble(textfields.get(3).getText()));
+                    case "Hydroelectric":
+                        currentStation.getEnergySource("Hydroelectric").insertAmount(Double.parseDouble(textfields.get(3).getText()));
                         break;
-                    case "nonrenewable":
-                        currentStation.getEnergySource("nonrenewable").insertAmount(Double.parseDouble(textfields.get(4).getText()));
+                    case "Nonrenewable":
+                        currentStation.getEnergySource("Nonrenewable").insertAmount(Double.parseDouble(textfields.get(4).getText()));
                         break;
-                    case "geothermal":
-                        currentStation.getEnergySource("geothermal").insertAmount(Double.parseDouble(textfields.get(5).getText()));
+                    case "Geothermal":
+                        currentStation.getEnergySource("Geothermal").insertAmount(Double.parseDouble(textfields.get(5).getText()));
                         break;
                     default:
                         break;
                 }
             Maintenance.completionMessage("insertion of energy amounts");
+            newEnergyPackages.fire();
         });
         sort.setOnAction(e -> {
             if(Maintenance.fieldCompletionCheck())
@@ -330,21 +327,22 @@ class Energy {
                 }
             String[] sources = new String[currentStation.getSources().length];
             if (!textfields.get(0).isDisabled())
-                sources[Integer.parseInt(textfields.get(0).getText()) - 1] = "solar";
+                sources[Integer.parseInt(textfields.get(0).getText()) - 1] = "Solar";
             if (!textfields.get(1).isDisabled())
-                sources[Integer.parseInt(textfields.get(1).getText()) - 1] = "wind";
+                sources[Integer.parseInt(textfields.get(1).getText()) - 1] = "Wind";
             if (!textfields.get(2).isDisabled())
-                sources[Integer.parseInt(textfields.get(2).getText()) - 1] = "wave";
+                sources[Integer.parseInt(textfields.get(2).getText()) - 1] = "Wave";
             if (!textfields.get(3).isDisabled())
-                sources[Integer.parseInt(textfields.get(3).getText()) - 1] = "hydroelectric";
+                sources[Integer.parseInt(textfields.get(3).getText()) - 1] = "Hydroelectric";
             if (!textfields.get(4).isDisabled())
-                sources[Integer.parseInt(textfields.get(4).getText()) - 1] = "nonrenewable";
+                sources[Integer.parseInt(textfields.get(4).getText()) - 1] = "Nonrenewable";
             if (!textfields.get(5).isDisabled())
-                sources[Integer.parseInt(textfields.get(5).getText()) - 1] = "geothermal";
+                sources[Integer.parseInt(textfields.get(5).getText()) - 1] = "Geothermal";
             if (!textfields.get(6).isDisabled())
-                sources[Integer.parseInt(textfields.get(6).getText()) - 1] = "discharging";
+                sources[Integer.parseInt(textfields.get(6).getText()) - 1] = "DisCharging";
             currentStation.customEnergySorting(sources);
             Maintenance.completionMessage("sorting");
+            sortEnergies.fire();
         });
         return energy;
     }

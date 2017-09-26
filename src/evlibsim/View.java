@@ -1,13 +1,19 @@
 package evlibsim;
 
-import EVLib.Events.*;
-import EVLib.Station.*;
+import EVLib.Events.ChargingEvent;
+import EVLib.Events.DisChargingEvent;
+import EVLib.Station.Charger;
+import EVLib.Station.DisCharger;
+import EVLib.Station.ExchangeHandler;
+import EVLib.Station.ParkingSlot;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
@@ -19,14 +25,15 @@ class View {
     private static final Menu view = new Menu("View");
     static final MenuItem totalActivity = new MenuItem("Overview");
     private static final MenuItem queue = new MenuItem("Queue of Events");
-    private static final MenuItem chargingsMenuItem = new MenuItem("ChargingEvent");
-    private static final MenuItem dischargingsMenuItem = new MenuItem("DisChargingEvent");
-    private static final MenuItem exchangesMenuItem = new MenuItem("BatterySwapingEvent");
-    private static final MenuItem parkingsMenuItem = new MenuItem("ParkingEvent");
-    private static final Button chargings = new Button("ChargingEvent");
-    private static final Button dischargings = new Button("DisChargingEvent");
-    private static final Button exchanges = new Button("BatteryExchangeEvent");
-    private static final Button parkings = new Button("ParkingEvent");
+    private static final MenuItem chargingsMenuItem = new MenuItem("Running chargings");
+    private static final MenuItem dischargingsMenuItem = new MenuItem("Running dischargings");
+    private static final MenuItem exchangesMenuItem = new MenuItem("Running swappings");
+    private static final MenuItem parkingsMenuItem = new MenuItem("Running parkings");
+    private static final Button chargings = new Button("Running chargings");
+    private static final Button dischargings = new Button("Running dischargings");
+    private static final Button exchanges = new Button("Running swappings");
+    private static final Button parkings = new Button("Runinng parkings");
+    private static final Image image = new Image(View.class.getResourceAsStream("run.png"));
 
     static Menu createViewMenu()
     {
@@ -36,23 +43,24 @@ class View {
         queue.setOnAction(e -> {
             Maintenance.cleanScreen();
             ScrollPane scroll = new ScrollPane();
-            scroll.setMaxSize(700, 650);
+            scroll.setMaxSize(800, 650);
             VBox x = new VBox();
             x.setAlignment(Pos.CENTER);
             x.setSpacing(15);
             HBox z;
             Label foo;
-            ChargingEvent et;
-            DisChargingEvent r;
+            Button execution;
             for(int i = 0; i < currentStation.getFast().getSize(); i++)
             {
-                et = (ChargingEvent) currentStation.getFast().get(i);
+                ChargingEvent et = (ChargingEvent) currentStation.getFast().get(i);
                 z = new HBox();
                 z.setSpacing(15);
                 z.setAlignment(Pos.TOP_LEFT);
                 z.setPadding(new Insets(5, 5, 5, 5));
                 foo = new Label("Charging");
                 z.getChildren().add(foo);
+                foo = new Label("Position: " + i);
+                z.getChildren().add(foo);
                 foo = new Label("Id: " + et.getId());
                 z.getChildren().add(foo);
                 foo = new Label("Driver: " + et.getElectricVehicle().getDriver().getName());
@@ -65,17 +73,43 @@ class View {
                 z.getChildren().add(foo);
                 foo = new Label("Cost: " + et.getCost());
                 z.getChildren().add(foo);
+                execution = new Button();
+                execution.setGraphic(new ImageView(image));
+                z.getChildren().add(execution);
+                execution.setMaxSize(image.getWidth(), image.getHeight());
+                execution.setMinSize(image.getWidth(), image.getHeight());
+                execution.setOnAction(er -> {
+                    if(!currentStation.getQueueHandling()) {
+                        et.preProcessing();
+                        if (et.getCondition().equals("charging")) {
+                            et.execution();
+                            queue.fire();
+                        }
+                        else if (et.getCondition().equals("wait"))
+                            Maintenance.queueInsertion();
+                    }
+                    else
+                    {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Error");
+                        alert.setHeaderText(null);
+                        alert.setContentText("The manual queue handling is disabled.");
+                        alert.showAndWait();
+                    }
+                });
                 x.getChildren().add(z);
             }
             for(int i = 0; i < currentStation.getSlow().getSize(); i++)
             {
-                et = (ChargingEvent) currentStation.getSlow().get(i);
+                ChargingEvent et = (ChargingEvent) currentStation.getSlow().get(i);
                 z = new HBox();
                 z.setSpacing(15);
                 z.setAlignment(Pos.TOP_LEFT);
                 z.setPadding(new Insets(5, 5, 5, 5));
                 foo = new Label("DisCharging");
                 z.getChildren().add(foo);
+                foo = new Label("Position: " + i);
+                z.getChildren().add(foo);
                 foo = new Label("Id: " + et.getId());
                 z.getChildren().add(foo);
                 foo = new Label("Driver: " + et.getElectricVehicle().getDriver().getName());
@@ -88,16 +122,42 @@ class View {
                 z.getChildren().add(foo);
                 foo = new Label("Cost: " + et.getCost());
                 z.getChildren().add(foo);
+                execution = new Button();
+                execution.setGraphic(new ImageView(image));
+                z.getChildren().add(execution);
+                execution.setMaxSize(image.getWidth(), image.getHeight());
+                execution.setMinSize(image.getWidth(), image.getHeight());
+                execution.setOnAction(er -> {
+                    if(!currentStation.getQueueHandling()) {
+                        et.preProcessing();
+                        if (et.getCondition().equals("charging")) {
+                            et.execution();
+                            queue.fire();
+                        }
+                        else if (et.getCondition().equals("wait"))
+                            Maintenance.queueInsertion();
+                    }
+                    else
+                    {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Error");
+                        alert.setHeaderText(null);
+                        alert.setContentText("The manual queue handling is disabled.");
+                        alert.showAndWait();
+                    }
+                });
                 x.getChildren().add(z);
             }
             for(int i = 0; i < currentStation.getDischarging().getSize(); i++)
             {
-                r = (DisChargingEvent) currentStation.getDischarging().get(i);
+                DisChargingEvent r = (DisChargingEvent) currentStation.getDischarging().get(i);
                 z = new HBox();
                 z.setSpacing(15);
                 z.setAlignment(Pos.TOP_LEFT);
                 z.setPadding(new Insets(5, 5, 5, 5));
                 foo = new Label("Exchange");
+                z.getChildren().add(foo);
+                foo = new Label("Position: " + i);
                 z.getChildren().add(foo);
                 foo = new Label("Id: " + r.getId());
                 z.getChildren().add(foo);
@@ -109,16 +169,42 @@ class View {
                 z.getChildren().add(foo);
                 foo = new Label("Profit: " + r.getProfit());
                 z.getChildren().add(foo);
+                execution = new Button();
+                execution.setGraphic(new ImageView(image));
+                z.getChildren().add(execution);
+                execution.setMaxSize(image.getWidth(), image.getHeight());
+                execution.setMinSize(image.getWidth(), image.getHeight());
+                execution.setOnAction(er -> {
+                    if(!currentStation.getQueueHandling()) {
+                        r.preProcessing();
+                        if (r.getCondition().equals("discharging")) {
+                            r.execution();
+                            queue.fire();
+                        }
+                        else if (r.getCondition().equals("wait"))
+                            Maintenance.queueInsertion();
+                    }
+                    else
+                    {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Error");
+                        alert.setHeaderText(null);
+                        alert.setContentText("The manual queue handling is disabled.");
+                        alert.showAndWait();
+                    }
+                });
                 x.getChildren().add(z);
             }
             for(int i = 0; i < currentStation.getExchange().getSize(); i++)
             {
-                et = (ChargingEvent) currentStation.getExchange().get(i);
+                ChargingEvent et = (ChargingEvent) currentStation.getExchange().get(i);
                 z = new HBox();
                 z.setSpacing(15);
                 z.setAlignment(Pos.TOP_LEFT);
                 z.setPadding(new Insets(5, 5, 5, 5));
                 foo = new Label("Parking");
+                z.getChildren().add(foo);
+                foo = new Label("Position: " + i);
                 z.getChildren().add(foo);
                 foo = new Label("Id: " + et.getId());
                 z.getChildren().add(foo);
@@ -128,6 +214,30 @@ class View {
                 z.getChildren().add(foo);
                 foo = new Label("Cost: " + et.getCost());
                 z.getChildren().add(foo);
+                execution = new Button();
+                execution.setGraphic(new ImageView(image));
+                z.getChildren().add(execution);
+                execution.setMaxSize(image.getWidth(), image.getHeight());
+                execution.setMinSize(image.getWidth(), image.getHeight());
+                execution.setOnAction(er -> {
+                    if(!currentStation.getQueueHandling()) {
+                        et.preProcessing();
+                        if (et.getCondition().equals("swapping")) {
+                            et.execution();
+                            queue.fire();
+                        }
+                        else if (et.getCondition().equals("wait"))
+                            Maintenance.queueInsertion();
+                    }
+                    else
+                    {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Error");
+                        alert.setHeaderText(null);
+                        alert.setContentText("The manual queue handling is disabled.");
+                        alert.showAndWait();
+                    }
+                });
                 x.getChildren().add(z);
             }
             scroll.setContent(x);
@@ -154,52 +264,52 @@ class View {
                     new Label("Cars waiting for battery exchange: " + String.valueOf(currentStation.getExchange().getSize())),
                     title,
                     chargings, dischargings, exchanges, parkings);
-            chargings.setPrefSize(230,30);
-            dischargings.setPrefSize(230, 30);
-            exchanges.setPrefSize(230, 30);
-            parkings.setPrefSize(230, 30);
+            chargings.setPrefSize(250,30);
+            dischargings.setPrefSize(250, 30);
+            exchanges.setPrefSize(250, 30);
+            parkings.setPrefSize(250, 30);
             ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
             for(int i=0; i<currentStation.getSources().length; i++) {
                 switch (currentStation.getSources()[i]) {
-                    case "solar":
-                        if(currentStation.getSpecificAmount("solar") > 0) {
-                            pieChartData.add(new PieChart.Data("Solar", currentStation.getSpecificAmount("solar")));
+                    case "Solar":
+                        if(currentStation.getSpecificAmount("Solar") > 0) {
+                            pieChartData.add(new PieChart.Data("Solar", currentStation.getSpecificAmount("Solar")));
                             continue;
                         }
                         break;
-                    case "wind":
-                        if(currentStation.getSpecificAmount("wind") > 0) {
-                            pieChartData.add(new PieChart.Data("Wind", currentStation.getSpecificAmount("wind")));
+                    case "Wind":
+                        if(currentStation.getSpecificAmount("Wind") > 0) {
+                            pieChartData.add(new PieChart.Data("Wind", currentStation.getSpecificAmount("Wind")));
                             continue;
                         }
                         break;
-                    case "wave":
-                        if(currentStation.getSpecificAmount("wave") > 0) {
-                            pieChartData.add(new PieChart.Data("Wave", currentStation.getSpecificAmount("wave")));
+                    case "Wave":
+                        if(currentStation.getSpecificAmount("Wave") > 0) {
+                            pieChartData.add(new PieChart.Data("Wave", currentStation.getSpecificAmount("Wave")));
                             continue;
                         }
                         break;
-                    case "hydroelectric":
-                        if(currentStation.getSpecificAmount("hydroelectric") > 0) {
-                            pieChartData.add(new PieChart.Data("Hydro-Electric", currentStation.getSpecificAmount("hydroelectric")));
+                    case "Hydroelectric":
+                        if(currentStation.getSpecificAmount("Hydroelectric") > 0) {
+                            pieChartData.add(new PieChart.Data("Hydroelectric", currentStation.getSpecificAmount("Hydroelectric")));
                             continue;
                         }
                         break;
-                    case "nonrenewable":
-                        if(currentStation.getSpecificAmount("nonrenewable") > 0) {
-                            pieChartData.add(new PieChart.Data("Non-Renewable", currentStation.getSpecificAmount("nonrenewable")));
+                    case "Nonrenewable":
+                        if(currentStation.getSpecificAmount("Nonrenewable") > 0) {
+                            pieChartData.add(new PieChart.Data("Nonrenewable", currentStation.getSpecificAmount("Nonrenewable")));
                             continue;
                         }
                         break;
-                    case "geothermal":
-                        if(currentStation.getSpecificAmount("geothermal") > 0) {
-                            pieChartData.add(new PieChart.Data("Geothermal", currentStation.getSpecificAmount("geothermal")));
+                    case "Geothermal":
+                        if(currentStation.getSpecificAmount("Geothermal") > 0) {
+                            pieChartData.add(new PieChart.Data("Geothermal", currentStation.getSpecificAmount("Geothermal")));
                             continue;
                         }
                         break;
-                    case "discharging":
-                        if(currentStation.getSpecificAmount("discharging") > 0) {
-                            pieChartData.add(new PieChart.Data("Discharging", currentStation.getSpecificAmount("discharging")));
+                    case "DisCharging":
+                        if(currentStation.getSpecificAmount("DisCharging") > 0) {
+                            pieChartData.add(new PieChart.Data("Discharging", currentStation.getSpecificAmount("DisCharging")));
                             continue;
                         }
                         break;

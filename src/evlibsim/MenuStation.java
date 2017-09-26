@@ -2,6 +2,7 @@ package evlibsim;
 
 import EVLib.EV.Battery;
 import EVLib.Sources.*;
+import EVLib.Station.*;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -10,7 +11,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import EVLib.Station.*;
+
 import java.util.Objects;
 import java.util.Optional;
 
@@ -43,7 +44,7 @@ class MenuStation {
     private static final Button chargerCreationB = new Button("Creation");
     private static final Button modifyStationB = new Button("Modification");
     private static final Button batteryCreationB = new Button("Creation");
-    private static Image image = new Image(MenuStation.class.getResourceAsStream("d.png"));
+    private static final Image image = new Image(MenuStation.class.getResourceAsStream("d.png"));
     private static Button delete;
     
     static Menu createStationMenu() {
@@ -102,7 +103,7 @@ class MenuStation {
             RadioMenuItem win = new RadioMenuItem("Wind");
             RadioMenuItem wav = new RadioMenuItem("Wave");
             RadioMenuItem hydr = new RadioMenuItem("Hydroelectric");
-            RadioMenuItem non = new RadioMenuItem("Non-renewable");
+            RadioMenuItem non = new RadioMenuItem("Nonrenewable");
             RadioMenuItem geo = new RadioMenuItem("Geothermal");
             src.getItems().addAll(sol, win, wav, hydr, non, geo);
             sourc.getMenus().add(src);
@@ -194,39 +195,39 @@ class MenuStation {
                     automaticHandling = tr.isSelected());
             sol.setOnAction((ActionEvent et) -> {
                 if (sol.isSelected())
-                    EVLibSim.energies.add("solar");
+                    EVLibSim.energies.add("Solar");
                 else
-                    EVLibSim.energies.remove("solar");
+                    EVLibSim.energies.remove("Solar");
             });
             win.setOnAction((ActionEvent et) -> {
                 if (win.isSelected())
-                    EVLibSim.energies.add("wind");
+                    EVLibSim.energies.add("Wind");
                 else
-                    EVLibSim.energies.remove("wind");
+                    EVLibSim.energies.remove("Wind");
             });
             wav.setOnAction((ActionEvent et) -> {
                 if (wav.isSelected())
-                    EVLibSim.energies.add("wave");
+                    EVLibSim.energies.add("Wave");
                 else
-                    EVLibSim.energies.remove("wave");
+                    EVLibSim.energies.remove("Wave");
             });
             hydr.setOnAction((ActionEvent et) -> {
                 if (hydr.isSelected())
-                    EVLibSim.energies.add("hydroelectric");
+                    EVLibSim.energies.add("Hydroelectric");
                 else
-                    EVLibSim.energies.remove("hydroelectric");
+                    EVLibSim.energies.remove("Hydroelectric");
             });
             geo.setOnAction((ActionEvent et) -> {
                 if (geo.isSelected())
-                    EVLibSim.energies.add("geothermal");
+                    EVLibSim.energies.add("Geothermal");
                 else
-                    EVLibSim.energies.remove("geothermal");
+                    EVLibSim.energies.remove("Geothermal");
             });
             non.setOnAction((ActionEvent et) -> {
                 if (non.isSelected())
-                    EVLibSim.energies.add("nonrenewable");
+                    EVLibSim.energies.add("Nonrenewable");
                 else
-                    EVLibSim.energies.remove("nonrenewable");
+                    EVLibSim.energies.remove("Nonrenewable");
             });
         });
         newChargerMI.setOnAction(e ->
@@ -260,13 +261,13 @@ class MenuStation {
             alert.setHeaderText(null);
             alert.setContentText("Please give a name: ");
             Optional<String> result = alert.showAndWait();
-            if(result.isPresent()) {
+            result.ifPresent(s -> {
                 DisCharger ch;
                 ch = new DisCharger(currentStation);
-                ch.setName(result.get());
+                ch.setName(s);
                 currentStation.addDisCharger(ch);
                 Maintenance.completionMessage("DisCharger creation");
-            }
+            });
         });
         newExchangeHandlerMI.setOnAction(e ->
         {
@@ -277,13 +278,13 @@ class MenuStation {
             alert.setHeaderText(null);
             alert.setContentText("Please give a name: ");
             Optional<String> result = alert.showAndWait();
-            if(result.isPresent()) {
+            result.ifPresent(s -> {
                 ExchangeHandler ch;
                 ch = new ExchangeHandler(currentStation);
-                ch.setName(result.get());
+                ch.setName(s);
                 currentStation.addExchangeHandler(ch);
                 Maintenance.completionMessage("ExchangeHandler creation");
-            }
+            });
         });
         newParkingSlotMI.setOnAction(e ->
         {
@@ -294,13 +295,13 @@ class MenuStation {
             alert.setHeaderText(null);
             alert.setContentText("Please give a name: ");
             Optional<String> result = alert.showAndWait();
-            if(result.isPresent()) {
+            result.ifPresent(s -> {
                 ParkingSlot ch;
                 ch = new ParkingSlot(currentStation);
-                ch.setName(result.get());
+                ch.setName(s);
                 currentStation.addParkingSlot(ch);
                 Maintenance.completionMessage("ParkingSlot creation");
-            }
+            });
         });
         modifyChargingStationMI.setOnAction(e -> {
             if (Maintenance.stationCheck())
@@ -659,6 +660,7 @@ class MenuStation {
             currentStation.addCharger(ch);
             ch.setName(textfields.get(1).getText());
             Maintenance.completionMessage("Charger creation");
+            newChargerMI.fire();
         });
         chargingStationCreationB.setOnAction(e ->
         {
@@ -750,23 +752,23 @@ class MenuStation {
             }
             EnergySource en;
             for (String enr : energies) {
-                if (Objects.equals(enr, "solar")) {
+                if (Objects.equals(enr, "Solar")) {
                     en = new Solar();
                     st.addEnergySource(en);
-                } else if (Objects.equals(enr, "geothermal")) {
+                } else if (Objects.equals(enr, "Geothermal")) {
                     en = new Geothermal();
                     st.addEnergySource(en);
-                } else if (Objects.equals(enr, "wind")) {
+                } else if (Objects.equals(enr, "Wind")) {
                     en = new Wind();
                     st.addEnergySource(en);
-                } else if (Objects.equals(enr, "wave")) {
+                } else if (Objects.equals(enr, "Wave")) {
                     en = new Wave();
                     st.addEnergySource(en);
-                } else if (Objects.equals(enr, "nonrenewable")) {
-                    en = new NonRenewable();
+                } else if (Objects.equals(enr, "Nonrenewable")) {
+                    en = new Nonrenewable();
                     st.addEnergySource(en);
-                } else if (Objects.equals(enr, "hydroelectric")) {
-                    en = new HydroElectric();
+                } else if (Objects.equals(enr, "Hydroelectric")) {
+                    en = new Hydroelectric();
                     st.addEnergySource(en);
                 }
             }
@@ -777,6 +779,7 @@ class MenuStation {
             if(s.getItems().size() == 1)
                 cs.setSelected(true);
             Maintenance.completionMessage("ChargingStation creation");
+            newChargingStationMI.fire();
         });
         modifyStationB.setOnAction(e -> {
             if (Maintenance.fieldCompletionCheck())
@@ -797,6 +800,7 @@ class MenuStation {
             cs = (RadioMenuItem) group.getSelectedToggle();
             cs.setText(currentStation.getName());
             Maintenance.completionMessage("modification of the ChargingStation");
+            modifyChargingStationMI.fire();
         });
         newBatteryMI.setOnAction(e -> {
             if (Maintenance.stationCheck())
@@ -839,6 +843,7 @@ class MenuStation {
             bat.setMaxNumberOfChargings(Integer.parseInt(textfields.get(2).getText()));
             currentStation.joinBattery(bat);
             Maintenance.completionMessage("Battery creation");
+            newBatteryMI.fire();
         });
         return stationM;
     }

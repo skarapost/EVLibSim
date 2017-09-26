@@ -1,9 +1,24 @@
 package evlibsim;
 
-import EVLib.EV.*;
-import EVLib.Events.*;
+import EVLib.EV.Battery;
+import EVLib.EV.Driver;
+import EVLib.EV.ElectricVehicle;
+import EVLib.Events.ChargingEvent;
+import EVLib.Events.DisChargingEvent;
+import EVLib.Events.ParkingEvent;
+import EVLib.Events.PricingPolicy;
+import EVLib.Station.ChargingStation;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -11,11 +26,11 @@ import static evlibsim.EVLibSim.*;
 
 class Event {
 
+    static final MenuItem charging = new MenuItem("New ChargingEvent");
+    static final MenuItem discharging = new MenuItem("New DisChargingEvent");
+    static final MenuItem exchange = new MenuItem("New ChargingEvent(Exchange)");
+    static final MenuItem parking = new MenuItem("New ParkingEvent");
     private static final Menu event = new Menu("Event");
-    static final MenuItem charging = new MenuItem("Charging");
-    static final MenuItem discharging = new MenuItem("Discharging");
-    static final MenuItem exchange = new MenuItem("Exchange of Battery");
-    static final MenuItem parking = new MenuItem("Parking/Inductive charging");
     private static final MenuItem policy = new MenuItem("Pricing Policy");
     private static final Button chargingEventCreation = new Button("Creation");
     private static final Button disChargingEventCreation = new Button("Creation");
@@ -23,6 +38,10 @@ class Event {
     private static final Button exchangeEventCreation = new Button("Creation");
     private static final Button policyCreation1 = new Button("Creation");
     private static final Button policyCreation2 = new Button("Creation");
+    static Button suggest1 = new Button("Suggestions");
+    static Button suggest2 = new Button("Suggestions");
+    static Button suggest3 = new Button("Suggestions");
+    static Button suggest4 = new Button("Suggestions");
     private static String kindOfCharging;
 
     static Menu createEventMenu()
@@ -86,6 +105,98 @@ class Event {
             grid.add(boo, 3, 4);
             textfields.add(boo);
             grid.add(chargingEventCreation, 0, 5);
+            suggest1.setOnAction(eu -> {
+                Stage popupwindow = new Stage();
+                popupwindow.initModality(Modality.APPLICATION_MODAL);
+                popupwindow.setTitle("Suggestions Box");
+
+                GridPane g = new GridPane();
+                g.setAlignment(Pos.CENTER);
+                g.setStyle("-fx-background-color:#e0e2e6;");
+                g.setHgap(30);
+                g.setVgap(30);
+                g.setPadding(new Insets(15, 15, 15, 15));
+
+                VBox outside;
+                Label title;
+
+                ArrayList<ChargingStation> tempStations = new ArrayList<ChargingStation>(Arrays.asList(bestEnergy()).subList(0, Math.min(stations.size(), 5)));
+                VBox inside1 = new VBox();
+                inside1.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
+                inside1.setPadding(new Insets(10, 10, 10, 10));
+                inside1.setSpacing(20);
+                tempStations.forEach(temp -> inside1.getChildren().add(new Label(temp.getName() + ": " + temp.getTotalEnergy())));
+                VBox inside2 = new VBox();
+                inside2.setMaxSize(80, 30);
+                title = new Label("Energy");
+                inside2.getChildren().add(title);
+                inside2.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 5 5 0 0; -fx-background-radius: 5 5 0 0; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
+                inside2.setPadding(new Insets(10, 10, 10, 10));
+                inside2.setSpacing(20);
+                outside = new VBox();
+                outside.getChildren().addAll(inside2, inside1);
+                g.add(outside, 0, 0);
+
+                tempStations = new ArrayList<ChargingStation>(Arrays.asList(bestPrice()).subList(0, Math.min(stations.size(), 5)));
+                VBox inside3 = new VBox();
+                inside3.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
+                inside3.setPadding(new Insets(10, 10, 10, 10));
+                inside3.setSpacing(20);
+                tempStations.forEach(temp -> inside3.getChildren().add(new Label(temp.getName() + ": " + temp.getCurrentPrice())));
+                VBox inside4 = new VBox();
+                inside4.setMaxSize(70, 30);
+                title = new Label("Price");
+                inside4.getChildren().add(title);
+                inside4.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 5 5 0 0; -fx-background-radius: 5 5 0 0; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
+                inside4.setPadding(new Insets(10, 10, 10, 10));
+                inside4.setSpacing(20);
+                outside = new VBox();
+                outside.getChildren().addAll(inside4, inside3);
+                g.add(outside, 1, 0);
+
+                tempStations = new ArrayList<ChargingStation>(Arrays.asList(bestTime("slow")).subList(0, Math.min(stations.size(), 5)));
+                VBox inside5 = new VBox();
+                inside5.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
+                inside5.setPadding(new Insets(10, 10, 10, 10));
+                inside5.setSpacing(20);
+                tempStations.forEach(temp -> inside5.getChildren().add(new Label(temp.getName() + ": " + temp.getWaitingTime("slow"))));
+                VBox inside6 = new VBox();
+                inside6.setMaxSize(150, 30);
+                title = new Label("WaitTime(Slow)");
+                inside6.getChildren().add(title);
+                inside6.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 5 5 0 0; -fx-background-radius: 5 5 0 0; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
+                inside6.setPadding(new Insets(10, 10, 10, 10));
+                inside6.setSpacing(20);
+                outside = new VBox();
+                outside.getChildren().addAll(inside6, inside5);
+                g.add(outside, 2, 0);
+
+                tempStations = new ArrayList<ChargingStation>(Arrays.asList(bestTime("fast")).subList(0, Math.min(stations.size(), 5)));
+                VBox inside7 = new VBox();
+                inside7.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
+                inside7.setPadding(new Insets(10, 10, 10, 10));
+                inside7.setSpacing(20);
+                tempStations.forEach(temp -> inside7.getChildren().add(new Label(temp.getName() + ": " + temp.getWaitingTime("fast"))));
+                VBox inside8 = new VBox();
+                inside8.setMaxSize(150, 30);
+                title = new Label("WaitTime(Fast)");
+                inside8.getChildren().add(title);
+                inside8.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 5 5 0 0; -fx-background-radius: 5 5 0 0; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
+                inside8.setPadding(new Insets(10, 10, 10, 10));
+                inside8.setSpacing(20);
+                outside = new VBox();
+                outside.getChildren().addAll(inside8, inside7);
+                g.add(outside, 3, 0);
+
+                Button close= new Button("Close");
+                g.add(close, 0, 1);
+                close.setOnAction(ew -> popupwindow.close());
+
+                Scene scene1 = new Scene(g, 850, 450);
+                popupwindow.setScene(scene1);
+                popupwindow.showAndWait();
+            });
+            grid.add(suggest1, 1, 5);
             chargingEventCreation.setDefaultButton(true);
             root.setCenter(grid);
             slow.setOnAction(ew -> {
@@ -101,6 +212,7 @@ class Event {
         {
             if(Maintenance.stationCheck())
                 return;
+
             Maintenance.cleanScreen();
             grid.setMaxSize(800, 500);
             TextField boo;
@@ -136,6 +248,81 @@ class Event {
             grid.add(boo, 3, 3);
             textfields.add(boo);
             grid.add(disChargingEventCreation, 0, 4);
+            suggest2.setOnAction(eu -> {
+                Stage popupwindow = new Stage();
+                popupwindow.initModality(Modality.APPLICATION_MODAL);
+                popupwindow.setTitle("Suggestions Box");
+
+                GridPane g = new GridPane();
+                g.setAlignment(Pos.CENTER);
+                g.setStyle("-fx-background-color:#e0e2e6;");
+                g.setHgap(30);
+                g.setVgap(30);
+                g.setPadding(new Insets(15, 15, 15, 15));
+
+                VBox outside;
+                Label title;
+
+                ArrayList<ChargingStation> tempStations = new ArrayList<ChargingStation>(Arrays.asList(bestEnergy()).subList(0, Math.min(stations.size(), 5)));
+                VBox inside1 = new VBox();
+                inside1.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
+                inside1.setPadding(new Insets(10, 10, 10, 10));
+                inside1.setSpacing(20);
+                tempStations.forEach(temp -> inside1.getChildren().add(new Label(temp.getName() + ": " + temp.getTotalEnergy())));
+                VBox inside2 = new VBox();
+                inside2.setMaxSize(80, 30);
+                title = new Label("Energy");
+                inside2.getChildren().add(title);
+                inside2.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 5 5 0 0; -fx-background-radius: 5 5 0 0; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
+                inside2.setPadding(new Insets(10, 10, 10, 10));
+                inside2.setSpacing(20);
+                outside = new VBox();
+                outside.getChildren().addAll(inside2, inside1);
+                g.add(outside, 0, 0);
+
+                tempStations = new ArrayList<ChargingStation>(Arrays.asList(bestDisPrice()).subList(0, Math.min(stations.size(), 5)));
+                VBox inside3 = new VBox();
+                inside3.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
+                inside3.setPadding(new Insets(10, 10, 10, 10));
+                inside3.setSpacing(20);
+                tempStations.forEach(temp -> inside3.getChildren().add(new Label(temp.getName() + ": " + temp.getDisUnitPrice())));
+                VBox inside4 = new VBox();
+                inside4.setMaxSize(70, 30);
+                title = new Label("Price");
+                inside4.getChildren().add(title);
+                inside4.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 5 5 0 0; -fx-background-radius: 5 5 0 0; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
+                inside4.setPadding(new Insets(10, 10, 10, 10));
+                inside4.setSpacing(20);
+                outside = new VBox();
+                outside.getChildren().addAll(inside4, inside3);
+                g.add(outside, 1, 0);
+
+                tempStations = new ArrayList<ChargingStation>(Arrays.asList(bestTime("discharging")).subList(0, Math.min(stations.size(), 5)));
+                VBox inside5 = new VBox();
+                inside5.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
+                inside5.setPadding(new Insets(10, 10, 10, 10));
+                inside5.setSpacing(20);
+                tempStations.forEach(temp -> inside5.getChildren().add(new Label(temp.getName() + ": " + temp.getWaitingTime("discharging"))));
+                VBox inside6 = new VBox();
+                inside6.setMaxSize(150, 30);
+                title = new Label("WaitTime");
+                inside6.getChildren().add(title);
+                inside6.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 5 5 0 0; -fx-background-radius: 5 5 0 0; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
+                inside6.setPadding(new Insets(10, 10, 10, 10));
+                inside6.setSpacing(20);
+                outside = new VBox();
+                outside.getChildren().addAll(inside6, inside5);
+                g.add(outside, 2, 0);
+
+                Button close= new Button("Close");
+                g.add(close, 0, 1);
+                close.setOnAction(ew -> popupwindow.close());
+
+                Scene scene1 = new Scene(g, 650, 450);
+                popupwindow.setScene(scene1);
+                popupwindow.showAndWait();
+            });
+            grid.add(suggest2, 1, 4);
             disChargingEventCreation.setDefaultButton(true);
             root.setCenter(grid);
         });
@@ -173,6 +360,81 @@ class Event {
             grid.add(boo, 1, 3);
             textfields.add(boo);
             grid.add(exchangeEventCreation, 0, 4);
+            suggest3.setOnAction(eu -> {
+                Stage popupwindow = new Stage();
+                popupwindow.initModality(Modality.APPLICATION_MODAL);
+                popupwindow.setTitle("Suggestions Box");
+
+                GridPane g = new GridPane();
+                g.setAlignment(Pos.CENTER);
+                g.setStyle("-fx-background-color:#e0e2e6;");
+                g.setHgap(30);
+                g.setVgap(30);
+                g.setPadding(new Insets(15, 15, 15, 15));
+
+                VBox outside;
+                Label title;
+
+                ArrayList<ChargingStation> tempStations = new ArrayList<ChargingStation>(Arrays.asList(bestEnergy()).subList(0, Math.min(stations.size(), 5)));
+                VBox inside1 = new VBox();
+                inside1.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
+                inside1.setPadding(new Insets(10, 10, 10, 10));
+                inside1.setSpacing(20);
+                tempStations.forEach(temp -> inside1.getChildren().add(new Label(temp.getName() + ": " + temp.getTotalEnergy())));
+                VBox inside2 = new VBox();
+                inside2.setMaxSize(80, 30);
+                title = new Label("Energy");
+                inside2.getChildren().add(title);
+                inside2.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 5 5 0 0; -fx-background-radius: 5 5 0 0; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
+                inside2.setPadding(new Insets(10, 10, 10, 10));
+                inside2.setSpacing(20);
+                outside = new VBox();
+                outside.getChildren().addAll(inside2, inside1);
+                g.add(outside, 0, 0);
+
+                tempStations = new ArrayList<ChargingStation>(Arrays.asList(bestPrice()).subList(0, Math.min(stations.size(), 5)));
+                VBox inside3 = new VBox();
+                inside3.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
+                inside3.setPadding(new Insets(10, 10, 10, 10));
+                inside3.setSpacing(20);
+                tempStations.forEach(temp -> inside3.getChildren().add(new Label(temp.getName() + ": " + temp.getExchangePrice())));
+                VBox inside4 = new VBox();
+                inside4.setMaxSize(70, 30);
+                title = new Label("Price");
+                inside4.getChildren().add(title);
+                inside4.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 5 5 0 0; -fx-background-radius: 5 5 0 0; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
+                inside4.setPadding(new Insets(10, 10, 10, 10));
+                inside4.setSpacing(20);
+                outside = new VBox();
+                outside.getChildren().addAll(inside4, inside3);
+                g.add(outside, 1, 0);
+
+                tempStations = new ArrayList<ChargingStation>(Arrays.asList(bestTime("exchange")).subList(0, Math.min(stations.size(), 5)));
+                VBox inside5 = new VBox();
+                inside5.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
+                inside5.setPadding(new Insets(10, 10, 10, 10));
+                inside5.setSpacing(20);
+                tempStations.forEach(temp -> inside5.getChildren().add(new Label(temp.getName() + ": " + temp.getWaitingTime("exchange"))));
+                VBox inside6 = new VBox();
+                inside6.setMaxSize(150, 30);
+                title = new Label("WaitTime");
+                inside6.getChildren().add(title);
+                inside6.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 5 5 0 0; -fx-background-radius: 5 5 0 0; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
+                inside6.setPadding(new Insets(10, 10, 10, 10));
+                inside6.setSpacing(20);
+                outside = new VBox();
+                outside.getChildren().addAll(inside6, inside5);
+                g.add(outside, 2, 0);
+
+                Button close= new Button("Close");
+                g.add(close, 0, 1);
+                close.setOnAction(ew -> popupwindow.close());
+
+                Scene scene1 = new Scene(g, 650, 450);
+                popupwindow.setScene(scene1);
+                popupwindow.showAndWait();
+            });
+            grid.add(suggest3, 1, 4);
             exchangeEventCreation.setDefaultButton(true);
             root.setCenter(grid);
         });
@@ -215,6 +477,64 @@ class Event {
             grid.add(boo, 3, 3);
             textfields.add(boo);
             grid.add(parkingEventCreation, 0, 4);
+            suggest4.setOnAction(eu -> {
+                Stage popupwindow = new Stage();
+                popupwindow.initModality(Modality.APPLICATION_MODAL);
+                popupwindow.setTitle("Suggestions Box");
+
+                GridPane g = new GridPane();
+                g.setAlignment(Pos.CENTER);
+                g.setStyle("-fx-background-color:#e0e2e6;");
+                g.setHgap(30);
+                g.setVgap(30);
+                g.setPadding(new Insets(15, 15, 15, 15));
+
+                VBox outside;
+                Label title;
+
+                ArrayList<ChargingStation> tempStations = new ArrayList<ChargingStation>(Arrays.asList(bestEnergy()).subList(0, Math.min(stations.size(), 5)));
+                VBox inside1 = new VBox();
+                inside1.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
+                inside1.setPadding(new Insets(10, 10, 10, 10));
+                inside1.setSpacing(20);
+                tempStations.forEach(temp -> inside1.getChildren().add(new Label(temp.getName() + ": " + temp.getTotalEnergy())));
+                VBox inside2 = new VBox();
+                inside2.setMaxSize(80, 30);
+                title = new Label("Energy");
+                inside2.getChildren().add(title);
+                inside2.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 5 5 0 0; -fx-background-radius: 5 5 0 0; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
+                inside2.setPadding(new Insets(10, 10, 10, 10));
+                inside2.setSpacing(20);
+                outside = new VBox();
+                outside.getChildren().addAll(inside2, inside1);
+                g.add(outside, 0, 0);
+
+                tempStations = new ArrayList<ChargingStation>(Arrays.asList(bestPrice()).subList(0, Math.min(stations.size(), 5)));
+                VBox inside3 = new VBox();
+                inside3.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
+                inside3.setPadding(new Insets(10, 10, 10, 10));
+                inside3.setSpacing(20);
+                tempStations.forEach(temp -> inside3.getChildren().add(new Label(temp.getName() + ": " + temp.getInductivePrice())));
+                VBox inside4 = new VBox();
+                inside4.setMaxSize(70, 30);
+                title = new Label("Price");
+                inside4.getChildren().add(title);
+                inside4.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 5 5 0 0; -fx-background-radius: 5 5 0 0; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
+                inside4.setPadding(new Insets(10, 10, 10, 10));
+                inside4.setSpacing(20);
+                outside = new VBox();
+                outside.getChildren().addAll(inside4, inside3);
+                g.add(outside, 1, 0);
+
+                Button close= new Button("Close");
+                g.add(close, 0, 1);
+                close.setOnAction(ew -> popupwindow.close());
+
+                Scene scene1 = new Scene(g, 450, 450);
+                popupwindow.setScene(scene1);
+                popupwindow.showAndWait();
+            });
+            grid.add(suggest4, 1, 4);
             parkingEventCreation.setDefaultButton(true);
             root.setCenter(grid);
         });
@@ -271,6 +591,7 @@ class Event {
         chargingEventCreation.setOnAction(e -> {
             if (Maintenance.fieldCompletionCheck())
                 return;
+
             if (Double.parseDouble(textfields.get(2).getText()) < 0 ||
                     Double.parseDouble(textfields.get(3).getText()) < 0 ||
                     Double.parseDouble(textfields.get(4).getText()) < 0 ||
@@ -319,7 +640,7 @@ class Event {
                 ch = new ChargingEvent(currentStation, el, kindOfCharging, Double.parseDouble(textfields.get(6).getText()));
             ch.setWaitingTime(Long.parseLong(textfields.get(5).getText()));
             ch.preProcessing();
-            if(ch.getCondition().equals("charging"))
+            if(ch.getCondition().equals("ready"))
                 ch.execution();
             else if(ch.getCondition().equals("wait")){
                 Maintenance.queueInsertion();
@@ -331,6 +652,7 @@ class Event {
                 return;
             }
             Maintenance.completionMessage("ChargingEvent creation");
+            charging.fire();
         });
         disChargingEventCreation.setOnAction(e ->
         {
@@ -373,7 +695,7 @@ class Event {
                 dsch = new DisChargingEvent(currentStation, el, Double.parseDouble(textfields.get(4).getText()));
                 dsch.setWaitingTime(Long.parseLong(textfields.get(5).getText()));
                 dsch.preProcessing();
-                if(dsch.getCondition().equals("discharging"))
+                if(dsch.getCondition().equals("ready"))
                     dsch.execution();
                 else if(dsch.getCondition().equals("wait")){
                     Maintenance.queueInsertion();
@@ -387,6 +709,7 @@ class Event {
                 dsch.execution();
             }
             Maintenance.completionMessage("DisChargingEvent creation");
+            discharging.fire();
         });
         exchangeEventCreation.setOnAction(e -> {
             if (Maintenance.fieldCompletionCheck())
@@ -418,7 +741,7 @@ class Event {
             ch = new ChargingEvent(currentStation, el);
             ch.setWaitingTime(Long.parseLong(textfields.get(4).getText()));
             ch.preProcessing();
-            if(ch.getCondition().equals("swapping"))
+            if(ch.getCondition().equals("ready"))
                 ch.execution();
             else if(ch.getCondition().equals("wait")){
                 Maintenance.queueInsertion();
@@ -429,6 +752,7 @@ class Event {
                 return;
             }
             Maintenance.completionMessage("ChargingEvent creation");
+            exchange.fire();
         });
         parkingEventCreation.setOnAction(e -> {
             if (Maintenance.fieldCompletionCheck())
@@ -470,7 +794,7 @@ class Event {
             if (!Objects.equals(textfields.get(4).getText(), "0")) {
                 ch = new ParkingEvent(currentStation, el, Long.parseLong(textfields.get(5).getText()), Double.parseDouble(textfields.get(4).getText()));
                 ch.preProcessing();
-                if(ch.getCondition().equals("parking") || ch.getCondition().equals("charging"))
+                if(ch.getCondition().equals("ready"))
                     ch.execution();
                 else {
                     Maintenance.noExecution();
@@ -479,7 +803,7 @@ class Event {
             } else if (!Objects.equals(textfields.get(5).getText(), "0")) {
                 ch = new ParkingEvent(currentStation, el, Long.parseLong(textfields.get(5).getText()));
                 ch.preProcessing();
-                if(ch.getCondition().equals("parking") || ch.getCondition().equals("charging"))
+                if(ch.getCondition().equals("ready"))
                     ch.execution();
                 else {
                     Maintenance.noExecution();
@@ -496,11 +820,12 @@ class Event {
                 return;
             }
             Maintenance.completionMessage("ParkingEvent creation");
+            parking.fire();
         });
         policyCreation1.setOnAction(e -> {
             if(Maintenance.fieldCompletionCheck())
                 return;
-            if(Maintenance.confirmCreation("PricingPolicy"))
+            if(Maintenance.confirmCreation())
                 return;
             String text = textfields.get(1).getText().replaceAll("[^0-9,]+","");
             textfields.get(1).setText(text);
@@ -515,7 +840,7 @@ class Event {
         policyCreation2.setOnAction(e -> {
             if(Maintenance.fieldCompletionCheck())
                 return;
-            if(Maintenance.confirmCreation("PricingPolicy"))
+            if(Maintenance.confirmCreation())
                 return;
             String text = textfields.get(0).getText().replaceAll("[^0-9,]+","");
             textfields.get(0).setText(text);
@@ -544,5 +869,73 @@ class Event {
         });
         event.getItems().addAll(charging, discharging, exchange, parking, new SeparatorMenuItem(), policy);
         return event;
+    }
+
+    private static ChargingStation[] bestEnergy()
+    {
+        ChargingStation[] st = new ChargingStation[stations.size()];
+        stations.forEach(station -> st[stations.indexOf(station)] = station);
+        ChargingStation temp;
+        for(int i=0; i < st.length; i++){
+            for(int j=1; j < (st.length - i); j++){
+                if(st[j-1].getTotalEnergy() < st[j].getTotalEnergy()){
+                    temp = st[j-1];
+                    st[j-1] = st[j];
+                    st[j] = temp;
+                }
+            }
+        }
+        return st;
+    }
+
+    private static ChargingStation[] bestPrice()
+    {
+        ChargingStation[] st = new ChargingStation[stations.size()];
+        stations.forEach(station -> st[stations.indexOf(station)] = station);
+        ChargingStation temp;
+        for(int i=0; i < st.length; i++){
+            for(int j=1; j < (st.length - i); j++){
+                if(st[j-1].getCurrentPrice() > st[j].getCurrentPrice()){
+                    temp = st[j-1];
+                    st[j-1] = st[j];
+                    st[j] = temp;
+                }
+            }
+        }
+        return st;
+    }
+
+    private static ChargingStation[] bestDisPrice()
+    {
+        ChargingStation[] st = new ChargingStation[stations.size()];
+        stations.forEach(station -> st[stations.indexOf(station)] = station);
+        ChargingStation temp;
+        for(int i=0; i < st.length; i++){
+            for(int j=1; j < (st.length - i); j++){
+                if(st[j-1].getDisUnitPrice() > st[j].getDisUnitPrice()){
+                    temp = st[j-1];
+                    st[j-1] = st[j];
+                    st[j] = temp;
+                }
+            }
+        }
+        return st;
+    }
+
+    private static ChargingStation[] bestTime(String kind)
+    {
+        ChargingStation[] st = new ChargingStation[stations.size()];
+        stations.forEach(station -> st[stations.indexOf(station)] = station);
+        ChargingStation temp;
+        for(int i=0; i < st.length; i++){
+            for(int j=1; j < (st.length - i); j++){
+                if(st[j-1].getWaitingTime(kind) > st[j].getWaitingTime(kind)){
+                    temp = st[j-1];
+                    st[j-1] = st[j];
+                    st[j] = temp;
+                }
+            }
+        }
+        return st;
     }
 }

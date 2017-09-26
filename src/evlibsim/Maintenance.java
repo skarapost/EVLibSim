@@ -3,6 +3,7 @@ package evlibsim;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
+
 import java.util.Optional;
 
 import static evlibsim.EVLibSim.*;
@@ -92,9 +93,9 @@ class Maintenance {
         alert.showAndWait();
     }
 
-    static boolean confirmCreation(String message) {
+    static boolean confirmCreation() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle(message + " creation");
+        alert.setTitle("PricingPolicy" + " creation");
         alert.setHeaderText(null);
         alert.setContentText("Are you sure about the creation?");
         Optional<ButtonType> option = alert.showAndWait();
