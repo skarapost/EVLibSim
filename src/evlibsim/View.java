@@ -2,6 +2,7 @@ package evlibsim;
 
 import EVLib.Events.ChargingEvent;
 import EVLib.Events.DisChargingEvent;
+import EVLib.Events.ParkingEvent;
 import EVLib.Station.Charger;
 import EVLib.Station.DisCharger;
 import EVLib.Station.ExchangeHandler;
@@ -12,6 +13,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -27,7 +29,7 @@ class View {
     private static final MenuItem queue = new MenuItem("Queue of Events");
     private static final MenuItem chargingsMenuItem = new MenuItem("Running chargings");
     private static final MenuItem dischargingsMenuItem = new MenuItem("Running dischargings");
-    private static final MenuItem exchangesMenuItem = new MenuItem("Running swappings");
+    private static final MenuItem exchangesMenuItem = new MenuItem("Running exchanges");
     private static final MenuItem parkingsMenuItem = new MenuItem("Running parkings");
     private static final Button chargings = new Button("Running chargings");
     private static final Button dischargings = new Button("Running dischargings");
@@ -35,23 +37,21 @@ class View {
     private static final Button parkings = new Button("Runinng parkings");
     private static final Image image = new Image(View.class.getResourceAsStream("run.png"));
 
-    static Menu createViewMenu()
-    {
+    static Menu createViewMenu() {
         overview.getItems().addAll(totalActivity, new SeparatorMenuItem(), chargingsMenuItem, dischargingsMenuItem, exchangesMenuItem, parkingsMenuItem);
         view.getItems().addAll(overview, queue);
 
         queue.setOnAction(e -> {
             Maintenance.cleanScreen();
             ScrollPane scroll = new ScrollPane();
-            scroll.setMaxSize(800, 650);
+            scroll.setMaxSize(700, 650);
             VBox x = new VBox();
             x.setAlignment(Pos.CENTER);
             x.setSpacing(15);
             HBox z;
             Label foo;
             Button execution;
-            for(int i = 0; i < currentStation.getFast().getSize(); i++)
-            {
+            for (int i = 0; i < currentStation.getFast().getSize(); i++) {
                 ChargingEvent et = (ChargingEvent) currentStation.getFast().get(i);
                 z = new HBox();
                 z.setSpacing(15);
@@ -79,17 +79,14 @@ class View {
                 execution.setMaxSize(image.getWidth(), image.getHeight());
                 execution.setMinSize(image.getWidth(), image.getHeight());
                 execution.setOnAction(er -> {
-                    if(!currentStation.getQueueHandling()) {
+                    if (!currentStation.getQueueHandling()) {
                         et.preProcessing();
                         if (et.getCondition().equals("charging")) {
                             et.execution();
                             queue.fire();
-                        }
-                        else if (et.getCondition().equals("wait"))
+                        } else if (et.getCondition().equals("wait"))
                             Maintenance.queueInsertion();
-                    }
-                    else
-                    {
+                    } else {
                         Alert alert = new Alert(Alert.AlertType.ERROR);
                         alert.setTitle("Error");
                         alert.setHeaderText(null);
@@ -99,8 +96,7 @@ class View {
                 });
                 x.getChildren().add(z);
             }
-            for(int i = 0; i < currentStation.getSlow().getSize(); i++)
-            {
+            for (int i = 0; i < currentStation.getSlow().getSize(); i++) {
                 ChargingEvent et = (ChargingEvent) currentStation.getSlow().get(i);
                 z = new HBox();
                 z.setSpacing(15);
@@ -128,17 +124,14 @@ class View {
                 execution.setMaxSize(image.getWidth(), image.getHeight());
                 execution.setMinSize(image.getWidth(), image.getHeight());
                 execution.setOnAction(er -> {
-                    if(!currentStation.getQueueHandling()) {
+                    if (!currentStation.getQueueHandling()) {
                         et.preProcessing();
                         if (et.getCondition().equals("charging")) {
                             et.execution();
                             queue.fire();
-                        }
-                        else if (et.getCondition().equals("wait"))
+                        } else if (et.getCondition().equals("wait"))
                             Maintenance.queueInsertion();
-                    }
-                    else
-                    {
+                    } else {
                         Alert alert = new Alert(Alert.AlertType.ERROR);
                         alert.setTitle("Error");
                         alert.setHeaderText(null);
@@ -148,8 +141,7 @@ class View {
                 });
                 x.getChildren().add(z);
             }
-            for(int i = 0; i < currentStation.getDischarging().getSize(); i++)
-            {
+            for (int i = 0; i < currentStation.getDischarging().getSize(); i++) {
                 DisChargingEvent r = (DisChargingEvent) currentStation.getDischarging().get(i);
                 z = new HBox();
                 z.setSpacing(15);
@@ -175,17 +167,14 @@ class View {
                 execution.setMaxSize(image.getWidth(), image.getHeight());
                 execution.setMinSize(image.getWidth(), image.getHeight());
                 execution.setOnAction(er -> {
-                    if(!currentStation.getQueueHandling()) {
+                    if (!currentStation.getQueueHandling()) {
                         r.preProcessing();
                         if (r.getCondition().equals("discharging")) {
                             r.execution();
                             queue.fire();
-                        }
-                        else if (r.getCondition().equals("wait"))
+                        } else if (r.getCondition().equals("wait"))
                             Maintenance.queueInsertion();
-                    }
-                    else
-                    {
+                    } else {
                         Alert alert = new Alert(Alert.AlertType.ERROR);
                         alert.setTitle("Error");
                         alert.setHeaderText(null);
@@ -195,8 +184,7 @@ class View {
                 });
                 x.getChildren().add(z);
             }
-            for(int i = 0; i < currentStation.getExchange().getSize(); i++)
-            {
+            for (int i = 0; i < currentStation.getExchange().getSize(); i++) {
                 ChargingEvent et = (ChargingEvent) currentStation.getExchange().get(i);
                 z = new HBox();
                 z.setSpacing(15);
@@ -220,17 +208,14 @@ class View {
                 execution.setMaxSize(image.getWidth(), image.getHeight());
                 execution.setMinSize(image.getWidth(), image.getHeight());
                 execution.setOnAction(er -> {
-                    if(!currentStation.getQueueHandling()) {
+                    if (!currentStation.getQueueHandling()) {
                         et.preProcessing();
                         if (et.getCondition().equals("swapping")) {
                             et.execution();
                             queue.fire();
-                        }
-                        else if (et.getCondition().equals("wait"))
+                        } else if (et.getCondition().equals("wait"))
                             Maintenance.queueInsertion();
-                    }
-                    else
-                    {
+                    } else {
                         Alert alert = new Alert(Alert.AlertType.ERROR);
                         alert.setTitle("Error");
                         alert.setHeaderText(null);
@@ -244,7 +229,7 @@ class View {
             root.setCenter(scroll);
         });
         totalActivity.setOnAction(e -> {
-            if(Maintenance.stationCheck())
+            if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
             Label title = new Label("Running Events");
@@ -254,61 +239,61 @@ class View {
             box.setPadding(new Insets(25));
             box.setSpacing(25);
             box.getChildren().addAll(new Label(stationName.getText()),
-                    new Label(totalChargers.getText()),
-                    new Label(totalDisChargers.getText()),
-                    new Label(totalExchange.getText()),
-                    new Label(totalParkingSlots.getText()),
+                    new Label("Total Chargers: " + currentStation.getChargers().length),
+                    new Label("Total DisChargers: " + currentStation.getDisChargers().length),
+                    new Label("Total ExchangeHandlers: " + currentStation.getExchangeHandlers().length),
+                    new Label("Total ParkingSlots: " + currentStation.getParkingSlots().length),
                     new Label("Cars waiting for slow charging: " + String.valueOf(currentStation.getSlow().getSize())),
                     new Label("Cars waiting for fast charging: " + String.valueOf(currentStation.getFast().getSize())),
                     new Label("Cars waiting for discharging: " + String.valueOf(currentStation.getDischarging().getSize())),
                     new Label("Cars waiting for battery exchange: " + String.valueOf(currentStation.getExchange().getSize())),
                     title,
                     chargings, dischargings, exchanges, parkings);
-            chargings.setPrefSize(250,30);
+            chargings.setPrefSize(250, 30);
             dischargings.setPrefSize(250, 30);
             exchanges.setPrefSize(250, 30);
             parkings.setPrefSize(250, 30);
             ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
-            for(int i=0; i<currentStation.getSources().length; i++) {
+            for (int i = 0; i < currentStation.getSources().length; i++) {
                 switch (currentStation.getSources()[i]) {
                     case "Solar":
-                        if(currentStation.getSpecificAmount("Solar") > 0) {
+                        if (currentStation.getSpecificAmount("Solar") > 0) {
                             pieChartData.add(new PieChart.Data("Solar", currentStation.getSpecificAmount("Solar")));
                             continue;
                         }
                         break;
                     case "Wind":
-                        if(currentStation.getSpecificAmount("Wind") > 0) {
+                        if (currentStation.getSpecificAmount("Wind") > 0) {
                             pieChartData.add(new PieChart.Data("Wind", currentStation.getSpecificAmount("Wind")));
                             continue;
                         }
                         break;
                     case "Wave":
-                        if(currentStation.getSpecificAmount("Wave") > 0) {
+                        if (currentStation.getSpecificAmount("Wave") > 0) {
                             pieChartData.add(new PieChart.Data("Wave", currentStation.getSpecificAmount("Wave")));
                             continue;
                         }
                         break;
                     case "Hydroelectric":
-                        if(currentStation.getSpecificAmount("Hydroelectric") > 0) {
+                        if (currentStation.getSpecificAmount("Hydroelectric") > 0) {
                             pieChartData.add(new PieChart.Data("Hydroelectric", currentStation.getSpecificAmount("Hydroelectric")));
                             continue;
                         }
                         break;
                     case "Nonrenewable":
-                        if(currentStation.getSpecificAmount("Nonrenewable") > 0) {
+                        if (currentStation.getSpecificAmount("Nonrenewable") > 0) {
                             pieChartData.add(new PieChart.Data("Nonrenewable", currentStation.getSpecificAmount("Nonrenewable")));
                             continue;
                         }
                         break;
                     case "Geothermal":
-                        if(currentStation.getSpecificAmount("Geothermal") > 0) {
+                        if (currentStation.getSpecificAmount("Geothermal") > 0) {
                             pieChartData.add(new PieChart.Data("Geothermal", currentStation.getSpecificAmount("Geothermal")));
                             continue;
                         }
                         break;
                     case "DisCharging":
-                        if(currentStation.getSpecificAmount("DisCharging") > 0) {
+                        if (currentStation.getSpecificAmount("DisCharging") > 0) {
                             pieChartData.add(new PieChart.Data("Discharging", currentStation.getSpecificAmount("DisCharging")));
                             continue;
                         }
@@ -329,144 +314,133 @@ class View {
 
         //Buttons
         chargings.setOnAction(et -> {
+            if (Maintenance.stationCheck())
+                return;
             Maintenance.cleanScreen();
-            ScrollPane scroll = new ScrollPane();
-            scroll.setMaxSize(700, 650);
-            VBox x = new VBox();
-            x.setAlignment(Pos.CENTER);
-            x.setSpacing(15);
-            HBox z;
-            Label boo;
-            for(Charger ch: currentStation.getChargers())
-                if((ch.getChargingEvent()!=null)&&ch.getChargingEvent().getCondition().equals("charging")) {
-                    z = new HBox();
-                    z.setSpacing(15);
-                    z.setAlignment(Pos.TOP_LEFT);
-                    z.setPadding(new Insets(5, 5, 5, 5));
-                    boo = new Label("Id: " + ch.getChargingEvent().getId());
-                    z.getChildren().add(boo);
-                    boo = new Label("Driver: " + ch.getChargingEvent().getElectricVehicle().getDriver().getName());
-                    z.getChildren().add(boo);
-                    boo = new Label("Brand: " + ch.getChargingEvent().getElectricVehicle().getBrand());
-                    z.getChildren().add(boo);
-                    boo = new Label("Energy: " + ch.getChargingEvent().getEnergyToBeReceived());
-                    z.getChildren().add(boo);
-                    boo = new Label("Kind: " + ch.getChargingEvent().getKindOfCharging());
-                    z.getChildren().add(boo);
-                    boo = new Label("Cost: " + ch.getChargingEvent().getCost());
-                    z.getChildren().add(boo);
-                    ProgressBar bar = new ProgressBar();
-                    z.getChildren().add(bar);
-                    float progress = (float) ch.getChargingEvent().getElapsedChargingTime()/ch.getChargingEvent().getChargingTime();
-                    bar.setProgress(progress);
-                    x.getChildren().add(z);
-                }
-            scroll.setContent(x);
-            root.setCenter(scroll);
+            ObservableList<ChargingEvent> result = FXCollections.observableArrayList();
+            for (Charger ch : currentStation.getChargers())
+                if ((ch.getChargingEvent() != null) && ch.getChargingEvent().getCondition().equals("charging"))
+                    result.add(ch.getChargingEvent());
+            TableView<ChargingEvent> table = new TableView<>();
+            TableColumn<ChargingEvent, Integer> idCol = new TableColumn<>("Id");
+            TableColumn<ChargingEvent, Double> askingAmountCol = new TableColumn<>("EnergyAmount");
+            TableColumn<ChargingEvent, Double> energyToBeReceivedCol = new TableColumn<>("EnergyToBeReceived");
+            TableColumn<ChargingEvent, String> kindCol = new TableColumn<>("Kind");
+            TableColumn<ChargingEvent, Long> waitingTimeCol = new TableColumn<>("WaitingTime");
+            TableColumn<ChargingEvent, Long> maxWaitingTimeCol = new TableColumn<>("MaxWaitingTime");
+            TableColumn<ChargingEvent, Long> chargingTimeCol = new TableColumn<>("ChargingTime");
+            TableColumn<ChargingEvent, String> conditionCol = new TableColumn<>("Condition");
+            TableColumn<ChargingEvent, Double> costCol = new TableColumn<>("Cost");
+            TableColumn<ChargingEvent, Long> elapseTimeCol = new TableColumn<>("ElapsedChargingTime");
+            table.getColumns().addAll(idCol, askingAmountCol, energyToBeReceivedCol, kindCol, waitingTimeCol, maxWaitingTimeCol, chargingTimeCol,
+                    conditionCol, costCol, elapseTimeCol);
+            idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+            askingAmountCol.setCellValueFactory(new PropertyValueFactory<>("amountOfEnergy"));
+            energyToBeReceivedCol.setCellValueFactory(new PropertyValueFactory<>("energyToBeReceived"));
+            kindCol.setCellValueFactory(new PropertyValueFactory<>("kindOfCharging"));
+            waitingTimeCol.setCellValueFactory(new PropertyValueFactory<>("waitingTime"));
+            maxWaitingTimeCol.setCellValueFactory(new PropertyValueFactory<>("maxWaitingTime"));
+            chargingTimeCol.setCellValueFactory(new PropertyValueFactory<>("chargingTime"));
+            conditionCol.setCellValueFactory(new PropertyValueFactory<>("condition"));
+            costCol.setCellValueFactory(new PropertyValueFactory<>("cost"));
+            elapseTimeCol.setCellValueFactory(new PropertyValueFactory<>("elapsedDisChargingTime"));
+            table.setItems(result);
+            table.setMaxSize(1000, 600);
+            root.setCenter(table);
         });
         dischargings.setOnAction(et -> {
+            if (Maintenance.stationCheck())
+                return;
             Maintenance.cleanScreen();
-            ScrollPane scroll = new ScrollPane();
-            scroll.setMaxSize(700, 650);
-            VBox x = new VBox();
-            x.setAlignment(Pos.CENTER);
-            x.setSpacing(15);
-            HBox z;
-            Label boo;
-            for(DisCharger ch: currentStation.getDisChargers())
-                if((ch.getDisChargingEvent()!=null)&&ch.getDisChargingEvent().getCondition().equals("discharging")) {
-                    z = new HBox();
-                    z.setSpacing(15);
-                    z.setAlignment(Pos.TOP_LEFT);
-                    z.setPadding(new Insets(5, 5, 5, 5));
-                    boo = new Label("Id: " + ch.getDisChargingEvent().getId());
-                    z.getChildren().add(boo);
-                    boo = new Label("Driver: " + ch.getDisChargingEvent().getElectricVehicle().getDriver().getName());
-                    z.getChildren().add(boo);
-                    boo = new Label("Brand: " + ch.getDisChargingEvent().getElectricVehicle().getBrand());
-                    z.getChildren().add(boo);
-                    boo = new Label("Energy: " + ch.getDisChargingEvent().getAmountOfEnergy());
-                    z.getChildren().add(boo);
-                    boo = new Label("Profit: " + ch.getDisChargingEvent().getProfit());
-                    z.getChildren().add(boo);
-                    ProgressBar bar = new ProgressBar();
-                    z.getChildren().add(bar);
-                    float progress = (float) ch.getDisChargingEvent().getElapsedDisChargingTime()/ch.getDisChargingEvent().getDisChargingTime();
-                    bar.setProgress(progress);
-                    x.getChildren().add(z);
-                }
-            scroll.setContent(x);
-            root.setCenter(scroll);
+            ObservableList<DisChargingEvent> result = FXCollections.observableArrayList();
+            for (DisCharger ch : currentStation.getDisChargers())
+                if ((ch.getDisChargingEvent() != null) && ch.getDisChargingEvent().getCondition().equals("discharging"))
+                    result.add(ch.getDisChargingEvent());
+            TableView<DisChargingEvent> table = new TableView<>();
+            TableColumn<DisChargingEvent, Integer> idCol = new TableColumn<>("Id");
+            TableColumn<DisChargingEvent, Double> amountOfEnergyCol = new TableColumn<>("EnergyAmount");
+            TableColumn<DisChargingEvent, String> conditionCol = new TableColumn<>("Condition");
+            TableColumn<DisChargingEvent, Long> waitingTimeCol = new TableColumn<>("WaitingTime");
+            TableColumn<DisChargingEvent, Long> maxWaitingTimeCol = new TableColumn<>("MaxWaitingTime");
+            TableColumn<DisChargingEvent, Long> disChargingTimeCol = new TableColumn<>("DisChargingTime");
+            TableColumn<DisChargingEvent, Long> elapsedDisChargingTimeCol = new TableColumn<>("ElapsedDisChargingTime");
+            TableColumn<DisChargingEvent, Double> profitCol = new TableColumn<>("Profit");
+            table.getColumns().addAll(idCol, amountOfEnergyCol, conditionCol, maxWaitingTimeCol, waitingTimeCol,
+                    disChargingTimeCol, elapsedDisChargingTimeCol, profitCol);
+            idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+            amountOfEnergyCol.setCellValueFactory(new PropertyValueFactory<>("amountOfEnergy"));
+            conditionCol.setCellValueFactory(new PropertyValueFactory<>("condition"));
+            waitingTimeCol.setCellValueFactory(new PropertyValueFactory<>("waitingTime"));
+            maxWaitingTimeCol.setCellValueFactory(new PropertyValueFactory<>("maxWaitingTime"));
+            disChargingTimeCol.setCellValueFactory(new PropertyValueFactory<>("disChargingTime"));
+            elapsedDisChargingTimeCol.setCellValueFactory(new PropertyValueFactory<>("elapsedDisChargingTime"));
+            profitCol.setCellValueFactory(new PropertyValueFactory<>("profit"));
+            table.setItems(result);
+            table.setMaxSize(1000, 600);
+            root.setCenter(table);
         });
         exchanges.setOnAction(et -> {
+            if (Maintenance.stationCheck())
+                return;
             Maintenance.cleanScreen();
-            ScrollPane scroll = new ScrollPane();
-            scroll.setMaxSize(700, 650);
-            VBox x = new VBox();
-            x.setAlignment(Pos.CENTER);
-            x.setSpacing(15);
-            HBox z;
-            Label boo;
-            for(ExchangeHandler ch: currentStation.getExchangeHandlers())
-                if((ch.getChargingEvent()!=null)&&ch.getChargingEvent().getCondition().equals("swapping")) {
-                    z = new HBox();
-                    z.setSpacing(15);
-                    z.setAlignment(Pos.TOP_LEFT);
-                    z.setPadding(new Insets(5, 5, 5, 5));
-                    boo = new Label("Id: " + ch.getChargingEvent().getId());
-                    z.getChildren().add(boo);
-                    boo = new Label("Driver: " + ch.getChargingEvent().getElectricVehicle().getDriver().getName());
-                    z.getChildren().add(boo);
-                    boo = new Label("Brand: " + ch.getChargingEvent().getElectricVehicle().getBrand());
-                    z.getChildren().add(boo);
-                    boo = new Label("Cost: " + ch.getChargingEvent().getCost());
-                    z.getChildren().add(boo);
-                    ProgressBar bar = new ProgressBar();
-                    z.getChildren().add(bar);
-                    float progress = (float) ch.getChargingEvent().getElapsedChargingTime()/ch.getChargingEvent().getChargingTime();
-                    bar.setProgress(progress);
-                    x.getChildren().add(z);
-                }
-            scroll.setContent(x);
-            root.setCenter(scroll);
+            ObservableList<ChargingEvent> result = FXCollections.observableArrayList();
+            for (ExchangeHandler ch : currentStation.getExchangeHandlers())
+                if ((ch.getChargingEvent() != null) && ch.getChargingEvent().getCondition().equals("swapping"))
+                    result.add(ch.getChargingEvent());
+            TableView<ChargingEvent> table = new TableView<>();
+            TableColumn<ChargingEvent, Integer> idCol = new TableColumn<>("Id");
+            TableColumn<ChargingEvent, Long> waitingTimeCol = new TableColumn<>("WaitingTime");
+            TableColumn<ChargingEvent, Long> maxWaitingTimeCol = new TableColumn<>("MaxWaitingTime");
+            TableColumn<ChargingEvent, String> conditionCol = new TableColumn<>("Condition");
+            TableColumn<ChargingEvent, Long> chargingTimeCol = new TableColumn<>("ChargingTime");
+            TableColumn<ChargingEvent, Long> elapsedExchangeTimeCol = new TableColumn<>("ElapsedChargingTime");
+            TableColumn<ChargingEvent, Double> profitCol = new TableColumn<>("Cost");
+            table.getColumns().addAll(idCol, waitingTimeCol, maxWaitingTimeCol, conditionCol, chargingTimeCol, elapsedExchangeTimeCol, profitCol);
+            idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+            waitingTimeCol.setCellValueFactory(new PropertyValueFactory<>("waitingTime"));
+            maxWaitingTimeCol.setCellValueFactory(new PropertyValueFactory<>("maxWaitingTime"));
+            conditionCol.setCellValueFactory(new PropertyValueFactory<>("condition"));
+            chargingTimeCol.setCellValueFactory(new PropertyValueFactory<>("chargingTime"));
+            elapsedExchangeTimeCol.setCellValueFactory(new PropertyValueFactory<>("elapsedChargingTime"));
+            profitCol.setCellValueFactory(new PropertyValueFactory<>("cost"));
+            table.setItems(result);
+            table.setMaxSize(1000, 600);
+            root.setCenter(table);
         });
         parkings.setOnAction(et -> {
+            if (Maintenance.stationCheck())
+                return;
             Maintenance.cleanScreen();
-            ScrollPane scroll = new ScrollPane();
-            scroll.setMaxSize(700, 650);
-            VBox x = new VBox();
-            x.setAlignment(Pos.CENTER);
-            x.setSpacing(15);
-            HBox z;
-            Label boo;
-            for(ParkingSlot ch: currentStation.getParkingSlots())
-                if((ch.getParkingEvent()!=null)&&(ch.getParkingEvent().getCondition().equals("parking")||ch.getParkingEvent().getCondition().equals("charging"))) {
-                    z = new HBox();
-                    z.setSpacing(15);
-                    z.setAlignment(Pos.TOP_LEFT);
-                    z.setPadding(new Insets(5, 5, 5, 5));
-                    boo = new Label("Id: " + ch.getParkingEvent().getId());
-                    z.getChildren().add(boo);
-                    boo = new Label("Driver: " + ch.getParkingEvent().getElectricVehicle().getDriver().getName());
-                    z.getChildren().add(boo);
-                    boo = new Label("Brand: " + ch.getParkingEvent().getElectricVehicle().getBrand());
-                    z.getChildren().add(boo);
-                    boo = new Label("Condition: " + ch.getParkingEvent().getCondition());
-                    z.getChildren().add(boo);
-                    boo = new Label("Cost: " + ch.getParkingEvent().getCost());
-                    z.getChildren().add(boo);
-                    ProgressBar bar = new ProgressBar();
-                    z.getChildren().add(bar);
-                    float progress;
-                    if(ch.getParkingEvent().getCondition().equals("charging"))
-                        progress = (float) ch.getParkingEvent().getElapsedChargingTime() / ch.getParkingEvent().getChargingTime();
-                    else
-                        progress = (float) ch.getParkingEvent().getElapsedParkingTime() / ch.getParkingEvent().getParkingTime();
-                    bar.setProgress(progress);
-                    x.getChildren().add(z);
-                }
-            scroll.setContent(x);
-            root.setCenter(scroll);
+            ObservableList<ParkingEvent> result = FXCollections.observableArrayList();
+            for (ParkingSlot ch : currentStation.getParkingSlots())
+                if ((ch.getParkingEvent() != null) && (ch.getParkingEvent().getCondition().equals("parking") || ch.getParkingEvent().getCondition().equals("charging")))
+                    result.add(ch.getParkingEvent());
+            TableView<ParkingEvent> table = new TableView<>();
+            TableColumn<ParkingEvent, Integer> idCol = new TableColumn<>("Id");
+            TableColumn<ParkingEvent, Double> askingAmountCol = new TableColumn<>("AskingAmount");
+            TableColumn<ParkingEvent, Double> energyToBeReceivedCol = new TableColumn<>("EnergyToBeReceived");
+            TableColumn<ParkingEvent, String> parkingTimeCol = new TableColumn<>("ParkingTime");
+            TableColumn<ParkingEvent, Long> waitingTimeCol = new TableColumn<>("WaitingTime");
+            TableColumn<ParkingEvent, Long> chargingTimeCol = new TableColumn<>("ChargingTime");
+            TableColumn<ParkingEvent, Long> elapsedParkingTimeCol = new TableColumn<>("ElapsedParkingTime");
+            TableColumn<ParkingEvent, Long> elapsedChargingTimeCol = new TableColumn<>("ElapsedChargingTime");
+            TableColumn<ParkingEvent, String> conditionCol = new TableColumn<>("condition");
+            TableColumn<ParkingEvent, Double> costCol = new TableColumn<>("Cost");
+            table.getColumns().addAll(idCol, askingAmountCol, energyToBeReceivedCol, parkingTimeCol, waitingTimeCol,
+                    chargingTimeCol, elapsedParkingTimeCol, elapsedChargingTimeCol, conditionCol, costCol);
+            idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+            askingAmountCol.setCellValueFactory(new PropertyValueFactory<>("amountOfEnergy"));
+            energyToBeReceivedCol.setCellValueFactory(new PropertyValueFactory<>("energyToBeReceived"));
+            parkingTimeCol.setCellValueFactory(new PropertyValueFactory<>("parkingTime"));
+            waitingTimeCol.setCellValueFactory(new PropertyValueFactory<>("waitingTime"));
+            chargingTimeCol.setCellValueFactory(new PropertyValueFactory<>("chargingTime"));
+            elapsedParkingTimeCol.setCellValueFactory(new PropertyValueFactory<>("elapsedParkingTime"));
+            elapsedChargingTimeCol.setCellValueFactory(new PropertyValueFactory<>("elapsedChargingTime"));
+            conditionCol.setCellValueFactory(new PropertyValueFactory<>("condition"));
+            costCol.setCellValueFactory(new PropertyValueFactory<>("cost"));
+            table.setItems(result);
+            table.setMaxSize(1000, 600);
+            root.setCenter(table);
         });
         return view;
     }

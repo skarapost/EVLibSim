@@ -128,16 +128,14 @@ class History {
             TableColumn<ParkingEvent, Double> askingAmountCol = new TableColumn<>("AskingAmount");
             TableColumn<ParkingEvent, Double> energyaToBeReceivedCol = new TableColumn<>("EnergyToBeReceived");
             TableColumn<ParkingEvent, String> parkingTimeCol = new TableColumn<>("ParkingTime");
-            TableColumn<ParkingEvent, Long> waitingTimeCol = new TableColumn<>("WaitingTime");
             TableColumn<ParkingEvent, Long> chargingTimeCol = new TableColumn<>("ChargingTime");
             TableColumn<ParkingEvent, String> conditionCol = new TableColumn<>("condition");
             TableColumn<ParkingEvent, Double> costCol = new TableColumn<>("Cost");
-            table.getColumns().addAll(idCol, askingAmountCol, energyaToBeReceivedCol, parkingTimeCol, waitingTimeCol, chargingTimeCol, conditionCol, costCol);
+            table.getColumns().addAll(idCol, askingAmountCol, energyaToBeReceivedCol, parkingTimeCol, chargingTimeCol, conditionCol, costCol);
             idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
             askingAmountCol.setCellValueFactory(new PropertyValueFactory<>("amountOfEnergy"));
             energyaToBeReceivedCol.setCellValueFactory(new PropertyValueFactory<>("energyToBeReceived"));
             parkingTimeCol.setCellValueFactory(new PropertyValueFactory<>("parkingTime"));
-            waitingTimeCol.setCellValueFactory(new PropertyValueFactory<>("waitingTime"));
             chargingTimeCol.setCellValueFactory(new PropertyValueFactory<>("chargingTime"));
             conditionCol.setCellValueFactory(new PropertyValueFactory<>("condition"));
             costCol.setCellValueFactory(new PropertyValueFactory<>("cost"));

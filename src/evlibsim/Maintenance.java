@@ -48,23 +48,27 @@ class Maintenance {
         textfields.clear();
     }
 
-    static void energyAlert(String energySource)
-    {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error");
-        alert.setHeaderText(null);
-        alert.setContentText(energySource + " energy is already an option.");
-        alert.showAndWait();
-    }
+// --Commented out by Inspection START (27/9/2017 3:29 μμ):
+//    static void energyAlert(String energySource)
+//    {
+//        Alert alert = new Alert(Alert.AlertType.ERROR);
+//        alert.setTitle("Error");
+//        alert.setHeaderText(null);
+//        alert.setContentText(energySource + " energy is already an option.");
+//        alert.showAndWait();
+//    }
+// --Commented out by Inspection STOP (27/9/2017 3:29 μμ)
 
-    static void notEnergyAlert(String energySource)
-    {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error");
-        alert.setHeaderText(null);
-        alert.setContentText(energySource + " energy is not an option.");
-        alert.showAndWait();
-    }
+// --Commented out by Inspection START (27/9/2017 3:29 μμ):
+//    static void notEnergyAlert(String energySource)
+//    {
+//        Alert alert = new Alert(Alert.AlertType.ERROR);
+//        alert.setTitle("Error");
+//        alert.setHeaderText(null);
+//        alert.setContentText(energySource + " energy is not an option.");
+//        alert.showAndWait();
+//    }
+// --Commented out by Inspection STOP (27/9/2017 3:29 μμ)
 
     static void completionMessage(String message)
     {
@@ -108,5 +112,13 @@ class Maintenance {
             if(energ.equals(energy))
                 return true;
         return false;
+    }
+
+    static void refillBlanks() {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText(null);
+        alert.setContentText("Please fill in the blanks again.");
+        alert.showAndWait();
     }
 }

@@ -54,7 +54,7 @@ public class EVLibSim extends Application {
     static final ToggleGroup group = new ToggleGroup();
     private static final MenuItem startScreen = new MenuItem("Start Screen");
     private static final Menu rec = new Menu("Suggestions");
-    static final RadioMenuItem enable = new RadioMenuItem("Enable");
+    private static final RadioMenuItem enable = new RadioMenuItem("Enable");
     private static final RadioMenuItem disable = new RadioMenuItem("Disable");
     static final Menu s = new Menu("Stations");
     private static final MenuItem load = new MenuItem("Load");
@@ -64,10 +64,13 @@ public class EVLibSim extends Application {
     private static final MenuItem about = new MenuItem("About");
     static final Label stationName = new Label();
     private static final Label energyAmount = new Label();
-    static final Label totalChargers = new Label();
-    static final Label totalDisChargers = new Label();
-    static final Label totalExchange = new Label();
-    static final Label totalParkingSlots = new Label();
+    private static final Label unitPrice = new Label();
+    private static final Label disUnitPrice = new Label();
+    private static final Label exchangePrice = new Label();
+    private static final Label waitTimeSlow = new Label();
+    private static final Label waitTimeFast = new Label();
+    private static final Label waitTimeDis = new Label();
+    private static final Label waitTimeEx = new Label();
     private static final VBox tBox = new VBox();
     private static final TextArea ta = new TextArea();
     private static final Button bt1 = new Button("New ChargingEvent");
@@ -91,7 +94,7 @@ public class EVLibSim extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        Console console = new Console(ta);
+        Console console = new Console();
         ta.setEditable(false);
         ta.setMaxSize(300, 200);
         PrintStream ps = new PrintStream(console, true);
@@ -142,10 +145,13 @@ public class EVLibSim extends Application {
 
         stationGrid.add(stationName, 0, 0);
         stationGrid.add(energyAmount, 1, 0);
-        stationGrid.add(totalChargers, 2, 0);
-        stationGrid.add(totalDisChargers, 3, 0);
-        stationGrid.add(totalExchange, 4, 0);
-        stationGrid.add(totalParkingSlots, 5, 0);
+        stationGrid.add(waitTimeSlow, 2, 0);
+        stationGrid.add(waitTimeFast, 3, 0);
+        stationGrid.add(waitTimeDis, 4, 0);
+        stationGrid.add(waitTimeEx, 5, 0);
+        stationGrid.add(unitPrice, 6, 0);
+        stationGrid.add(disUnitPrice, 7, 0);
+        stationGrid.add(exchangePrice, 8, 0);
 
         root.setBottom(stationGrid);
 
@@ -170,12 +176,15 @@ public class EVLibSim extends Application {
                 for (ChargingStation cs : stations)
                     if (Objects.equals(cs.getName(), name)) {
                         currentStation = cs;
-                        stationName.setText("ChargingStation Name: " + currentStation.getName());
-                        energyAmount.setText("Total Energy: " + currentStation.getTotalEnergy());
-                        totalChargers.setText("Number of Chargers: " + currentStation.getChargers().length);
-                        totalDisChargers.setText("Number of DisChargers: " + currentStation.getDisChargers().length);
-                        totalExchange.setText("Number of ExchangeHandlers: " + currentStation.getExchangeHandlers().length);
-                        totalParkingSlots.setText("Number of ParkingSlots: " + currentStation.getParkingSlots().length);
+                        stationName.setText("Name: " + currentStation.getName());
+                        energyAmount.setText("Energy: " + currentStation.getTotalEnergy());
+                        waitTimeSlow.setText("Wait(slow): " + currentStation.getWaitingTime("slow"));
+                        waitTimeFast.setText("Wait(fast): " + currentStation.getWaitingTime("fast"));
+                        waitTimeDis.setText("Wait(discharging): " + currentStation.getWaitingTime("discharging"));
+                        waitTimeEx.setText("Wait(exchange): " + currentStation.getWaitingTime("exchange"));
+                        unitPrice.setText("Price(charging): " + currentStation.getCurrentPrice());
+                        disUnitPrice.setText("Price(discharging): " + currentStation.getDisUnitPrice());
+                        exchangePrice.setText("Price(exchange): " + currentStation.getExchangePrice());
                     }
             }
         });
@@ -298,21 +307,27 @@ public class EVLibSim extends Application {
 
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(5), ev -> {
             if(currentStation == null) {
-                stationName.setText("ChargingStation Name: -");
-                energyAmount.setText("Total Energy: -");
-                totalChargers.setText("Number of Chargers: -");
-                totalDisChargers.setText("Number of DisChargers: -");
-                totalExchange.setText("Number of ExchangeHandlers: -");
-                totalParkingSlots.setText("Number of ParkingSlots: -");
+                stationName.setText("Name: -");
+                energyAmount.setText("Energy: -");
+                waitTimeSlow.setText("Wait(slow): -");
+                waitTimeFast.setText("Wait(fast): -");
+                waitTimeDis.setText("Wait(discharging): -");
+                waitTimeEx.setText("Wait(exchange): -");
+                unitPrice.setText("Price(charging): -");
+                disUnitPrice.setText("Price(discharging): -");
+                exchangePrice.setText("Price(exchange): -");
             }
             else
             {
-                stationName.setText("ChargingStation Name: " + currentStation.getName());
-                energyAmount.setText("Total Energy: " + currentStation.getTotalEnergy());
-                totalChargers.setText("Number of Chargers: " + currentStation.getChargers().length);
-                totalDisChargers.setText("Number of DisChargers: " + currentStation.getDisChargers().length);
-                totalExchange.setText("Number of ExchangeHandlers: " + currentStation.getExchangeHandlers().length);
-                totalParkingSlots.setText("Number of ParkingSlots: " + currentStation.getParkingSlots().length);
+                stationName.setText("Name: " + currentStation.getName());
+                energyAmount.setText("Energy: " + currentStation.getTotalEnergy());
+                waitTimeSlow.setText("Wait(slow): " + currentStation.getWaitingTime("slow"));
+                waitTimeFast.setText("Wait(fast): " + currentStation.getWaitingTime("fast"));
+                waitTimeDis.setText("Wait(discharging): " + currentStation.getWaitingTime("discharging"));
+                waitTimeEx.setText("Wait(exchange): " + currentStation.getWaitingTime("exchange"));
+                unitPrice.setText("Price(charging): " + currentStation.getCurrentPrice());
+                disUnitPrice.setText("Price(discharging): " + currentStation.getDisUnitPrice());
+                exchangePrice.setText("Price(exchange): " + currentStation.getExchangePrice());
             }
         }));
 
@@ -610,9 +625,10 @@ public class EVLibSim extends Application {
     private static class Console extends OutputStream
     {
         private final TextArea output;
-        Console(TextArea ta)
+
+        Console()
         {
-            this.output = ta;
+            this.output = EVLibSim.ta;
         }
         @Override
         public void write(int i) throws IOException {

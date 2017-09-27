@@ -19,11 +19,12 @@ class Energy {
     static final MenuItem newEnergySource = new MenuItem("New EnergySource");
     static final MenuItem deleteEnergySource = new MenuItem("Remove EnergySource");
 
-    static Menu createEnergyMenu()
-    {
+    //Builds the Energy category in the main MenuBar.
+    static Menu createEnergyMenu() {
         energy.getItems().addAll(newEnergySource, deleteEnergySource, new SeparatorMenuItem(),
                 newEnergyPackages, updateStorage, new SeparatorMenuItem(), sortEnergies);
 
+        //Builds the New EnergySource MenuItem
         newEnergySource.setOnAction(e -> {
             List<String> energies = new ArrayList<>();
             String[] a = {"Solar", "Wind", "Wave", "Nonrenewable", "Hydroelectric", "Geothermal", "DisCharging"};
@@ -66,6 +67,7 @@ class Energy {
             });
         });
 
+        //Creates the Delete EnergySource MenuItem
         deleteEnergySource.setOnAction(e -> {
             ArrayList<String> energies = new ArrayList<>(Arrays.asList(currentStation.getSources()));
             energies.remove("DisCharging");
@@ -99,15 +101,14 @@ class Energy {
             });
         });
 
+        //Implements the energy storage update, in case the automatic update mode is false.
         updateStorage.setOnAction((ActionEvent e) -> {
             if (Maintenance.stationCheck())
                 return;
             if(!currentStation.getUpdateMode()) {
                 currentStation.updateStorage();
                 Maintenance.completionMessage("storage update");
-            }
-            else
-            {
+            } else {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setHeaderText(null);
@@ -115,6 +116,8 @@ class Energy {
                 alert.showAndWait();
             }
         });
+
+        //Implements the sorting of the energies. The user sets the order at every charging the Charger will look for energy.
         sortEnergies.setOnAction(e -> {
             if(Maintenance.stationCheck())
                 return;
@@ -193,6 +196,7 @@ class Energy {
             sort.setDefaultButton(true);
             root.setCenter(grid);
         });
+        //Choice for adding new energy packages in every EnergySource.
         newEnergyPackages.setOnAction(e -> {
             if (Maintenance.stationCheck())
                 return;
@@ -267,37 +271,44 @@ class Energy {
             root.setCenter(grid);
         });
 
+        //Buttons
         addEnergies.setOnAction(e -> {
-            for(String en: currentStation.getSources())
-                switch (en)
-                {
-                    case "Solar":
-                        currentStation.getEnergySource("Solar").insertAmount(Double.parseDouble(textfields.get(0).getText()));
-                        break;
-                    case "Wind":
-                        currentStation.getEnergySource("Wind").insertAmount(Double.parseDouble(textfields.get(1).getText()));
-                        break;
-                    case "Wave":
-                        currentStation.getEnergySource("Wave").insertAmount(Double.parseDouble(textfields.get(2).getText()));
-                        break;
-                    case "Hydroelectric":
-                        currentStation.getEnergySource("Hydroelectric").insertAmount(Double.parseDouble(textfields.get(3).getText()));
-                        break;
-                    case "Nonrenewable":
-                        currentStation.getEnergySource("Nonrenewable").insertAmount(Double.parseDouble(textfields.get(4).getText()));
-                        break;
-                    case "Geothermal":
-                        currentStation.getEnergySource("Geothermal").insertAmount(Double.parseDouble(textfields.get(5).getText()));
-                        break;
-                    default:
-                        break;
-                }
+            textfields.forEach(field -> field.setText(field.getText().replaceAll("[^0-9.]", "")));
+            try {
+                for (String en : currentStation.getSources())
+                    switch (en) {
+                        case "Solar":
+                            currentStation.getEnergySource("Solar").insertAmount(Double.parseDouble(textfields.get(0).getText()));
+                            break;
+                        case "Wind":
+                            currentStation.getEnergySource("Wind").insertAmount(Double.parseDouble(textfields.get(1).getText()));
+                            break;
+                        case "Wave":
+                            currentStation.getEnergySource("Wave").insertAmount(Double.parseDouble(textfields.get(2).getText()));
+                            break;
+                        case "Hydroelectric":
+                            currentStation.getEnergySource("Hydroelectric").insertAmount(Double.parseDouble(textfields.get(3).getText()));
+                            break;
+                        case "Nonrenewable":
+                            currentStation.getEnergySource("Nonrenewable").insertAmount(Double.parseDouble(textfields.get(4).getText()));
+                            break;
+                        case "Geothermal":
+                            currentStation.getEnergySource("Geothermal").insertAmount(Double.parseDouble(textfields.get(5).getText()));
+                            break;
+                        default:
+                            break;
+                    }
+            } catch (Exception ex) {
+                Maintenance.refillBlanks();
+                newEnergyPackages.fire();
+            }
             Maintenance.completionMessage("insertion of energy amounts");
             newEnergyPackages.fire();
         });
         sort.setOnAction(e -> {
             if(Maintenance.fieldCompletionCheck())
                 return;
+            textfields.forEach(field -> field.setText(field.getText().replaceAll("[^0-9]", "")));
             HashSet<String> b = new HashSet<>();
             int counter = 0;
             for(TextField s: textfields)
@@ -305,8 +316,7 @@ class Energy {
                     b.add(s.getText());
                     counter++;
                 }
-            if (b.size() != counter)
-            {
+            if (b.size() != counter) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setHeaderText(null);
@@ -325,22 +335,27 @@ class Energy {
                         return;
                     }
                 }
-            String[] sources = new String[currentStation.getSources().length];
-            if (!textfields.get(0).isDisabled())
-                sources[Integer.parseInt(textfields.get(0).getText()) - 1] = "Solar";
-            if (!textfields.get(1).isDisabled())
-                sources[Integer.parseInt(textfields.get(1).getText()) - 1] = "Wind";
-            if (!textfields.get(2).isDisabled())
-                sources[Integer.parseInt(textfields.get(2).getText()) - 1] = "Wave";
-            if (!textfields.get(3).isDisabled())
-                sources[Integer.parseInt(textfields.get(3).getText()) - 1] = "Hydroelectric";
-            if (!textfields.get(4).isDisabled())
-                sources[Integer.parseInt(textfields.get(4).getText()) - 1] = "Nonrenewable";
-            if (!textfields.get(5).isDisabled())
-                sources[Integer.parseInt(textfields.get(5).getText()) - 1] = "Geothermal";
-            if (!textfields.get(6).isDisabled())
-                sources[Integer.parseInt(textfields.get(6).getText()) - 1] = "DisCharging";
-            currentStation.customEnergySorting(sources);
+            try {
+                String[] sources = new String[currentStation.getSources().length];
+                if (!textfields.get(0).isDisabled())
+                    sources[Integer.parseInt(textfields.get(0).getText()) - 1] = "Solar";
+                if (!textfields.get(1).isDisabled())
+                    sources[Integer.parseInt(textfields.get(1).getText()) - 1] = "Wind";
+                if (!textfields.get(2).isDisabled())
+                    sources[Integer.parseInt(textfields.get(2).getText()) - 1] = "Wave";
+                if (!textfields.get(3).isDisabled())
+                    sources[Integer.parseInt(textfields.get(3).getText()) - 1] = "Hydroelectric";
+                if (!textfields.get(4).isDisabled())
+                    sources[Integer.parseInt(textfields.get(4).getText()) - 1] = "Nonrenewable";
+                if (!textfields.get(5).isDisabled())
+                    sources[Integer.parseInt(textfields.get(5).getText()) - 1] = "Geothermal";
+                if (!textfields.get(6).isDisabled())
+                    sources[Integer.parseInt(textfields.get(6).getText()) - 1] = "DisCharging";
+                currentStation.customEnergySorting(sources);
+            } catch (Exception ex) {
+                Maintenance.refillBlanks();
+                sortEnergies.fire();
+            }
             Maintenance.completionMessage("sorting");
             sortEnergies.fire();
         });

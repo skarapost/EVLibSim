@@ -35,8 +35,7 @@ class Overview {
             TextInputDialog dialog = new TextInputDialog();
             dialog.setTitle("Path insertion");
             dialog.setHeaderText(null);
-            dialog.setContentText("Please enter an absolute path. " +
-                    "The name has to be a text(.txt) file: ");
+            dialog.setContentText("Please enter an absolute path. The name has to be a text(.txt) file: ");
             Optional<String> path = dialog.showAndWait();
             path.ifPresent(s -> currentStation.genReport(path.get()));
         });

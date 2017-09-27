@@ -56,7 +56,7 @@ class MenuStation {
                 exchangeHandlersM, parkingSlotsM, new SeparatorMenuItem(), modifyChargingStationMI,
                 new SeparatorMenuItem(), newBatteryMI, batteriesChargingMI, allBatteriesMI);
 
-
+        //Implements the New ChargingStation MenuItem
         newChargingStationMI.setOnAction((ActionEvent e) ->
         {
             Maintenance.cleanScreen();
@@ -230,6 +230,8 @@ class MenuStation {
                     EVLibSim.energies.remove("Nonrenewable");
             });
         });
+
+        //Implements the New Charger MenuItem
         newChargerMI.setOnAction(e ->
         {
             if (Maintenance.stationCheck())
@@ -252,6 +254,8 @@ class MenuStation {
             chargerCreationB.setDefaultButton(true);
             EVLibSim.root.setCenter(EVLibSim.grid);
         });
+
+        //Implements the New DisCharge MenuItem.
         newDisChargerMI.setOnAction(e ->
         {
             if (Maintenance.stationCheck())
@@ -269,6 +273,8 @@ class MenuStation {
                 Maintenance.completionMessage("DisCharger creation");
             });
         });
+
+        //Implements the New ExchangeHandler MenuItem.
         newExchangeHandlerMI.setOnAction(e ->
         {
             if (Maintenance.stationCheck())
@@ -286,6 +292,8 @@ class MenuStation {
                 Maintenance.completionMessage("ExchangeHandler creation");
             });
         });
+
+        //Implements the New ParkingSlot MenuItem.
         newParkingSlotMI.setOnAction(e ->
         {
             if (Maintenance.stationCheck())
@@ -303,6 +311,8 @@ class MenuStation {
                 Maintenance.completionMessage("ParkingSlot creation");
             });
         });
+
+        //Implements the Modify ChargingStation.
         modifyChargingStationMI.setOnAction(e -> {
             if (Maintenance.stationCheck())
                 return;
@@ -409,6 +419,7 @@ class MenuStation {
             tr.setOnAction((ActionEvent et) -> automaticHandling = tr.isSelected());
         });
 
+        //Implements the All Chargers MenuItem
         allChargersMI.setOnAction(e -> {
             if(Maintenance.stationCheck())
                 return;
@@ -459,6 +470,7 @@ class MenuStation {
             root.setCenter(scroll);
         });
 
+        //Implements the All DisChargers MenuItem.
         allDisChargersMI.setOnAction(e -> {
             if(Maintenance.stationCheck())
                 return;
@@ -506,6 +518,8 @@ class MenuStation {
             scroll.setContent(box);
             root.setCenter(scroll);
         });
+
+        //Implements the All ExchangeHandlers MenuItem.
         allExchangeHandlersMI.setOnAction(e -> {
             if(Maintenance.stationCheck())
                 return;
@@ -553,6 +567,8 @@ class MenuStation {
             scroll.setContent(box);
             root.setCenter(scroll);
         });
+
+        //Implements the All ParkingSlots MenuItem.
         allParkingSlotsMI.setOnAction(e -> {
             if(Maintenance.stationCheck())
                 return;
@@ -600,6 +616,36 @@ class MenuStation {
             scroll.setContent(box);
             root.setCenter(scroll);
         });
+
+        //Implements the New Battery MenuItem.
+        newBatteryMI.setOnAction(e -> {
+            if (Maintenance.stationCheck())
+                return;
+            Maintenance.cleanScreen();
+            EVLibSim.grid.setMaxSize(400, 280);
+            TextField boo;
+            Label foo;
+            foo = new Label("Battery capacity: ");
+            EVLibSim.grid.add(foo, 0, 1);
+            boo = new TextField();
+            EVLibSim.grid.add(boo, 1, 1);
+            textfields.add(boo);
+            foo = new Label("Battery remaining: ");
+            EVLibSim.grid.add(foo, 0, 2);
+            boo = new TextField();
+            EVLibSim.grid.add(boo, 1, 2);
+            textfields.add(boo);
+            foo = new Label("Maximum chargings: ");
+            EVLibSim.grid.add(foo, 0, 3);
+            boo = new TextField();
+            EVLibSim.grid.add(boo, 1, 3);
+            textfields.add(boo);
+            EVLibSim.grid.add(batteryCreationB, 0, 4);
+            batteryCreationB.setDefaultButton(true);
+            EVLibSim.root.setCenter(EVLibSim.grid);
+        });
+
+        //Implements the All Batteries MenuItem.
         allBatteriesMI.setOnAction(e -> {
             if(Maintenance.stationCheck())
                 return;
@@ -637,6 +683,8 @@ class MenuStation {
             scroll.setContent(box);
             root.setCenter(scroll);
         });
+
+        //Implements the charging of batteries that are for battery exchange
         batteriesChargingMI.setOnAction(e -> {
             if(Maintenance.stationCheck())
                 return;
@@ -653,12 +701,19 @@ class MenuStation {
             alert.showAndWait();
         });
 
+        //Buttons
         chargerCreationB.setOnAction(e ->
         {
             Charger ch;
-            ch = new Charger(currentStation, textfields.get(0).getText());
-            currentStation.addCharger(ch);
-            ch.setName(textfields.get(1).getText());
+            textfields.forEach(field -> field.setText(field.getText().replaceAll("[^a-zA-Z]", "")));
+            try {
+                ch = new Charger(currentStation, textfields.get(0).getText());
+                currentStation.addCharger(ch);
+                ch.setName(textfields.get(1).getText());
+            } catch (Exception ex) {
+                Maintenance.refillBlanks();
+                newChargerMI.fire();
+            }
             Maintenance.completionMessage("Charger creation");
             newChargerMI.fire();
         });
@@ -666,6 +721,7 @@ class MenuStation {
         {
             if (Maintenance.fieldCompletionCheck())
                 return;
+            textfields.forEach(field -> field.setText(field.getText().replaceAll("[^a-zA-Z0-9.]", "")));
             if (energies.size() == 0) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
@@ -696,141 +752,106 @@ class MenuStation {
                 alert.showAndWait();
                 return;
             }
-            ChargingStation st;
-            st = new ChargingStation(textfields.get(0).getText());
-            st.setUnitPrice(Double.parseDouble(textfields.get(6).getText()));
-            st.setDisUnitPrice(Double.parseDouble(textfields.get(7).getText()));
-            st.setExchangePrice(Double.parseDouble(textfields.get(8).getText()));
-            st.setInductivePrice(Double.parseDouble(textfields.get(9).getText()));
-            st.setChargingRatioFast(Double.parseDouble(textfields.get(10).getText()));
-            st.setChargingRatioSlow(Double.parseDouble(textfields.get(11).getText()));
-            st.setDisChargingRatio(Double.parseDouble(textfields.get(12).getText()));
-            st.setInductiveChargingRatio(Double.parseDouble(textfields.get(13).getText()));
-            st.setTimeofExchange(Long.parseLong(textfields.get(15).getText()));
-            st.setAutomaticUpdateMode(automaticUpdate);
-            st.setUpdateSpace(Integer.parseInt(textfields.get(14).getText()));
-            st.setAutomaticQueueHandling(automaticHandling);
-            if (textfields.get(1).getText() != null) {
-                int len = Integer.parseInt(textfields.get(1).getText());
-                Charger ch;
-                for (int i = 0; i < len; i++) {
-                    ch = new Charger(st, "fast");
-                    st.addCharger(ch);
+            try {
+                ChargingStation st;
+                st = new ChargingStation(textfields.get(0).getText());
+                st.setUnitPrice(Double.parseDouble(textfields.get(6).getText()));
+                st.setDisUnitPrice(Double.parseDouble(textfields.get(7).getText()));
+                st.setExchangePrice(Double.parseDouble(textfields.get(8).getText()));
+                st.setInductivePrice(Double.parseDouble(textfields.get(9).getText()));
+                st.setChargingRatioFast(Double.parseDouble(textfields.get(10).getText()));
+                st.setChargingRatioSlow(Double.parseDouble(textfields.get(11).getText()));
+                st.setDisChargingRatio(Double.parseDouble(textfields.get(12).getText()));
+                st.setInductiveChargingRatio(Double.parseDouble(textfields.get(13).getText()));
+                st.setTimeofExchange(Long.parseLong(textfields.get(15).getText()));
+                st.setAutomaticUpdateMode(automaticUpdate);
+                st.setUpdateSpace(Integer.parseInt(textfields.get(14).getText()));
+                st.setAutomaticQueueHandling(automaticHandling);
+                if (textfields.get(1).getText() != null) {
+                    int len = Integer.parseInt(textfields.get(1).getText());
+                    for (int i = 0; i < len; i++)
+                        st.addCharger(new Charger(st, "fast"));
                 }
-            }
-            if (textfields.get(2).getText() != null) {
-                int len = Integer.parseInt(textfields.get(2).getText());
-                Charger ch;
-                for (int i = 0; i < len; i++) {
-                    ch = new Charger(st, "slow");
-                    st.addCharger(ch);
+                if (textfields.get(2).getText() != null) {
+                    int len = Integer.parseInt(textfields.get(2).getText());
+                    for (int i = 0; i < len; i++)
+                        st.addCharger(new Charger(st, "slow"));
                 }
-            }
-            if (textfields.get(3).getText() != null) {
-                int len = Integer.parseInt(textfields.get(3).getText());
-                ExchangeHandler exch;
-                for (int i = 0; i < len; i++) {
-                    exch = new ExchangeHandler(st);
-                    st.addExchangeHandler(exch);
+                if (textfields.get(3).getText() != null) {
+                    int len = Integer.parseInt(textfields.get(3).getText());
+                    for (int i = 0; i < len; i++)
+                        st.addExchangeHandler(new ExchangeHandler(st));
                 }
-            }
-            if (textfields.get(4).getText() != null) {
-                int len = Integer.parseInt(textfields.get(4).getText());
-                DisCharger dsch;
-                for (int i = 0; i < len; i++) {
-                    dsch = new DisCharger(st);
-                    st.addDisCharger(dsch);
+                if (textfields.get(4).getText() != null) {
+                    int len = Integer.parseInt(textfields.get(4).getText());
+                    for (int i = 0; i < len; i++)
+                        st.addDisCharger(new DisCharger(st));
                 }
-            }
-            if (textfields.get(5).getText() != null) {
-                int len = Integer.parseInt(textfields.get(5).getText());
-                ParkingSlot ps;
-                for (int i = 0; i < len; i++) {
-                    ps = new ParkingSlot(st);
-                    st.addParkingSlot(ps);
+                if (textfields.get(5).getText() != null) {
+                    int len = Integer.parseInt(textfields.get(5).getText());
+                    for (int i = 0; i < len; i++)
+                        st.addParkingSlot(new ParkingSlot(st));
                 }
-            }
-            EnergySource en;
-            for (String enr : energies) {
-                if (Objects.equals(enr, "Solar")) {
-                    en = new Solar();
-                    st.addEnergySource(en);
-                } else if (Objects.equals(enr, "Geothermal")) {
-                    en = new Geothermal();
-                    st.addEnergySource(en);
-                } else if (Objects.equals(enr, "Wind")) {
-                    en = new Wind();
-                    st.addEnergySource(en);
-                } else if (Objects.equals(enr, "Wave")) {
-                    en = new Wave();
-                    st.addEnergySource(en);
-                } else if (Objects.equals(enr, "Nonrenewable")) {
-                    en = new Nonrenewable();
-                    st.addEnergySource(en);
-                } else if (Objects.equals(enr, "Hydroelectric")) {
-                    en = new Hydroelectric();
-                    st.addEnergySource(en);
+                for (String enr : energies) {
+                    if (Objects.equals(enr, "Solar"))
+                        st.addEnergySource(new Solar());
+                    else if (Objects.equals(enr, "Geothermal"))
+                        st.addEnergySource(new Geothermal());
+                    else if (Objects.equals(enr, "Wind"))
+                        st.addEnergySource(new Wind());
+                    else if (Objects.equals(enr, "Wave"))
+                        st.addEnergySource(new Wave());
+                    else if (Objects.equals(enr, "Nonrenewable"))
+                        st.addEnergySource(new Nonrenewable());
+                    else if (Objects.equals(enr, "Hydroelectric"))
+                        st.addEnergySource(new Hydroelectric());
                 }
+                stations.add(st);
+                cs = new RadioMenuItem(st.getName());
+                group.getToggles().add(cs);
+                s.getItems().add(cs);
+                if (s.getItems().size() == 1)
+                    cs.setSelected(true);
+            } catch (Exception ex) {
+                Maintenance.refillBlanks();
+                newChargingStationMI.fire();
             }
-            stations.add(st);
-            cs = new RadioMenuItem(st.getName());
-            group.getToggles().add(cs);
-            s.getItems().add(cs);
-            if(s.getItems().size() == 1)
-                cs.setSelected(true);
             Maintenance.completionMessage("ChargingStation creation");
             newChargingStationMI.fire();
         });
         modifyStationB.setOnAction(e -> {
             if (Maintenance.fieldCompletionCheck())
                 return;
-            currentStation.setName(textfields.get(0).getText());
-            currentStation.setUnitPrice(Double.parseDouble(textfields.get(1).getText()));
-            currentStation.setDisUnitPrice(Double.parseDouble(textfields.get(2).getText()));
-            currentStation.setExchangePrice(Double.parseDouble(textfields.get(3).getText()));
-            currentStation.setInductivePrice((Double.parseDouble(textfields.get(4).getText())));
-            currentStation.setChargingRatioFast((Double.parseDouble(textfields.get(5).getText())));
-            currentStation.setChargingRatioSlow((Double.parseDouble(textfields.get(6).getText())));
-            currentStation.setDisChargingRatio((Double.parseDouble(textfields.get(7).getText())));
-            currentStation.setInductiveChargingRatio((Double.parseDouble(textfields.get(8).getText())));
-            currentStation.setAutomaticUpdateMode(automaticUpdate);
-            currentStation.setUpdateSpace((Integer.parseInt(textfields.get(9).getText())));
-            currentStation.setTimeofExchange(Long.parseLong(textfields.get(10).getText()));
-            currentStation.setAutomaticQueueHandling(automaticHandling);
-            cs = (RadioMenuItem) group.getSelectedToggle();
-            cs.setText(currentStation.getName());
+            textfields.forEach(field -> field.setText(field.getText().replaceAll("[^a-zA-Z0-9.]", "")));
+            try {
+                currentStation.setName(textfields.get(0).getText());
+                currentStation.setUnitPrice(Double.parseDouble(textfields.get(1).getText()));
+                currentStation.setDisUnitPrice(Double.parseDouble(textfields.get(2).getText()));
+                currentStation.setExchangePrice(Double.parseDouble(textfields.get(3).getText()));
+                currentStation.setInductivePrice((Double.parseDouble(textfields.get(4).getText())));
+                currentStation.setChargingRatioFast((Double.parseDouble(textfields.get(5).getText())));
+                currentStation.setChargingRatioSlow((Double.parseDouble(textfields.get(6).getText())));
+                currentStation.setDisChargingRatio((Double.parseDouble(textfields.get(7).getText())));
+                currentStation.setInductiveChargingRatio((Double.parseDouble(textfields.get(8).getText())));
+                currentStation.setAutomaticUpdateMode(automaticUpdate);
+                currentStation.setUpdateSpace((Integer.parseInt(textfields.get(9).getText())));
+                currentStation.setTimeofExchange(Long.parseLong(textfields.get(10).getText()));
+                currentStation.setAutomaticQueueHandling(automaticHandling);
+                cs = (RadioMenuItem) group.getSelectedToggle();
+                cs.setText(currentStation.getName());
+            } catch (Exception ex) {
+                Maintenance.refillBlanks();
+                modifyChargingStationMI.fire();
+            }
             Maintenance.completionMessage("modification of the ChargingStation");
             modifyChargingStationMI.fire();
         });
-        newBatteryMI.setOnAction(e -> {
-            if (Maintenance.stationCheck())
-                return;
-            Maintenance.cleanScreen();
-            EVLibSim.grid.setMaxSize(400, 280);
-            TextField boo;
-            Label foo;
-            foo = new Label("Battery capacity: ");
-            EVLibSim.grid.add(foo, 0, 1);
-            boo = new TextField();
-            EVLibSim.grid.add(boo, 1, 1);
-            textfields.add(boo);
-            foo = new Label("Battery remaining: ");
-            EVLibSim.grid.add(foo, 0, 2);
-            boo = new TextField();
-            EVLibSim.grid.add(boo, 1, 2);
-            textfields.add(boo);
-            foo = new Label("Maximum chargings: ");
-            EVLibSim.grid.add(foo, 0, 3);
-            boo = new TextField();
-            EVLibSim.grid.add(boo, 1, 3);
-            textfields.add(boo);
-            EVLibSim.grid.add(batteryCreationB, 0, 4);
-            batteryCreationB.setDefaultButton(true);
-            EVLibSim.root.setCenter(EVLibSim.grid);
-        });
+
+
         batteryCreationB.setOnAction(e -> {
             if (Maintenance.fieldCompletionCheck())
                 return;
+            textfields.forEach(field -> field.setText(field.getText().replaceAll("[^0-9.]", "")));
             if (Double.parseDouble(textfields.get(0).getText()) < Double.parseDouble(textfields.get(1).getText())) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
@@ -839,9 +860,14 @@ class MenuStation {
                 alert.showAndWait();
                 return;
             }
-            Battery bat = new Battery(Integer.parseInt(textfields.get(1).getText()), Integer.parseInt(textfields.get(0).getText()));
-            bat.setMaxNumberOfChargings(Integer.parseInt(textfields.get(2).getText()));
-            currentStation.joinBattery(bat);
+            try {
+                Battery bat = new Battery(Integer.parseInt(textfields.get(1).getText()), Integer.parseInt(textfields.get(0).getText()));
+                bat.setMaxNumberOfChargings(Integer.parseInt(textfields.get(2).getText()));
+                currentStation.joinBattery(bat);
+            } catch (Exception ex) {
+                Maintenance.refillBlanks();
+                newBatteryMI.fire();
+            }
             Maintenance.completionMessage("Battery creation");
             newBatteryMI.fire();
         });

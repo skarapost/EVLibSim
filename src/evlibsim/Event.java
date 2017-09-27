@@ -38,14 +38,15 @@ class Event {
     private static final Button exchangeEventCreation = new Button("Creation");
     private static final Button policyCreation1 = new Button("Creation");
     private static final Button policyCreation2 = new Button("Creation");
-    static Button suggest1 = new Button("Suggestions");
-    static Button suggest2 = new Button("Suggestions");
-    static Button suggest3 = new Button("Suggestions");
-    static Button suggest4 = new Button("Suggestions");
+    static final Button suggest1 = new Button("Suggestions");
+    static final Button suggest2 = new Button("Suggestions");
+    static final Button suggest3 = new Button("Suggestions");
+    static final Button suggest4 = new Button("Suggestions");
     private static String kindOfCharging;
 
-    static Menu createEventMenu()
-    {
+    //Builds the Event category in the main MenuBar
+    static Menu createEventMenu() {
+        //Implements the New ChargingEvent MenuItem
         charging.setOnAction(e ->
         {
             if(Maintenance.stationCheck())
@@ -105,6 +106,7 @@ class Event {
             grid.add(boo, 3, 4);
             textfields.add(boo);
             grid.add(chargingEventCreation, 0, 5);
+            //Suggestion button in the New ChargingEvent MenuItem
             suggest1.setOnAction(eu -> {
                 Stage popupwindow = new Stage();
                 popupwindow.initModality(Modality.APPLICATION_MODAL);
@@ -120,7 +122,7 @@ class Event {
                 VBox outside;
                 Label title;
 
-                ArrayList<ChargingStation> tempStations = new ArrayList<ChargingStation>(Arrays.asList(bestEnergy()).subList(0, Math.min(stations.size(), 5)));
+                ArrayList<ChargingStation> tempStations = new ArrayList<>(Arrays.asList(bestEnergy()).subList(0, Math.min(stations.size(), 5)));
                 VBox inside1 = new VBox();
                 inside1.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
                 inside1.setPadding(new Insets(10, 10, 10, 10));
@@ -137,7 +139,7 @@ class Event {
                 outside.getChildren().addAll(inside2, inside1);
                 g.add(outside, 0, 0);
 
-                tempStations = new ArrayList<ChargingStation>(Arrays.asList(bestPrice()).subList(0, Math.min(stations.size(), 5)));
+                tempStations = new ArrayList<>(Arrays.asList(bestPrice()).subList(0, Math.min(stations.size(), 5)));
                 VBox inside3 = new VBox();
                 inside3.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
                 inside3.setPadding(new Insets(10, 10, 10, 10));
@@ -154,7 +156,7 @@ class Event {
                 outside.getChildren().addAll(inside4, inside3);
                 g.add(outside, 1, 0);
 
-                tempStations = new ArrayList<ChargingStation>(Arrays.asList(bestTime("slow")).subList(0, Math.min(stations.size(), 5)));
+                tempStations = new ArrayList<>(Arrays.asList(bestTime("slow")).subList(0, Math.min(stations.size(), 5)));
                 VBox inside5 = new VBox();
                 inside5.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
                 inside5.setPadding(new Insets(10, 10, 10, 10));
@@ -171,7 +173,7 @@ class Event {
                 outside.getChildren().addAll(inside6, inside5);
                 g.add(outside, 2, 0);
 
-                tempStations = new ArrayList<ChargingStation>(Arrays.asList(bestTime("fast")).subList(0, Math.min(stations.size(), 5)));
+                tempStations = new ArrayList<>(Arrays.asList(bestTime("fast")).subList(0, Math.min(stations.size(), 5)));
                 VBox inside7 = new VBox();
                 inside7.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
                 inside7.setPadding(new Insets(10, 10, 10, 10));
@@ -208,6 +210,7 @@ class Event {
                     kindOfCharging = "fast";
             });
         });
+        //Implements the New DisChargingEvent MenuItem
         discharging.setOnAction(e ->
         {
             if(Maintenance.stationCheck())
@@ -248,6 +251,7 @@ class Event {
             grid.add(boo, 3, 3);
             textfields.add(boo);
             grid.add(disChargingEventCreation, 0, 4);
+            //Suggestion button for DisChargingEvent MenuItem
             suggest2.setOnAction(eu -> {
                 Stage popupwindow = new Stage();
                 popupwindow.initModality(Modality.APPLICATION_MODAL);
@@ -263,7 +267,7 @@ class Event {
                 VBox outside;
                 Label title;
 
-                ArrayList<ChargingStation> tempStations = new ArrayList<ChargingStation>(Arrays.asList(bestEnergy()).subList(0, Math.min(stations.size(), 5)));
+                ArrayList<ChargingStation> tempStations = new ArrayList<>(Arrays.asList(bestEnergy()).subList(0, Math.min(stations.size(), 5)));
                 VBox inside1 = new VBox();
                 inside1.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
                 inside1.setPadding(new Insets(10, 10, 10, 10));
@@ -280,7 +284,7 @@ class Event {
                 outside.getChildren().addAll(inside2, inside1);
                 g.add(outside, 0, 0);
 
-                tempStations = new ArrayList<ChargingStation>(Arrays.asList(bestDisPrice()).subList(0, Math.min(stations.size(), 5)));
+                tempStations = new ArrayList<>(Arrays.asList(bestDisPrice()).subList(0, Math.min(stations.size(), 5)));
                 VBox inside3 = new VBox();
                 inside3.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
                 inside3.setPadding(new Insets(10, 10, 10, 10));
@@ -297,7 +301,7 @@ class Event {
                 outside.getChildren().addAll(inside4, inside3);
                 g.add(outside, 1, 0);
 
-                tempStations = new ArrayList<ChargingStation>(Arrays.asList(bestTime("discharging")).subList(0, Math.min(stations.size(), 5)));
+                tempStations = new ArrayList<>(Arrays.asList(bestTime("discharging")).subList(0, Math.min(stations.size(), 5)));
                 VBox inside5 = new VBox();
                 inside5.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
                 inside5.setPadding(new Insets(10, 10, 10, 10));
@@ -326,6 +330,7 @@ class Event {
             disChargingEventCreation.setDefaultButton(true);
             root.setCenter(grid);
         });
+        //Implements the New ChargingEvent(exchange)
         exchange.setOnAction(e ->
         {
             if(Maintenance.stationCheck())
@@ -360,6 +365,7 @@ class Event {
             grid.add(boo, 1, 3);
             textfields.add(boo);
             grid.add(exchangeEventCreation, 0, 4);
+            //Suggestion button for New ChargingEvent(exchange)
             suggest3.setOnAction(eu -> {
                 Stage popupwindow = new Stage();
                 popupwindow.initModality(Modality.APPLICATION_MODAL);
@@ -375,7 +381,7 @@ class Event {
                 VBox outside;
                 Label title;
 
-                ArrayList<ChargingStation> tempStations = new ArrayList<ChargingStation>(Arrays.asList(bestEnergy()).subList(0, Math.min(stations.size(), 5)));
+                ArrayList<ChargingStation> tempStations = new ArrayList<>(Arrays.asList(bestEnergy()).subList(0, Math.min(stations.size(), 5)));
                 VBox inside1 = new VBox();
                 inside1.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
                 inside1.setPadding(new Insets(10, 10, 10, 10));
@@ -392,7 +398,7 @@ class Event {
                 outside.getChildren().addAll(inside2, inside1);
                 g.add(outside, 0, 0);
 
-                tempStations = new ArrayList<ChargingStation>(Arrays.asList(bestPrice()).subList(0, Math.min(stations.size(), 5)));
+                tempStations = new ArrayList<>(Arrays.asList(bestExchangePrice()).subList(0, Math.min(stations.size(), 5)));
                 VBox inside3 = new VBox();
                 inside3.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
                 inside3.setPadding(new Insets(10, 10, 10, 10));
@@ -409,7 +415,7 @@ class Event {
                 outside.getChildren().addAll(inside4, inside3);
                 g.add(outside, 1, 0);
 
-                tempStations = new ArrayList<ChargingStation>(Arrays.asList(bestTime("exchange")).subList(0, Math.min(stations.size(), 5)));
+                tempStations = new ArrayList<>(Arrays.asList(bestTime("exchange")).subList(0, Math.min(stations.size(), 5)));
                 VBox inside5 = new VBox();
                 inside5.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
                 inside5.setPadding(new Insets(10, 10, 10, 10));
@@ -438,6 +444,7 @@ class Event {
             exchangeEventCreation.setDefaultButton(true);
             root.setCenter(grid);
         });
+        //Implements the New ParkingEvent MenuItem
         parking.setOnAction(e ->
         {
             if(Maintenance.stationCheck())
@@ -477,6 +484,7 @@ class Event {
             grid.add(boo, 3, 3);
             textfields.add(boo);
             grid.add(parkingEventCreation, 0, 4);
+            //Suggestion button for New ParkingEvent MenuItem
             suggest4.setOnAction(eu -> {
                 Stage popupwindow = new Stage();
                 popupwindow.initModality(Modality.APPLICATION_MODAL);
@@ -492,7 +500,7 @@ class Event {
                 VBox outside;
                 Label title;
 
-                ArrayList<ChargingStation> tempStations = new ArrayList<ChargingStation>(Arrays.asList(bestEnergy()).subList(0, Math.min(stations.size(), 5)));
+                ArrayList<ChargingStation> tempStations = new ArrayList<>(Arrays.asList(bestEnergy()).subList(0, Math.min(stations.size(), 5)));
                 VBox inside1 = new VBox();
                 inside1.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
                 inside1.setPadding(new Insets(10, 10, 10, 10));
@@ -509,7 +517,7 @@ class Event {
                 outside.getChildren().addAll(inside2, inside1);
                 g.add(outside, 0, 0);
 
-                tempStations = new ArrayList<ChargingStation>(Arrays.asList(bestPrice()).subList(0, Math.min(stations.size(), 5)));
+                tempStations = new ArrayList<>(Arrays.asList(bestPrice()).subList(0, Math.min(stations.size(), 5)));
                 VBox inside3 = new VBox();
                 inside3.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
                 inside3.setPadding(new Insets(10, 10, 10, 10));
@@ -538,6 +546,7 @@ class Event {
             parkingEventCreation.setDefaultButton(true);
             root.setCenter(grid);
         });
+        //Implements the New PricingPolicy MenuItem
         policy.setOnAction(e -> {
             if (Maintenance.stationCheck())
                 return;
@@ -591,7 +600,7 @@ class Event {
         chargingEventCreation.setOnAction(e -> {
             if (Maintenance.fieldCompletionCheck())
                 return;
-
+            textfields.forEach(field -> field.setText(field.getText().replaceAll("[^a-zA-Z0-9.]", "")));
             if (Double.parseDouble(textfields.get(2).getText()) < 0 ||
                     Double.parseDouble(textfields.get(3).getText()) < 0 ||
                     Double.parseDouble(textfields.get(4).getText()) < 0 ||
@@ -628,28 +637,31 @@ class Event {
                 alert.showAndWait();
                 return;
             }
-            ChargingEvent ch;
-            Driver d = new Driver(textfields.get(0).getText());
-            Battery b = new Battery(Double.parseDouble(textfields.get(3).getText()), Double.parseDouble(textfields.get(2).getText()));
-            ElectricVehicle el = new ElectricVehicle(textfields.get(1).getText());
-            el.setBattery(b);
-            el.setDriver(d);
-            if (!Objects.equals(textfields.get(4).getText(), "0"))
-                ch = new ChargingEvent(currentStation, el, Double.parseDouble(textfields.get(4).getText()), kindOfCharging);
-            else
-                ch = new ChargingEvent(currentStation, el, kindOfCharging, Double.parseDouble(textfields.get(6).getText()));
-            ch.setWaitingTime(Long.parseLong(textfields.get(5).getText()));
-            ch.preProcessing();
-            if(ch.getCondition().equals("ready"))
-                ch.execution();
-            else if(ch.getCondition().equals("wait")){
-                Maintenance.queueInsertion();
-                return;
-            }
-            else
-            {
-                Maintenance.noExecution();
-                return;
+            try {
+                ChargingEvent ch;
+                Driver d = new Driver(textfields.get(0).getText());
+                Battery b = new Battery(Double.parseDouble(textfields.get(3).getText()), Double.parseDouble(textfields.get(2).getText()));
+                ElectricVehicle el = new ElectricVehicle(textfields.get(1).getText());
+                el.setBattery(b);
+                el.setDriver(d);
+                if (!Objects.equals(textfields.get(4).getText(), "0"))
+                    ch = new ChargingEvent(currentStation, el, Double.parseDouble(textfields.get(4).getText()), kindOfCharging);
+                else
+                    ch = new ChargingEvent(currentStation, el, kindOfCharging, Double.parseDouble(textfields.get(6).getText()));
+                ch.setWaitingTime(Long.parseLong(textfields.get(5).getText()));
+                ch.preProcessing();
+                if (ch.getCondition().equals("ready"))
+                    ch.execution();
+                else if (ch.getCondition().equals("wait")) {
+                    Maintenance.queueInsertion();
+                    return;
+                } else {
+                    Maintenance.noExecution();
+                    return;
+                }
+            } catch (Exception ex) {
+                Maintenance.refillBlanks();
+                charging.fire();
             }
             Maintenance.completionMessage("ChargingEvent creation");
             charging.fire();
@@ -658,6 +670,7 @@ class Event {
         {
             if (Maintenance.fieldCompletionCheck())
                 return;
+            textfields.forEach(field -> field.setText(field.getText().replaceAll("[^a-zA-Z0-9.]", "")));
             if (Double.parseDouble(textfields.get(2).getText()) < 0 ||
                     Double.parseDouble(textfields.get(3).getText()) < 0 ||
                     Double.parseDouble(textfields.get(4).getText()) < 0 ||
@@ -685,28 +698,31 @@ class Event {
                 alert.showAndWait();
                 return;
             }
-            DisChargingEvent dsch;
-            Driver d = new Driver(textfields.get(0).getText());
-            Battery b = new Battery(Double.parseDouble(textfields.get(3).getText()), Double.parseDouble(textfields.get(2).getText()));
-            ElectricVehicle el = new ElectricVehicle(textfields.get(1).getText());
-            el.setBattery(b);
-            el.setDriver(d);
-            if (!Objects.equals(textfields.get(4).getText(), "0")) {
-                dsch = new DisChargingEvent(currentStation, el, Double.parseDouble(textfields.get(4).getText()));
-                dsch.setWaitingTime(Long.parseLong(textfields.get(5).getText()));
-                dsch.preProcessing();
-                if(dsch.getCondition().equals("ready"))
+            try {
+                DisChargingEvent dsch;
+                Driver d = new Driver(textfields.get(0).getText());
+                Battery b = new Battery(Double.parseDouble(textfields.get(3).getText()), Double.parseDouble(textfields.get(2).getText()));
+                ElectricVehicle el = new ElectricVehicle(textfields.get(1).getText());
+                el.setBattery(b);
+                el.setDriver(d);
+                if (!Objects.equals(textfields.get(4).getText(), "0")) {
+                    dsch = new DisChargingEvent(currentStation, el, Double.parseDouble(textfields.get(4).getText()));
+                    dsch.setWaitingTime(Long.parseLong(textfields.get(5).getText()));
+                    dsch.preProcessing();
+                    if (dsch.getCondition().equals("ready"))
+                        dsch.execution();
+                    else if (dsch.getCondition().equals("wait")) {
+                        Maintenance.queueInsertion();
+                        return;
+                    } else {
+                        Maintenance.noExecution();
+                        return;
+                    }
                     dsch.execution();
-                else if(dsch.getCondition().equals("wait")){
-                    Maintenance.queueInsertion();
-                    return;
                 }
-                else
-                {
-                    Maintenance.noExecution();
-                    return;
-                }
-                dsch.execution();
+            } catch (Exception ex) {
+                Maintenance.refillBlanks();
+                discharging.fire();
             }
             Maintenance.completionMessage("DisChargingEvent creation");
             discharging.fire();
@@ -714,6 +730,7 @@ class Event {
         exchangeEventCreation.setOnAction(e -> {
             if (Maintenance.fieldCompletionCheck())
                 return;
+            textfields.forEach(field -> field.setText(field.getText().replaceAll("[^a-zA-Z0-9.]", "")));
             if (Double.parseDouble(textfields.get(2).getText()) < 0 ||
                     Double.parseDouble(textfields.get(3).getText()) < 0 ||
                     Double.parseDouble(textfields.get(4).getText()) < 0) {
@@ -732,24 +749,28 @@ class Event {
                 alert.showAndWait();
                 return;
             }
-            ChargingEvent ch;
-            Driver d = new Driver(textfields.get(0).getText());
-            Battery b = new Battery(Double.parseDouble(textfields.get(3).getText()), Double.parseDouble(textfields.get(2).getText()));
-            ElectricVehicle el = new ElectricVehicle(textfields.get(1).getText());
-            el.setBattery(b);
-            el.setDriver(d);
-            ch = new ChargingEvent(currentStation, el);
-            ch.setWaitingTime(Long.parseLong(textfields.get(4).getText()));
-            ch.preProcessing();
-            if(ch.getCondition().equals("ready"))
-                ch.execution();
-            else if(ch.getCondition().equals("wait")){
-                Maintenance.queueInsertion();
-                return;
-            }
-            else {
-                Maintenance.noExecution();
-                return;
+            try {
+                ChargingEvent ch;
+                Driver d = new Driver(textfields.get(0).getText());
+                Battery b = new Battery(Double.parseDouble(textfields.get(3).getText()), Double.parseDouble(textfields.get(2).getText()));
+                ElectricVehicle el = new ElectricVehicle(textfields.get(1).getText());
+                el.setBattery(b);
+                el.setDriver(d);
+                ch = new ChargingEvent(currentStation, el);
+                ch.setWaitingTime(Long.parseLong(textfields.get(4).getText()));
+                ch.preProcessing();
+                if (ch.getCondition().equals("ready"))
+                    ch.execution();
+                else if (ch.getCondition().equals("wait")) {
+                    Maintenance.queueInsertion();
+                    return;
+                } else {
+                    Maintenance.noExecution();
+                    return;
+                }
+            } catch (Exception ex) {
+                Maintenance.refillBlanks();
+                exchange.fire();
             }
             Maintenance.completionMessage("ChargingEvent creation");
             exchange.fire();
@@ -757,6 +778,7 @@ class Event {
         parkingEventCreation.setOnAction(e -> {
             if (Maintenance.fieldCompletionCheck())
                 return;
+            textfields.forEach(field -> field.setText(field.getText().replaceAll("[^a-zA-Z0-9.]", "")));
             if (Double.parseDouble(textfields.get(2).getText()) < 0 ||
                     Double.parseDouble(textfields.get(3).getText()) < 0 ||
                     Double.parseDouble(textfields.get(4).getText()) < 0 ||
@@ -785,39 +807,42 @@ class Event {
                 alert.showAndWait();
                 return;
             }
-            ParkingEvent ch;
-            Driver d = new Driver(textfields.get(0).getText());
-            Battery b = new Battery(Double.parseDouble(textfields.get(3).getText()), Double.parseDouble(textfields.get(2).getText()));
-            ElectricVehicle el = new ElectricVehicle(textfields.get(1).getText());
-            el.setBattery(b);
-            el.setDriver(d);
-            if (!Objects.equals(textfields.get(4).getText(), "0")) {
-                ch = new ParkingEvent(currentStation, el, Long.parseLong(textfields.get(5).getText()), Double.parseDouble(textfields.get(4).getText()));
-                ch.preProcessing();
-                if(ch.getCondition().equals("ready"))
-                    ch.execution();
-                else {
-                    Maintenance.noExecution();
+            try {
+                ParkingEvent ch;
+                Driver d = new Driver(textfields.get(0).getText());
+                Battery b = new Battery(Double.parseDouble(textfields.get(3).getText()), Double.parseDouble(textfields.get(2).getText()));
+                ElectricVehicle el = new ElectricVehicle(textfields.get(1).getText());
+                el.setBattery(b);
+                el.setDriver(d);
+                if (!Objects.equals(textfields.get(4).getText(), "0")) {
+                    ch = new ParkingEvent(currentStation, el, Long.parseLong(textfields.get(5).getText()), Double.parseDouble(textfields.get(4).getText()));
+                    ch.preProcessing();
+                    if (ch.getCondition().equals("ready"))
+                        ch.execution();
+                    else {
+                        Maintenance.noExecution();
+                        return;
+                    }
+                } else if (!Objects.equals(textfields.get(5).getText(), "0")) {
+                    ch = new ParkingEvent(currentStation, el, Long.parseLong(textfields.get(5).getText()));
+                    ch.preProcessing();
+                    if (ch.getCondition().equals("ready"))
+                        ch.execution();
+                    else {
+                        Maintenance.noExecution();
+                        return;
+                    }
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Please select at least a positive parking time.");
+                    alert.showAndWait();
                     return;
                 }
-            } else if (!Objects.equals(textfields.get(5).getText(), "0")) {
-                ch = new ParkingEvent(currentStation, el, Long.parseLong(textfields.get(5).getText()));
-                ch.preProcessing();
-                if(ch.getCondition().equals("ready"))
-                    ch.execution();
-                else {
-                    Maintenance.noExecution();
-                    return;
-                }
-            }
-            else
-            {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText(null);
-                alert.setContentText("Please select at least a positive parking time.");
-                alert.showAndWait();
-                return;
+            } catch (Exception ex) {
+                Maintenance.refillBlanks();
+                parking.fire();
             }
             Maintenance.completionMessage("ParkingEvent creation");
             parking.fire();
@@ -848,8 +873,7 @@ class Event {
             text = textfields.get(1).getText().replaceAll("[^0-9,]+","");
             textfields.get(1).setText(text);
             String[] prices = textfields.get(1).getText().split(",");
-            if(spaces.length != prices.length)
-            {
+            if(spaces.length != prices.length) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setHeaderText(null);
@@ -859,7 +883,7 @@ class Event {
             }
             long[] s = new long[spaces.length];
             double[] p = new double[prices.length];
-            for(int i=0; i<spaces.length; i++) {
+            for(int i = 0; i<spaces.length; i++) {
                 s[i] = Long.parseLong(spaces[i]);
                 p[i] = Double.parseDouble(prices[i]);
             }
@@ -871,13 +895,13 @@ class Event {
         return event;
     }
 
-    private static ChargingStation[] bestEnergy()
-    {
+    //Returns the ChargingStation objects in a descending order based on their energy inventory.
+    private static ChargingStation[] bestEnergy() {
         ChargingStation[] st = new ChargingStation[stations.size()];
         stations.forEach(station -> st[stations.indexOf(station)] = station);
         ChargingStation temp;
-        for(int i=0; i < st.length; i++){
-            for(int j=1; j < (st.length - i); j++){
+        for(int i = 0; i < st.length; i++){
+            for(int j = 1; j < (st.length - i); j++){
                 if(st[j-1].getTotalEnergy() < st[j].getTotalEnergy()){
                     temp = st[j-1];
                     st[j-1] = st[j];
@@ -888,13 +912,13 @@ class Event {
         return st;
     }
 
-    private static ChargingStation[] bestPrice()
-    {
+    //Returns the ChargingStation objects in an ascending order based on their price per energy unit for the charging function.
+    private static ChargingStation[] bestPrice() {
         ChargingStation[] st = new ChargingStation[stations.size()];
         stations.forEach(station -> st[stations.indexOf(station)] = station);
         ChargingStation temp;
-        for(int i=0; i < st.length; i++){
-            for(int j=1; j < (st.length - i); j++){
+        for(int i = 0; i < st.length; i++){
+            for(int j = 1; j < (st.length - i); j++){
                 if(st[j-1].getCurrentPrice() > st[j].getCurrentPrice()){
                     temp = st[j-1];
                     st[j-1] = st[j];
@@ -905,13 +929,30 @@ class Event {
         return st;
     }
 
-    private static ChargingStation[] bestDisPrice()
-    {
+    //Returns the ChargingStation objects in an ascending order based on their price per swapping for the exchange function.
+    private static ChargingStation[] bestExchangePrice() {
         ChargingStation[] st = new ChargingStation[stations.size()];
         stations.forEach(station -> st[stations.indexOf(station)] = station);
         ChargingStation temp;
-        for(int i=0; i < st.length; i++){
-            for(int j=1; j < (st.length - i); j++){
+        for (int i = 0; i < st.length; i++) {
+            for (int j = 1; j < (st.length - i); j++) {
+                if (st[j - 1].getExchangePrice() > st[j].getExchangePrice()) {
+                    temp = st[j - 1];
+                    st[j - 1] = st[j];
+                    st[j] = temp;
+                }
+            }
+        }
+        return st;
+    }
+
+    //Returns the ChargingStation objects in an ascending order based on their price per energy unit for the discharging function.
+    private static ChargingStation[] bestDisPrice() {
+        ChargingStation[] st = new ChargingStation[stations.size()];
+        stations.forEach(station -> st[stations.indexOf(station)] = station);
+        ChargingStation temp;
+        for(int i = 0; i < st.length; i++){
+            for(int j = 1; j < (st.length - i); j++){
                 if(st[j-1].getDisUnitPrice() > st[j].getDisUnitPrice()){
                     temp = st[j-1];
                     st[j-1] = st[j];
@@ -922,13 +963,30 @@ class Event {
         return st;
     }
 
-    private static ChargingStation[] bestTime(String kind)
-    {
+    //Returns the ChargingStation objects in an ascending order based on their price per energy unit for the inductive charging.
+    private static ChargingStation[] bestInductivePrice() {
         ChargingStation[] st = new ChargingStation[stations.size()];
         stations.forEach(station -> st[stations.indexOf(station)] = station);
         ChargingStation temp;
-        for(int i=0; i < st.length; i++){
-            for(int j=1; j < (st.length - i); j++){
+        for (int i = 0; i < st.length; i++) {
+            for (int j = 1; j < (st.length - i); j++) {
+                if (st[j - 1].getInductivePrice() > st[j].getInductivePrice()) {
+                    temp = st[j - 1];
+                    st[j - 1] = st[j];
+                    st[j] = temp;
+                }
+            }
+        }
+        return st;
+    }
+
+    //Returns the ChargingStation objects in an ascending order based on their waiting time for the given function(slow, fast, exchange, park).
+    private static ChargingStation[] bestTime(String kind) {
+        ChargingStation[] st = new ChargingStation[stations.size()];
+        stations.forEach(station -> st[stations.indexOf(station)] = station);
+        ChargingStation temp;
+        for(int i = 0; i < st.length; i++){
+            for(int j = 1; j < (st.length - i); j++){
                 if(st[j-1].getWaitingTime(kind) > st[j].getWaitingTime(kind)){
                     temp = st[j-1];
                     st[j-1] = st[j];
