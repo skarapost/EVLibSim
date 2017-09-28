@@ -62,11 +62,10 @@ public class EVLibSim extends Application {
     private static final MenuItem saveAs = new MenuItem("Save as...");
     private static final MenuItem exitMenuItem = new MenuItem("Exit");
     private static final MenuItem about = new MenuItem("About");
-    static final Label stationName = new Label();
-    private static final Label energyAmount = new Label();
     private static final Label unitPrice = new Label();
     private static final Label disUnitPrice = new Label();
     private static final Label exchangePrice = new Label();
+    private static final Label inductivePrice = new Label();
     private static final Label waitTimeSlow = new Label();
     private static final Label waitTimeFast = new Label();
     private static final Label waitTimeDis = new Label();
@@ -143,15 +142,14 @@ public class EVLibSim extends Application {
         newEvent.setPrefSize(230, 60);
         newEnergy.setPrefSize(230, 60);
 
-        stationGrid.add(stationName, 0, 0);
-        stationGrid.add(energyAmount, 1, 0);
-        stationGrid.add(waitTimeSlow, 2, 0);
-        stationGrid.add(waitTimeFast, 3, 0);
-        stationGrid.add(waitTimeDis, 4, 0);
-        stationGrid.add(waitTimeEx, 5, 0);
-        stationGrid.add(unitPrice, 6, 0);
-        stationGrid.add(disUnitPrice, 7, 0);
-        stationGrid.add(exchangePrice, 8, 0);
+        stationGrid.add(waitTimeSlow, 0, 0);
+        stationGrid.add(waitTimeFast, 1, 0);
+        stationGrid.add(waitTimeDis, 2, 0);
+        stationGrid.add(waitTimeEx, 3, 0);
+        stationGrid.add(unitPrice, 4, 0);
+        stationGrid.add(disUnitPrice, 5, 0);
+        stationGrid.add(exchangePrice, 6, 0);
+        stationGrid.add(inductivePrice, 7, 0);
 
         root.setBottom(stationGrid);
 
@@ -176,8 +174,6 @@ public class EVLibSim extends Application {
                 for (ChargingStation cs : stations)
                     if (Objects.equals(cs.getName(), name)) {
                         currentStation = cs;
-                        stationName.setText("Name: " + currentStation.getName());
-                        energyAmount.setText("Energy: " + currentStation.getTotalEnergy());
                         waitTimeSlow.setText("Wait(slow): " + currentStation.getWaitingTime("slow"));
                         waitTimeFast.setText("Wait(fast): " + currentStation.getWaitingTime("fast"));
                         waitTimeDis.setText("Wait(discharging): " + currentStation.getWaitingTime("discharging"));
@@ -185,6 +181,8 @@ public class EVLibSim extends Application {
                         unitPrice.setText("Price(charging): " + currentStation.getCurrentPrice());
                         disUnitPrice.setText("Price(discharging): " + currentStation.getDisUnitPrice());
                         exchangePrice.setText("Price(exchange): " + currentStation.getExchangePrice());
+                        inductivePrice.setText("Price(insuctive): " + currentStation.getInductivePrice());
+                        startScreen.fire();
                     }
             }
         });
@@ -305,10 +303,8 @@ public class EVLibSim extends Application {
 
         });
 
-        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(5), ev -> {
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), ev -> {
             if(currentStation == null) {
-                stationName.setText("Name: -");
-                energyAmount.setText("Energy: -");
                 waitTimeSlow.setText("Wait(slow): -");
                 waitTimeFast.setText("Wait(fast): -");
                 waitTimeDis.setText("Wait(discharging): -");
@@ -316,11 +312,10 @@ public class EVLibSim extends Application {
                 unitPrice.setText("Price(charging): -");
                 disUnitPrice.setText("Price(discharging): -");
                 exchangePrice.setText("Price(exchange): -");
+                inductivePrice.setText("Price(inductive): -");
             }
             else
             {
-                stationName.setText("Name: " + currentStation.getName());
-                energyAmount.setText("Energy: " + currentStation.getTotalEnergy());
                 waitTimeSlow.setText("Wait(slow): " + currentStation.getWaitingTime("slow"));
                 waitTimeFast.setText("Wait(fast): " + currentStation.getWaitingTime("fast"));
                 waitTimeDis.setText("Wait(discharging): " + currentStation.getWaitingTime("discharging"));
@@ -328,6 +323,7 @@ public class EVLibSim extends Application {
                 unitPrice.setText("Price(charging): " + currentStation.getCurrentPrice());
                 disUnitPrice.setText("Price(discharging): " + currentStation.getDisUnitPrice());
                 exchangePrice.setText("Price(exchange): " + currentStation.getExchangePrice());
+                inductivePrice.setText("Price(inductive): " + currentStation.getInductivePrice());
             }
         }));
 

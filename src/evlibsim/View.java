@@ -19,7 +19,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-import static evlibsim.EVLibSim.*;
+import static evlibsim.EVLibSim.currentStation;
+import static evlibsim.EVLibSim.root;
 
 class View {
 
@@ -57,7 +58,7 @@ class View {
                 z.setSpacing(15);
                 z.setAlignment(Pos.TOP_LEFT);
                 z.setPadding(new Insets(5, 5, 5, 5));
-                foo = new Label("Charging");
+                foo = new Label("FastCharging");
                 z.getChildren().add(foo);
                 foo = new Label("Position: " + i);
                 z.getChildren().add(foo);
@@ -102,7 +103,7 @@ class View {
                 z.setSpacing(15);
                 z.setAlignment(Pos.TOP_LEFT);
                 z.setPadding(new Insets(5, 5, 5, 5));
-                foo = new Label("DisCharging");
+                foo = new Label("SlowCharging");
                 z.getChildren().add(foo);
                 foo = new Label("Position: " + i);
                 z.getChildren().add(foo);
@@ -147,7 +148,7 @@ class View {
                 z.setSpacing(15);
                 z.setAlignment(Pos.TOP_LEFT);
                 z.setPadding(new Insets(5, 5, 5, 5));
-                foo = new Label("Exchange");
+                foo = new Label("DisCharging");
                 z.getChildren().add(foo);
                 foo = new Label("Position: " + i);
                 z.getChildren().add(foo);
@@ -190,7 +191,7 @@ class View {
                 z.setSpacing(15);
                 z.setAlignment(Pos.TOP_LEFT);
                 z.setPadding(new Insets(5, 5, 5, 5));
-                foo = new Label("Parking");
+                foo = new Label("Exchange");
                 z.getChildren().add(foo);
                 foo = new Label("Position: " + i);
                 z.getChildren().add(foo);
@@ -238,7 +239,7 @@ class View {
             VBox box = new VBox();
             box.setPadding(new Insets(25));
             box.setSpacing(25);
-            box.getChildren().addAll(new Label(stationName.getText()),
+            box.getChildren().addAll(new Label(currentStation.getName()),
                     new Label("Total Chargers: " + currentStation.getChargers().length),
                     new Label("Total DisChargers: " + currentStation.getDisChargers().length),
                     new Label("Total ExchangeHandlers: " + currentStation.getExchangeHandlers().length),

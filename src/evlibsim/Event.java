@@ -164,7 +164,7 @@ class Event {
                 tempStations.forEach(temp -> inside5.getChildren().add(new Label(temp.getName() + ": " + temp.getWaitingTime("slow"))));
                 VBox inside6 = new VBox();
                 inside6.setMaxSize(150, 30);
-                title = new Label("WaitTime(Slow)");
+                title = new Label("Wait(Slow)");
                 inside6.getChildren().add(title);
                 inside6.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 5 5 0 0; -fx-background-radius: 5 5 0 0; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
                 inside6.setPadding(new Insets(10, 10, 10, 10));
@@ -181,7 +181,7 @@ class Event {
                 tempStations.forEach(temp -> inside7.getChildren().add(new Label(temp.getName() + ": " + temp.getWaitingTime("fast"))));
                 VBox inside8 = new VBox();
                 inside8.setMaxSize(150, 30);
-                title = new Label("WaitTime(Fast)");
+                title = new Label("Wait(Fast)");
                 inside8.getChildren().add(title);
                 inside8.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 5 5 0 0; -fx-background-radius: 5 5 0 0; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
                 inside8.setPadding(new Insets(10, 10, 10, 10));
@@ -309,7 +309,7 @@ class Event {
                 tempStations.forEach(temp -> inside5.getChildren().add(new Label(temp.getName() + ": " + temp.getWaitingTime("discharging"))));
                 VBox inside6 = new VBox();
                 inside6.setMaxSize(150, 30);
-                title = new Label("WaitTime");
+                title = new Label("Wait");
                 inside6.getChildren().add(title);
                 inside6.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 5 5 0 0; -fx-background-radius: 5 5 0 0; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
                 inside6.setPadding(new Insets(10, 10, 10, 10));
@@ -381,15 +381,15 @@ class Event {
                 VBox outside;
                 Label title;
 
-                ArrayList<ChargingStation> tempStations = new ArrayList<>(Arrays.asList(bestEnergy()).subList(0, Math.min(stations.size(), 5)));
+                ArrayList<ChargingStation> tempStations = new ArrayList<>(Arrays.asList(bestBatteries()).subList(0, Math.min(stations.size(), 5)));
                 VBox inside1 = new VBox();
                 inside1.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
                 inside1.setPadding(new Insets(10, 10, 10, 10));
                 inside1.setSpacing(20);
-                tempStations.forEach(temp -> inside1.getChildren().add(new Label(temp.getName() + ": " + temp.getTotalEnergy())));
+                tempStations.forEach(temp -> inside1.getChildren().add(new Label(temp.getName() + ": " + temp.getBatteries().size())));
                 VBox inside2 = new VBox();
                 inside2.setMaxSize(80, 30);
-                title = new Label("Energy");
+                title = new Label("BatInventory");
                 inside2.getChildren().add(title);
                 inside2.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 5 5 0 0; -fx-background-radius: 5 5 0 0; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
                 inside2.setPadding(new Insets(10, 10, 10, 10));
@@ -423,7 +423,7 @@ class Event {
                 tempStations.forEach(temp -> inside5.getChildren().add(new Label(temp.getName() + ": " + temp.getWaitingTime("exchange"))));
                 VBox inside6 = new VBox();
                 inside6.setMaxSize(150, 30);
-                title = new Label("WaitTime");
+                title = new Label("Wait");
                 inside6.getChildren().add(title);
                 inside6.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 5 5 0 0; -fx-background-radius: 5 5 0 0; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
                 inside6.setPadding(new Insets(10, 10, 10, 10));
@@ -971,6 +971,22 @@ class Event {
         for (int i = 0; i < st.length; i++) {
             for (int j = 1; j < (st.length - i); j++) {
                 if (st[j - 1].getInductivePrice() > st[j].getInductivePrice()) {
+                    temp = st[j - 1];
+                    st[j - 1] = st[j];
+                    st[j] = temp;
+                }
+            }
+        }
+        return st;
+    }
+
+    private static ChargingStation[] bestBatteries() {
+        ChargingStation[] st = new ChargingStation[stations.size()];
+        stations.forEach(station -> st[stations.indexOf(station)] = station);
+        ChargingStation temp;
+        for (int i = 0; i < st.length; i++) {
+            for (int j = 1; j < (st.length - i); j++) {
+                if (st[j - 1].getBatteries().size() < st[j].getBatteries().size()) {
                     temp = st[j - 1];
                     st[j - 1] = st[j];
                     st[j] = temp;
