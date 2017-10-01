@@ -11,13 +11,13 @@ import static evlibsim.EVLibSim.*;
 class Energy {
 
     private static final Menu energy = new Menu("Energy");
-    private static final MenuItem updateStorage = new MenuItem("Update Storage");
-    static final MenuItem newEnergyPackages = new MenuItem("New amounts");
-    private static final MenuItem sortEnergies = new MenuItem("Sort Energies");
+    static final MenuItem newEnergyPackages = new MenuItem("Add energy");
+    static final MenuItem newEnergySource = new MenuItem("New energy source");
+    static final MenuItem deleteEnergySource = new MenuItem("Remove energy source");
     private static final Button addEnergies = new Button("Add");
     private static final Button sort = new Button("Sort");
-    static final MenuItem newEnergySource = new MenuItem("New EnergySource");
-    static final MenuItem deleteEnergySource = new MenuItem("Remove EnergySource");
+    private static final MenuItem updateStorage = new MenuItem("Update storage");
+    private static final MenuItem sortEnergies = new MenuItem("Sort energies");
 
     //Builds the Energy category in the main MenuBar.
     static Menu createEnergyMenu() {

@@ -20,7 +20,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -40,7 +39,6 @@ public class EVLibSim extends Application {
 
     static final BorderPane root = new BorderPane();
     static final GridPane grid = new GridPane();
-    static final ScrollPane scroll = new ScrollPane();
     private static final GridPane stationGrid = new GridPane();
     static final ArrayList<TextField> textfields = new ArrayList<>();
     static final ArrayList<ChargingStation> stations = new ArrayList<>();
@@ -70,15 +68,14 @@ public class EVLibSim extends Application {
     private static final Label waitTimeFast = new Label();
     private static final Label waitTimeDis = new Label();
     private static final Label waitTimeEx = new Label();
-    private static final VBox tBox = new VBox();
     private static final TextArea ta = new TextArea();
-    private static final Button bt1 = new Button("New ChargingEvent");
-    private static final Button bt2 = new Button("New DisChargingEvent");
-    private static final Button bt3 = new Button("New ExchangeEvent");
-    private static final Button bt4 = new Button("New ParkingEvent");
-    private static final Button bt5 = new Button("New Amounts");
-    private static final Button bt6 = new Button("New EnergySource");
-    private static final Button bt7 = new Button("Delete EnergySource");
+    private static final Button bt1 = new Button("New charging");
+    private static final Button bt2 = new Button("New discharging");
+    private static final Button bt3 = new Button("New battery exchange");
+    private static final Button bt4 = new Button("New parking");
+    private static final Button bt5 = new Button("Add energy");
+    private static final Button bt6 = new Button("Add energy source");
+    private static final Button bt7 = new Button("Delete energy source");
     private File f = null;
 
     public static void main(String[] args) {
@@ -95,18 +92,13 @@ public class EVLibSim extends Application {
 
         Console console = new Console();
         ta.setEditable(false);
-        ta.setMaxSize(300, 200);
+        ta.setMaxHeight(50);
         PrintStream ps = new PrintStream(console, true);
         System.setOut(ps);
         System.setErr(ps);
 
-        BorderPane.setAlignment(tBox, Pos.CENTER_RIGHT);
-        tBox.getChildren().addAll(Overview.createOverviewMenu(), History.createSearchMenu(), ta);
-        tBox.setSpacing(50);
-        tBox.setAlignment(Pos.CENTER_RIGHT);
-
         root.setTop(menuBar);
-        root.setRight(tBox);
+        root.setRight(ToolBox.createToolBar());
 
         exitMenuItem.setOnAction(e -> {
             Platform.exit();
@@ -151,7 +143,7 @@ public class EVLibSim extends Application {
         stationGrid.add(exchangePrice, 6, 0);
         stationGrid.add(inductivePrice, 7, 0);
 
-        root.setBottom(stationGrid);
+        root.setBottom(ta);
 
         startScreen.setOnAction((ActionEvent e) -> {
             Maintenance.cleanScreen();
@@ -352,7 +344,7 @@ public class EVLibSim extends Application {
         DisChargingEvent.dischargingLog.clear();
         ChargingEvent.exchangeLog.clear();
         ParkingEvent.parkLog.clear();
-        //Prophets of Rage - living on 110
+        javafx.scene.text.Font.getFamilies();
         try {
             while ((line = in.readLine()) != null) {
                 tokens = line.split(",");

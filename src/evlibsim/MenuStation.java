@@ -20,25 +20,26 @@ import static evlibsim.EVLibSim.*;
 class MenuStation {
     
     private static final Menu stationM = new Menu("Station");
-    static final MenuItem newChargingStationMI = new MenuItem("New Station");
+    static final MenuItem newChargingStationMI = new MenuItem("New station");
     private static final Menu chargersM = new Menu("Charger");
-    private static final MenuItem newChargerMI = new MenuItem("New Charger");
-    private static final MenuItem allChargersMI = new MenuItem("All Chargers");
+    static final ScrollPane scroll = new ScrollPane();
+    private static final MenuItem newChargerMI = new MenuItem("New charger");
     private static final Menu disChargersM = new Menu("DisCharger");
-    private static final MenuItem newDisChargerMI = new MenuItem("New DisCharger");
-    private static final MenuItem allDisChargersMI = new MenuItem("All DisChargers");
-    private static final Menu exchangeHandlersM =new Menu("ExchangeHandler");
-    private static final MenuItem newExchangeHandlerMI = new MenuItem("New ExchangeHandler");
-    private static final MenuItem allExchangeHandlersMI = new MenuItem("All ExchangeHandlers");
-    private static final Menu parkingSlotsM = new Menu("ParkingSlot");
-    private static final MenuItem newParkingSlotMI = new MenuItem("New ParkingSlot");
-    private static final MenuItem allParkingSlotsMI = new MenuItem("All ParkingSlots");
-    private static final MenuItem modifyChargingStationMI = new MenuItem("Modify Station");
-    private static final MenuItem newBatteryMI = new MenuItem("New Battery");
-    private static final MenuItem batteriesChargingMI = new MenuItem("Batteries Charging");
+    private static final MenuItem allChargersMI = new MenuItem("All chargers");
+    private static final MenuItem newDisChargerMI = new MenuItem("New discharger");
+    private static final MenuItem allDisChargersMI = new MenuItem("All dischargers");
+    private static final Menu exchangeHandlersM = new Menu("Exchange handler");
+    private static final MenuItem newExchangeHandlerMI = new MenuItem("New exchange handler");
+    private static final MenuItem allExchangeHandlersMI = new MenuItem("All exchange handlers");
+    private static final Menu parkingSlotsM = new Menu("Parking slot");
+    private static final MenuItem newParkingSlotMI = new MenuItem("New parking slot");
+    private static final MenuItem allParkingSlotsMI = new MenuItem("All parking slots");
+    private static final MenuItem modifyChargingStationMI = new MenuItem("Modify station");
+    private static final MenuItem newBatteryMI = new MenuItem("New battery");
     private static final MenuItem allBatteriesMI = new MenuItem("Batteries");
     private static boolean automaticHandling = true;
     private static boolean automaticUpdate = false;
+    private static final MenuItem batteriesChargingMI = new MenuItem("Batteries charging");
     static RadioMenuItem cs;
     private static final Button chargingStationCreationB = new Button("Creation");
     private static final Button chargerCreationB = new Button("Creation");
@@ -98,7 +99,7 @@ class MenuStation {
             MenuBar sourc = new MenuBar();
             sourc.setId("menubar");
             sourc.setMaxWidth(100);
-            Menu src = new Menu("Energies");
+            Menu src = new Menu("Choice");
             RadioMenuItem sol = new RadioMenuItem("Solar");
             RadioMenuItem win = new RadioMenuItem("Wind");
             RadioMenuItem wav = new RadioMenuItem("Wave");
@@ -429,6 +430,7 @@ class MenuStation {
             box.setAlignment(Pos.CENTER);
             box.setSpacing(15);
             scroll.setMaxSize(600, 600);
+            scroll.getStyleClass().add("scroll");
             Label foo;
             for(Charger ch: currentStation.getChargers()) {
                 z = new HBox();
@@ -480,6 +482,7 @@ class MenuStation {
             box.setAlignment(Pos.CENTER);
             box.setSpacing(15);
             scroll.setMaxSize(600, 600);
+            scroll.getStyleClass().add("scroll");
             Label foo;
             for(DisCharger ch: currentStation.getDisChargers()) {
                 z = new HBox();
@@ -529,6 +532,7 @@ class MenuStation {
             box.setAlignment(Pos.CENTER);
             box.setSpacing(15);
             scroll.setMaxSize(600, 600);
+            scroll.getStyleClass().add("scroll");
             Label foo;
             for(ExchangeHandler ch: currentStation.getExchangeHandlers()) {
                 z = new HBox();
@@ -578,6 +582,7 @@ class MenuStation {
             box.setAlignment(Pos.CENTER);
             box.setSpacing(15);
             scroll.setMaxSize(600, 600);
+            scroll.getStyleClass().add("scroll");
             Label foo;
             for(ParkingSlot ch: currentStation.getParkingSlots()) {
                 z = new HBox();
@@ -655,6 +660,7 @@ class MenuStation {
             box.setAlignment(Pos.CENTER);
             box.setSpacing(15);
             scroll.setMaxSize(600, 600);
+            scroll.getStyleClass().add("scroll");
             Label foo;
             for(Battery b: currentStation.getBatteries()) {
                 z = new HBox();

@@ -26,12 +26,12 @@ import static evlibsim.EVLibSim.*;
 
 class Event {
 
-    static final MenuItem charging = new MenuItem("New ChargingEvent");
-    static final MenuItem discharging = new MenuItem("New DisChargingEvent");
-    static final MenuItem exchange = new MenuItem("New ChargingEvent(Exchange)");
-    static final MenuItem parking = new MenuItem("New ParkingEvent");
+    static final MenuItem charging = new MenuItem("New charging");
+    static final MenuItem discharging = new MenuItem("New discharging");
+    static final MenuItem exchange = new MenuItem("New battery exchange)");
+    static final MenuItem parking = new MenuItem("New parking");
     private static final Menu event = new Menu("Event");
-    private static final MenuItem policy = new MenuItem("Pricing Policy");
+    private static final MenuItem policy = new MenuItem("Pricing policy");
     private static final Button chargingEventCreation = new Button("Creation");
     private static final Button disChargingEventCreation = new Button("Creation");
     private static final Button parkingEventCreation = new Button("Creation");

@@ -21,20 +21,21 @@ import javafx.scene.layout.VBox;
 
 import static evlibsim.EVLibSim.currentStation;
 import static evlibsim.EVLibSim.root;
+import static evlibsim.MenuStation.scroll;
 
 class View {
 
-    private static final Menu overview = new Menu("Station Overview");
+    private static final Menu overview = new Menu("Station overview");
     private static final Menu view = new Menu("View");
     static final MenuItem totalActivity = new MenuItem("Overview");
-    private static final MenuItem queue = new MenuItem("Queue of Events");
+    private static final MenuItem queue = new MenuItem("Queue of events");
     private static final MenuItem chargingsMenuItem = new MenuItem("Running chargings");
     private static final MenuItem dischargingsMenuItem = new MenuItem("Running dischargings");
     private static final MenuItem exchangesMenuItem = new MenuItem("Running exchanges");
     private static final MenuItem parkingsMenuItem = new MenuItem("Running parkings");
     private static final Button chargings = new Button("Running chargings");
     private static final Button dischargings = new Button("Running dischargings");
-    private static final Button exchanges = new Button("Running swappings");
+    private static final Button exchanges = new Button("Running exchanges");
     private static final Button parkings = new Button("Runinng parkings");
     private static final Image image = new Image(View.class.getResourceAsStream("run.png"));
 
@@ -43,9 +44,11 @@ class View {
         view.getItems().addAll(overview, queue);
 
         queue.setOnAction(e -> {
+            if (Maintenance.stationCheck())
+                return;
             Maintenance.cleanScreen();
-            ScrollPane scroll = new ScrollPane();
             scroll.setMaxSize(700, 650);
+            scroll.getStyleClass().add("scroll");
             VBox x = new VBox();
             x.setAlignment(Pos.CENTER);
             x.setSpacing(15);
@@ -235,15 +238,16 @@ class View {
             Maintenance.cleanScreen();
             Label title = new Label("Running Events");
             title.setAlignment(Pos.CENTER);
-            title.setStyle("-fx-font-weight: bold;");
+            title.setStyle("-fx-font: 15 Lato bold;");
             VBox box = new VBox();
             box.setPadding(new Insets(25));
             box.setSpacing(25);
-            box.getChildren().addAll(new Label(currentStation.getName()),
-                    new Label("Total Chargers: " + currentStation.getChargers().length),
-                    new Label("Total DisChargers: " + currentStation.getDisChargers().length),
-                    new Label("Total ExchangeHandlers: " + currentStation.getExchangeHandlers().length),
-                    new Label("Total ParkingSlots: " + currentStation.getParkingSlots().length),
+            box.getChildren().addAll(new Label("Name: " + currentStation.getName()),
+                    new Label("Total slow chargers: " + currentStation.SLOW_CHARGERS),
+                    new Label("Total fast chargers: " + currentStation.FAST_CHARGERS),
+                    new Label("Total dischargers: " + currentStation.getDisChargers().length),
+                    new Label("Total exchange handlers: " + currentStation.getExchangeHandlers().length),
+                    new Label("Total parking slots: " + currentStation.getParkingSlots().length),
                     new Label("Cars waiting for slow charging: " + String.valueOf(currentStation.getSlow().getSize())),
                     new Label("Cars waiting for fast charging: " + String.valueOf(currentStation.getFast().getSize())),
                     new Label("Cars waiting for discharging: " + String.valueOf(currentStation.getDischarging().getSize())),
@@ -332,7 +336,7 @@ class View {
             TableColumn<ChargingEvent, Long> chargingTimeCol = new TableColumn<>("ChargingTime");
             TableColumn<ChargingEvent, String> conditionCol = new TableColumn<>("Condition");
             TableColumn<ChargingEvent, Double> costCol = new TableColumn<>("Cost");
-            TableColumn<ChargingEvent, Long> elapseTimeCol = new TableColumn<>("ElapsedChargingTime");
+            TableColumn<ChargingEvent, Long> elapseTimeCol = new TableColumn<>("RemainingChargingTime");
             table.getColumns().addAll(idCol, askingAmountCol, energyToBeReceivedCol, kindCol, waitingTimeCol, maxWaitingTimeCol, chargingTimeCol,
                     conditionCol, costCol, elapseTimeCol);
             idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -344,7 +348,7 @@ class View {
             chargingTimeCol.setCellValueFactory(new PropertyValueFactory<>("chargingTime"));
             conditionCol.setCellValueFactory(new PropertyValueFactory<>("condition"));
             costCol.setCellValueFactory(new PropertyValueFactory<>("cost"));
-            elapseTimeCol.setCellValueFactory(new PropertyValueFactory<>("elapsedDisChargingTime"));
+            elapseTimeCol.setCellValueFactory(new PropertyValueFactory<>("remainingChargingTime"));
             table.setItems(result);
             table.setMaxSize(1000, 600);
             root.setCenter(table);
@@ -364,7 +368,7 @@ class View {
             TableColumn<DisChargingEvent, Long> waitingTimeCol = new TableColumn<>("WaitingTime");
             TableColumn<DisChargingEvent, Long> maxWaitingTimeCol = new TableColumn<>("MaxWaitingTime");
             TableColumn<DisChargingEvent, Long> disChargingTimeCol = new TableColumn<>("DisChargingTime");
-            TableColumn<DisChargingEvent, Long> elapsedDisChargingTimeCol = new TableColumn<>("ElapsedDisChargingTime");
+            TableColumn<DisChargingEvent, Long> elapsedDisChargingTimeCol = new TableColumn<>("RemainingDisChargingTime");
             TableColumn<DisChargingEvent, Double> profitCol = new TableColumn<>("Profit");
             table.getColumns().addAll(idCol, amountOfEnergyCol, conditionCol, maxWaitingTimeCol, waitingTimeCol,
                     disChargingTimeCol, elapsedDisChargingTimeCol, profitCol);
@@ -374,7 +378,7 @@ class View {
             waitingTimeCol.setCellValueFactory(new PropertyValueFactory<>("waitingTime"));
             maxWaitingTimeCol.setCellValueFactory(new PropertyValueFactory<>("maxWaitingTime"));
             disChargingTimeCol.setCellValueFactory(new PropertyValueFactory<>("disChargingTime"));
-            elapsedDisChargingTimeCol.setCellValueFactory(new PropertyValueFactory<>("elapsedDisChargingTime"));
+            elapsedDisChargingTimeCol.setCellValueFactory(new PropertyValueFactory<>("remainingDisChargingTime"));
             profitCol.setCellValueFactory(new PropertyValueFactory<>("profit"));
             table.setItems(result);
             table.setMaxSize(1000, 600);
@@ -394,7 +398,7 @@ class View {
             TableColumn<ChargingEvent, Long> maxWaitingTimeCol = new TableColumn<>("MaxWaitingTime");
             TableColumn<ChargingEvent, String> conditionCol = new TableColumn<>("Condition");
             TableColumn<ChargingEvent, Long> chargingTimeCol = new TableColumn<>("ChargingTime");
-            TableColumn<ChargingEvent, Long> elapsedExchangeTimeCol = new TableColumn<>("ElapsedChargingTime");
+            TableColumn<ChargingEvent, Long> elapsedExchangeTimeCol = new TableColumn<>("RemainingChargingTime");
             TableColumn<ChargingEvent, Double> profitCol = new TableColumn<>("Cost");
             table.getColumns().addAll(idCol, waitingTimeCol, maxWaitingTimeCol, conditionCol, chargingTimeCol, elapsedExchangeTimeCol, profitCol);
             idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -402,7 +406,7 @@ class View {
             maxWaitingTimeCol.setCellValueFactory(new PropertyValueFactory<>("maxWaitingTime"));
             conditionCol.setCellValueFactory(new PropertyValueFactory<>("condition"));
             chargingTimeCol.setCellValueFactory(new PropertyValueFactory<>("chargingTime"));
-            elapsedExchangeTimeCol.setCellValueFactory(new PropertyValueFactory<>("elapsedChargingTime"));
+            elapsedExchangeTimeCol.setCellValueFactory(new PropertyValueFactory<>("remainingChargingTime"));
             profitCol.setCellValueFactory(new PropertyValueFactory<>("cost"));
             table.setItems(result);
             table.setMaxSize(1000, 600);
@@ -423,8 +427,8 @@ class View {
             TableColumn<ParkingEvent, String> parkingTimeCol = new TableColumn<>("ParkingTime");
             TableColumn<ParkingEvent, Long> waitingTimeCol = new TableColumn<>("WaitingTime");
             TableColumn<ParkingEvent, Long> chargingTimeCol = new TableColumn<>("ChargingTime");
-            TableColumn<ParkingEvent, Long> elapsedParkingTimeCol = new TableColumn<>("ElapsedParkingTime");
-            TableColumn<ParkingEvent, Long> elapsedChargingTimeCol = new TableColumn<>("ElapsedChargingTime");
+            TableColumn<ParkingEvent, Long> elapsedParkingTimeCol = new TableColumn<>("RemainingParkingTime");
+            TableColumn<ParkingEvent, Long> elapsedChargingTimeCol = new TableColumn<>("RemainingChargingTime");
             TableColumn<ParkingEvent, String> conditionCol = new TableColumn<>("condition");
             TableColumn<ParkingEvent, Double> costCol = new TableColumn<>("Cost");
             table.getColumns().addAll(idCol, askingAmountCol, energyToBeReceivedCol, parkingTimeCol, waitingTimeCol,
@@ -435,8 +439,8 @@ class View {
             parkingTimeCol.setCellValueFactory(new PropertyValueFactory<>("parkingTime"));
             waitingTimeCol.setCellValueFactory(new PropertyValueFactory<>("waitingTime"));
             chargingTimeCol.setCellValueFactory(new PropertyValueFactory<>("chargingTime"));
-            elapsedParkingTimeCol.setCellValueFactory(new PropertyValueFactory<>("elapsedParkingTime"));
-            elapsedChargingTimeCol.setCellValueFactory(new PropertyValueFactory<>("elapsedChargingTime"));
+            elapsedParkingTimeCol.setCellValueFactory(new PropertyValueFactory<>("remainingParkingTime"));
+            elapsedChargingTimeCol.setCellValueFactory(new PropertyValueFactory<>("remainingChargingTime"));
             conditionCol.setCellValueFactory(new PropertyValueFactory<>("condition"));
             costCol.setCellValueFactory(new PropertyValueFactory<>("cost"));
             table.setItems(result);

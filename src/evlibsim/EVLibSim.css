@@ -1,9 +1,11 @@
 .root {
     -fx-background-color:#e0e2e6;
+    -fx-background-image: url("back1.png");
+    -fx-background-size: cover;
 }
 
 .grid {
-    -fx-background-color:#e3e4e6;
+    -fx-background-color: #BDCFDF;
     -fx-background-radius: 5 5 5 5;
     -fx-padding: 15 15 15 15;
     -fx-hgap: 20;
@@ -13,34 +15,17 @@
     -fx-alignment: center;
 }
 
-.box {
-    -fx-background-color:#e3e4e6;
-    -fx-padding: 5 5 5 5;
-    -fx-spacing: 25;
-    -fx-alignment: center;
-}
-
 #menubar {
     -fx-alignment: center;
 }
 
-.mini-box {
-    -fx-background-color:#e3e4e6;
-    -fx-padding: 15 15 15 15;
-    -fx-spacing: 25;
-    -fx-alignment: center;
-    -fx-border-radius: 5 0 0 5;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);
-    -fx-background-radius: 5 0 0 5;
-}
-
-.text-area, .text-area .viewport, .text-area .content {
+/*.text-area, .text-area .viewport, .text-area .content {
     -fx-background-color: transparent;
-}
+}*/
 
-.scroll-pane {
-    -fx-background-color: #e3e4e6;
-    -fx-background: #e3e4e6;
+.scroll {
+    -fx-background-color: #BDCFDF;
+    -fx-background: #BDCFDF;
     -fx-background-radius: 5 5 5 5;
     -fx-padding: 15 15 15 15;
     -fx-hgap: 20;
@@ -50,7 +35,7 @@
 }
 
 .stationGrid {
-    -fx-background-color:#e3e4e6;
+    -fx-background-color: #BDCFDF;
     -fx-padding: 10 10 10 10;
     -fx-hgap: 15;
     -fx-vgap: 15;
@@ -60,14 +45,13 @@
 
 .button {
     -fx-background-color:
-            rgba(0,0,0,0.08),
-            linear-gradient(#9a9a9a, #909090),
-            linear-gradient(white 0%, #f3f3f3 50%, #ececec 51%, #f2f2f2 100%);
-    -fx-background-insets: 0 0 -1 0,0,1;
-    -fx-background-radius: 5, 5, 4;
-    -fx-padding: 3 30 3 30;
-    -fx-text-fill: #242d35;
-    -fx-font-size: 14px;
+            linear-gradient(#f2f2f2, #d6d6d6),
+            linear-gradient(#fcfcfc 0%, #d9d9d9 20%, #d6d6d6 100%),
+            linear-gradient(#dddddd 0%, #f6f6f6 50%);
+    -fx-background-radius: 8,7,6;
+    -fx-background-insets: 0,1,2;
+    -fx-text-fill: black;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
 }
 
 .button:hover {
@@ -76,25 +60,43 @@
 
 *{
     -fx-my-menu-color: #FFFFFF;
-    -fx-my-menu-color-highlighted: #E8E8E8;
+    -fx-my-menu-color-highlighted: #E0EFFA;
     -fx-my-menu-font-color: #000000;
     -fx-my-menu-font-color-highlighted: #DBDBDB;
+    -fx-color-500: #D8E3ED;
+    -fx-font-family: Lato;
 }
 
 .menu-bar {
-    -fx-background-color: -fx-my-menu-color;
+    -fx-pref-height: 40;
+    -fx-min-height: 40;
+    -fx-max-height: 40;
+    -fx-background-color: -fx-color-500;
+    -fx-padding: 0 16 0 16;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
+    -fx-alignment: center-left;
 }
 
 .menu-bar > .container > .menu-button {
-    -fx-background-color: -fx-my-menu-color;
+    -fx-background-color: -fx-color-500;
+}
+
+.menu-bar .context-menu {
+    -fx-background-color: -fx-color-500;
 }
 
 .menu-bar > .container > .menu-button > .label {
     -fx-text-fill: -fx-my-menu-font-color;
+    -fx-font: 15 Lato;
+}
+
+.menu-item {
+    -fx-background-color: -fx-color-500;
 }
 
 .menu-item .label {
     -fx-text-fill: -fx-my-menu-font-color;
+    -fx-font: 15 Lato;
 }
 
 .menu-bar > .container > .menu-button > .label:disabled {
@@ -122,12 +124,4 @@
     -fx-background-insets: -0.4, 1, 2;
     -fx-background-radius: 3.4, 2, 2;
     -fx-prompt-text-fill: transparent;
-}
-
-#welcome {
-    -fx-font-size: 32px;
-    -fx-font-family: "Arial Black";
-    -fx-fill: #818181;
-    -fx-effect: innershadow( three-pass-box, rgba(0,0,0,0.7), 6, 0.0, 0, 2);
-    -fx-alignment: center;
 }
