@@ -1,8 +1,8 @@
 package evlibsim;
 
-import EVLib.Events.ChargingEvent;
-import EVLib.Events.DisChargingEvent;
-import EVLib.Events.ParkingEvent;
+import EVLib.Station.ChargingEvent;
+import EVLib.Station.DisChargingEvent;
+import EVLib.Station.ParkingEvent;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Orientation;
@@ -35,7 +35,7 @@ class ToolBox {
     private static final Image image6 = new Image(View.class.getResourceAsStream("report.png"));
     private static final Image image7 = new Image(View.class.getResourceAsStream("energy.png"));
 
-    static void createLogButtons()
+    private static void createLogButtons()
     {
         chargingLog.setGraphic(new ImageView(image1));
         chargingLog.setPrefSize(image1.getWidth(), image1.getHeight());
@@ -165,7 +165,7 @@ class ToolBox {
         });
     }
 
-    static void createOverviewMenu() {
+    private static void createOverviewMenu() {
 
         showTotalActivity.setGraphic(new ImageView(image5));
         showTotalActivity.setPrefSize(image5.getWidth(), image5.getHeight());
@@ -264,9 +264,8 @@ class ToolBox {
         bar.getItems().addAll(chargingLog, disChargingLog, exchangeLog, parkingLog,
                 showTotalActivity, totalEnergy, report);
         bar.setOrientation(Orientation.VERTICAL);
-        bar.setStyle("-fx-alignment: center; -fx-spacing: 20; -fx-max-height: 580;" +
-                " -fx-background-color: transparent;" +
-                " -fx-border-radius: 5 0 0 5; background-radius: 5 0 0 5;");
+        bar.setStyle("-fx-alignment: center; -fx-spacing: 20;" +
+                " -fx-background-color: transparent;");
         BorderPane.setAlignment(bar, Pos.CENTER);
         createLogButtons();
         createOverviewMenu();

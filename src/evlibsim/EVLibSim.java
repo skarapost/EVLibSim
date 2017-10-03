@@ -3,9 +3,6 @@ package evlibsim;
 import EVLib.EV.Battery;
 import EVLib.EV.Driver;
 import EVLib.EV.ElectricVehicle;
-import EVLib.Events.ChargingEvent;
-import EVLib.Events.DisChargingEvent;
-import EVLib.Events.ParkingEvent;
 import EVLib.Sources.*;
 import EVLib.Station.*;
 import javafx.animation.Animation;
@@ -20,6 +17,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -39,15 +37,14 @@ public class EVLibSim extends Application {
 
     static final BorderPane root = new BorderPane();
     static final GridPane grid = new GridPane();
-    private static final GridPane stationGrid = new GridPane();
     static final ArrayList<TextField> textfields = new ArrayList<>();
     static final ArrayList<ChargingStation> stations = new ArrayList<>();
     static ChargingStation currentStation;
     static final ArrayList<String> energies = new ArrayList<>();
     private static final MenuBar menuBar = new MenuBar();
     private static final Menu file = new Menu("File");
-    private static final Button newChargingStation = new Button("Station");
-    private static final Button newEvent = new Button("Event");
+    private static final Button newChargingStation = new Button("New station");
+    private static final Button newEvent = new Button("New event");
     private static final Button newEnergy = new Button("Energy");
     static final ToggleGroup group = new ToggleGroup();
     private static final MenuItem startScreen = new MenuItem("Start Screen");
@@ -76,6 +73,7 @@ public class EVLibSim extends Application {
     private static final Button bt5 = new Button("Add energy");
     private static final Button bt6 = new Button("Add energy source");
     private static final Button bt7 = new Button("Delete energy source");
+    private final VBox box = new VBox();
     private File f = null;
 
     public static void main(String[] args) {
@@ -128,22 +126,22 @@ public class EVLibSim extends Application {
         menuBar.getMenus().addAll(file, View.createViewMenu(), MenuStation.createStationMenu(), Event.createEventMenu(), Energy.createEnergyMenu());
         scene.getStylesheets().add(EVLibSim.class.getResource("EVLibSim.css").toExternalForm());
         grid.getStyleClass().add("grid");
-        stationGrid.getStyleClass().add("stationGrid");
 
         newChargingStation.setPrefSize(230, 60);
         newEvent.setPrefSize(230, 60);
         newEnergy.setPrefSize(230, 60);
 
-        stationGrid.add(waitTimeSlow, 0, 0);
-        stationGrid.add(waitTimeFast, 1, 0);
-        stationGrid.add(waitTimeDis, 2, 0);
-        stationGrid.add(waitTimeEx, 3, 0);
-        stationGrid.add(unitPrice, 4, 0);
-        stationGrid.add(disUnitPrice, 5, 0);
-        stationGrid.add(exchangePrice, 6, 0);
-        stationGrid.add(inductivePrice, 7, 0);
+        Label prices = new Label("Prices");
+        Label wait = new Label("Wait");
+        prices.setStyle("-fx-font-weight: bold; -fx-font-size: 15;");
+        wait.setStyle("-fx-font-weight: bold; -fx-font-size: 15");
+        box.getChildren().addAll(prices, unitPrice, disUnitPrice, exchangePrice, inductivePrice,
+                wait, waitTimeSlow, waitTimeFast, waitTimeEx, waitTimeDis);
+        box.getStyleClass().add("box");
+        BorderPane.setAlignment(box, Pos.CENTER);
 
         root.setBottom(ta);
+        root.setLeft(box);
 
         startScreen.setOnAction((ActionEvent e) -> {
             Maintenance.cleanScreen();
@@ -166,14 +164,14 @@ public class EVLibSim extends Application {
                 for (ChargingStation cs : stations)
                     if (Objects.equals(cs.getName(), name)) {
                         currentStation = cs;
-                        waitTimeSlow.setText("Wait(slow): " + currentStation.getWaitingTime("slow"));
-                        waitTimeFast.setText("Wait(fast): " + currentStation.getWaitingTime("fast"));
-                        waitTimeDis.setText("Wait(discharging): " + currentStation.getWaitingTime("discharging"));
-                        waitTimeEx.setText("Wait(exchange): " + currentStation.getWaitingTime("exchange"));
-                        unitPrice.setText("Price(charging): " + currentStation.getCurrentPrice());
-                        disUnitPrice.setText("Price(discharging): " + currentStation.getDisUnitPrice());
-                        exchangePrice.setText("Price(exchange): " + currentStation.getExchangePrice());
-                        inductivePrice.setText("Price(insuctive): " + currentStation.getInductivePrice());
+                        waitTimeSlow.setText("Slow: " + currentStation.getWaitingTime("slow"));
+                        waitTimeFast.setText("Fast: " + currentStation.getWaitingTime("fast"));
+                        waitTimeDis.setText("DisCharging: " + currentStation.getWaitingTime("discharging"));
+                        waitTimeEx.setText("Exchange: " + currentStation.getWaitingTime("exchange"));
+                        unitPrice.setText("Charging: " + currentStation.getCurrentPrice());
+                        disUnitPrice.setText("DisCharging: " + currentStation.getDisUnitPrice());
+                        exchangePrice.setText("Exchange: " + currentStation.getExchangePrice());
+                        inductivePrice.setText("Inductive: " + currentStation.getInductivePrice());
                         startScreen.fire();
                     }
             }
@@ -297,25 +295,25 @@ public class EVLibSim extends Application {
 
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), ev -> {
             if(currentStation == null) {
-                waitTimeSlow.setText("Wait(slow): -");
-                waitTimeFast.setText("Wait(fast): -");
-                waitTimeDis.setText("Wait(discharging): -");
-                waitTimeEx.setText("Wait(exchange): -");
-                unitPrice.setText("Price(charging): -");
-                disUnitPrice.setText("Price(discharging): -");
-                exchangePrice.setText("Price(exchange): -");
-                inductivePrice.setText("Price(inductive): -");
+                waitTimeSlow.setText("Slow: -");
+                waitTimeFast.setText("Fast: -");
+                waitTimeDis.setText("DisCharging: -");
+                waitTimeEx.setText("Exchange: -");
+                unitPrice.setText("Charging: -");
+                disUnitPrice.setText("DisCharging: -");
+                exchangePrice.setText("Exchange: -");
+                inductivePrice.setText("Inductive: -");
             }
             else
             {
-                waitTimeSlow.setText("Wait(slow): " + currentStation.getWaitingTime("slow"));
-                waitTimeFast.setText("Wait(fast): " + currentStation.getWaitingTime("fast"));
-                waitTimeDis.setText("Wait(discharging): " + currentStation.getWaitingTime("discharging"));
-                waitTimeEx.setText("Wait(exchange): " + currentStation.getWaitingTime("exchange"));
-                unitPrice.setText("Price(charging): " + currentStation.getCurrentPrice());
-                disUnitPrice.setText("Price(discharging): " + currentStation.getDisUnitPrice());
-                exchangePrice.setText("Price(exchange): " + currentStation.getExchangePrice());
-                inductivePrice.setText("Price(inductive): " + currentStation.getInductivePrice());
+                waitTimeSlow.setText("Slow: " + currentStation.getWaitingTime("slow"));
+                waitTimeFast.setText("Fast: " + currentStation.getWaitingTime("fast"));
+                waitTimeDis.setText("DisCharging: " + currentStation.getWaitingTime("discharging"));
+                waitTimeEx.setText("Exchange: " + currentStation.getWaitingTime("exchange"));
+                unitPrice.setText("Charging: " + currentStation.getCurrentPrice());
+                disUnitPrice.setText("DisCharging: " + currentStation.getDisUnitPrice());
+                exchangePrice.setText("Exchange: " + currentStation.getExchangePrice());
+                inductivePrice.setText("Inductive: " + currentStation.getInductivePrice());
             }
         }));
 

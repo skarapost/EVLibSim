@@ -3,11 +3,7 @@ package evlibsim;
 import EVLib.EV.Battery;
 import EVLib.EV.Driver;
 import EVLib.EV.ElectricVehicle;
-import EVLib.Events.ChargingEvent;
-import EVLib.Events.DisChargingEvent;
-import EVLib.Events.ParkingEvent;
-import EVLib.Events.PricingPolicy;
-import EVLib.Station.ChargingStation;
+import EVLib.Station.*;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -114,7 +110,7 @@ class Event {
 
                 GridPane g = new GridPane();
                 g.setAlignment(Pos.CENTER);
-                g.setStyle("-fx-background-color:#e0e2e6;");
+                g.setStyle("-fx-background-color:#D8E2F2;");
                 g.setHgap(30);
                 g.setVgap(30);
                 g.setPadding(new Insets(15, 15, 15, 15));
@@ -124,7 +120,7 @@ class Event {
 
                 ArrayList<ChargingStation> tempStations = new ArrayList<>(Arrays.asList(bestEnergy()).subList(0, Math.min(stations.size(), 5)));
                 VBox inside1 = new VBox();
-                inside1.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
+                inside1.setStyle("-fx-background-color:#F0F1F3; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
                 inside1.setPadding(new Insets(10, 10, 10, 10));
                 inside1.setSpacing(20);
                 tempStations.forEach(temp -> inside1.getChildren().add(new Label(temp.getName() + ": " + temp.getTotalEnergy())));
@@ -132,7 +128,7 @@ class Event {
                 inside2.setMaxSize(80, 30);
                 title = new Label("Energy");
                 inside2.getChildren().add(title);
-                inside2.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 5 5 0 0; -fx-background-radius: 5 5 0 0; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
+                inside2.setStyle("-fx-background-color:#F0F1F3; -fx-border-radius: 5 5 0 0; -fx-background-radius: 5 5 0 0; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
                 inside2.setPadding(new Insets(10, 10, 10, 10));
                 inside2.setSpacing(20);
                 outside = new VBox();
@@ -141,7 +137,7 @@ class Event {
 
                 tempStations = new ArrayList<>(Arrays.asList(bestPrice()).subList(0, Math.min(stations.size(), 5)));
                 VBox inside3 = new VBox();
-                inside3.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
+                inside3.setStyle("-fx-background-color:#F0F1F3; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
                 inside3.setPadding(new Insets(10, 10, 10, 10));
                 inside3.setSpacing(20);
                 tempStations.forEach(temp -> inside3.getChildren().add(new Label(temp.getName() + ": " + temp.getCurrentPrice())));
@@ -149,7 +145,7 @@ class Event {
                 inside4.setMaxSize(70, 30);
                 title = new Label("Price");
                 inside4.getChildren().add(title);
-                inside4.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 5 5 0 0; -fx-background-radius: 5 5 0 0; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
+                inside4.setStyle("-fx-background-color:#F0F1F3; -fx-border-radius: 5 5 0 0; -fx-background-radius: 5 5 0 0; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
                 inside4.setPadding(new Insets(10, 10, 10, 10));
                 inside4.setSpacing(20);
                 outside = new VBox();
@@ -158,7 +154,7 @@ class Event {
 
                 tempStations = new ArrayList<>(Arrays.asList(bestTime("slow")).subList(0, Math.min(stations.size(), 5)));
                 VBox inside5 = new VBox();
-                inside5.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
+                inside5.setStyle("-fx-background-color:#F0F1F3; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
                 inside5.setPadding(new Insets(10, 10, 10, 10));
                 inside5.setSpacing(20);
                 tempStations.forEach(temp -> inside5.getChildren().add(new Label(temp.getName() + ": " + temp.getWaitingTime("slow"))));
@@ -166,7 +162,7 @@ class Event {
                 inside6.setMaxSize(150, 30);
                 title = new Label("Wait(Slow)");
                 inside6.getChildren().add(title);
-                inside6.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 5 5 0 0; -fx-background-radius: 5 5 0 0; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
+                inside6.setStyle("-fx-background-color:#F0F1F3; -fx-border-radius: 5 5 0 0; -fx-background-radius: 5 5 0 0; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
                 inside6.setPadding(new Insets(10, 10, 10, 10));
                 inside6.setSpacing(20);
                 outside = new VBox();
@@ -175,7 +171,7 @@ class Event {
 
                 tempStations = new ArrayList<>(Arrays.asList(bestTime("fast")).subList(0, Math.min(stations.size(), 5)));
                 VBox inside7 = new VBox();
-                inside7.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
+                inside7.setStyle("-fx-background-color:#F0F1F3; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
                 inside7.setPadding(new Insets(10, 10, 10, 10));
                 inside7.setSpacing(20);
                 tempStations.forEach(temp -> inside7.getChildren().add(new Label(temp.getName() + ": " + temp.getWaitingTime("fast"))));
@@ -183,7 +179,7 @@ class Event {
                 inside8.setMaxSize(150, 30);
                 title = new Label("Wait(Fast)");
                 inside8.getChildren().add(title);
-                inside8.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 5 5 0 0; -fx-background-radius: 5 5 0 0; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
+                inside8.setStyle("-fx-background-color:#F0F1F3; -fx-border-radius: 5 5 0 0; -fx-background-radius: 5 5 0 0; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
                 inside8.setPadding(new Insets(10, 10, 10, 10));
                 inside8.setSpacing(20);
                 outside = new VBox();
@@ -259,7 +255,7 @@ class Event {
 
                 GridPane g = new GridPane();
                 g.setAlignment(Pos.CENTER);
-                g.setStyle("-fx-background-color:#e0e2e6;");
+                g.setStyle("-fx-background-color:#D8E2F2;");
                 g.setHgap(30);
                 g.setVgap(30);
                 g.setPadding(new Insets(15, 15, 15, 15));
@@ -269,7 +265,7 @@ class Event {
 
                 ArrayList<ChargingStation> tempStations = new ArrayList<>(Arrays.asList(bestEnergy()).subList(0, Math.min(stations.size(), 5)));
                 VBox inside1 = new VBox();
-                inside1.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
+                inside1.setStyle("-fx-background-color:#F0F1F3; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
                 inside1.setPadding(new Insets(10, 10, 10, 10));
                 inside1.setSpacing(20);
                 tempStations.forEach(temp -> inside1.getChildren().add(new Label(temp.getName() + ": " + temp.getTotalEnergy())));
@@ -277,7 +273,7 @@ class Event {
                 inside2.setMaxSize(80, 30);
                 title = new Label("Energy");
                 inside2.getChildren().add(title);
-                inside2.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 5 5 0 0; -fx-background-radius: 5 5 0 0; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
+                inside2.setStyle("-fx-background-color:#F0F1F3; -fx-border-radius: 5 5 0 0; -fx-background-radius: 5 5 0 0; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
                 inside2.setPadding(new Insets(10, 10, 10, 10));
                 inside2.setSpacing(20);
                 outside = new VBox();
@@ -286,7 +282,7 @@ class Event {
 
                 tempStations = new ArrayList<>(Arrays.asList(bestDisPrice()).subList(0, Math.min(stations.size(), 5)));
                 VBox inside3 = new VBox();
-                inside3.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
+                inside3.setStyle("-fx-background-color:#F0F1F3; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
                 inside3.setPadding(new Insets(10, 10, 10, 10));
                 inside3.setSpacing(20);
                 tempStations.forEach(temp -> inside3.getChildren().add(new Label(temp.getName() + ": " + temp.getDisUnitPrice())));
@@ -294,7 +290,7 @@ class Event {
                 inside4.setMaxSize(70, 30);
                 title = new Label("Price");
                 inside4.getChildren().add(title);
-                inside4.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 5 5 0 0; -fx-background-radius: 5 5 0 0; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
+                inside4.setStyle("-fx-background-color:#F0F1F3; -fx-border-radius: 5 5 0 0; -fx-background-radius: 5 5 0 0; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
                 inside4.setPadding(new Insets(10, 10, 10, 10));
                 inside4.setSpacing(20);
                 outside = new VBox();
@@ -303,7 +299,7 @@ class Event {
 
                 tempStations = new ArrayList<>(Arrays.asList(bestTime("discharging")).subList(0, Math.min(stations.size(), 5)));
                 VBox inside5 = new VBox();
-                inside5.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
+                inside5.setStyle("-fx-background-color:#F0F1F3; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
                 inside5.setPadding(new Insets(10, 10, 10, 10));
                 inside5.setSpacing(20);
                 tempStations.forEach(temp -> inside5.getChildren().add(new Label(temp.getName() + ": " + temp.getWaitingTime("discharging"))));
@@ -311,7 +307,7 @@ class Event {
                 inside6.setMaxSize(150, 30);
                 title = new Label("Wait");
                 inside6.getChildren().add(title);
-                inside6.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 5 5 0 0; -fx-background-radius: 5 5 0 0; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
+                inside6.setStyle("-fx-background-color:#F0F1F3; -fx-border-radius: 5 5 0 0; -fx-background-radius: 5 5 0 0; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
                 inside6.setPadding(new Insets(10, 10, 10, 10));
                 inside6.setSpacing(20);
                 outside = new VBox();
@@ -373,7 +369,7 @@ class Event {
 
                 GridPane g = new GridPane();
                 g.setAlignment(Pos.CENTER);
-                g.setStyle("-fx-background-color:#e0e2e6;");
+                g.setStyle("-fx-background-color:#D8E2F2;");
                 g.setHgap(30);
                 g.setVgap(30);
                 g.setPadding(new Insets(15, 15, 15, 15));
@@ -383,15 +379,15 @@ class Event {
 
                 ArrayList<ChargingStation> tempStations = new ArrayList<>(Arrays.asList(bestBatteries()).subList(0, Math.min(stations.size(), 5)));
                 VBox inside1 = new VBox();
-                inside1.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
+                inside1.setStyle("-fx-background-color:#F0F1F3; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
                 inside1.setPadding(new Insets(10, 10, 10, 10));
                 inside1.setSpacing(20);
-                tempStations.forEach(temp -> inside1.getChildren().add(new Label(temp.getName() + ": " + temp.getBatteries().size())));
+                tempStations.forEach(temp -> inside1.getChildren().add(new Label(temp.getName() + ": " + temp.getBatteries().length)));
                 VBox inside2 = new VBox();
                 inside2.setMaxSize(80, 30);
                 title = new Label("BatInventory");
                 inside2.getChildren().add(title);
-                inside2.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 5 5 0 0; -fx-background-radius: 5 5 0 0; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
+                inside2.setStyle("-fx-background-color:#F0F1F3; -fx-border-radius: 5 5 0 0; -fx-background-radius: 5 5 0 0; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
                 inside2.setPadding(new Insets(10, 10, 10, 10));
                 inside2.setSpacing(20);
                 outside = new VBox();
@@ -400,7 +396,7 @@ class Event {
 
                 tempStations = new ArrayList<>(Arrays.asList(bestExchangePrice()).subList(0, Math.min(stations.size(), 5)));
                 VBox inside3 = new VBox();
-                inside3.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
+                inside3.setStyle("-fx-background-color:#F0F1F3; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
                 inside3.setPadding(new Insets(10, 10, 10, 10));
                 inside3.setSpacing(20);
                 tempStations.forEach(temp -> inside3.getChildren().add(new Label(temp.getName() + ": " + temp.getExchangePrice())));
@@ -408,7 +404,7 @@ class Event {
                 inside4.setMaxSize(70, 30);
                 title = new Label("Price");
                 inside4.getChildren().add(title);
-                inside4.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 5 5 0 0; -fx-background-radius: 5 5 0 0; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
+                inside4.setStyle("-fx-background-color:#F0F1F3; -fx-border-radius: 5 5 0 0; -fx-background-radius: 5 5 0 0; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
                 inside4.setPadding(new Insets(10, 10, 10, 10));
                 inside4.setSpacing(20);
                 outside = new VBox();
@@ -417,7 +413,7 @@ class Event {
 
                 tempStations = new ArrayList<>(Arrays.asList(bestTime("exchange")).subList(0, Math.min(stations.size(), 5)));
                 VBox inside5 = new VBox();
-                inside5.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
+                inside5.setStyle("-fx-background-color:#F0F1F3; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
                 inside5.setPadding(new Insets(10, 10, 10, 10));
                 inside5.setSpacing(20);
                 tempStations.forEach(temp -> inside5.getChildren().add(new Label(temp.getName() + ": " + temp.getWaitingTime("exchange"))));
@@ -425,7 +421,7 @@ class Event {
                 inside6.setMaxSize(150, 30);
                 title = new Label("Wait");
                 inside6.getChildren().add(title);
-                inside6.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 5 5 0 0; -fx-background-radius: 5 5 0 0; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
+                inside6.setStyle("-fx-background-color:#F0F1F3; -fx-border-radius: 5 5 0 0; -fx-background-radius: 5 5 0 0; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
                 inside6.setPadding(new Insets(10, 10, 10, 10));
                 inside6.setSpacing(20);
                 outside = new VBox();
@@ -492,7 +488,7 @@ class Event {
 
                 GridPane g = new GridPane();
                 g.setAlignment(Pos.CENTER);
-                g.setStyle("-fx-background-color:#e0e2e6;");
+                g.setStyle("-fx-background-color:#D8E2F2;");
                 g.setHgap(30);
                 g.setVgap(30);
                 g.setPadding(new Insets(15, 15, 15, 15));
@@ -502,7 +498,7 @@ class Event {
 
                 ArrayList<ChargingStation> tempStations = new ArrayList<>(Arrays.asList(bestEnergy()).subList(0, Math.min(stations.size(), 5)));
                 VBox inside1 = new VBox();
-                inside1.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
+                inside1.setStyle("-fx-background-color:#F0F1F3; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
                 inside1.setPadding(new Insets(10, 10, 10, 10));
                 inside1.setSpacing(20);
                 tempStations.forEach(temp -> inside1.getChildren().add(new Label(temp.getName() + ": " + temp.getTotalEnergy())));
@@ -510,7 +506,7 @@ class Event {
                 inside2.setMaxSize(80, 30);
                 title = new Label("Energy");
                 inside2.getChildren().add(title);
-                inside2.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 5 5 0 0; -fx-background-radius: 5 5 0 0; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
+                inside2.setStyle("-fx-background-color:#F0F1F3; -fx-border-radius: 5 5 0 0; -fx-background-radius: 5 5 0 0; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
                 inside2.setPadding(new Insets(10, 10, 10, 10));
                 inside2.setSpacing(20);
                 outside = new VBox();
@@ -519,7 +515,7 @@ class Event {
 
                 tempStations = new ArrayList<>(Arrays.asList(bestPrice()).subList(0, Math.min(stations.size(), 5)));
                 VBox inside3 = new VBox();
-                inside3.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
+                inside3.setStyle("-fx-background-color:#F0F1F3; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
                 inside3.setPadding(new Insets(10, 10, 10, 10));
                 inside3.setSpacing(20);
                 tempStations.forEach(temp -> inside3.getChildren().add(new Label(temp.getName() + ": " + temp.getInductivePrice())));
@@ -527,7 +523,7 @@ class Event {
                 inside4.setMaxSize(70, 30);
                 title = new Label("Price");
                 inside4.getChildren().add(title);
-                inside4.setStyle("-fx-background-color:#e3e4e6; -fx-border-radius: 5 5 0 0; -fx-background-radius: 5 5 0 0; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
+                inside4.setStyle("-fx-background-color:#F0F1F3; -fx-border-radius: 5 5 0 0; -fx-background-radius: 5 5 0 0; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
                 inside4.setPadding(new Insets(10, 10, 10, 10));
                 inside4.setSpacing(20);
                 outside = new VBox();
@@ -986,7 +982,7 @@ class Event {
         ChargingStation temp;
         for (int i = 0; i < st.length; i++) {
             for (int j = 1; j < (st.length - i); j++) {
-                if (st[j - 1].getBatteries().size() < st[j].getBatteries().size()) {
+                if (st[j - 1].getBatteries().length < st[j].getBatteries().length) {
                     temp = st[j - 1];
                     st[j - 1] = st[j];
                     st[j] = temp;

@@ -44,32 +44,9 @@ class Maintenance {
     {
         grid.getChildren().clear();
         root.setCenter(null);
-        root.setLeft(null);
         scroll.setContent(null);
         textfields.clear();
     }
-
-// --Commented out by Inspection START (27/9/2017 3:29 μμ):
-//    static void energyAlert(String energySource)
-//    {
-//        Alert alert = new Alert(Alert.AlertType.ERROR);
-//        alert.setTitle("Error");
-//        alert.setHeaderText(null);
-//        alert.setContentText(energySource + " energy is already an option.");
-//        alert.showAndWait();
-//    }
-// --Commented out by Inspection STOP (27/9/2017 3:29 μμ)
-
-// --Commented out by Inspection START (27/9/2017 3:29 μμ):
-//    static void notEnergyAlert(String energySource)
-//    {
-//        Alert alert = new Alert(Alert.AlertType.ERROR);
-//        alert.setTitle("Error");
-//        alert.setHeaderText(null);
-//        alert.setContentText(energySource + " energy is not an option.");
-//        alert.showAndWait();
-//    }
-// --Commented out by Inspection STOP (27/9/2017 3:29 μμ)
 
     static void completionMessage(String message)
     {
