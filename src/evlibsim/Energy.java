@@ -125,67 +125,73 @@ class Energy {
             grid.setMaxSize(700, 300);
             TextField boo;
             Label foo;
-            boo = new TextField("0");
+            boo = new TextField(String.valueOf(Arrays.asList(currentStation.getSources()).indexOf("Solar")));
             textfields.add(boo);
             if (Maintenance.checkEnergy("Solar"))
                 foo = new Label("Solar*: ");
             else {
                 foo = new Label("Solar: ");
                 boo.setDisable(true);
+                boo.setText(null);
             }
             grid.add(foo, 0, 1);
             grid.add(boo, 1, 1);
-            boo = new TextField("0");
+            boo = new TextField(String.valueOf(Arrays.asList(currentStation.getSources()).indexOf("Wind")));
             textfields.add(boo);
             if (Maintenance.checkEnergy("Wind")) {
                 foo = new Label("Wind*: ");
             } else {
                 foo = new Label("Wind: ");
                 boo.setDisable(true);
+                boo.setText(null);
             }
             grid.add(foo, 2, 1);
             grid.add(boo, 3, 1);
-            boo = new TextField("0");
+            boo = new TextField(String.valueOf(Arrays.asList(currentStation.getSources()).indexOf("Wave")));
             textfields.add(boo);
             if (Maintenance.checkEnergy("Wave"))
                 foo = new Label("Wave*: ");
             else {
                 foo = new Label("Wave: ");
                 boo.setDisable(true);
+                boo.setText(null);
             }
             grid.add(foo, 0, 2);
             grid.add(boo, 1, 2);
-            boo = new TextField("0");
+            boo = new TextField(String.valueOf(Arrays.asList(currentStation.getSources()).indexOf("Hydroelectric")));
             textfields.add(boo);
             if(Maintenance.checkEnergy("Hydroelectric"))
                 foo = new Label("Hydroelectric*: ");
             else {
                 foo = new Label("Hydroelectric: ");
                 boo.setDisable(true);
+                boo.setText(null);
             }
             grid.add(foo, 2, 2);
             grid.add(boo, 3, 2);
-            boo = new TextField("0");
+            boo = new TextField(String.valueOf(Arrays.asList(currentStation.getSources()).indexOf("Nonrenewable")));
             textfields.add(boo);
             if(Maintenance.checkEnergy("Nonrenewable"))
                 foo = new Label("Nonrenewable*: ");
             else {
                 foo = new Label("Nonrenewable: ");
                 boo.setDisable(true);
+                boo.setText(null);
             }
             grid.add(foo, 0, 3);
             grid.add(boo, 1, 3);
-            boo = new TextField("0");
+            boo = new TextField(String.valueOf(Arrays.asList(currentStation.getSources()).indexOf("Geothermal")));
             textfields.add(boo);
             if(Maintenance.checkEnergy("Geothermal"))
                 foo = new Label("Geothermal*: ");
             else {
                 foo = new Label("Geothermal: ");
                 boo.setDisable(true);
+                boo.setText(null);
             }
             grid.add(foo, 2, 3);
             grid.add(boo, 3, 3);
-            boo = new TextField("0");
+            boo = new TextField(String.valueOf(Arrays.asList(currentStation.getSources()).indexOf("DisCharging")));
             textfields.add(boo);
             foo = new Label("DisCharging*: ");
             grid.add(foo, 0, 4);

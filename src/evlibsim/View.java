@@ -3,9 +3,10 @@ package evlibsim;
 import EVLib.Station.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.chart.PieChart;
+import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
@@ -13,8 +14,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-import static evlibsim.EVLibSim.currentStation;
-import static evlibsim.EVLibSim.root;
+import static evlibsim.EVLibSim.*;
 import static evlibsim.MenuStation.scroll;
 
 class View {
@@ -27,10 +27,6 @@ class View {
     private static final MenuItem dischargingsMenuItem = new MenuItem("Running dischargings");
     private static final MenuItem exchangesMenuItem = new MenuItem("Running exchanges");
     private static final MenuItem parkingsMenuItem = new MenuItem("Running parkings");
-    private static final Button chargings = new Button("Running chargings");
-    private static final Button dischargings = new Button("Running dischargings");
-    private static final Button exchanges = new Button("Running exchanges");
-    private static final Button parkings = new Button("Runinng parkings");
     private static final Image image = new Image(View.class.getResourceAsStream("run.png"));
 
     static Menu createViewMenu() {
@@ -226,32 +222,11 @@ class View {
             scroll.setContent(x);
             root.setCenter(scroll);
         });
-        totalActivity.setOnAction(e -> {
+        totalActivity.setOnAction((ActionEvent e) -> {
             if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
-            Label title = new Label("Running Events");
-            title.setAlignment(Pos.CENTER);
-            title.setStyle("-fx-font: 15 Lato bold;");
-            VBox box = new VBox();
-            box.setPadding(new Insets(25));
-            box.setSpacing(25);
-            box.getChildren().addAll(new Label("Name: " + currentStation.getName()),
-                    new Label("Total slow chargers: " + currentStation.SLOW_CHARGERS),
-                    new Label("Total fast chargers: " + currentStation.FAST_CHARGERS),
-                    new Label("Total dischargers: " + currentStation.getDisChargers().length),
-                    new Label("Total exchange handlers: " + currentStation.getExchangeHandlers().length),
-                    new Label("Total parking slots: " + currentStation.getParkingSlots().length),
-                    new Label("Cars waiting for slow charging: " + String.valueOf(currentStation.getSlow().getSize())),
-                    new Label("Cars waiting for fast charging: " + String.valueOf(currentStation.getFast().getSize())),
-                    new Label("Cars waiting for discharging: " + String.valueOf(currentStation.getDischarging().getSize())),
-                    new Label("Cars waiting for battery exchange: " + String.valueOf(currentStation.getExchange().getSize())),
-                    title,
-                    chargings, dischargings, exchanges, parkings);
-            chargings.setPrefSize(250, 30);
-            dischargings.setPrefSize(250, 30);
-            exchanges.setPrefSize(250, 30);
-            parkings.setPrefSize(250, 30);
+            grid.setMaxSize(950, 750);
             ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
             for (int i = 0; i < currentStation.getSources().length; i++) {
                 switch (currentStation.getSources()[i]) {
@@ -293,26 +268,90 @@ class View {
                         break;
                     case "DisCharging":
                         if (currentStation.getSpecificAmount("DisCharging") > 0) {
-                            pieChartData.add(new PieChart.Data("Discharging", currentStation.getSpecificAmount("DisCharging")));
+                            pieChartData.add(new PieChart.Data("DisCharging", currentStation.getSpecificAmount("DisCharging")));
                             continue;
                         }
                         break;
                 }
             }
-            final PieChart chart = new PieChart(pieChartData);
-            chart.setTitle("Energy Sources");
+            PieChart chart = new PieChart(pieChartData);
+            chart.setTitle("Energy Division");
+            chart.setLegendVisible(false);
             chart.setLabelLineLength(25);
             chart.setClockwise(true);
-            root.setCenter(chart);
-            root.setLeft(box);
+            chart.getData().stream().forEach(data -> {
+                Tooltip tooltip = new Tooltip();
+                tooltip.setText(String.valueOf(data.getPieValue()));
+                Tooltip.install(data.getNode(), tooltip);
+            });
+            grid.add(chart, 0, 0);
+            root.setCenter(grid);
+            applyCustomColorSequence(pieChartData, "aqua",
+                    "bisque",
+                    "chocolate",
+                    "coral",
+                    "crimson",
+                    "cyan",
+                    "steelblue");
+            CategoryAxis xAxis = new CategoryAxis();
+            NumberAxis yAxis = new NumberAxis();
+            BarChart barChart = new BarChart(xAxis, yAxis);
+            XYChart.Series dataSeries1 = new XYChart.Series();
+            dataSeries1.setName("Running Events");
+            int counter = 0;
+            for (Charger ch : currentStation.getChargers())
+                if ((ch.getChargingEvent() != null) && ch.getChargingEvent().getCondition().equals("charging"))
+                    counter++;
+            dataSeries1.getData().add(new XYChart.Data("Char", counter));
+            counter = 0;
+            for (DisCharger ch : currentStation.getDisChargers())
+                if ((ch.getDisChargingEvent() != null) && ch.getDisChargingEvent().getCondition().equals("discharging"))
+                    counter++;
+            dataSeries1.getData().add(new XYChart.Data("Dis", counter));
+            counter = 0;
+            for (ExchangeHandler ch : currentStation.getExchangeHandlers())
+                if ((ch.getChargingEvent() != null) && ch.getChargingEvent().getCondition().equals("swapping"))
+                    counter++;
+            dataSeries1.getData().add(new XYChart.Data("Exch", counter));
+            counter = 0;
+            for (ParkingSlot ch : currentStation.getParkingSlots())
+                if ((ch.getParkingEvent() != null) && (ch.getParkingEvent().getCondition().equals("parking") || ch.getParkingEvent().getCondition().equals("charging")))
+                    counter++;
+            dataSeries1.getData().add(new XYChart.Data("Park", counter));
+            barChart.getData().add(dataSeries1);
+
+            grid.add(barChart, 0, 1);
+
+            xAxis = new CategoryAxis();
+            yAxis = new NumberAxis();
+            barChart = new BarChart(xAxis, yAxis);
+            dataSeries1 = new XYChart.Series();
+            dataSeries1.setName("Infastructure");
+            dataSeries1.getData().add(new XYChart.Data("Slow", currentStation.SLOW_CHARGERS));
+            dataSeries1.getData().add(new XYChart.Data("Fast", currentStation.FAST_CHARGERS));
+            dataSeries1.getData().add(new XYChart.Data("Dis", currentStation.getDisChargers().length));
+            dataSeries1.getData().add(new XYChart.Data("Park", currentStation.getParkingSlots().length));
+            dataSeries1.getData().add(new XYChart.Data("Exch", currentStation.getExchangeHandlers().length));
+            barChart.getData().add(dataSeries1);
+
+            grid.add(barChart, 1, 0);
+
+            xAxis = new CategoryAxis();
+            yAxis = new NumberAxis();
+            barChart = new BarChart(xAxis, yAxis);
+            dataSeries1 = new XYChart.Series();
+            dataSeries1.setName("Waiting List");
+            dataSeries1.getData().add(new XYChart.Data("Slow", currentStation.getSlow().getSize()));
+            dataSeries1.getData().add(new XYChart.Data("Fast", currentStation.getFast().getSize()));
+            dataSeries1.getData().add(new XYChart.Data("Dis", currentStation.getDischarging().getSize()));
+            dataSeries1.getData().add(new XYChart.Data("Exch", currentStation.getExchange().getSize()));
+            barChart.getData().add(dataSeries1);
+
+            grid.add(barChart, 1, 1);
         });
-        chargingsMenuItem.setOnAction(et -> chargings.fire());
-        dischargingsMenuItem.setOnAction(et -> dischargings.fire());
-        exchangesMenuItem.setOnAction(et -> exchanges.fire());
-        parkingsMenuItem.setOnAction(et -> parkings.fire());
 
         //Buttons
-        chargings.setOnAction(et -> {
+        chargingsMenuItem.setOnAction(et -> {
             if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
@@ -347,7 +386,7 @@ class View {
             table.setMaxSize(1000, 600);
             root.setCenter(table);
         });
-        dischargings.setOnAction(et -> {
+        dischargingsMenuItem.setOnAction(et -> {
             if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
@@ -378,7 +417,7 @@ class View {
             table.setMaxSize(1000, 600);
             root.setCenter(table);
         });
-        exchanges.setOnAction(et -> {
+        exchangesMenuItem.setOnAction(et -> {
             if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
@@ -406,7 +445,7 @@ class View {
             table.setMaxSize(1000, 600);
             root.setCenter(table);
         });
-        parkings.setOnAction(et -> {
+        parkingsMenuItem.setOnAction(et -> {
             if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
@@ -442,5 +481,13 @@ class View {
             root.setCenter(table);
         });
         return view;
+    }
+
+    private static void applyCustomColorSequence(ObservableList<PieChart.Data> pieChartData, String... pieColors) {
+        int i = 0;
+        for (PieChart.Data data : pieChartData) {
+            data.getNode().setStyle("-fx-pie-color: " + pieColors[i % pieColors.length] + ";");
+            i++;
+        }
     }
 }

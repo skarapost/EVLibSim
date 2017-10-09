@@ -91,6 +91,8 @@ public class EVLibSim extends Application {
         Console console = new Console();
         ta.setEditable(false);
         ta.setMaxHeight(50);
+        ta.setMaxWidth(400);
+        BorderPane.setAlignment(ta, Pos.CENTER);
         PrintStream ps = new PrintStream(console, true);
         System.setOut(ps);
         System.setErr(ps);

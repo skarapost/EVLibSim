@@ -37,8 +37,8 @@ class MenuStation {
     private static final MenuItem modifyChargingStationMI = new MenuItem("Modify station");
     private static final MenuItem newBatteryMI = new MenuItem("New battery");
     private static final MenuItem allBatteriesMI = new MenuItem("Batteries");
-    private static boolean automaticHandling = true;
-    private static boolean automaticUpdate = false;
+    private static boolean automaticHandling;
+    private static boolean automaticUpdate;
     private static final MenuItem batteriesChargingMI = new MenuItem("Batteries charging");
     static RadioMenuItem cs;
     private static final Button chargingStationCreationB = new Button("Creation");
@@ -159,7 +159,10 @@ class MenuStation {
             RadioMenuItem te = new RadioMenuItem("True");
             RadioMenuItem fe = new RadioMenuItem("False");
             r.getToggles().addAll(te, fe);
-            fe.setSelected(true);
+            te.setSelected(true);
+            r.selectedToggleProperty().addListener((observable, newValue, oldValue) -> {
+                automaticUpdate = te.isSelected();
+            });
             src.getItems().addAll(te, fe);
             sourc.getMenus().add(src);
             EVLibSim.grid.add(sourc, 3, 8);
@@ -169,11 +172,14 @@ class MenuStation {
             sourc.setMaxWidth(100);
             sourc.setId("menubar");
             src = new Menu("Choice");
-            r = new ToggleGroup();
+            ToggleGroup t = new ToggleGroup();
             RadioMenuItem tr = new RadioMenuItem("True");
             RadioMenuItem fa = new RadioMenuItem("False");
-            r.getToggles().addAll(tr, fa);
+            t.getToggles().addAll(tr, fa);
             tr.setSelected(true);
+            t.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+                automaticHandling = tr.isSelected();
+            });
             src.getItems().addAll(tr, fa);
             sourc.getMenus().add(src);
             EVLibSim.grid.add(sourc, 1, 9);
@@ -190,10 +196,6 @@ class MenuStation {
             EVLibSim.grid.add(chargingStationCreationB, 0, 11);
             chargingStationCreationB.setDefaultButton(true);
             EVLibSim.root.setCenter(EVLibSim.grid);
-            te.setOnAction((ActionEvent et) ->
-                    automaticUpdate = te.isSelected());
-            tr.setOnAction((ActionEvent et) ->
-                    automaticHandling = tr.isSelected());
             sol.setOnAction((ActionEvent et) -> {
                 if (sol.isSelected())
                     EVLibSim.energies.add("Solar");
@@ -374,32 +376,42 @@ class MenuStation {
             foo = new Label("Automatic energy update: ");
             EVLibSim.grid.add(foo, 2, 5);
             sourc = new MenuBar();
+            sourc.setId("menubar");
             sourc.setMaxWidth(100);
             src = new Menu("Choice");
             ToggleGroup r = new ToggleGroup();
             RadioMenuItem te = new RadioMenuItem("True");
             RadioMenuItem fe = new RadioMenuItem("False");
             r.getToggles().addAll(te, fe);
-            if (currentStation.getUpdateMode())
+            automaticUpdate = currentStation.getUpdateMode();
+            if (automaticUpdate)
                 te.setSelected(true);
             else
                 fe.setSelected(true);
+            r.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+                automaticUpdate = te.isSelected();
+            });
             src.getItems().addAll(te, fe);
             sourc.getMenus().add(src);
             EVLibSim.grid.add(sourc, 3, 5);
             foo = new Label("Automatic queue handling: ");
             EVLibSim.grid.add(foo, 0, 6);
             sourc = new MenuBar();
+            sourc.setId("menubar");
             sourc.setMaxWidth(100);
             src = new Menu("Choice");
-            r = new ToggleGroup();
+            ToggleGroup t = new ToggleGroup();
             RadioMenuItem tr = new RadioMenuItem("True");
             RadioMenuItem fa = new RadioMenuItem("False");
-            r.getToggles().addAll(tr, fa);
-            if (currentStation.getQueueHandling())
+            t.getToggles().addAll(tr, fa);
+            automaticHandling = currentStation.getQueueHandling();
+            if (automaticHandling)
                 tr.setSelected(true);
             else
                 fa.setSelected(true);
+            t.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+                automaticHandling = tr.isSelected();
+            });
             src.getItems().addAll(tr, fa);
             sourc.getMenus().add(src);
             EVLibSim.grid.add(sourc, 1, 6);
@@ -416,8 +428,6 @@ class MenuStation {
             EVLibSim.grid.add(modifyStationB, 0, 8);
             modifyStationB.setDefaultButton(true);
             EVLibSim.root.setCenter(EVLibSim.grid);
-            te.setOnAction((ActionEvent et) -> automaticUpdate = te.isSelected());
-            tr.setOnAction((ActionEvent et) -> automaticHandling = tr.isSelected());
         });
 
         //Implements the All Chargers MenuItem

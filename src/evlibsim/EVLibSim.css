@@ -28,8 +28,8 @@
     -fx-background-radius: 0 5 5 0;
     -fx-border-radius: 0 5 5 0;
     -fx-max-height: 400;
-    -fx-max-width: 200;
-    -fx-min-width: 200;
+    -fx-max-width: 190;
+    -fx-min-width: 190;
     -fx-alignment: center;
     -fx-padding: 5;
     -fx-spacing: 15;
@@ -96,7 +96,7 @@
     -fx-max-height: 40;
     -fx-background-color: -fx-color-500;
     -fx-padding: 0 16 0 16;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);
     -fx-alignment: center-left;
 }
 

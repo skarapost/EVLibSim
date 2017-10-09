@@ -5,6 +5,7 @@ import EVLib.Station.DisChargingEvent;
 import EVLib.Station.ParkingEvent;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -267,6 +268,7 @@ class ToolBox {
         bar.setStyle("-fx-alignment: center; -fx-spacing: 20;" +
                 " -fx-background-color: transparent;");
         BorderPane.setAlignment(bar, Pos.CENTER);
+        BorderPane.setMargin(bar, new Insets(0, 0, 0, 120));
         createLogButtons();
         createOverviewMenu();
         return bar;
