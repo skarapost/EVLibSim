@@ -1,8 +1,8 @@
 package evlibsim;
 
-import EVLib.Station.ChargingEvent;
-import EVLib.Station.DisChargingEvent;
-import EVLib.Station.ParkingEvent;
+import evlib.station.ChargingEvent;
+import evlib.station.DisChargingEvent;
+import evlib.station.ParkingEvent;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;

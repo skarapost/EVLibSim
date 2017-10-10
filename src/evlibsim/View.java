@@ -1,6 +1,6 @@
 package evlibsim;
 
-import EVLib.Station.*;
+import evlib.station.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -279,7 +279,7 @@ class View {
             chart.setLegendVisible(false);
             chart.setLabelLineLength(25);
             chart.setClockwise(true);
-            chart.getData().stream().forEach(data -> {
+            chart.getData().forEach(data -> {
                 Tooltip tooltip = new Tooltip();
                 tooltip.setText(String.valueOf(data.getPieValue()));
                 Tooltip.install(data.getNode(), tooltip);

@@ -1,10 +1,10 @@
 package evlibsim;
 
-import EVLib.EV.Battery;
-import EVLib.EV.Driver;
-import EVLib.EV.ElectricVehicle;
-import EVLib.Sources.*;
-import EVLib.Station.*;
+import evlib.ev.Battery;
+import evlib.ev.Driver;
+import evlib.ev.ElectricVehicle;
+import evlib.sources.*;
+import evlib.station.*;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -47,7 +47,7 @@ public class EVLibSim extends Application {
     private static final Button newEvent = new Button("New event");
     private static final Button newEnergy = new Button("Energy");
     static final ToggleGroup group = new ToggleGroup();
-    private static final MenuItem startScreen = new MenuItem("Start Screen");
+    static final MenuItem startScreen = new MenuItem("Start Screen");
     private static final Menu rec = new Menu("Suggestions");
     private static final RadioMenuItem enable = new RadioMenuItem("Enable");
     private static final RadioMenuItem disable = new RadioMenuItem("Disable");

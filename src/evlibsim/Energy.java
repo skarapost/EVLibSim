@@ -1,6 +1,6 @@
 package evlibsim;
 
-import EVLib.Sources.*;
+import evlib.sources.*;
 import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 
@@ -64,6 +64,7 @@ class Energy {
                         break;
                 }
                 Maintenance.completionMessage("EnergySource insertion");
+                startScreen.fire();
             });
         });
 
@@ -76,8 +77,8 @@ class Energy {
             dialog.setHeaderText(null);
             dialog.setContentText("Choose an EnergySource: ");
             Optional<String> result = dialog.showAndWait();
-            result.ifPresent(s -> {
-                switch (s) {
+            if (result.isPresent()) {
+                switch (result.get()) {
                     case "Solar":
                         currentStation.deleteEnergySource(currentStation.getEnergySource("Solar"));
                         break;
@@ -98,7 +99,8 @@ class Energy {
                         break;
                 }
                 Maintenance.completionMessage("EnergySource removal");
-            });
+                startScreen.fire();
+            }
         });
 
         //Implements the energy storage update, in case the automatic update mode is false.
@@ -125,73 +127,67 @@ class Energy {
             grid.setMaxSize(700, 300);
             TextField boo;
             Label foo;
-            boo = new TextField(String.valueOf(Arrays.asList(currentStation.getSources()).indexOf("Solar")));
+            boo = new TextField(String.valueOf(Arrays.asList(currentStation.getSources()).indexOf("Solar") - 1));
             textfields.add(boo);
             if (Maintenance.checkEnergy("Solar"))
                 foo = new Label("Solar*: ");
             else {
                 foo = new Label("Solar: ");
                 boo.setDisable(true);
-                boo.setText(null);
             }
             grid.add(foo, 0, 1);
             grid.add(boo, 1, 1);
-            boo = new TextField(String.valueOf(Arrays.asList(currentStation.getSources()).indexOf("Wind")));
+            boo = new TextField(String.valueOf(Arrays.asList(currentStation.getSources()).indexOf("Wind") - 1));
             textfields.add(boo);
             if (Maintenance.checkEnergy("Wind")) {
                 foo = new Label("Wind*: ");
             } else {
                 foo = new Label("Wind: ");
                 boo.setDisable(true);
-                boo.setText(null);
             }
             grid.add(foo, 2, 1);
             grid.add(boo, 3, 1);
-            boo = new TextField(String.valueOf(Arrays.asList(currentStation.getSources()).indexOf("Wave")));
+            boo = new TextField(String.valueOf(Arrays.asList(currentStation.getSources()).indexOf("Wave") - 1));
             textfields.add(boo);
             if (Maintenance.checkEnergy("Wave"))
                 foo = new Label("Wave*: ");
             else {
                 foo = new Label("Wave: ");
                 boo.setDisable(true);
-                boo.setText(null);
             }
             grid.add(foo, 0, 2);
             grid.add(boo, 1, 2);
-            boo = new TextField(String.valueOf(Arrays.asList(currentStation.getSources()).indexOf("Hydroelectric")));
+            boo = new TextField(String.valueOf(Arrays.asList(currentStation.getSources()).indexOf("Hydroelectric") - 1));
             textfields.add(boo);
             if(Maintenance.checkEnergy("Hydroelectric"))
                 foo = new Label("Hydroelectric*: ");
             else {
                 foo = new Label("Hydroelectric: ");
                 boo.setDisable(true);
-                boo.setText(null);
             }
             grid.add(foo, 2, 2);
             grid.add(boo, 3, 2);
-            boo = new TextField(String.valueOf(Arrays.asList(currentStation.getSources()).indexOf("Nonrenewable")));
+            boo = new TextField(String.valueOf(Arrays.asList(currentStation.getSources()).indexOf("Nonrenewable") - 1));
             textfields.add(boo);
             if(Maintenance.checkEnergy("Nonrenewable"))
                 foo = new Label("Nonrenewable*: ");
             else {
                 foo = new Label("Nonrenewable: ");
                 boo.setDisable(true);
-                boo.setText(null);
             }
             grid.add(foo, 0, 3);
             grid.add(boo, 1, 3);
-            boo = new TextField(String.valueOf(Arrays.asList(currentStation.getSources()).indexOf("Geothermal")));
+            boo = new TextField(String.valueOf(Arrays.asList(currentStation.getSources()).indexOf("Geothermal") - 1));
             textfields.add(boo);
             if(Maintenance.checkEnergy("Geothermal"))
                 foo = new Label("Geothermal*: ");
             else {
                 foo = new Label("Geothermal: ");
                 boo.setDisable(true);
-                boo.setText(null);
             }
             grid.add(foo, 2, 3);
             grid.add(boo, 3, 3);
-            boo = new TextField(String.valueOf(Arrays.asList(currentStation.getSources()).indexOf("DisCharging")));
+            boo = new TextField(String.valueOf(Arrays.asList(currentStation.getSources()).indexOf("DisCharging") - 1));
             textfields.add(boo);
             foo = new Label("DisCharging*: ");
             grid.add(foo, 0, 4);
@@ -330,17 +326,17 @@ class Energy {
                 alert.showAndWait();
                 return;
             }
-            for(TextField a: textfields)
-                if(!a.isDisabled()) {
+            textfields.forEach(a -> {
+                if (!a.isDisabled()) {
                     if (Integer.parseInt(a.getText()) > currentStation.getSources().length || Integer.parseInt(a.getText()) < 1) {
                         Alert alert = new Alert(Alert.AlertType.ERROR);
                         alert.setTitle("Error");
                         alert.setHeaderText(null);
                         alert.setContentText("Please put numbers from 1-" + currentStation.getSources().length + ".");
                         alert.showAndWait();
-                        return;
                     }
                 }
+            });
             try {
                 String[] sources = new String[currentStation.getSources().length];
                 if (!textfields.get(0).isDisabled())

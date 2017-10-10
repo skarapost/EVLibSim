@@ -1,9 +1,9 @@
 package evlibsim;
 
-import EVLib.EV.Battery;
-import EVLib.EV.Driver;
-import EVLib.EV.ElectricVehicle;
-import EVLib.Station.*;
+import evlib.ev.Battery;
+import evlib.ev.Driver;
+import evlib.ev.ElectricVehicle;
+import evlib.station.*;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -513,7 +513,7 @@ class Event {
                 outside.getChildren().addAll(inside2, inside1);
                 g.add(outside, 0, 0);
 
-                tempStations = new ArrayList<>(Arrays.asList(bestPrice()).subList(0, Math.min(stations.size(), 5)));
+                tempStations = new ArrayList<>(Arrays.asList(bestInductivePrice()).subList(0, Math.min(stations.size(), 5)));
                 VBox inside3 = new VBox();
                 inside3.setStyle("-fx-background-color:#F0F1F3; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
                 inside3.setPadding(new Insets(10, 10, 10, 10));
@@ -557,7 +557,6 @@ class Event {
             Optional<ButtonType> result = alert.showAndWait();
             TextField boo;
             Label foo;
-            grid.setMaxSize(500, 300);
             if(result.isPresent()) {
                 if (result.get() == buttonTypeOne) {
                     Maintenance.cleanScreen();
@@ -573,6 +572,8 @@ class Event {
                     textfields.add(boo);
                     grid.add(policyCreation1, 0, 3);
                     policyCreation1.setDefaultButton(true);
+                    grid.setMaxSize(500, 300);
+                    root.setCenter(grid);
                 } else if (result.get() == buttonTypeTwo) {
                     Maintenance.cleanScreen();
                     foo = new Label("Durations(Separated with comma): ");
@@ -587,9 +588,10 @@ class Event {
                     textfields.add(boo);
                     grid.add(policyCreation2, 0, 3);
                     policyCreation2.setDefaultButton(true);
+                    grid.setMaxSize(500, 300);
+                    root.setCenter(grid);
                 }
             }
-            root.setCenter(grid);
         });
 
         //Buttons
@@ -846,8 +848,6 @@ class Event {
         policyCreation1.setOnAction(e -> {
             if(Maintenance.fieldCompletionCheck())
                 return;
-            if(Maintenance.confirmCreation())
-                return;
             String text = textfields.get(1).getText().replaceAll("[^0-9,]+","");
             textfields.get(1).setText(text);
             String[] prices = textfields.get(1).getText().split(",");
@@ -860,8 +860,6 @@ class Event {
         });
         policyCreation2.setOnAction(e -> {
             if(Maintenance.fieldCompletionCheck())
-                return;
-            if(Maintenance.confirmCreation())
                 return;
             String text = textfields.get(0).getText().replaceAll("[^0-9,]+","");
             textfields.get(0).setText(text);

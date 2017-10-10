@@ -75,11 +75,11 @@ class Maintenance {
         alert.showAndWait();
     }
 
-    static boolean confirmCreation() {
+    static boolean confirmDeletion() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("PricingPolicy" + " creation");
+        alert.setTitle("Confirm Deletion");
         alert.setHeaderText(null);
-        alert.setContentText("Are you sure about the creation?");
+        alert.setContentText("Are you sure about the deletion?");
         Optional<ButtonType> option = alert.showAndWait();
         return !option.isPresent() || option.get() != ButtonType.OK;
     }

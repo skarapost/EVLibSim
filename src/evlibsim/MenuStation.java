@@ -1,8 +1,8 @@
 package evlibsim;
 
-import EVLib.EV.Battery;
-import EVLib.Sources.*;
-import EVLib.Station.*;
+import evlib.ev.Battery;
+import evlib.sources.*;
+import evlib.station.*;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -12,6 +12,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -160,9 +161,7 @@ class MenuStation {
             RadioMenuItem fe = new RadioMenuItem("False");
             r.getToggles().addAll(te, fe);
             te.setSelected(true);
-            r.selectedToggleProperty().addListener((observable, newValue, oldValue) -> {
-                automaticUpdate = te.isSelected();
-            });
+            r.selectedToggleProperty().addListener((observable, newValue, oldValue) -> automaticUpdate = te.isSelected());
             src.getItems().addAll(te, fe);
             sourc.getMenus().add(src);
             EVLibSim.grid.add(sourc, 3, 8);
@@ -177,9 +176,7 @@ class MenuStation {
             RadioMenuItem fa = new RadioMenuItem("False");
             t.getToggles().addAll(tr, fa);
             tr.setSelected(true);
-            t.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
-                automaticHandling = tr.isSelected();
-            });
+            t.selectedToggleProperty().addListener((observable, oldValue, newValue) -> automaticHandling = tr.isSelected());
             src.getItems().addAll(tr, fa);
             sourc.getMenus().add(src);
             EVLibSim.grid.add(sourc, 1, 9);
@@ -268,13 +265,13 @@ class MenuStation {
             alert.setHeaderText(null);
             alert.setContentText("Please give a name: ");
             Optional<String> result = alert.showAndWait();
-            result.ifPresent(s -> {
+            if (result.isPresent()) {
                 DisCharger ch;
                 ch = new DisCharger(currentStation);
-                ch.setName(s);
+                ch.setName(result.get());
                 currentStation.addDisCharger(ch);
                 Maintenance.completionMessage("DisCharger creation");
-            });
+            }
         });
 
         //Implements the New ExchangeHandler MenuItem.
@@ -287,13 +284,13 @@ class MenuStation {
             alert.setHeaderText(null);
             alert.setContentText("Please give a name: ");
             Optional<String> result = alert.showAndWait();
-            result.ifPresent(s -> {
+            if (result.isPresent()) {
                 ExchangeHandler ch;
                 ch = new ExchangeHandler(currentStation);
-                ch.setName(s);
+                ch.setName(result.get());
                 currentStation.addExchangeHandler(ch);
                 Maintenance.completionMessage("ExchangeHandler creation");
-            });
+            }
         });
 
         //Implements the New ParkingSlot MenuItem.
@@ -306,13 +303,13 @@ class MenuStation {
             alert.setHeaderText(null);
             alert.setContentText("Please give a name: ");
             Optional<String> result = alert.showAndWait();
-            result.ifPresent(s -> {
+            if (result.isPresent()) {
                 ParkingSlot ch;
                 ch = new ParkingSlot(currentStation);
-                ch.setName(s);
+                ch.setName(result.get());
                 currentStation.addParkingSlot(ch);
                 Maintenance.completionMessage("ParkingSlot creation");
-            });
+            }
         });
 
         //Implements the Modify ChargingStation.
@@ -388,9 +385,7 @@ class MenuStation {
                 te.setSelected(true);
             else
                 fe.setSelected(true);
-            r.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
-                automaticUpdate = te.isSelected();
-            });
+            r.selectedToggleProperty().addListener((observable, oldValue, newValue) -> automaticUpdate = te.isSelected());
             src.getItems().addAll(te, fe);
             sourc.getMenus().add(src);
             EVLibSim.grid.add(sourc, 3, 5);
@@ -409,9 +404,7 @@ class MenuStation {
                 tr.setSelected(true);
             else
                 fa.setSelected(true);
-            t.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
-                automaticHandling = tr.isSelected();
-            });
+            t.selectedToggleProperty().addListener((observable, oldValue, newValue) -> automaticHandling = tr.isSelected());
             src.getItems().addAll(tr, fa);
             sourc.getMenus().add(src);
             EVLibSim.grid.add(sourc, 1, 6);
@@ -462,8 +455,10 @@ class MenuStation {
                 delete.setOnAction(et -> {
                     if (ch.getChargingEvent() == null)
                     {
-                        currentStation.deleteCharger(ch);
-                        Maintenance.completionMessage("Charger deletion");
+                        if (Maintenance.confirmDeletion()) {
+                            currentStation.deleteCharger(ch);
+                            Maintenance.completionMessage("Charger deletion");
+                        }
                     }
                     else
                     {
@@ -512,8 +507,10 @@ class MenuStation {
                 delete.setOnAction(et -> {
                     if (ch.getDisChargingEvent() == null)
                     {
-                        currentStation.deleteDisCharger(ch);
-                        Maintenance.completionMessage("DisCharger deletion");
+                        if (Maintenance.confirmDeletion()) {
+                            currentStation.deleteDisCharger(ch);
+                            Maintenance.completionMessage("DisCharger deletion");
+                        }
                     }
                     else
                     {
@@ -562,8 +559,10 @@ class MenuStation {
                 delete.setOnAction(et -> {
                     if (ch.getChargingEvent() == null)
                     {
-                        currentStation.deleteExchangeHandler(ch);
-                        Maintenance.completionMessage("ExchangeHandler deletion");
+                        if (Maintenance.confirmDeletion()) {
+                            currentStation.deleteExchangeHandler(ch);
+                            Maintenance.completionMessage("ExchangeHandler deletion");
+                        }
                     }
                     else
                     {
@@ -612,8 +611,10 @@ class MenuStation {
                 delete.setOnAction(et -> {
                     if (ch.getParkingEvent() == null)
                     {
-                        currentStation.deleteParkingSlot(ch);
-                        Maintenance.completionMessage("ParkingSlot deletion");
+                        if (Maintenance.confirmDeletion()) {
+                            currentStation.deleteParkingSlot(ch);
+                            Maintenance.completionMessage("ParkingSlot deletion");
+                        }
                     }
                     else
                     {
@@ -690,8 +691,21 @@ class MenuStation {
                 delete.setMinSize(image.getWidth(), image.getHeight());
                 delete.setGraphic(new ImageView(image));
                 delete.setOnAction(et -> {
-                    currentStation.deleteBattery(b);
-                    allChargersMI.fire();
+                    for (Charger charger : currentStation.getChargers()) {
+                        if (charger.getChargingEvent().getElectricVehicle().getBattery() == b) {
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("Error");
+                            alert.setHeaderText(null);
+                            alert.setContentText("Battery is charging now.");
+                            alert.showAndWait();
+                            return;
+                        }
+                    }
+                    if (Maintenance.confirmDeletion()) {
+                        currentStation.deleteBattery(b);
+                        Maintenance.completionMessage("Battery deletion");
+                        allBatteriesMI.fire();
+                    }
                 });
                 z.getChildren().add(delete);
                 box.getChildren().add(z);
@@ -704,19 +718,21 @@ class MenuStation {
         batteriesChargingMI.setOnAction(e -> {
             if(Maintenance.stationCheck())
                 return;
-            TextInputDialog dialog = new TextInputDialog();
+            String[] choices = {"slow", "fast"};
+            ChoiceDialog<String> dialog = new ChoiceDialog(Arrays.asList(choices).get(0), Arrays.asList(choices));
             dialog.setTitle("Information");
             dialog.setHeaderText(null);
             dialog.setContentText("Kind of charging: ");
             Optional<String> result = dialog.showAndWait();
-            result.ifPresent(s -> currentStation.batteriesCharging(s));
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Information");
-            alert.setHeaderText(null);
-            alert.setContentText("The chargings started.");
-            alert.showAndWait();
+            if (result.isPresent()) {
+                currentStation.batteriesCharging(result.get());
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Information");
+                alert.setHeaderText(null);
+                alert.setContentText("The chargings started.");
+                alert.showAndWait();
+            }
         });
-
         //Buttons
         chargerCreationB.setOnAction(e ->
         {
