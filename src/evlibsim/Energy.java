@@ -127,7 +127,7 @@ class Energy {
             grid.setMaxSize(700, 300);
             TextField boo;
             Label foo;
-            boo = new TextField(String.valueOf(Arrays.asList(currentStation.getSources()).indexOf("Solar") - 1));
+            boo = new TextField(String.valueOf(Arrays.asList(currentStation.getSources()).indexOf("Solar") + 1));
             textfields.add(boo);
             if (Maintenance.checkEnergy("Solar"))
                 foo = new Label("Solar*: ");
@@ -137,7 +137,7 @@ class Energy {
             }
             grid.add(foo, 0, 1);
             grid.add(boo, 1, 1);
-            boo = new TextField(String.valueOf(Arrays.asList(currentStation.getSources()).indexOf("Wind") - 1));
+            boo = new TextField(String.valueOf(Arrays.asList(currentStation.getSources()).indexOf("Wind") + 1));
             textfields.add(boo);
             if (Maintenance.checkEnergy("Wind")) {
                 foo = new Label("Wind*: ");
@@ -147,7 +147,7 @@ class Energy {
             }
             grid.add(foo, 2, 1);
             grid.add(boo, 3, 1);
-            boo = new TextField(String.valueOf(Arrays.asList(currentStation.getSources()).indexOf("Wave") - 1));
+            boo = new TextField(String.valueOf(Arrays.asList(currentStation.getSources()).indexOf("Wave") + 1));
             textfields.add(boo);
             if (Maintenance.checkEnergy("Wave"))
                 foo = new Label("Wave*: ");
@@ -157,7 +157,7 @@ class Energy {
             }
             grid.add(foo, 0, 2);
             grid.add(boo, 1, 2);
-            boo = new TextField(String.valueOf(Arrays.asList(currentStation.getSources()).indexOf("Hydroelectric") - 1));
+            boo = new TextField(String.valueOf(Arrays.asList(currentStation.getSources()).indexOf("Hydroelectric") + 1));
             textfields.add(boo);
             if(Maintenance.checkEnergy("Hydroelectric"))
                 foo = new Label("Hydroelectric*: ");
@@ -167,7 +167,7 @@ class Energy {
             }
             grid.add(foo, 2, 2);
             grid.add(boo, 3, 2);
-            boo = new TextField(String.valueOf(Arrays.asList(currentStation.getSources()).indexOf("Nonrenewable") - 1));
+            boo = new TextField(String.valueOf(Arrays.asList(currentStation.getSources()).indexOf("Nonrenewable") + 1));
             textfields.add(boo);
             if(Maintenance.checkEnergy("Nonrenewable"))
                 foo = new Label("Nonrenewable*: ");
@@ -177,7 +177,7 @@ class Energy {
             }
             grid.add(foo, 0, 3);
             grid.add(boo, 1, 3);
-            boo = new TextField(String.valueOf(Arrays.asList(currentStation.getSources()).indexOf("Geothermal") - 1));
+            boo = new TextField(String.valueOf(Arrays.asList(currentStation.getSources()).indexOf("Geothermal") + 1));
             textfields.add(boo);
             if(Maintenance.checkEnergy("Geothermal"))
                 foo = new Label("Geothermal*: ");
@@ -187,7 +187,7 @@ class Energy {
             }
             grid.add(foo, 2, 3);
             grid.add(boo, 3, 3);
-            boo = new TextField(String.valueOf(Arrays.asList(currentStation.getSources()).indexOf("DisCharging") - 1));
+            boo = new TextField(String.valueOf(Arrays.asList(currentStation.getSources()).indexOf("DisCharging") + 1));
             textfields.add(boo);
             foo = new Label("DisCharging*: ");
             grid.add(foo, 0, 4);
@@ -300,12 +300,12 @@ class Energy {
                         default:
                             break;
                     }
+                Maintenance.completionMessage("insertion of energy amounts");
+                newEnergyPackages.fire();
             } catch (Exception ex) {
                 Maintenance.refillBlanks();
                 newEnergyPackages.fire();
             }
-            Maintenance.completionMessage("insertion of energy amounts");
-            newEnergyPackages.fire();
         });
         sort.setOnAction(e -> {
             if(Maintenance.fieldCompletionCheck())
@@ -354,12 +354,12 @@ class Energy {
                 if (!textfields.get(6).isDisabled())
                     sources[Integer.parseInt(textfields.get(6).getText()) - 1] = "DisCharging";
                 currentStation.customEnergySorting(sources);
+                Maintenance.completionMessage("sorting");
+                sortEnergies.fire();
             } catch (Exception ex) {
                 Maintenance.refillBlanks();
                 sortEnergies.fire();
             }
-            Maintenance.completionMessage("sorting");
-            sortEnergies.fire();
         });
         return energy;
     }

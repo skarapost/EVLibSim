@@ -93,6 +93,12 @@ class Event {
             r.getToggles().addAll(slow, fast);
             slow.setSelected(true);
             kindOfCharging = "slow";
+            r.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+                if (slow.isSelected())
+                    kindOfCharging = "slow";
+                else
+                    kindOfCharging = "fast";
+            });
             src.getItems().addAll(slow, fast);
             sourc.getMenus().add(src);
             grid.add(sourc, 1, 4);
@@ -197,14 +203,6 @@ class Event {
             grid.add(suggest1, 1, 5);
             chargingEventCreation.setDefaultButton(true);
             root.setCenter(grid);
-            slow.setOnAction(ew -> {
-                if (slow.isSelected())
-                    kindOfCharging = "slow";
-            });
-            fast.setOnAction(ew -> {
-                if (fast.isSelected())
-                    kindOfCharging = "fast";
-            });
         });
         //Implements the New DisChargingEvent MenuItem
         discharging.setOnAction(e ->
@@ -648,21 +646,18 @@ class Event {
                     ch = new ChargingEvent(currentStation, el, kindOfCharging, Double.parseDouble(textfields.get(6).getText()));
                 ch.setWaitingTime(Long.parseLong(textfields.get(5).getText()));
                 ch.preProcessing();
-                if (ch.getCondition().equals("ready"))
+                if (ch.getCondition().equals("ready")) {
                     ch.execution();
-                else if (ch.getCondition().equals("wait")) {
+                    Maintenance.completionMessage("ChargingEvent creation");
+                } else if (ch.getCondition().equals("wait"))
                     Maintenance.queueInsertion();
-                    return;
-                } else {
+                else
                     Maintenance.noExecution();
-                    return;
-                }
+                charging.fire();
             } catch (Exception ex) {
                 Maintenance.refillBlanks();
                 charging.fire();
             }
-            Maintenance.completionMessage("ChargingEvent creation");
-            charging.fire();
         });
         disChargingEventCreation.setOnAction(e ->
         {
@@ -707,23 +702,19 @@ class Event {
                     dsch = new DisChargingEvent(currentStation, el, Double.parseDouble(textfields.get(4).getText()));
                     dsch.setWaitingTime(Long.parseLong(textfields.get(5).getText()));
                     dsch.preProcessing();
-                    if (dsch.getCondition().equals("ready"))
+                    if (dsch.getCondition().equals("ready")) {
                         dsch.execution();
-                    else if (dsch.getCondition().equals("wait")) {
+                        Maintenance.completionMessage("DisChargingEvent creation");
+                    } else if (dsch.getCondition().equals("wait"))
                         Maintenance.queueInsertion();
-                        return;
-                    } else {
+                    else
                         Maintenance.noExecution();
-                        return;
-                    }
-                    dsch.execution();
                 }
+                discharging.fire();
             } catch (Exception ex) {
                 Maintenance.refillBlanks();
                 discharging.fire();
             }
-            Maintenance.completionMessage("DisChargingEvent creation");
-            discharging.fire();
         });
         exchangeEventCreation.setOnAction(e -> {
             if (Maintenance.fieldCompletionCheck())
@@ -757,21 +748,18 @@ class Event {
                 ch = new ChargingEvent(currentStation, el);
                 ch.setWaitingTime(Long.parseLong(textfields.get(4).getText()));
                 ch.preProcessing();
-                if (ch.getCondition().equals("ready"))
+                if (ch.getCondition().equals("ready")) {
                     ch.execution();
-                else if (ch.getCondition().equals("wait")) {
+                    Maintenance.completionMessage("ChargingEvent creation");
+                } else if (ch.getCondition().equals("wait"))
                     Maintenance.queueInsertion();
-                    return;
-                } else {
+                else
                     Maintenance.noExecution();
-                    return;
-                }
+                exchange.fire();
             } catch (Exception ex) {
                 Maintenance.refillBlanks();
                 exchange.fire();
             }
-            Maintenance.completionMessage("ChargingEvent creation");
-            exchange.fire();
         });
         parkingEventCreation.setOnAction(e -> {
             if (Maintenance.fieldCompletionCheck())
@@ -801,7 +789,7 @@ class Event {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setHeaderText(null);
-                alert.setContentText("Please select a smaller amount.");
+                alert.setContentText("Please select a smaller amount of energy.");
                 alert.showAndWait();
                 return;
             }
@@ -815,35 +803,31 @@ class Event {
                 if (!Objects.equals(textfields.get(4).getText(), "0")) {
                     ch = new ParkingEvent(currentStation, el, Long.parseLong(textfields.get(5).getText()), Double.parseDouble(textfields.get(4).getText()));
                     ch.preProcessing();
-                    if (ch.getCondition().equals("ready"))
+                    if (ch.getCondition().equals("ready")) {
                         ch.execution();
-                    else {
+                        Maintenance.completionMessage("ParkingEvent creation");
+                    } else
                         Maintenance.noExecution();
-                        return;
-                    }
                 } else if (!Objects.equals(textfields.get(5).getText(), "0")) {
                     ch = new ParkingEvent(currentStation, el, Long.parseLong(textfields.get(5).getText()));
                     ch.preProcessing();
-                    if (ch.getCondition().equals("ready"))
+                    if (ch.getCondition().equals("ready")) {
                         ch.execution();
-                    else {
+                        Maintenance.completionMessage("ParkingEvent creation");
+                    } else
                         Maintenance.noExecution();
-                        return;
-                    }
                 } else {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Error");
                     alert.setHeaderText(null);
                     alert.setContentText("Please select at least a positive parking time.");
                     alert.showAndWait();
-                    return;
                 }
+                parking.fire();
             } catch (Exception ex) {
                 Maintenance.refillBlanks();
                 parking.fire();
             }
-            Maintenance.completionMessage("ParkingEvent creation");
-            parking.fire();
         });
         policyCreation1.setOnAction(e -> {
             if(Maintenance.fieldCompletionCheck())
@@ -854,9 +838,15 @@ class Event {
             double[] p = new double[prices.length];
             for(int i=0; i<prices.length; i++)
                 p[i] = Double.parseDouble(prices[i]);
-            PricingPolicy policy = new PricingPolicy(Long.parseLong(textfields.get(0).getText()), p);
-            currentStation.setPricingPolicy(policy);
-            Maintenance.completionMessage("PricingPolicy creation");
+            try {
+                PricingPolicy policy = new PricingPolicy(Long.parseLong(textfields.get(0).getText()), p);
+                currentStation.setPricingPolicy(policy);
+                Maintenance.completionMessage("PricingPolicy creation");
+                startScreen.fire();
+            } catch (Exception ex) {
+                Maintenance.refillBlanks();
+                startScreen.fire();
+            }
         });
         policyCreation2.setOnAction(e -> {
             if(Maintenance.fieldCompletionCheck())
@@ -881,9 +871,15 @@ class Event {
                 s[i] = Long.parseLong(spaces[i]);
                 p[i] = Double.parseDouble(prices[i]);
             }
-            PricingPolicy policy = new PricingPolicy(s, p);
-            currentStation.setPricingPolicy(policy);
-            Maintenance.completionMessage("PricingPolicy creation");
+            try {
+                PricingPolicy policy = new PricingPolicy(s, p);
+                currentStation.setPricingPolicy(policy);
+                Maintenance.completionMessage("PricingPolicy creation");
+                startScreen.fire();
+            } catch (Exception ex) {
+                Maintenance.refillBlanks();
+                startScreen.fire();
+            }
         });
         event.getItems().addAll(charging, discharging, exchange, parking, new SeparatorMenuItem(), policy);
         return event;

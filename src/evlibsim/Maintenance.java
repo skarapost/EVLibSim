@@ -81,7 +81,7 @@ class Maintenance {
         alert.setHeaderText(null);
         alert.setContentText("Are you sure about the deletion?");
         Optional<ButtonType> option = alert.showAndWait();
-        return !option.isPresent() || option.get() != ButtonType.OK;
+        return option.isPresent() || option.get() == ButtonType.OK;
     }
 
     static boolean checkEnergy(String energy)

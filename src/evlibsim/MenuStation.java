@@ -40,6 +40,7 @@ class MenuStation {
     private static final MenuItem allBatteriesMI = new MenuItem("Batteries");
     private static boolean automaticHandling;
     private static boolean automaticUpdate;
+    private static String kindOfCharging;
     private static final MenuItem batteriesChargingMI = new MenuItem("Batteries charging");
     static RadioMenuItem cs;
     private static final Button chargingStationCreationB = new Button("Creation");
@@ -242,9 +243,24 @@ class MenuStation {
             Label foo;
             foo = new Label("Kind: ");
             EVLibSim.grid.add(foo, 0, 1);
-            boo = new TextField();
-            EVLibSim.grid.add(boo, 1, 1);
-            textfields.add(boo);
+            MenuBar sourc = new MenuBar();
+            sourc.setId("menubar");
+            sourc.setMaxWidth(100);
+            Menu src = new Menu("Choice");
+            ToggleGroup r = new ToggleGroup();
+            RadioMenuItem slow = new RadioMenuItem("slow");
+            RadioMenuItem fast = new RadioMenuItem("fast");
+            r.getToggles().addAll(slow, fast);
+            slow.setSelected(true);
+            r.selectedToggleProperty().addListener((observable, newValue, oldValue) -> {
+                if (slow.isSelected())
+                    kindOfCharging = "slow";
+                else
+                    kindOfCharging = "fast";
+            });
+            src.getItems().addAll(slow, fast);
+            sourc.getMenus().add(src);
+            grid.add(sourc, 1, 1);
             foo = new Label("Name: ");
             EVLibSim.grid.add(foo, 0, 2);
             boo = new TextField();
@@ -692,7 +708,8 @@ class MenuStation {
                 delete.setGraphic(new ImageView(image));
                 delete.setOnAction(et -> {
                     for (Charger charger : currentStation.getChargers()) {
-                        if (charger.getChargingEvent().getElectricVehicle().getBattery() == b) {
+                        if (charger.getChargingEvent() != null)
+                            if (charger.getChargingEvent().getElectricVehicle().getBattery() == b) {
                             Alert alert = new Alert(Alert.AlertType.ERROR);
                             alert.setTitle("Error");
                             alert.setHeaderText(null);
@@ -739,15 +756,15 @@ class MenuStation {
             Charger ch;
             textfields.forEach(field -> field.setText(field.getText().replaceAll("[^a-zA-Z]", "")));
             try {
-                ch = new Charger(currentStation, textfields.get(0).getText());
+                ch = new Charger(currentStation, kindOfCharging);
                 currentStation.addCharger(ch);
-                ch.setName(textfields.get(1).getText());
+                ch.setName(textfields.get(0).getText());
+                Maintenance.completionMessage("Charger creation");
+                newChargerMI.fire();
             } catch (Exception ex) {
                 Maintenance.refillBlanks();
                 newChargerMI.fire();
             }
-            Maintenance.completionMessage("Charger creation");
-            newChargerMI.fire();
         });
         chargingStationCreationB.setOnAction(e ->
         {
@@ -844,12 +861,12 @@ class MenuStation {
                 s.getItems().add(cs);
                 if (s.getItems().size() == 1)
                     cs.setSelected(true);
+                Maintenance.completionMessage("ChargingStation creation");
+                newChargingStationMI.fire();
             } catch (Exception ex) {
                 Maintenance.refillBlanks();
                 newChargingStationMI.fire();
             }
-            Maintenance.completionMessage("ChargingStation creation");
-            newChargingStationMI.fire();
         });
         modifyStationB.setOnAction(e -> {
             if (Maintenance.fieldCompletionCheck())
@@ -871,12 +888,12 @@ class MenuStation {
                 currentStation.setAutomaticQueueHandling(automaticHandling);
                 cs = (RadioMenuItem) group.getSelectedToggle();
                 cs.setText(currentStation.getName());
+                Maintenance.completionMessage("modification of the ChargingStation");
+                modifyChargingStationMI.fire();
             } catch (Exception ex) {
                 Maintenance.refillBlanks();
                 modifyChargingStationMI.fire();
             }
-            Maintenance.completionMessage("modification of the ChargingStation");
-            modifyChargingStationMI.fire();
         });
 
 
@@ -896,12 +913,12 @@ class MenuStation {
                 Battery bat = new Battery(Integer.parseInt(textfields.get(1).getText()), Integer.parseInt(textfields.get(0).getText()));
                 bat.setMaxNumberOfChargings(Integer.parseInt(textfields.get(2).getText()));
                 currentStation.joinBattery(bat);
+                Maintenance.completionMessage("Battery creation");
+                newBatteryMI.fire();
             } catch (Exception ex) {
                 Maintenance.refillBlanks();
                 newBatteryMI.fire();
             }
-            Maintenance.completionMessage("Battery creation");
-            newBatteryMI.fire();
         });
         return stationM;
     }
