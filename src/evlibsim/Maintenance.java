@@ -44,6 +44,7 @@ class Maintenance {
     {
         grid.getChildren().clear();
         root.setCenter(null);
+        root.setBottom(null);
         scroll.setContent(null);
         textfields.clear();
     }

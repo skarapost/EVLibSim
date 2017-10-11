@@ -27,9 +27,10 @@
     -fx-background-color: -fx-color-500;
     -fx-background-radius: 0 5 5 0;
     -fx-border-radius: 0 5 5 0;
-    -fx-max-height: 400;
-    -fx-max-width: 190;
-    -fx-min-width: 190;
+    -fx-max-height: 200;
+    -fx-min-height: 200;
+    -fx-max-width: 200;
+    -fx-min-width: 200;
     -fx-alignment: center;
     -fx-padding: 5;
     -fx-spacing: 15;

@@ -73,7 +73,9 @@ public class EVLibSim extends Application {
     private static final Button bt5 = new Button("Add energy");
     private static final Button bt6 = new Button("Add energy source");
     private static final Button bt7 = new Button("Delete energy source");
-    private final VBox box = new VBox();
+    private final VBox box1 = new VBox();
+    private final VBox box2 = new VBox();
+    private final VBox leftBox = new VBox();
     private File f = null;
 
     public static void main(String[] args) {
@@ -87,15 +89,6 @@ public class EVLibSim extends Application {
         primaryStage.setMaximized(true);
         primaryStage.setScene(scene);
         primaryStage.show();
-
-        Console console = new Console();
-        ta.setEditable(false);
-        ta.setMaxHeight(50);
-        ta.setMaxWidth(400);
-        BorderPane.setAlignment(ta, Pos.CENTER);
-        PrintStream ps = new PrintStream(console, true);
-        System.setOut(ps);
-        System.setErr(ps);
 
         root.setTop(menuBar);
         root.setRight(ToolBox.createToolBar());
@@ -135,15 +128,32 @@ public class EVLibSim extends Application {
 
         Label prices = new Label("Prices");
         Label wait = new Label("Wait");
+
         prices.setStyle("-fx-font-weight: bold; -fx-font-size: 15;");
         wait.setStyle("-fx-font-weight: bold; -fx-font-size: 15");
-        box.getChildren().addAll(prices, unitPrice, disUnitPrice, exchangePrice, inductivePrice,
-                wait, waitTimeSlow, waitTimeFast, waitTimeEx, waitTimeDis);
-        box.getStyleClass().add("box");
-        BorderPane.setAlignment(box, Pos.CENTER);
 
-        root.setBottom(ta);
-        root.setLeft(box);
+        box1.getChildren().addAll(prices, unitPrice, disUnitPrice, exchangePrice, inductivePrice);
+        box1.getStyleClass().add("box");
+
+        box2.getChildren().addAll(wait, waitTimeSlow, waitTimeFast, waitTimeEx, waitTimeDis);
+        box2.getStyleClass().add("box");
+
+        Console console = new Console();
+        ta.setEditable(false);
+        ta.setMaxHeight(200);
+        ta.setMaxWidth(200);
+        ta.setStyle("-fx-background-radius: 0 5 5 0; -fx-border-radius: 0 5 5 0;");
+        PrintStream ps = new PrintStream(console, true);
+        System.setOut(ps);
+        System.setErr(ps);
+
+        leftBox.setAlignment(Pos.CENTER);
+        leftBox.setStyle("-fx-spacing: 25;");
+        leftBox.getChildren().addAll(box1, box2, ta);
+
+        BorderPane.setAlignment(leftBox, Pos.CENTER);
+
+        root.setLeft(leftBox);
 
         startScreen.setOnAction((ActionEvent e) -> {
             Maintenance.cleanScreen();
@@ -279,7 +289,7 @@ public class EVLibSim extends Application {
                     alert.setTitle("Information");
                     alert.setHeaderText(null);
                     alert.getButtonTypes().add(ButtonType.CANCEL);
-                    alert.setContentText("There are still some tasks running.\nDo you want to close the application?");
+                    alert.setContentText("There are still some running tasks.\nClose the application?");
                     Optional<ButtonType> result = alert.showAndWait();
                     if(result.isPresent())
                         if(result.get() == ButtonType.OK) {
