@@ -10,9 +10,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
@@ -28,6 +30,7 @@ class Event {
     static final MenuItem parking = new MenuItem("New parking");
     private static final Menu event = new Menu("Event");
     private static final MenuItem policy = new MenuItem("New pricing policy");
+    private static final MenuItem planExecution = new MenuItem("Plan execution");
     private static final Button chargingEventCreation = new Button("Creation");
     private static final Button disChargingEventCreation = new Button("Creation");
     private static final Button parkingEventCreation = new Button("Creation");
@@ -52,37 +55,37 @@ class Event {
             TextField boo;
             Label foo;
             foo = new Label("Driver's name: ");
+            grid.add(foo, 0, 0);
+            boo = new TextField();
+            grid.add(boo, 1, 0);
+            textfields.add(boo);
+            foo = new Label("Vehicle's brand: ");
+            grid.add(foo, 2, 0);
+            boo = new TextField();
+            grid.add(boo, 3, 0);
+            textfields.add(boo);
+            foo = new Label("Battery capacity: ");
             grid.add(foo, 0, 1);
             boo = new TextField();
             grid.add(boo, 1, 1);
             textfields.add(boo);
-            foo = new Label("Vehicle's brand: ");
+            foo = new Label("Battery remaining: ");
             grid.add(foo, 2, 1);
             boo = new TextField();
             grid.add(boo, 3, 1);
             textfields.add(boo);
-            foo = new Label("Battery capacity: ");
+            foo = new Label("Amount of energy: ");
             grid.add(foo, 0, 2);
             boo = new TextField();
             grid.add(boo, 1, 2);
             textfields.add(boo);
-            foo = new Label("Battery remaining: ");
+            foo = new Label("Waiting time: ");
             grid.add(foo, 2, 2);
             boo = new TextField();
             grid.add(boo, 3, 2);
             textfields.add(boo);
-            foo = new Label("Amount of energy: ");
-            grid.add(foo, 0, 3);
-            boo = new TextField();
-            grid.add(boo, 1, 3);
-            textfields.add(boo);
-            foo = new Label("Waiting time: ");
-            grid.add(foo, 2, 3);
-            boo = new TextField();
-            grid.add(boo, 3, 3);
-            textfields.add(boo);
             foo = new Label("Kind of Charging: ");
-            EVLibSim.grid.add(foo, 0, 4);
+            EVLibSim.grid.add(foo, 0, 3);
             MenuBar sourc = new MenuBar();
             sourc.setId("menubar");
             sourc.setMaxWidth(100);
@@ -101,13 +104,13 @@ class Event {
             });
             src.getItems().addAll(slow, fast);
             sourc.getMenus().add(src);
-            grid.add(sourc, 1, 4);
+            grid.add(sourc, 1, 3);
             foo = new Label("Money: ");
-            grid.add(foo, 2, 4);
+            grid.add(foo, 2, 3);
             boo = new TextField();
-            grid.add(boo, 3, 4);
+            grid.add(boo, 3, 3);
             textfields.add(boo);
-            grid.add(chargingEventCreation, 0, 5);
+            grid.add(chargingEventCreation, 0, 4);
             //Suggestion button in the New ChargingEvent MenuItem
             suggest1.setOnAction(eu -> {
                 Stage popupwindow = new Stage();
@@ -200,8 +203,9 @@ class Event {
                 popupwindow.setScene(scene1);
                 popupwindow.showAndWait();
             });
-            grid.add(suggest1, 1, 5);
+            grid.add(suggest1, 1, 4);
             chargingEventCreation.setDefaultButton(true);
+            grid.add(cancel, 2, 4);
             root.setCenter(grid);
         });
         //Implements the New DisChargingEvent MenuItem
@@ -215,36 +219,36 @@ class Event {
             TextField boo;
             Label foo;
             foo = new Label("Driver's name: ");
+            grid.add(foo, 0, 0);
+            boo = new TextField();
+            grid.add(boo, 1, 0);
+            textfields.add(boo);
+            foo = new Label("Vehicle's brand: ");
+            grid.add(foo, 2, 0);
+            boo = new TextField();
+            grid.add(boo, 3, 0);
+            textfields.add(boo);
+            foo = new Label("Battery capacity: ");
             grid.add(foo, 0, 1);
             boo = new TextField();
             grid.add(boo, 1, 1);
             textfields.add(boo);
-            foo = new Label("Vehicle's brand: ");
+            foo = new Label("Battery remaining: ");
             grid.add(foo, 2, 1);
             boo = new TextField();
             grid.add(boo, 3, 1);
             textfields.add(boo);
-            foo = new Label("Battery capacity: ");
+            foo = new Label("Amount of energy: ");
             grid.add(foo, 0, 2);
             boo = new TextField();
             grid.add(boo, 1, 2);
             textfields.add(boo);
-            foo = new Label("Battery remaining: ");
+            foo = new Label("Waiting time: ");
             grid.add(foo, 2, 2);
             boo = new TextField();
             grid.add(boo, 3, 2);
             textfields.add(boo);
-            foo = new Label("Amount of energy: ");
-            grid.add(foo, 0, 3);
-            boo = new TextField();
-            grid.add(boo, 1, 3);
-            textfields.add(boo);
-            foo = new Label("Waiting time: ");
-            grid.add(foo, 2, 3);
-            boo = new TextField();
-            grid.add(boo, 3, 3);
-            textfields.add(boo);
-            grid.add(disChargingEventCreation, 0, 4);
+            grid.add(disChargingEventCreation, 0, 3);
             //Suggestion button for DisChargingEvent MenuItem
             suggest2.setOnAction(eu -> {
                 Stage popupwindow = new Stage();
@@ -320,8 +324,9 @@ class Event {
                 popupwindow.setScene(scene1);
                 popupwindow.showAndWait();
             });
-            grid.add(suggest2, 1, 4);
+            grid.add(suggest2, 1, 3);
             disChargingEventCreation.setDefaultButton(true);
+            grid.add(cancel, 2, 3);
             root.setCenter(grid);
         });
         //Implements the New ChargingEvent(exchange)
@@ -334,31 +339,31 @@ class Event {
             TextField boo;
             Label foo;
             foo = new Label("Driver's name: ");
+            grid.add(foo, 0, 0);
+            boo = new TextField();
+            grid.add(boo, 1, 0);
+            textfields.add(boo);
+            foo = new Label("Vehicle's brand: ");
+            grid.add(foo, 2, 0);
+            boo = new TextField();
+            grid.add(boo, 3, 0);
+            textfields.add(boo);
+            foo = new Label("Battery capacity: ");
             grid.add(foo, 0, 1);
             boo = new TextField();
             grid.add(boo, 1, 1);
             textfields.add(boo);
-            foo = new Label("Vehicle's brand: ");
+            foo = new Label("Battery remaining: ");
             grid.add(foo, 2, 1);
             boo = new TextField();
             grid.add(boo, 3, 1);
             textfields.add(boo);
-            foo = new Label("Battery capacity: ");
+            foo = new Label("Waiting time: ");
             grid.add(foo, 0, 2);
             boo = new TextField();
             grid.add(boo, 1, 2);
             textfields.add(boo);
-            foo = new Label("Battery remaining: ");
-            grid.add(foo, 2, 2);
-            boo = new TextField();
-            grid.add(boo, 3, 2);
-            textfields.add(boo);
-            foo = new Label("Waiting time: ");
-            grid.add(foo, 0, 3);
-            boo = new TextField();
-            grid.add(boo, 1, 3);
-            textfields.add(boo);
-            grid.add(exchangeEventCreation, 0, 4);
+            grid.add(exchangeEventCreation, 0, 3);
             //Suggestion button for New ChargingEvent(exchange)
             suggest3.setOnAction(eu -> {
                 Stage popupwindow = new Stage();
@@ -434,8 +439,9 @@ class Event {
                 popupwindow.setScene(scene1);
                 popupwindow.showAndWait();
             });
-            grid.add(suggest3, 1, 4);
+            grid.add(suggest3, 1, 3);
             exchangeEventCreation.setDefaultButton(true);
+            grid.add(cancel, 2, 3);
             root.setCenter(grid);
         });
         //Implements the New ParkingEvent MenuItem
@@ -448,36 +454,36 @@ class Event {
             TextField boo;
             Label foo;
             foo = new Label("Driver's name: ");
+            grid.add(foo, 0, 0);
+            boo = new TextField();
+            grid.add(boo, 1, 0);
+            textfields.add(boo);
+            foo = new Label("Vehicle's brand: ");
+            grid.add(foo, 2, 0);
+            boo = new TextField();
+            grid.add(boo, 3, 0);
+            textfields.add(boo);
+            foo = new Label("Battery capacity: ");
             grid.add(foo, 0, 1);
             boo = new TextField();
             grid.add(boo, 1, 1);
             textfields.add(boo);
-            foo = new Label("Vehicle's brand: ");
+            foo = new Label("Battery remaining: ");
             grid.add(foo, 2, 1);
             boo = new TextField();
             grid.add(boo, 3, 1);
             textfields.add(boo);
-            foo = new Label("Battery capacity: ");
+            foo = new Label("Amount of energy: ");
             grid.add(foo, 0, 2);
             boo = new TextField();
             grid.add(boo, 1, 2);
             textfields.add(boo);
-            foo = new Label("Battery remaining: ");
+            foo = new Label("Parking time: ");
             grid.add(foo, 2, 2);
             boo = new TextField();
             grid.add(boo, 3, 2);
             textfields.add(boo);
-            foo = new Label("Amount of energy: ");
-            grid.add(foo, 0, 3);
-            boo = new TextField();
-            grid.add(boo, 1, 3);
-            textfields.add(boo);
-            foo = new Label("Parking time: ");
-            grid.add(foo, 2, 3);
-            boo = new TextField();
-            grid.add(boo, 3, 3);
-            textfields.add(boo);
-            grid.add(parkingEventCreation, 0, 4);
+            grid.add(parkingEventCreation, 0, 3);
             //Suggestion button for New ParkingEvent MenuItem
             suggest4.setOnAction(eu -> {
                 Stage popupwindow = new Stage();
@@ -536,10 +542,27 @@ class Event {
                 popupwindow.setScene(scene1);
                 popupwindow.showAndWait();
             });
-            grid.add(suggest4, 1, 4);
+            grid.add(suggest4, 1, 3);
             parkingEventCreation.setDefaultButton(true);
+            grid.add(cancel, 2, 3);
             root.setCenter(grid);
         });
+        planExecution.setOnAction(e -> {
+            if (Maintenance.stationCheck())
+                return;
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Set plan execution");
+            fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text Files(.txt)", "*.txt"));
+            File selectedFile = fileChooser.showOpenDialog(primaryStage);
+            if (selectedFile != null) {
+                try {
+                    currentStation.execEvents(selectedFile.getPath());
+                } catch (Exception e1) {
+                    System.out.println("Plan execution failed");
+                }
+            }
+        });
+
         //Implements the New PricingPolicy MenuItem
         policy.setOnAction(e -> {
             if (Maintenance.stationCheck())
@@ -559,33 +582,35 @@ class Event {
                 if (result.get() == buttonTypeOne) {
                     Maintenance.cleanScreen();
                     foo = new Label("Duration: ");
+                    grid.add(foo, 0, 0);
+                    boo = new TextField();
+                    grid.add(boo, 1, 0);
+                    textfields.add(boo);
+                    foo = new Label("Prices(Separated with comma): ");
                     grid.add(foo, 0, 1);
                     boo = new TextField();
                     grid.add(boo, 1, 1);
                     textfields.add(boo);
-                    foo = new Label("Prices(Separated with comma): ");
-                    grid.add(foo, 0, 2);
-                    boo = new TextField();
-                    grid.add(boo, 1, 2);
-                    textfields.add(boo);
-                    grid.add(policyCreation1, 0, 3);
+                    grid.add(policyCreation1, 0, 2);
                     policyCreation1.setDefaultButton(true);
                     grid.setMaxSize(500, 300);
+                    grid.add(cancel, 1, 2);
                     root.setCenter(grid);
                 } else if (result.get() == buttonTypeTwo) {
                     Maintenance.cleanScreen();
                     foo = new Label("Durations(Separated with comma): ");
+                    grid.add(foo, 0, 0);
+                    boo = new TextField();
+                    grid.add(boo, 1, 0);
+                    textfields.add(boo);
+                    foo = new Label("Prices(Separated with comma): ");
                     grid.add(foo, 0, 1);
                     boo = new TextField();
                     grid.add(boo, 1, 1);
                     textfields.add(boo);
-                    foo = new Label("Prices(Separated with comma): ");
-                    grid.add(foo, 0, 2);
-                    boo = new TextField();
-                    grid.add(boo, 1, 2);
-                    textfields.add(boo);
-                    grid.add(policyCreation2, 0, 3);
+                    grid.add(policyCreation2, 0, 2);
                     policyCreation2.setDefaultButton(true);
+                    grid.add(cancel, 1, 2);
                     grid.setMaxSize(500, 300);
                     root.setCenter(grid);
                 }
@@ -881,7 +906,7 @@ class Event {
                 startScreen.fire();
             }
         });
-        event.getItems().addAll(charging, discharging, exchange, parking, new SeparatorMenuItem(), policy);
+        event.getItems().addAll(charging, discharging, exchange, parking, new SeparatorMenuItem(), policy, planExecution);
         return event;
     }
 

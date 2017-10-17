@@ -135,8 +135,8 @@ class Energy {
                 foo = new Label("Solar: ");
                 boo.setDisable(true);
             }
-            grid.add(foo, 0, 1);
-            grid.add(boo, 1, 1);
+            grid.add(foo, 0, 0);
+            grid.add(boo, 1, 0);
             boo = new TextField(String.valueOf(Arrays.asList(currentStation.getSources()).indexOf("Wind") + 1));
             textfields.add(boo);
             if (Maintenance.checkEnergy("Wind")) {
@@ -145,8 +145,8 @@ class Energy {
                 foo = new Label("Wind: ");
                 boo.setDisable(true);
             }
-            grid.add(foo, 2, 1);
-            grid.add(boo, 3, 1);
+            grid.add(foo, 2, 0);
+            grid.add(boo, 3, 0);
             boo = new TextField(String.valueOf(Arrays.asList(currentStation.getSources()).indexOf("Wave") + 1));
             textfields.add(boo);
             if (Maintenance.checkEnergy("Wave"))
@@ -155,8 +155,8 @@ class Energy {
                 foo = new Label("Wave: ");
                 boo.setDisable(true);
             }
-            grid.add(foo, 0, 2);
-            grid.add(boo, 1, 2);
+            grid.add(foo, 0, 1);
+            grid.add(boo, 1, 1);
             boo = new TextField(String.valueOf(Arrays.asList(currentStation.getSources()).indexOf("Hydroelectric") + 1));
             textfields.add(boo);
             if(Maintenance.checkEnergy("Hydroelectric"))
@@ -165,8 +165,8 @@ class Energy {
                 foo = new Label("Hydroelectric: ");
                 boo.setDisable(true);
             }
-            grid.add(foo, 2, 2);
-            grid.add(boo, 3, 2);
+            grid.add(foo, 2, 1);
+            grid.add(boo, 3, 1);
             boo = new TextField(String.valueOf(Arrays.asList(currentStation.getSources()).indexOf("Nonrenewable") + 1));
             textfields.add(boo);
             if(Maintenance.checkEnergy("Nonrenewable"))
@@ -175,8 +175,8 @@ class Energy {
                 foo = new Label("Nonrenewable: ");
                 boo.setDisable(true);
             }
-            grid.add(foo, 0, 3);
-            grid.add(boo, 1, 3);
+            grid.add(foo, 0, 2);
+            grid.add(boo, 1, 2);
             boo = new TextField(String.valueOf(Arrays.asList(currentStation.getSources()).indexOf("Geothermal") + 1));
             textfields.add(boo);
             if(Maintenance.checkEnergy("Geothermal"))
@@ -185,17 +185,18 @@ class Energy {
                 foo = new Label("Geothermal: ");
                 boo.setDisable(true);
             }
-            grid.add(foo, 2, 3);
-            grid.add(boo, 3, 3);
+            grid.add(foo, 2, 2);
+            grid.add(boo, 3, 2);
             boo = new TextField(String.valueOf(Arrays.asList(currentStation.getSources()).indexOf("DisCharging") + 1));
             textfields.add(boo);
             foo = new Label("DisCharging*: ");
-            grid.add(foo, 0, 4);
-            grid.add(boo, 1, 4);
+            grid.add(foo, 0, 3);
+            grid.add(boo, 1, 3);
             foo = new Label("*Selected");
-            grid.add(foo, 0, 5, 2, 1);
-            grid.add(sort, 0, 6);
+            grid.add(foo, 0, 4, 2, 1);
+            grid.add(sort, 0, 5);
             sort.setDefaultButton(true);
+            grid.add(cancel, 1, 5);
             root.setCenter(grid);
         });
         //Choice for adding new energy packages in every EnergySource.
@@ -214,8 +215,8 @@ class Energy {
                 foo = new Label("Solar: ");
                 boo.setDisable(true);
             }
-            grid.add(foo, 0, 1);
-            grid.add(boo, 1, 1);
+            grid.add(foo, 0, 0);
+            grid.add(boo, 1, 0);
             boo = new TextField("0");
             textfields.add(boo);
             if (Maintenance.checkEnergy("Wind")) {
@@ -224,8 +225,8 @@ class Energy {
                 foo = new Label("Wind: ");
                 boo.setDisable(true);
             }
-            grid.add(foo, 2, 1);
-            grid.add(boo, 3, 1);
+            grid.add(foo, 2, 0);
+            grid.add(boo, 3, 0);
             boo = new TextField("0");
             textfields.add(boo);
             if (Maintenance.checkEnergy("Wave"))
@@ -234,8 +235,8 @@ class Energy {
                 foo = new Label("Wave: ");
                 boo.setDisable(true);
             }
-            grid.add(foo, 0, 2);
-            grid.add(boo, 1, 2);
+            grid.add(foo, 0, 1);
+            grid.add(boo, 1, 1);
             boo = new TextField("0");
             textfields.add(boo);
             if(Maintenance.checkEnergy("Hydroelectric"))
@@ -244,8 +245,8 @@ class Energy {
                 foo = new Label("Hydroelectric: ");
                 boo.setDisable(true);
             }
-            grid.add(foo, 2, 2);
-            grid.add(boo, 3, 2);
+            grid.add(foo, 2, 1);
+            grid.add(boo, 3, 1);
             boo = new TextField("0");
             textfields.add(boo);
             if(Maintenance.checkEnergy("Nonrenewable"))
@@ -254,8 +255,8 @@ class Energy {
                 foo = new Label("Nonrenewable: ");
                 boo.setDisable(true);
             }
-            grid.add(foo, 0, 3);
-            grid.add(boo, 1, 3);
+            grid.add(foo, 0, 2);
+            grid.add(boo, 1, 2);
             boo = new TextField("0");
             textfields.add(boo);
             if(Maintenance.checkEnergy("Geothermal"))
@@ -264,12 +265,13 @@ class Energy {
                 foo = new Label("Geothermal: ");
                 boo.setDisable(true);
             }
-            grid.add(foo, 2, 3);
-            grid.add(boo, 3, 3);
-            grid.add(addEnergies, 0, 4);
+            grid.add(foo, 2, 2);
+            grid.add(boo, 3, 2);
+            grid.add(addEnergies, 0, 3);
             addEnergies.setDefaultButton(true);
+            grid.add(cancel, 1, 3);
             foo = new Label("*Selected");
-            grid.add(foo, 0, 5, 2, 1);
+            grid.add(foo, 0, 4, 2, 1);
             root.setCenter(grid);
         });
 

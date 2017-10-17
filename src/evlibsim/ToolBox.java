@@ -12,8 +12,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.FileChooser;
 
-import java.util.Optional;
+import java.io.File;
 
 import static evlibsim.EVLibSim.*;
 
@@ -178,12 +179,13 @@ class ToolBox {
         report.setOnAction(e -> {
             if (Maintenance.stationCheck())
                 return;
-            TextInputDialog dialog = new TextInputDialog();
-            dialog.setTitle("Path insertion");
-            dialog.setHeaderText(null);
-            dialog.setContentText("Please enter an absolute path. The name has to be a text(.txt) file: ");
-            Optional<String> path = dialog.showAndWait();
-            path.ifPresent(s -> currentStation.genReport(path.get()));
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Generate Report");
+            fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text Files(.txt)", "*.txt"));
+            File selectedFile = fileChooser.showSaveDialog(primaryStage);
+            if (selectedFile != null) {
+                currentStation.genReport(selectedFile.getPath());
+            }
         });
 
         totalEnergy.setGraphic(new ImageView(image7));
@@ -197,65 +199,65 @@ class ToolBox {
             Label foo;
             TextField boo;
             foo = new Label("Total energy: ");
-            grid.add(foo, 0, 1);
+            grid.add(foo, 0, 0);
             boo = new TextField(String.valueOf(currentStation.getTotalEnergy()));
             boo.setEditable(false);
-            grid.add(boo, 1, 1);
+            grid.add(boo, 1, 0);
             if (Maintenance.checkEnergy("Solar"))
                 foo = new Label("Solar*: ");
             else
                 foo = new Label("Solar: ");
-            grid.add(foo, 2, 1);
+            grid.add(foo, 2, 0);
             boo = new TextField(String.valueOf(currentStation.getSpecificAmount("Solar")));
             boo.setEditable(false);
-            grid.add(boo, 3, 1);
+            grid.add(boo, 3, 0);
             if (Maintenance.checkEnergy("Wind"))
                 foo = new Label("Wind*: ");
             else
                 foo = new Label("Wind: ");
-            grid.add(foo, 0, 2);
+            grid.add(foo, 0, 1);
             boo = new TextField(String.valueOf(currentStation.getSpecificAmount("Wind")));
             boo.setEditable(false);
-            grid.add(boo, 1, 2);
+            grid.add(boo, 1, 1);
             if (Maintenance.checkEnergy("Wave"))
                 foo = new Label("Wave*: ");
             else
                 foo = new Label("Wave: ");
-            grid.add(foo, 2, 2);
+            grid.add(foo, 2, 1);
             boo = new TextField(String.valueOf(currentStation.getSpecificAmount("Wave")));
             boo.setEditable(false);
-            grid.add(boo, 3, 2);
+            grid.add(boo, 3, 1);
             if (Maintenance.checkEnergy("Hydroelectric"))
                 foo = new Label("Hydroelectric*: ");
             else
                 foo = new Label("Hydroelectric: ");
-            grid.add(foo, 0, 3);
+            grid.add(foo, 0, 2);
             boo = new TextField(String.valueOf(currentStation.getSpecificAmount("Hydroelectric")));
             boo.setEditable(false);
-            grid.add(boo, 1, 3);
+            grid.add(boo, 1, 2);
             if (Maintenance.checkEnergy("Nonrenewable"))
                 foo = new Label("Nonrenewable*: ");
             else
                 foo = new Label("Nonrenewable: ");
-            grid.add(foo, 2, 3);
+            grid.add(foo, 2, 2);
             boo = new TextField(String.valueOf(currentStation.getSpecificAmount("Nonrenewable")));
             boo.setEditable(false);
-            grid.add(boo, 3, 3);
+            grid.add(boo, 3, 2);
             if (Maintenance.checkEnergy("Geothermal"))
                 foo = new Label("Geothermal*: ");
             else
                 foo = new Label("Geothermal: ");
-            grid.add(foo, 0, 4);
+            grid.add(foo, 0, 3);
             boo = new TextField(String.valueOf(currentStation.getSpecificAmount("Geothermal")));
             boo.setEditable(false);
-            grid.add(boo, 1, 4);
+            grid.add(boo, 1, 3);
             foo = new Label("DisCharging*: ");
-            grid.add(foo, 2, 4);
+            grid.add(foo, 2, 3);
             boo = new TextField(String.valueOf(currentStation.getSpecificAmount("DisCharging")));
             boo.setEditable(false);
-            grid.add(boo, 3, 4);
+            grid.add(boo, 3, 3);
             foo = new Label("*Selected");
-            grid.add(foo, 0, 5);
+            grid.add(foo, 0, 4);
             root.setCenter(grid);
         });
     }

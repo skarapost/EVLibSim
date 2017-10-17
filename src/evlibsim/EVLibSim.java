@@ -77,6 +77,8 @@ public class EVLibSim extends Application {
     private final VBox box2 = new VBox();
     private final VBox leftBox = new VBox();
     private File f = null;
+    static Button cancel = new Button("Cancel");
+    static Stage primaryStage;
 
     public static void main(String[] args) {
         launch(args);
@@ -84,6 +86,7 @@ public class EVLibSim extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        EVLibSim.primaryStage = primaryStage;
         primaryStage.setTitle("EVLibSim");
         Scene scene = new Scene(root);
         primaryStage.setMaximized(true);
@@ -97,6 +100,8 @@ public class EVLibSim extends Application {
             Platform.exit();
             System.exit(0);
         });
+
+        cancel.setOnAction(e -> startScreen.fire());
 
         rec.getItems().addAll(enable, disable);
         enable.setSelected(true);
