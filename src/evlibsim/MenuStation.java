@@ -162,6 +162,7 @@ class MenuStation {
             RadioMenuItem fe = new RadioMenuItem("False");
             r.getToggles().addAll(te, fe);
             te.setSelected(true);
+            automaticUpdate = true;
             r.selectedToggleProperty().addListener((observable, newValue, oldValue) -> automaticUpdate = te.isSelected());
             src.getItems().addAll(te, fe);
             sourc.getMenus().add(src);
@@ -177,6 +178,7 @@ class MenuStation {
             RadioMenuItem fa = new RadioMenuItem("False");
             t.getToggles().addAll(tr, fa);
             tr.setSelected(true);
+            automaticHandling = true;
             t.selectedToggleProperty().addListener((observable, oldValue, newValue) -> automaticHandling = tr.isSelected());
             src.getItems().addAll(tr, fa);
             sourc.getMenus().add(src);

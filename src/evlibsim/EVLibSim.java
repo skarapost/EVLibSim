@@ -432,96 +432,44 @@ public class EVLibSim extends Application {
                             cs.setSelected(true);
                         break;
                     case "ch":
-                        driver = new Driver(tokens[12]);
-                        driver.setDebt(Double.parseDouble(tokens[13]));
-                        driver.setProfit(Double.parseDouble(tokens[14]));
-                        driver.setId(Integer.parseInt(tokens[11]));
-                        vehicle = new ElectricVehicle(tokens[4]);
-                        vehicle.setDriver(driver);
-                        vehicle.setId(Integer.parseInt(tokens[3]));
-                        bat = new Battery(Double.parseDouble(tokens[6]), Double.parseDouble(tokens[7]));
-                        bat.setId(5);
-                        bat.setNumberOfChargings(Integer.parseInt(tokens[8]));
-                        bat.setMaxNumberOfChargings(Integer.parseInt(tokens[9]));
-                        bat.setActive(Boolean.parseBoolean(tokens[10]));
-                        vehicle.setBattery(bat);
-                        event = new ChargingEvent(searchStation(tokens[2]), vehicle, Double.parseDouble(tokens[15]), tokens[16]);
+                        event = new ChargingEvent(searchStation(tokens[2]), null, Double.parseDouble(tokens[3]), tokens[4]);
                         event.setId(Integer.parseInt(tokens[1]));
                         event.setCondition("finished");
-                        event.setWaitingTime(Long.parseLong(tokens[17]));
-                        event.setCost(Double.parseDouble(tokens[18]));
-                        event.setEnergyToBeReceived(Double.parseDouble(tokens[19]));
-                        event.setChargingTime(Long.parseLong(tokens[20]));
-                        event.setMaxWaitingTime(Long.parseLong(tokens[21]));
+                        event.setWaitingTime(Long.parseLong(tokens[5]));
+                        event.setCost(Double.parseDouble(tokens[6]));
+                        event.setEnergyToBeReceived(Double.parseDouble(tokens[7]));
+                        event.setChargingTime(Long.parseLong(tokens[8]));
+                        event.setMaxWaitingTime(Long.parseLong(tokens[9]));
                         ChargingEvent.chargingLog.add(event);
                         break;
                     case "dis":
-                        driver = new Driver(tokens[12]);
-                        driver.setDebt(Double.parseDouble(tokens[13]));
-                        driver.setProfit(Double.parseDouble(tokens[14]));
-                        driver.setId(Integer.parseInt(tokens[11]));
-                        vehicle = new ElectricVehicle(tokens[4]);
-                        vehicle.setDriver(driver);
-                        vehicle.setId(Integer.parseInt(tokens[3]));
-                        bat = new Battery(Double.parseDouble(tokens[6]), Double.parseDouble(tokens[7]));
-                        bat.setId(5);
-                        bat.setNumberOfChargings(Integer.parseInt(tokens[8]));
-                        bat.setMaxNumberOfChargings(Integer.parseInt(tokens[9]));
-                        bat.setActive(Boolean.parseBoolean(tokens[10]));
-                        vehicle.setBattery(bat);
-                        disEvent = new DisChargingEvent(searchStation(tokens[2]), vehicle, Double.parseDouble(tokens[15]));
+                        disEvent = new DisChargingEvent(searchStation(tokens[2]), null, Double.parseDouble(tokens[3]));
                         disEvent.setId(Integer.parseInt(tokens[1]));
                         disEvent.setCondition("finished");
-                        disEvent.setWaitingTime(Long.parseLong(tokens[16]));
-                        disEvent.setProfit(Double.parseDouble(tokens[17]));
-                        disEvent.setDisChargingTime(Long.parseLong(tokens[18]));
-                        disEvent.setMaxWaitingTime(Long.parseLong(tokens[19]));
+                        disEvent.setWaitingTime(Long.parseLong(tokens[4]));
+                        disEvent.setProfit(Double.parseDouble(tokens[5]));
+                        disEvent.setDisChargingTime(Long.parseLong(tokens[6]));
+                        disEvent.setMaxWaitingTime(Long.parseLong(tokens[7]));
                         DisChargingEvent.dischargingLog.add(disEvent);
                         break;
                     case "ex":
-                        driver = new Driver(tokens[12]);
-                        driver.setDebt(Double.parseDouble(tokens[13]));
-                        driver.setProfit(Double.parseDouble(tokens[14]));
-                        driver.setId(Integer.parseInt(tokens[11]));
-                        vehicle = new ElectricVehicle(tokens[4]);
-                        vehicle.setDriver(driver);
-                        vehicle.setId(Integer.parseInt(tokens[3]));
-                        bat = new Battery(Double.parseDouble(tokens[6]), Double.parseDouble(tokens[7]));
-                        bat.setId(5);
-                        bat.setNumberOfChargings(Integer.parseInt(tokens[8]));
-                        bat.setMaxNumberOfChargings(Integer.parseInt(tokens[9]));
-                        bat.setActive(Boolean.parseBoolean(tokens[10]));
-                        vehicle.setBattery(bat);
-                        event = new ChargingEvent(searchStation(tokens[2]), vehicle);
+                        event = new ChargingEvent(searchStation(tokens[2]), null);
                         event.setId(Integer.parseInt(tokens[1]));
                         event.setCondition("finished");
-                        event.setWaitingTime(Long.parseLong(tokens[15]));
-                        event.setCost(Double.parseDouble(tokens[16]));
-                        event.setChargingTime(Long.parseLong(tokens[17]));
-                        event.setMaxWaitingTime(Long.parseLong(tokens[18]));
+                        event.setWaitingTime(Long.parseLong(tokens[3]));
+                        event.setCost(Double.parseDouble(tokens[4]));
+                        event.setChargingTime(Long.parseLong(tokens[5]));
+                        event.setMaxWaitingTime(Long.parseLong(tokens[6]));
                         ChargingEvent.exchangeLog.add(event);
                         break;
                     default:
-                        driver = new Driver(tokens[12]);
-                        driver.setDebt(Double.parseDouble(tokens[13]));
-                        driver.setProfit(Double.parseDouble(tokens[14]));
-                        driver.setId(Integer.parseInt(tokens[11]));
-                        vehicle = new ElectricVehicle(tokens[4]);
-                        vehicle.setDriver(driver);
-                        vehicle.setId(Integer.parseInt(tokens[3]));
-                        bat = new Battery(Double.parseDouble(tokens[6]), Double.parseDouble(tokens[7]));
-                        bat.setId(5);
-                        bat.setNumberOfChargings(Integer.parseInt(tokens[8]));
-                        bat.setMaxNumberOfChargings(Integer.parseInt(tokens[9]));
-                        bat.setActive(Boolean.parseBoolean(tokens[10]));
-                        vehicle.setBattery(bat);
-                        event1 = new ParkingEvent(searchStation(tokens[2]), vehicle,
-                                Long.parseLong(tokens[15]), Double.parseDouble(tokens[16]));
+                        event1 = new ParkingEvent(searchStation(tokens[2]), null,
+                                Long.parseLong(tokens[3]), Double.parseDouble(tokens[4]));
                         event1.setId(Integer.parseInt(tokens[1]));
                         event1.setCondition("finished");
-                        event1.setCost(Double.parseDouble(tokens[17]));
-                        event1.setEnergyToBeReceived(Double.parseDouble(tokens[18]));
-                        event1.setChargingTime(Long.parseLong(tokens[19]));
+                        event1.setCost(Double.parseDouble(tokens[5]));
+                        event1.setEnergyToBeReceived(Double.parseDouble(tokens[6]));
+                        event1.setChargingTime(Long.parseLong(tokens[7]));
                         ParkingEvent.parkLog.add(event1);
                         break;
                 }
@@ -572,49 +520,30 @@ public class EVLibSim extends Application {
             }
             for(ChargingEvent event:ChargingEvent.chargingLog)
             {
-                line = new StringBuilder("ch" + "," + event.getId() + "," + event.getStation().getName() + "," + event.getElectricVehicle().getId() + ","
-                        + event.getElectricVehicle().getBrand() + "," + event.getElectricVehicle().getBattery().getId() + ","
-                        + event.getElectricVehicle().getBattery().getRemAmount() + "," + event.getElectricVehicle().getBattery().getCapacity() + ","
-                        + event.getElectricVehicle().getBattery().getNumberOfChargings() + "," + event.getElectricVehicle().getBattery().getMaxNumberOfChargings() + ","
-                        + event.getElectricVehicle().getBattery().getActive() + "," + event.getElectricVehicle().getDriver().getId() + "," + event.getElectricVehicle().getDriver().getName() + ","
-                        + event.getElectricVehicle().getDriver().getDebt() + "," + event.getElectricVehicle().getDriver().getProfit() + "," + event.getAmountOfEnergy() + ","
-                        + event.getKindOfCharging() + "," + event.getWaitingTime() + "," + event.getCost() + "," + event.getEnergyToBeReceived() + "," + event.getChargingTime() + ","
-                        + event.getMaxWaitingTime());
+                line = new StringBuilder("ch" + "," + event.getId() + "," + event.getStation().getName() + "," + event.getAmountOfEnergy() + ","
+                        + event.getKindOfCharging() + "," + event.getWaitingTime() + "," + event.getCost() + "," + event.getEnergyToBeReceived() + ","
+                        + event.getChargingTime() + "," + event.getMaxWaitingTime());
                 line.append(System.getProperty("line.separator"));
                 writer.write(line.toString());
             }
             for(DisChargingEvent event: DisChargingEvent.dischargingLog)
             {
-                line = new StringBuilder("dis" + "," + event.getId() + "," + event.getStation().getName() + "," + event.getElectricVehicle().getId() + ","
-                        + event.getElectricVehicle().getBrand() + "," + event.getElectricVehicle().getBattery().getId() + ","
-                        + event.getElectricVehicle().getBattery().getRemAmount() + "," + event.getElectricVehicle().getBattery().getCapacity() + ","
-                        + event.getElectricVehicle().getBattery().getNumberOfChargings() + "," + event.getElectricVehicle().getBattery().getMaxNumberOfChargings() + ","
-                        + event.getElectricVehicle().getBattery().getActive() + "," + event.getElectricVehicle().getDriver().getId() + "," + event.getElectricVehicle().getDriver().getName() + ","
-                        + event.getElectricVehicle().getDriver().getDebt() + "," + event.getElectricVehicle().getDriver().getProfit() + "," + event.getAmountOfEnergy() + ","
+                line = new StringBuilder("dis" + "," + event.getId() + "," + event.getStation().getName() + "," + event.getAmountOfEnergy() + ","
                         + event.getWaitingTime() + "," + event.getProfit() + "," + event.getDisChargingTime() + "," + event.getMaxWaitingTime());
                 line.append(System.getProperty("line.separator"));
                 writer.write(line.toString());
             }
             for(ChargingEvent event: ChargingEvent.exchangeLog)
             {
-                line = new StringBuilder("ex" + "," + event.getId() + "," + event.getStation().getName() + "," + event.getElectricVehicle().getId() + ","
-                        + event.getElectricVehicle().getBrand() + "," + event.getElectricVehicle().getBattery().getId() + ","
-                        + event.getElectricVehicle().getBattery().getRemAmount() + "," + event.getElectricVehicle().getBattery().getCapacity() + ","
-                        + event.getElectricVehicle().getBattery().getNumberOfChargings() + "," + event.getElectricVehicle().getBattery().getMaxNumberOfChargings() + ","
-                        + event.getElectricVehicle().getBattery().getActive() + "," + event.getElectricVehicle().getDriver().getId() + "," + event.getElectricVehicle().getDriver().getName() + ","
-                        + event.getElectricVehicle().getDriver().getDebt() + "," + event.getElectricVehicle().getDriver().getProfit() + ","
-                        + event.getWaitingTime() + "," + event.getCost() + "," + event.getChargingTime() + "," + event.getMaxWaitingTime());
+                line = new StringBuilder("ex" + "," + event.getId() + "," + event.getStation().getName() + ","
+                        + event.getWaitingTime() + "," + event.getCost() + "," + event.getChargingTime() + ","
+                        + event.getMaxWaitingTime());
                 line.append(System.getProperty("line.separator"));
                 writer.write(line.toString());
             }
             for(ParkingEvent event: ParkingEvent.parkLog)
             {
-                line = new StringBuilder("park" + "," + event.getId() + "," + event.getStation().getName() + "," + event.getElectricVehicle().getId() + ","
-                        + event.getElectricVehicle().getBrand() + "," + event.getElectricVehicle().getBattery().getId() + ","
-                        + event.getElectricVehicle().getBattery().getRemAmount() + "," + event.getElectricVehicle().getBattery().getCapacity() + ","
-                        + event.getElectricVehicle().getBattery().getNumberOfChargings() + "," + event.getElectricVehicle().getBattery().getMaxNumberOfChargings() + ","
-                        + event.getElectricVehicle().getBattery().getActive() + "," + event.getElectricVehicle().getDriver().getId() + "," + event.getElectricVehicle().getDriver().getName() + ","
-                        + event.getElectricVehicle().getDriver().getDebt() + "," + event.getElectricVehicle().getDriver().getProfit() + "," + event.getParkingTime() + ","
+                line = new StringBuilder("park" + "," + event.getId() + "," + event.getStation().getName() + "," + event.getParkingTime() + ","
                         + event.getAmountOfEnergy() + "," + event.getCost() + "," + event.getEnergyToBeReceived() + "," + event.getChargingTime());
                 line.append(System.getProperty("line.separator"));
                 writer.write(line.toString());

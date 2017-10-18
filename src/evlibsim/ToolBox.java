@@ -15,6 +15,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 
 import static evlibsim.EVLibSim.*;
 
@@ -71,6 +74,38 @@ class ToolBox {
             costCol.setCellValueFactory(new PropertyValueFactory<>("cost"));
             table.setItems(result);
             table.setMaxSize(1000, 600);
+            final ContextMenu contextMenu = new ContextMenu();
+            MenuItem export = new MenuItem("Export to csv");
+            export.setOnAction(ey -> {
+                FileChooser fileChooser = new FileChooser();
+                fileChooser.setTitle("Export to csv");
+                fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text Files(.txt)", "*.txt"));
+                File selectedFile = fileChooser.showSaveDialog(primaryStage);
+                if (selectedFile != null) {
+                    OutputStreamWriter writer;
+                    StringBuilder line = null;
+                    try {
+                        writer = new OutputStreamWriter(new FileOutputStream(selectedFile.getPath(), false), "utf-8");
+                        for (ChargingEvent event : result) {
+                            line = new StringBuilder(event.getId() + "," + event.getChargingStationName() + "," + event.getAmountOfEnergy() + ","
+                                    + event.getEnergyToBeReceived() + "," + event.getKindOfCharging() + "," + event.getWaitingTime() + ","
+                                    + event.getMaxWaitingTime() + "," + event.getChargingTime() + "," + event.getCondition() + "," + event.getCost());
+                            line.append(System.getProperty("line.separator"));
+                            writer.write(line.toString());
+                        }
+                        writer.close();
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            });
+            contextMenu.getItems().add(export);
+            table.setContextMenu(contextMenu);
+            table.setOnMousePressed(ep -> {
+                if (ep.isSecondaryButtonDown()) {
+                    contextMenu.show(table, ep.getScreenX(), ep.getScreenY());
+                }
+            });
             root.setCenter(table);
         });
 
@@ -102,6 +137,38 @@ class ToolBox {
             profitCol.setCellValueFactory(new PropertyValueFactory<>("profit"));
             table.setItems(result);
             table.setMaxSize(1000, 600);
+            final ContextMenu contextMenu = new ContextMenu();
+            MenuItem export = new MenuItem("Export to csv");
+            export.setOnAction(ey -> {
+                FileChooser fileChooser = new FileChooser();
+                fileChooser.setTitle("Export to csv");
+                fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text Files(.txt)", "*.txt"));
+                File selectedFile = fileChooser.showSaveDialog(primaryStage);
+                if (selectedFile != null) {
+                    OutputStreamWriter writer;
+                    StringBuilder line = null;
+                    try {
+                        writer = new OutputStreamWriter(new FileOutputStream(selectedFile.getPath(), false), "utf-8");
+                        for (DisChargingEvent event : result) {
+                            line = new StringBuilder(event.getId() + "," + event.getChargingStationName() + "," + event.getAmountOfEnergy() + ","
+                                    + event.getCondition() + "," + event.getWaitingTime() + ","
+                                    + event.getMaxWaitingTime() + "," + event.getDisChargingTime() + "," + event.getProfit());
+                            line.append(System.getProperty("line.separator"));
+                            writer.write(line.toString());
+                        }
+                        writer.close();
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            });
+            contextMenu.getItems().add(export);
+            table.setContextMenu(contextMenu);
+            table.setOnMousePressed(ep -> {
+                if (ep.isSecondaryButtonDown()) {
+                    contextMenu.show(table, ep.getScreenX(), ep.getScreenY());
+                }
+            });
             root.setCenter(table);
         });
 
@@ -131,6 +198,38 @@ class ToolBox {
             profitCol.setCellValueFactory(new PropertyValueFactory<>("cost"));
             table.setItems(result);
             table.setMaxSize(1000, 600);
+            final ContextMenu contextMenu = new ContextMenu();
+            MenuItem export = new MenuItem("Export to csv");
+            export.setOnAction(ey -> {
+                FileChooser fileChooser = new FileChooser();
+                fileChooser.setTitle("Export to csv");
+                fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text Files(.txt)", "*.txt"));
+                File selectedFile = fileChooser.showSaveDialog(primaryStage);
+                if (selectedFile != null) {
+                    OutputStreamWriter writer;
+                    StringBuilder line = null;
+                    try {
+                        writer = new OutputStreamWriter(new FileOutputStream(selectedFile.getPath(), false), "utf-8");
+                        for (ChargingEvent event : result) {
+                            line = new StringBuilder(event.getId() + "," + event.getChargingStationName() + "," + event.getWaitingTime() + ","
+                                    + event.getMaxWaitingTime() + "," + event.getCondition() + "," + event.getChargingTime() + ","
+                                    + event.getCost());
+                            line.append(System.getProperty("line.separator"));
+                            writer.write(line.toString());
+                        }
+                        writer.close();
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            });
+            contextMenu.getItems().add(export);
+            table.setContextMenu(contextMenu);
+            table.setOnMousePressed(ep -> {
+                if (ep.isSecondaryButtonDown()) {
+                    contextMenu.show(table, ep.getScreenX(), ep.getScreenY());
+                }
+            });
             root.setCenter(table);
         });
 
@@ -162,6 +261,38 @@ class ToolBox {
             costCol.setCellValueFactory(new PropertyValueFactory<>("cost"));
             table.setItems(result);
             table.setMaxSize(1000, 600);
+            final ContextMenu contextMenu = new ContextMenu();
+            MenuItem export = new MenuItem("Export to csv");
+            export.setOnAction(ey -> {
+                FileChooser fileChooser = new FileChooser();
+                fileChooser.setTitle("Export to csv");
+                fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text Files(.txt)", "*.txt"));
+                File selectedFile = fileChooser.showSaveDialog(primaryStage);
+                if (selectedFile != null) {
+                    OutputStreamWriter writer;
+                    StringBuilder line = null;
+                    try {
+                        writer = new OutputStreamWriter(new FileOutputStream(selectedFile.getPath(), false), "utf-8");
+                        for (ParkingEvent event : result) {
+                            line = new StringBuilder(event.getId() + "," + event.getChargingStationName() + "," + event.getAmountOfEnergy() + ","
+                                    + event.getEnergyToBeReceived() + "," + event.getParkingTime() + "," + event.getChargingTime() + "," + event.getCondition() + ","
+                                    + event.getCost());
+                            line.append(System.getProperty("line.separator"));
+                            writer.write(line.toString());
+                        }
+                        writer.close();
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            });
+            contextMenu.getItems().add(export);
+            table.setContextMenu(contextMenu);
+            table.setOnMousePressed(ep -> {
+                if (ep.isSecondaryButtonDown()) {
+                    contextMenu.show(table, ep.getScreenX(), ep.getScreenY());
+                }
+            });
             root.setCenter(table);
         });
     }

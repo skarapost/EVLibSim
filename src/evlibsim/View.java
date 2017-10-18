@@ -291,8 +291,8 @@ class View {
                     "chocolate",
                     "coral",
                     "crimson",
-                    "cyan",
-                    "steelblue");
+                    "yellow",
+                    "black");
             CategoryAxis xAxis = new CategoryAxis();
             NumberAxis yAxis = new NumberAxis();
             BarChart barChart = new BarChart(xAxis, yAxis);
