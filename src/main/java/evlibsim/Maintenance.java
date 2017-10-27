@@ -11,10 +11,9 @@ import static evlibsim.MenuStation.scroll;
 
 class Maintenance {
 
-    static boolean fieldCompletionCheck()
-    {
-        for(TextField f: textfields) {
-            if (f.getText().isEmpty()||f.getText().equals(" ") || f.getText().equals("  ") || f.getText().equals("   ") || f.getText().equals("    ")) {
+    static boolean fieldCompletionCheck() {
+        for (TextField f : textfields) {
+            if (f.getText().isEmpty() || f.getText().equals(" ") || f.getText().equals("  ") || f.getText().equals("   ") || f.getText().equals("    ")) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setHeaderText(null);
@@ -26,10 +25,8 @@ class Maintenance {
         return false;
     }
 
-    static boolean stationCheck()
-    {
-        if(stations.size() == 0)
-        {
+    static boolean stationCheck() {
+        if (stations.size() == 0) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText(null);
@@ -40,8 +37,7 @@ class Maintenance {
         return false;
     }
 
-    static void cleanScreen()
-    {
+    static void cleanScreen() {
         grid.getChildren().clear();
         root.setCenter(null);
         root.setBottom(null);
@@ -49,8 +45,7 @@ class Maintenance {
         textfields.clear();
     }
 
-    static void completionMessage(String message)
-    {
+    static void completionMessage(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Information");
         alert.setHeaderText(null);
@@ -58,8 +53,7 @@ class Maintenance {
         alert.showAndWait();
     }
 
-    static void queueInsertion()
-    {
+    static void queueInsertion() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Information");
         alert.setHeaderText(null);
@@ -67,8 +61,7 @@ class Maintenance {
         alert.showAndWait();
     }
 
-    static void noExecution()
-    {
+    static void noExecution() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Information");
         alert.setHeaderText(null);
@@ -85,10 +78,9 @@ class Maintenance {
         return option.isPresent() || option.get() == ButtonType.OK;
     }
 
-    static boolean checkEnergy(String energy)
-    {
-        for(String energ: currentStation.getSources())
-            if(energ.equals(energy))
+    static boolean checkEnergy(String energy) {
+        for (String energ : currentStation.getSources())
+            if (energ.equals(energy))
                 return true;
         return false;
     }

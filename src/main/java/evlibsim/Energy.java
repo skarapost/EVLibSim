@@ -10,13 +10,13 @@ import static evlibsim.EVLibSim.*;
 
 class Energy {
 
-    private static final Menu energy = new Menu("Energy");
     static final MenuItem newEnergyPackages = new MenuItem("Add energy");
     static final MenuItem newEnergySource = new MenuItem("New energy source");
     static final MenuItem deleteEnergySource = new MenuItem("Remove energy source");
+    static final MenuItem updateStorage = new MenuItem("Update storage");
+    private static final Menu energy = new Menu("Energy");
     private static final Button addEnergies = new Button("Add");
     private static final Button sort = new Button("Sort");
-    private static final MenuItem updateStorage = new MenuItem("Update storage");
     private static final MenuItem sortEnergies = new MenuItem("Sort energies");
 
     //Builds the Energy category in the main MenuBar.
@@ -107,7 +107,7 @@ class Energy {
         updateStorage.setOnAction((ActionEvent e) -> {
             if (Maintenance.stationCheck())
                 return;
-            if(!currentStation.getUpdateMode()) {
+            if (!currentStation.getUpdateMode()) {
                 currentStation.updateStorage();
                 Maintenance.completionMessage("storage update");
             } else {
@@ -121,7 +121,7 @@ class Energy {
 
         //Implements the sorting of the energies. The user sets the order at every charging the Charger will look for energy.
         sortEnergies.setOnAction(e -> {
-            if(Maintenance.stationCheck())
+            if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
             grid.setMaxSize(700, 300);
@@ -159,7 +159,7 @@ class Energy {
             grid.add(boo, 1, 1);
             boo = new TextField(String.valueOf(Arrays.asList(currentStation.getSources()).indexOf("Hydroelectric") + 1));
             textfields.add(boo);
-            if(Maintenance.checkEnergy("Hydroelectric"))
+            if (Maintenance.checkEnergy("Hydroelectric"))
                 foo = new Label("Hydroelectric*: ");
             else {
                 foo = new Label("Hydroelectric: ");
@@ -169,7 +169,7 @@ class Energy {
             grid.add(boo, 3, 1);
             boo = new TextField(String.valueOf(Arrays.asList(currentStation.getSources()).indexOf("Nonrenewable") + 1));
             textfields.add(boo);
-            if(Maintenance.checkEnergy("Nonrenewable"))
+            if (Maintenance.checkEnergy("Nonrenewable"))
                 foo = new Label("Nonrenewable*: ");
             else {
                 foo = new Label("Nonrenewable: ");
@@ -179,7 +179,7 @@ class Energy {
             grid.add(boo, 1, 2);
             boo = new TextField(String.valueOf(Arrays.asList(currentStation.getSources()).indexOf("Geothermal") + 1));
             textfields.add(boo);
-            if(Maintenance.checkEnergy("Geothermal"))
+            if (Maintenance.checkEnergy("Geothermal"))
                 foo = new Label("Geothermal*: ");
             else {
                 foo = new Label("Geothermal: ");
@@ -239,7 +239,7 @@ class Energy {
             grid.add(boo, 1, 1);
             boo = new TextField("0");
             textfields.add(boo);
-            if(Maintenance.checkEnergy("Hydroelectric"))
+            if (Maintenance.checkEnergy("Hydroelectric"))
                 foo = new Label("Hydroelectric*: ");
             else {
                 foo = new Label("Hydroelectric: ");
@@ -249,7 +249,7 @@ class Energy {
             grid.add(boo, 3, 1);
             boo = new TextField("0");
             textfields.add(boo);
-            if(Maintenance.checkEnergy("Nonrenewable"))
+            if (Maintenance.checkEnergy("Nonrenewable"))
                 foo = new Label("Nonrenewable*: ");
             else {
                 foo = new Label("Nonrenewable: ");
@@ -259,7 +259,7 @@ class Energy {
             grid.add(boo, 1, 2);
             boo = new TextField("0");
             textfields.add(boo);
-            if(Maintenance.checkEnergy("Geothermal"))
+            if (Maintenance.checkEnergy("Geothermal"))
                 foo = new Label("Geothermal*: ");
             else {
                 foo = new Label("Geothermal: ");
@@ -310,13 +310,13 @@ class Energy {
             }
         });
         sort.setOnAction(e -> {
-            if(Maintenance.fieldCompletionCheck())
+            if (Maintenance.fieldCompletionCheck())
                 return;
             textfields.forEach(field -> field.setText(field.getText().replaceAll("[^0-9]", "")));
             HashSet<String> b = new HashSet<>();
             int counter = 0;
-            for(TextField s: textfields)
-                if(!s.isDisabled()) {
+            for (TextField s : textfields)
+                if (!s.isDisabled()) {
                     b.add(s.getText());
                     counter++;
                 }

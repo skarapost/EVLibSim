@@ -31,16 +31,15 @@ class ToolBox {
     private static final Button report = new Button();
     private static final Button totalEnergy = new Button();
     private static final javafx.scene.control.ToolBar bar = new javafx.scene.control.ToolBar();
-    private static final Image image1 = new Image(View.class.getResourceAsStream("hist1.png"));
-    private static final Image image2 = new Image(View.class.getResourceAsStream("hist2.png"));
-    private static final Image image3 = new Image(View.class.getResourceAsStream("hist3.png"));
-    private static final Image image4 = new Image(View.class.getResourceAsStream("hist4.png"));
-    private static final Image image5 = new Image(View.class.getResourceAsStream("totalActivity.png"));
-    private static final Image image6 = new Image(View.class.getResourceAsStream("report.png"));
-    private static final Image image7 = new Image(View.class.getResourceAsStream("energy.png"));
+    private static final Image image1 = new Image(View.class.getResourceAsStream("/hist1.png"));
+    private static final Image image2 = new Image(View.class.getResourceAsStream("/hist2.png"));
+    private static final Image image3 = new Image(View.class.getResourceAsStream("/hist3.png"));
+    private static final Image image4 = new Image(View.class.getResourceAsStream("/hist4.png"));
+    private static final Image image5 = new Image(View.class.getResourceAsStream("/totalActivity.png"));
+    private static final Image image6 = new Image(View.class.getResourceAsStream("/report.png"));
+    private static final Image image7 = new Image(View.class.getResourceAsStream("/energy.png"));
 
-    private static void createLogButtons()
-    {
+    private static void createLogButtons() {
         chargingLog.setGraphic(new ImageView(image1));
         chargingLog.setPrefSize(image1.getWidth(), image1.getHeight());
         chargingLog.setTooltip(new Tooltip("Completed chargings"));
@@ -83,7 +82,7 @@ class ToolBox {
                 File selectedFile = fileChooser.showSaveDialog(primaryStage);
                 if (selectedFile != null) {
                     OutputStreamWriter writer;
-                    StringBuilder line = null;
+                    StringBuilder line;
                     try {
                         writer = new OutputStreamWriter(new FileOutputStream(selectedFile.getPath(), false), "utf-8");
                         for (ChargingEvent event : result) {
@@ -146,7 +145,7 @@ class ToolBox {
                 File selectedFile = fileChooser.showSaveDialog(primaryStage);
                 if (selectedFile != null) {
                     OutputStreamWriter writer;
-                    StringBuilder line = null;
+                    StringBuilder line;
                     try {
                         writer = new OutputStreamWriter(new FileOutputStream(selectedFile.getPath(), false), "utf-8");
                         for (DisChargingEvent event : result) {
@@ -207,7 +206,7 @@ class ToolBox {
                 File selectedFile = fileChooser.showSaveDialog(primaryStage);
                 if (selectedFile != null) {
                     OutputStreamWriter writer;
-                    StringBuilder line = null;
+                    StringBuilder line;
                     try {
                         writer = new OutputStreamWriter(new FileOutputStream(selectedFile.getPath(), false), "utf-8");
                         for (ChargingEvent event : result) {
@@ -270,7 +269,7 @@ class ToolBox {
                 File selectedFile = fileChooser.showSaveDialog(primaryStage);
                 if (selectedFile != null) {
                     OutputStreamWriter writer;
-                    StringBuilder line = null;
+                    StringBuilder line;
                     try {
                         writer = new OutputStreamWriter(new FileOutputStream(selectedFile.getPath(), false), "utf-8");
                         for (ParkingEvent event : result) {

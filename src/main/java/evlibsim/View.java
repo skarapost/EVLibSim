@@ -19,15 +19,15 @@ import static evlibsim.MenuStation.scroll;
 
 class View {
 
+    static final MenuItem totalActivity = new MenuItem("Overview");
     private static final Menu overview = new Menu("Station overview");
     private static final Menu view = new Menu("View");
-    static final MenuItem totalActivity = new MenuItem("Overview");
     private static final MenuItem queue = new MenuItem("Queue of events");
     private static final MenuItem chargingsMenuItem = new MenuItem("Running chargings");
     private static final MenuItem dischargingsMenuItem = new MenuItem("Running dischargings");
     private static final MenuItem exchangesMenuItem = new MenuItem("Running exchanges");
     private static final MenuItem parkingsMenuItem = new MenuItem("Running parkings");
-    private static final Image image = new Image(View.class.getResourceAsStream("run.png"));
+    private static final Image image = new Image(View.class.getResourceAsStream("/run.png"));
 
     static Menu createViewMenu() {
         overview.getItems().addAll(totalActivity, new SeparatorMenuItem(), chargingsMenuItem, dischargingsMenuItem, exchangesMenuItem, parkingsMenuItem);

@@ -28,6 +28,10 @@ class Event {
     static final MenuItem discharging = new MenuItem("New discharging");
     static final MenuItem exchange = new MenuItem("New battery exchange");
     static final MenuItem parking = new MenuItem("New parking");
+    static final Button suggest1 = new Button("Suggestions");
+    static final Button suggest2 = new Button("Suggestions");
+    static final Button suggest3 = new Button("Suggestions");
+    static final Button suggest4 = new Button("Suggestions");
     private static final Menu event = new Menu("Event");
     private static final MenuItem policy = new MenuItem("New pricing policy");
     private static final MenuItem planExecution = new MenuItem("Plan execution");
@@ -37,10 +41,6 @@ class Event {
     private static final Button exchangeEventCreation = new Button("Creation");
     private static final Button policyCreation1 = new Button("Creation");
     private static final Button policyCreation2 = new Button("Creation");
-    static final Button suggest1 = new Button("Suggestions");
-    static final Button suggest2 = new Button("Suggestions");
-    static final Button suggest3 = new Button("Suggestions");
-    static final Button suggest4 = new Button("Suggestions");
     private static String kindOfCharging;
 
     //Builds the Event category in the main MenuBar
@@ -48,7 +48,7 @@ class Event {
         //Implements the New ChargingEvent MenuItem
         charging.setOnAction(e ->
         {
-            if(Maintenance.stationCheck())
+            if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
             grid.setMaxSize(800, 500);
@@ -195,7 +195,7 @@ class Event {
                 outside.getChildren().addAll(inside8, inside7);
                 g.add(outside, 3, 0);
 
-                Button close= new Button("Close");
+                Button close = new Button("Close");
                 g.add(close, 0, 1);
                 close.setOnAction(ew -> popupwindow.close());
 
@@ -211,7 +211,7 @@ class Event {
         //Implements the New DisChargingEvent MenuItem
         discharging.setOnAction(e ->
         {
-            if(Maintenance.stationCheck())
+            if (Maintenance.stationCheck())
                 return;
 
             Maintenance.cleanScreen();
@@ -316,7 +316,7 @@ class Event {
                 outside.getChildren().addAll(inside6, inside5);
                 g.add(outside, 2, 0);
 
-                Button close= new Button("Close");
+                Button close = new Button("Close");
                 g.add(close, 0, 1);
                 close.setOnAction(ew -> popupwindow.close());
 
@@ -332,7 +332,7 @@ class Event {
         //Implements the New ChargingEvent(exchange)
         exchange.setOnAction(e ->
         {
-            if(Maintenance.stationCheck())
+            if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
             grid.setMaxSize(800, 500);
@@ -431,7 +431,7 @@ class Event {
                 outside.getChildren().addAll(inside6, inside5);
                 g.add(outside, 2, 0);
 
-                Button close= new Button("Close");
+                Button close = new Button("Close");
                 g.add(close, 0, 1);
                 close.setOnAction(ew -> popupwindow.close());
 
@@ -447,7 +447,7 @@ class Event {
         //Implements the New ParkingEvent MenuItem
         parking.setOnAction(e ->
         {
-            if(Maintenance.stationCheck())
+            if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
             grid.setMaxSize(800, 500);
@@ -534,7 +534,7 @@ class Event {
                 outside.getChildren().addAll(inside4, inside3);
                 g.add(outside, 1, 0);
 
-                Button close= new Button("Close");
+                Button close = new Button("Close");
                 g.add(close, 0, 1);
                 close.setOnAction(ew -> popupwindow.close());
 
@@ -578,7 +578,7 @@ class Event {
             Optional<ButtonType> result = alert.showAndWait();
             TextField boo;
             Label foo;
-            if(result.isPresent()) {
+            if (result.isPresent()) {
                 if (result.get() == buttonTypeOne) {
                     Maintenance.cleanScreen();
                     foo = new Label("Duration: ");
@@ -855,13 +855,13 @@ class Event {
             }
         });
         policyCreation1.setOnAction(e -> {
-            if(Maintenance.fieldCompletionCheck())
+            if (Maintenance.fieldCompletionCheck())
                 return;
-            String text = textfields.get(1).getText().replaceAll("[^0-9,]+","");
+            String text = textfields.get(1).getText().replaceAll("[^0-9,]+", "");
             textfields.get(1).setText(text);
             String[] prices = textfields.get(1).getText().split(",");
             double[] p = new double[prices.length];
-            for(int i=0; i<prices.length; i++)
+            for (int i = 0; i < prices.length; i++)
                 p[i] = Double.parseDouble(prices[i]);
             try {
                 PricingPolicy policy = new PricingPolicy(Long.parseLong(textfields.get(0).getText()), p);
@@ -874,15 +874,15 @@ class Event {
             }
         });
         policyCreation2.setOnAction(e -> {
-            if(Maintenance.fieldCompletionCheck())
+            if (Maintenance.fieldCompletionCheck())
                 return;
-            String text = textfields.get(0).getText().replaceAll("[^0-9,]+","");
+            String text = textfields.get(0).getText().replaceAll("[^0-9,]+", "");
             textfields.get(0).setText(text);
             String[] spaces = textfields.get(0).getText().split(",");
-            text = textfields.get(1).getText().replaceAll("[^0-9,]+","");
+            text = textfields.get(1).getText().replaceAll("[^0-9,]+", "");
             textfields.get(1).setText(text);
             String[] prices = textfields.get(1).getText().split(",");
-            if(spaces.length != prices.length) {
+            if (spaces.length != prices.length) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setHeaderText(null);
@@ -892,7 +892,7 @@ class Event {
             }
             long[] s = new long[spaces.length];
             double[] p = new double[prices.length];
-            for(int i = 0; i<spaces.length; i++) {
+            for (int i = 0; i < spaces.length; i++) {
                 s[i] = Long.parseLong(spaces[i]);
                 p[i] = Double.parseDouble(prices[i]);
             }
@@ -915,11 +915,11 @@ class Event {
         ChargingStation[] st = new ChargingStation[stations.size()];
         stations.forEach(station -> st[stations.indexOf(station)] = station);
         ChargingStation temp;
-        for(int i = 0; i < st.length; i++){
-            for(int j = 1; j < (st.length - i); j++){
-                if(st[j-1].getTotalEnergy() < st[j].getTotalEnergy()){
-                    temp = st[j-1];
-                    st[j-1] = st[j];
+        for (int i = 0; i < st.length; i++) {
+            for (int j = 1; j < (st.length - i); j++) {
+                if (st[j - 1].getTotalEnergy() < st[j].getTotalEnergy()) {
+                    temp = st[j - 1];
+                    st[j - 1] = st[j];
                     st[j] = temp;
                 }
             }
@@ -932,11 +932,11 @@ class Event {
         ChargingStation[] st = new ChargingStation[stations.size()];
         stations.forEach(station -> st[stations.indexOf(station)] = station);
         ChargingStation temp;
-        for(int i = 0; i < st.length; i++){
-            for(int j = 1; j < (st.length - i); j++){
-                if(st[j-1].getCurrentPrice() > st[j].getCurrentPrice()){
-                    temp = st[j-1];
-                    st[j-1] = st[j];
+        for (int i = 0; i < st.length; i++) {
+            for (int j = 1; j < (st.length - i); j++) {
+                if (st[j - 1].getCurrentPrice() > st[j].getCurrentPrice()) {
+                    temp = st[j - 1];
+                    st[j - 1] = st[j];
                     st[j] = temp;
                 }
             }
@@ -966,11 +966,11 @@ class Event {
         ChargingStation[] st = new ChargingStation[stations.size()];
         stations.forEach(station -> st[stations.indexOf(station)] = station);
         ChargingStation temp;
-        for(int i = 0; i < st.length; i++){
-            for(int j = 1; j < (st.length - i); j++){
-                if(st[j-1].getDisUnitPrice() > st[j].getDisUnitPrice()){
-                    temp = st[j-1];
-                    st[j-1] = st[j];
+        for (int i = 0; i < st.length; i++) {
+            for (int j = 1; j < (st.length - i); j++) {
+                if (st[j - 1].getDisUnitPrice() > st[j].getDisUnitPrice()) {
+                    temp = st[j - 1];
+                    st[j - 1] = st[j];
                     st[j] = temp;
                 }
             }
@@ -1016,11 +1016,11 @@ class Event {
         ChargingStation[] st = new ChargingStation[stations.size()];
         stations.forEach(station -> st[stations.indexOf(station)] = station);
         ChargingStation temp;
-        for(int i = 0; i < st.length; i++){
-            for(int j = 1; j < (st.length - i); j++){
-                if(st[j-1].getWaitingTime(kind) > st[j].getWaitingTime(kind)){
-                    temp = st[j-1];
-                    st[j-1] = st[j];
+        for (int i = 0; i < st.length; i++) {
+            for (int j = 1; j < (st.length - i); j++) {
+                if (st[j - 1].getWaitingTime(kind) > st[j].getWaitingTime(kind)) {
+                    temp = st[j - 1];
+                    st[j - 1] = st[j];
                     st[j] = temp;
                 }
             }

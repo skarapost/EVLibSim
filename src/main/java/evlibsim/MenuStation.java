@@ -19,11 +19,11 @@ import java.util.Optional;
 import static evlibsim.EVLibSim.*;
 
 class MenuStation {
-    
-    private static final Menu stationM = new Menu("Station");
+
     static final MenuItem newChargingStationMI = new MenuItem("New station");
-    private static final Menu chargersM = new Menu("Charger");
     static final ScrollPane scroll = new ScrollPane();
+    private static final Menu stationM = new Menu("Station");
+    private static final Menu chargersM = new Menu("Charger");
     private static final MenuItem newChargerMI = new MenuItem("New charger");
     private static final Menu disChargersM = new Menu("DisCharger");
     private static final MenuItem allChargersMI = new MenuItem("All chargers");
@@ -38,18 +38,18 @@ class MenuStation {
     private static final MenuItem modifyChargingStationMI = new MenuItem("Modify station");
     private static final MenuItem newBatteryMI = new MenuItem("New battery");
     private static final MenuItem allBatteriesMI = new MenuItem("Batteries");
-    private static boolean automaticHandling;
-    private static boolean automaticUpdate;
-    private static String kindOfCharging;
     private static final MenuItem batteriesChargingMI = new MenuItem("Batteries charging");
-    static RadioMenuItem cs;
     private static final Button chargingStationCreationB = new Button("Creation");
     private static final Button chargerCreationB = new Button("Creation");
     private static final Button modifyStationB = new Button("Modification");
     private static final Button batteryCreationB = new Button("Creation");
-    private static final Image image = new Image(MenuStation.class.getResourceAsStream("d.png"));
+    private static final Image image = new Image(MenuStation.class.getResourceAsStream("/d.png"));
+    static RadioMenuItem cs;
+    private static boolean automaticHandling;
+    private static boolean automaticUpdate;
+    private static String kindOfCharging;
     private static Button delete;
-    
+
     static Menu createStationMenu() {
         chargersM.getItems().addAll(newChargerMI, allChargersMI);
         disChargersM.getItems().addAll(newDisChargerMI, allDisChargersMI);
@@ -251,9 +251,10 @@ class MenuStation {
             sourc.setMaxWidth(100);
             Menu src = new Menu("Choice");
             ToggleGroup r = new ToggleGroup();
-            RadioMenuItem slow = new RadioMenuItem("slow");
-            RadioMenuItem fast = new RadioMenuItem("fast");
+            RadioMenuItem slow = new RadioMenuItem("Slow");
+            RadioMenuItem fast = new RadioMenuItem("Fast");
             r.getToggles().addAll(slow, fast);
+            kindOfCharging = "slow";
             slow.setSelected(true);
             r.selectedToggleProperty().addListener((observable, newValue, oldValue) -> {
                 if (slow.isSelected())
@@ -271,7 +272,7 @@ class MenuStation {
             textfields.add(boo);
             EVLibSim.grid.add(chargerCreationB, 0, 2);
             chargerCreationB.setDefaultButton(true);
-            grid.add(cancel, 1, 3);
+            grid.add(cancel, 1, 2);
             EVLibSim.root.setCenter(EVLibSim.grid);
         });
 
@@ -446,7 +447,7 @@ class MenuStation {
 
         //Implements the All Chargers MenuItem
         allChargersMI.setOnAction(e -> {
-            if(Maintenance.stationCheck())
+            if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
             VBox box = new VBox();
@@ -456,7 +457,7 @@ class MenuStation {
             scroll.setMaxSize(600, 600);
             scroll.getStyleClass().add("scroll");
             Label foo;
-            for(Charger ch: currentStation.getChargers()) {
+            for (Charger ch : currentStation.getChargers()) {
                 z = new HBox();
                 z.setSpacing(15);
                 z.setAlignment(Pos.TOP_LEFT);
@@ -474,15 +475,12 @@ class MenuStation {
                 delete.setMinSize(image.getWidth(), image.getHeight());
                 delete.setGraphic(new ImageView(image));
                 delete.setOnAction(et -> {
-                    if (ch.getChargingEvent() == null)
-                    {
+                    if (ch.getChargingEvent() == null) {
                         if (Maintenance.confirmDeletion()) {
                             currentStation.deleteCharger(ch);
                             Maintenance.completionMessage("Charger deletion");
                         }
-                    }
-                    else
-                    {
+                    } else {
                         Alert alert = new Alert(Alert.AlertType.ERROR);
                         alert.setTitle("Error");
                         alert.setHeaderText(null);
@@ -500,7 +498,7 @@ class MenuStation {
 
         //Implements the All DisChargers MenuItem.
         allDisChargersMI.setOnAction(e -> {
-            if(Maintenance.stationCheck())
+            if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
             VBox box = new VBox();
@@ -510,7 +508,7 @@ class MenuStation {
             scroll.setMaxSize(600, 600);
             scroll.getStyleClass().add("scroll");
             Label foo;
-            for(DisCharger ch: currentStation.getDisChargers()) {
+            for (DisCharger ch : currentStation.getDisChargers()) {
                 z = new HBox();
                 z.setSpacing(15);
                 z.setAlignment(Pos.TOP_LEFT);
@@ -526,15 +524,12 @@ class MenuStation {
                 delete.setMinSize(image.getWidth(), image.getHeight());
                 delete.setGraphic(new ImageView(image));
                 delete.setOnAction(et -> {
-                    if (ch.getDisChargingEvent() == null)
-                    {
+                    if (ch.getDisChargingEvent() == null) {
                         if (Maintenance.confirmDeletion()) {
                             currentStation.deleteDisCharger(ch);
                             Maintenance.completionMessage("DisCharger deletion");
                         }
-                    }
-                    else
-                    {
+                    } else {
                         Alert alert = new Alert(Alert.AlertType.ERROR);
                         alert.setTitle("Error");
                         alert.setHeaderText(null);
@@ -552,7 +547,7 @@ class MenuStation {
 
         //Implements the All ExchangeHandlers MenuItem.
         allExchangeHandlersMI.setOnAction(e -> {
-            if(Maintenance.stationCheck())
+            if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
             VBox box = new VBox();
@@ -562,7 +557,7 @@ class MenuStation {
             scroll.setMaxSize(600, 600);
             scroll.getStyleClass().add("scroll");
             Label foo;
-            for(ExchangeHandler ch: currentStation.getExchangeHandlers()) {
+            for (ExchangeHandler ch : currentStation.getExchangeHandlers()) {
                 z = new HBox();
                 z.setSpacing(15);
                 z.setAlignment(Pos.TOP_LEFT);
@@ -578,15 +573,12 @@ class MenuStation {
                 delete.setMinSize(image.getWidth(), image.getHeight());
                 delete.setGraphic(new ImageView(image));
                 delete.setOnAction(et -> {
-                    if (ch.getChargingEvent() == null)
-                    {
+                    if (ch.getChargingEvent() == null) {
                         if (Maintenance.confirmDeletion()) {
                             currentStation.deleteExchangeHandler(ch);
                             Maintenance.completionMessage("ExchangeHandler deletion");
                         }
-                    }
-                    else
-                    {
+                    } else {
                         Alert alert = new Alert(Alert.AlertType.ERROR);
                         alert.setTitle("Error");
                         alert.setHeaderText(null);
@@ -604,7 +596,7 @@ class MenuStation {
 
         //Implements the All ParkingSlots MenuItem.
         allParkingSlotsMI.setOnAction(e -> {
-            if(Maintenance.stationCheck())
+            if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
             VBox box = new VBox();
@@ -614,7 +606,7 @@ class MenuStation {
             scroll.setMaxSize(600, 600);
             scroll.getStyleClass().add("scroll");
             Label foo;
-            for(ParkingSlot ch: currentStation.getParkingSlots()) {
+            for (ParkingSlot ch : currentStation.getParkingSlots()) {
                 z = new HBox();
                 z.setSpacing(15);
                 z.setAlignment(Pos.TOP_LEFT);
@@ -630,15 +622,12 @@ class MenuStation {
                 delete.setMinSize(image.getWidth(), image.getHeight());
                 delete.setGraphic(new ImageView(image));
                 delete.setOnAction(et -> {
-                    if (ch.getParkingEvent() == null)
-                    {
+                    if (ch.getParkingEvent() == null) {
                         if (Maintenance.confirmDeletion()) {
                             currentStation.deleteParkingSlot(ch);
                             Maintenance.completionMessage("ParkingSlot deletion");
                         }
-                    }
-                    else
-                    {
+                    } else {
                         Alert alert = new Alert(Alert.AlertType.ERROR);
                         alert.setTitle("Error");
                         alert.setHeaderText(null);
@@ -685,7 +674,7 @@ class MenuStation {
 
         //Implements the All Batteries MenuItem.
         allBatteriesMI.setOnAction(e -> {
-            if(Maintenance.stationCheck())
+            if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
             VBox box = new VBox();
@@ -695,7 +684,7 @@ class MenuStation {
             scroll.setMaxSize(600, 600);
             scroll.getStyleClass().add("scroll");
             Label foo;
-            for(Battery b: currentStation.getBatteries()) {
+            for (Battery b : currentStation.getBatteries()) {
                 z = new HBox();
                 z.setSpacing(15);
                 z.setAlignment(Pos.TOP_LEFT);
@@ -716,13 +705,13 @@ class MenuStation {
                     for (Charger charger : currentStation.getChargers()) {
                         if (charger.getChargingEvent() != null)
                             if (charger.getChargingEvent().getElectricVehicle().getBattery() == b) {
-                            Alert alert = new Alert(Alert.AlertType.ERROR);
-                            alert.setTitle("Error");
-                            alert.setHeaderText(null);
-                            alert.setContentText("Battery is charging now.");
-                            alert.showAndWait();
-                            return;
-                        }
+                                Alert alert = new Alert(Alert.AlertType.ERROR);
+                                alert.setTitle("Error");
+                                alert.setHeaderText(null);
+                                alert.setContentText("Battery is charging now.");
+                                alert.showAndWait();
+                                return;
+                            }
                     }
                     if (Maintenance.confirmDeletion()) {
                         currentStation.deleteBattery(b);
@@ -739,16 +728,16 @@ class MenuStation {
 
         //Implements the charging of batteries that are for battery exchange
         batteriesChargingMI.setOnAction(e -> {
-            if(Maintenance.stationCheck())
+            if (Maintenance.stationCheck())
                 return;
-            String[] choices = {"slow", "fast"};
+            String[] choices = {"Slow", "Fast"};
             ChoiceDialog<String> dialog = new ChoiceDialog(Arrays.asList(choices).get(0), Arrays.asList(choices));
             dialog.setTitle("Information");
             dialog.setHeaderText(null);
             dialog.setContentText("Kind of charging: ");
             Optional<String> result = dialog.showAndWait();
             if (result.isPresent()) {
-                currentStation.batteriesCharging(result.get());
+                currentStation.batteriesCharging(result.get().toLowerCase());
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Information");
                 alert.setHeaderText(null);
@@ -820,6 +809,7 @@ class MenuStation {
                 st.setInductiveChargingRatio(Double.parseDouble(textfields.get(13).getText()));
                 st.setTimeofExchange(Long.parseLong(textfields.get(15).getText()));
                 st.setAutomaticUpdateMode(automaticUpdate);
+                Energy.updateStorage.setDisable(automaticUpdate);
                 st.setUpdateSpace(Integer.parseInt(textfields.get(14).getText()));
                 st.setAutomaticQueueHandling(automaticHandling);
                 if (textfields.get(1).getText() != null) {
@@ -889,6 +879,7 @@ class MenuStation {
                 currentStation.setDisChargingRatio((Double.parseDouble(textfields.get(7).getText())));
                 currentStation.setInductiveChargingRatio((Double.parseDouble(textfields.get(8).getText())));
                 currentStation.setAutomaticUpdateMode(automaticUpdate);
+                Energy.updateStorage.setDisable(automaticUpdate);
                 currentStation.setUpdateSpace((Integer.parseInt(textfields.get(9).getText())));
                 currentStation.setTimeofExchange(Long.parseLong(textfields.get(10).getText()));
                 currentStation.setAutomaticQueueHandling(automaticHandling);
