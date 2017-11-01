@@ -1,9 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="EVLibSim:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/</output-path>
-    <root id="archive" name="EVLibSim.jar">
-      <element id="module-output" name="EVLibSim" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/../EVLib/target/EVLib.jar" path-in-jar="/" />
-    </root>
-  </artifact>
-</component>
