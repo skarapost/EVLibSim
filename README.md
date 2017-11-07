@@ -1,6 +1,5 @@
 # EVLibSim
-A simulation of a charging station using EVLib library. 
+A simulation tool for the operation of some charging stations using EVLib library. 
 
 ## Build
-Originally, it is required the build and installation to the loca repository of [EVLib](github.com/skarapost/EVLib) using maven. 
-The next part is the build of this project using maven, as well.
+Originally, it is required to build and install to the local repository [EVLib](github.com/skarapost/EVLib) library using Maven build tool. Then, using maven build EVLibSim.
