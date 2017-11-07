@@ -14,6 +14,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+import java.util.function.Predicate;
+
 import static evlibsim.EVLibSim.*;
 import static evlibsim.MenuStation.scroll;
 
@@ -226,7 +228,7 @@ class View {
             if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
-            grid.setMaxSize(950, 750);
+            grid.setMaxSize(950, 800);
             ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
             for (int i = 0; i < currentStation.getSources().length; i++) {
                 switch (currentStation.getSources()[i]) {
@@ -348,6 +350,13 @@ class View {
             barChart.getData().add(dataSeries1);
 
             grid.add(barChart, 1, 1);
+            Button refresh = new Button("Refresh");
+            refresh.setOnAction(q -> totalActivity.fire());
+            Predicate buttonPredicate = b -> (b != EVLibSim.cancel);
+            HBox buttonsBox = EVLibSim.getButtonsBox();
+            buttonsBox.getChildren().removeIf(buttonPredicate);
+            buttonsBox.getChildren().add(0, refresh);
+            grid.add(buttonsBox, 0, 2);
         });
 
         //Buttons

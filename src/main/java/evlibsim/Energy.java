@@ -3,8 +3,10 @@ package evlibsim;
 import evlib.sources.*;
 import javafx.event.ActionEvent;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 
 import java.util.*;
+import java.util.function.Predicate;
 
 import static evlibsim.EVLibSim.*;
 
@@ -14,17 +16,17 @@ class Energy {
     static final MenuItem newEnergySource = new MenuItem("New energy source");
     static final MenuItem deleteEnergySource = new MenuItem("Remove energy source");
     static final MenuItem updateStorage = new MenuItem("Update storage");
+    static final MenuItem sortEnergies = new MenuItem("Sort energies");
     private static final Menu energy = new Menu("Energy");
     private static final Button addEnergies = new Button("Add");
     private static final Button sort = new Button("Sort");
-    private static final MenuItem sortEnergies = new MenuItem("Sort energies");
 
-    //Builds the Energy category in the main MenuBar.
+    //Building of Energy menu item.
     static Menu createEnergyMenu() {
         energy.getItems().addAll(newEnergySource, deleteEnergySource, new SeparatorMenuItem(),
                 newEnergyPackages, updateStorage, new SeparatorMenuItem(), sortEnergies);
 
-        //Builds the New EnergySource MenuItem
+        //Building of NewEnergySource menu item
         newEnergySource.setOnAction(e -> {
             List<String> energies = new ArrayList<>();
             String[] a = {"Solar", "Wind", "Wave", "Nonrenewable", "Hydroelectric", "Geothermal", "DisCharging"};
@@ -77,8 +79,8 @@ class Energy {
             dialog.setHeaderText(null);
             dialog.setContentText("Choose an EnergySource: ");
             Optional<String> result = dialog.showAndWait();
-            if (result.isPresent()) {
-                switch (result.get()) {
+            result.ifPresent(s -> {
+                switch (s) {
                     case "Solar":
                         currentStation.deleteEnergySource(currentStation.getEnergySource("Solar"));
                         break;
@@ -100,7 +102,7 @@ class Energy {
                 }
                 Maintenance.completionMessage("EnergySource removal");
                 startScreen.fire();
-            }
+            });
         });
 
         //Implements the energy storage update, in case the automatic update mode is false.
@@ -194,9 +196,12 @@ class Energy {
             grid.add(boo, 1, 3);
             foo = new Label("*Selected");
             grid.add(foo, 0, 4, 2, 1);
-            grid.add(sort, 0, 5);
+            Predicate buttonPredicate = b -> (b != EVLibSim.cancel);
+            HBox buttonsBox = EVLibSim.getButtonsBox();
+            buttonsBox.getChildren().removeIf(buttonPredicate);
+            buttonsBox.getChildren().add(0, sort);
+            grid.add(buttonsBox, 0, 5, 2, 1);
             sort.setDefaultButton(true);
-            grid.add(cancel, 1, 5);
             root.setCenter(grid);
         });
         //Choice for adding new energy packages in every EnergySource.
@@ -267,11 +272,14 @@ class Energy {
             }
             grid.add(foo, 2, 2);
             grid.add(boo, 3, 2);
-            grid.add(addEnergies, 0, 3);
-            addEnergies.setDefaultButton(true);
-            grid.add(cancel, 1, 3);
             foo = new Label("*Selected");
-            grid.add(foo, 0, 4, 2, 1);
+            grid.add(foo, 0, 3, 2, 1);
+            Predicate buttonPredicate = b -> (b != EVLibSim.cancel);
+            HBox buttonsBox = EVLibSim.getButtonsBox();
+            buttonsBox.getChildren().removeIf(buttonPredicate);
+            buttonsBox.getChildren().add(0, addEnergies);
+            grid.add(buttonsBox, 0, 4, 2, 1);
+            addEnergies.setDefaultButton(true);
             root.setCenter(grid);
         });
 

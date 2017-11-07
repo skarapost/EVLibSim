@@ -15,6 +15,7 @@ import javafx.scene.layout.VBox;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 import static evlibsim.EVLibSim.*;
 
@@ -193,8 +194,11 @@ class MenuStation {
             boo = new TextField("5000");
             EVLibSim.grid.add(boo, 1, 9);
             textfields.add(boo);
-            EVLibSim.grid.add(chargingStationCreationB, 0, 10);
-            grid.add(cancel, 1, 10);
+            Predicate buttonPredicate = b -> (b != EVLibSim.cancel);
+            HBox buttonsBox = EVLibSim.getButtonsBox();
+            buttonsBox.getChildren().removeIf(buttonPredicate);
+            buttonsBox.getChildren().add(0, chargingStationCreationB);
+            grid.add(buttonsBox, 0, 10, 2, 1);
             chargingStationCreationB.setDefaultButton(true);
             EVLibSim.root.setCenter(EVLibSim.grid);
             sol.setOnAction((ActionEvent et) -> {
@@ -270,9 +274,12 @@ class MenuStation {
             boo = new TextField();
             EVLibSim.grid.add(boo, 1, 1);
             textfields.add(boo);
-            EVLibSim.grid.add(chargerCreationB, 0, 2);
+            Predicate buttonPredicate = b -> (b != EVLibSim.cancel);
+            HBox buttonsBox = EVLibSim.getButtonsBox();
+            buttonsBox.getChildren().removeIf(buttonPredicate);
+            buttonsBox.getChildren().add(0, chargerCreationB);
+            grid.add(buttonsBox, 0, 2, 2, 1);
             chargerCreationB.setDefaultButton(true);
-            grid.add(cancel, 1, 2);
             EVLibSim.root.setCenter(EVLibSim.grid);
         });
 
@@ -286,13 +293,13 @@ class MenuStation {
             alert.setHeaderText(null);
             alert.setContentText("Please give a name: ");
             Optional<String> result = alert.showAndWait();
-            if (result.isPresent()) {
+            result.ifPresent(s -> {
                 DisCharger ch;
                 ch = new DisCharger(currentStation);
-                ch.setName(result.get());
+                ch.setName(s);
                 currentStation.addDisCharger(ch);
                 Maintenance.completionMessage("DisCharger creation");
-            }
+            });
         });
 
         //Implements the New ExchangeHandler MenuItem.
@@ -305,13 +312,13 @@ class MenuStation {
             alert.setHeaderText(null);
             alert.setContentText("Please give a name: ");
             Optional<String> result = alert.showAndWait();
-            if (result.isPresent()) {
+            result.ifPresent(s -> {
                 ExchangeHandler ch;
                 ch = new ExchangeHandler(currentStation);
-                ch.setName(result.get());
+                ch.setName(s);
                 currentStation.addExchangeHandler(ch);
                 Maintenance.completionMessage("ExchangeHandler creation");
-            }
+            });
         });
 
         //Implements the New ParkingSlot MenuItem.
@@ -324,13 +331,13 @@ class MenuStation {
             alert.setHeaderText(null);
             alert.setContentText("Please give a name: ");
             Optional<String> result = alert.showAndWait();
-            if (result.isPresent()) {
+            result.ifPresent(s -> {
                 ParkingSlot ch;
                 ch = new ParkingSlot(currentStation);
-                ch.setName(result.get());
+                ch.setName(s);
                 currentStation.addParkingSlot(ch);
                 Maintenance.completionMessage("ParkingSlot creation");
-            }
+            });
         });
 
         //Implements the Modify ChargingStation.
@@ -439,9 +446,12 @@ class MenuStation {
             boo = new TextField(Long.toString(currentStation.getTimeOfExchange()));
             EVLibSim.grid.add(boo, 1, 6);
             textfields.add(boo);
-            EVLibSim.grid.add(modifyStationB, 0, 7);
+            Predicate buttonPredicate = b -> (b != EVLibSim.cancel);
+            HBox buttonsBox = EVLibSim.getButtonsBox();
+            buttonsBox.getChildren().removeIf(buttonPredicate);
+            buttonsBox.getChildren().add(0, modifyStationB);
+            grid.add(buttonsBox, 0, 7, 2, 1);
             modifyStationB.setDefaultButton(true);
-            grid.add(cancel, 1, 7);
             EVLibSim.root.setCenter(EVLibSim.grid);
         });
 
@@ -666,9 +676,12 @@ class MenuStation {
             boo = new TextField();
             EVLibSim.grid.add(boo, 1, 2);
             textfields.add(boo);
-            EVLibSim.grid.add(batteryCreationB, 0, 3);
+            Predicate buttonPredicate = b -> (b != EVLibSim.cancel);
+            HBox buttonsBox = EVLibSim.getButtonsBox();
+            buttonsBox.getChildren().removeIf(buttonPredicate);
+            buttonsBox.getChildren().add(0, batteryCreationB);
+            grid.add(buttonsBox, 0, 3, 2, 1);
             batteryCreationB.setDefaultButton(true);
-            grid.add(cancel, 1, 3);
             EVLibSim.root.setCenter(EVLibSim.grid);
         });
 
@@ -731,19 +744,19 @@ class MenuStation {
             if (Maintenance.stationCheck())
                 return;
             String[] choices = {"Slow", "Fast"};
-            ChoiceDialog<String> dialog = new ChoiceDialog(Arrays.asList(choices).get(0), Arrays.asList(choices));
+            ChoiceDialog<String> dialog = new ChoiceDialog<>(Arrays.asList(choices).get(0), Arrays.asList(choices));
             dialog.setTitle("Information");
             dialog.setHeaderText(null);
             dialog.setContentText("Kind of charging: ");
             Optional<String> result = dialog.showAndWait();
-            if (result.isPresent()) {
-                currentStation.batteriesCharging(result.get().toLowerCase());
+            result.ifPresent(s -> {
+                currentStation.batteriesCharging(s.toLowerCase());
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Information");
                 alert.setHeaderText(null);
                 alert.setContentText("The chargings started.");
                 alert.showAndWait();
-            }
+            });
         });
         //Buttons
         chargerCreationB.setOnAction(e ->

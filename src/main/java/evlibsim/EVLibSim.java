@@ -15,8 +15,11 @@ import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -41,21 +44,20 @@ public class EVLibSim extends Application {
     static final ArrayList<ChargingStation> stations = new ArrayList<>();
     static final ArrayList<String> energies = new ArrayList<>();
     static final ToggleGroup group = new ToggleGroup();
-    static final MenuItem startScreen = new MenuItem("Start Screen");
-    static final Menu s = new Menu("Stations");
     private static final MenuBar menuBar = new MenuBar();
+    //File menu item
     private static final Menu file = new Menu("File");
-    private static final Button newChargingStation = new Button("New station");
-    private static final Button newEvent = new Button("New event");
-    private static final Button newEnergy = new Button("Energy");
     private static final Menu rec = new Menu("Suggestions");
     private static final RadioMenuItem enable = new RadioMenuItem("Enable");
     private static final RadioMenuItem disable = new RadioMenuItem("Disable");
+    static final MenuItem startScreen = new MenuItem("Start Screen");
+    static final Menu s = new Menu("Stations");
     private static final MenuItem load = new MenuItem("Load");
     private static final MenuItem save = new MenuItem("Save");
     private static final MenuItem saveAs = new MenuItem("Save as...");
     private static final MenuItem exitMenuItem = new MenuItem("Exit");
     private static final MenuItem about = new MenuItem("About");
+    //Labels for the left box
     private static final Label unitPrice = new Label();
     private static final Label disUnitPrice = new Label();
     private static final Label exchangePrice = new Label();
@@ -64,7 +66,18 @@ public class EVLibSim extends Application {
     private static final Label waitTimeFast = new Label();
     private static final Label waitTimeDis = new Label();
     private static final Label waitTimeEx = new Label();
+    private final VBox box1 = new VBox();
+    private final VBox box2 = new VBox();
+    private final VBox leftBox = new VBox();
     private static final TextArea ta = new TextArea();
+
+    //Buttons' box
+    private static final HBox buttonsBox = new HBox();
+
+    //Buttons of startScreen's grid
+    private static final Button newChargingStation = new Button("New station");
+    private static final Button newEvent = new Button("New event");
+    private static final Button newEnergy = new Button("Energy");
     private static final Button bt1 = new Button("New charging");
     private static final Button bt2 = new Button("New discharging");
     private static final Button bt3 = new Button("New battery exchange");
@@ -72,13 +85,16 @@ public class EVLibSim extends Application {
     private static final Button bt5 = new Button("Add energy");
     private static final Button bt6 = new Button("Add energy source");
     private static final Button bt7 = new Button("Delete energy source");
+    private static final Button bt8 = new Button("Sort energies");
+
     static ChargingStation currentStation;
-    static Button cancel = new Button("Cancel");
+
     static Stage primaryStage;
-    private final VBox box1 = new VBox();
-    private final VBox box2 = new VBox();
-    private final VBox leftBox = new VBox();
+
     private File f = null;
+
+    private static final Image image = new Image(View.class.getResourceAsStream("/backArrow.png"));
+    static final Button cancel = new Button("Cancel");
 
     public static void main(String[] args) {
         launch(args);
@@ -93,16 +109,24 @@ public class EVLibSim extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
 
+        file.getItems().addAll(startScreen, new SeparatorMenuItem(), load, save, saveAs, new SeparatorMenuItem(), s, about, rec, exitMenuItem);
+        menuBar.getMenus().addAll(file, View.createViewMenu(), MenuStation.createStationMenu(), Event.createEventMenu(), Energy.createEnergyMenu());
+        scene.getStylesheets().add(EVLibSim.class.getResource("/EVLibSim.css").toExternalForm());
+        grid.getStyleClass().add("grid");
+
         root.setTop(menuBar);
         root.setRight(ToolBox.createToolBar());
+        root.setLeft(leftBox);
 
-        exitMenuItem.setOnAction(e -> {
-            Platform.exit();
-            System.exit(0);
-        });
+        //Configuration of buttons's box
+        buttonsBox.getChildren().addAll(EVLibSim.cancel);
+        buttonsBox.setAlignment(Pos.CENTER_LEFT);
+        buttonsBox.setStyle("-fx-background-color: transparent; -fx-spacing: 15px;");
 
+        //Global buttons(cancel)
         cancel.setOnAction(e -> startScreen.fire());
 
+        //Control of suggestion box menu item
         rec.getItems().addAll(enable, disable);
         enable.setSelected(true);
         ToggleGroup g = new ToggleGroup();
@@ -121,15 +145,7 @@ public class EVLibSim extends Application {
             }
         });
 
-        file.getItems().addAll(startScreen, new SeparatorMenuItem(), load, save, saveAs, new SeparatorMenuItem(), s, about, rec, exitMenuItem);
-        menuBar.getMenus().addAll(file, View.createViewMenu(), MenuStation.createStationMenu(), Event.createEventMenu(), Energy.createEnergyMenu());
-        scene.getStylesheets().add(EVLibSim.class.getResource("/EVLibSim.css").toExternalForm());
-        grid.getStyleClass().add("grid");
-
-        newChargingStation.setPrefSize(230, 60);
-        newEvent.setPrefSize(230, 60);
-        newEnergy.setPrefSize(230, 60);
-
+        //Left boxes
         Label prices = new Label("Prices");
         Label wait = new Label("Wait");
 
@@ -157,12 +173,11 @@ public class EVLibSim extends Application {
 
         BorderPane.setAlignment(leftBox, Pos.CENTER);
 
-        root.setLeft(leftBox);
-
+        //Start screen
         startScreen.setOnAction((ActionEvent e) -> {
             Maintenance.cleanScreen();
-            grid.setMaxSize(400, 380);
-            grid.setMinSize(400, 380);
+            grid.setMaxSize(420, 420);
+            grid.setMinSize(420, 420);
             grid.add(newChargingStation, 0, 0);
             grid.add(newEvent, 0, 1);
             grid.add(newEnergy, 0, 2);
@@ -194,6 +209,12 @@ public class EVLibSim extends Application {
             }
         });
 
+
+        //Start screen buttons
+        newChargingStation.setPrefSize(230, 60);
+        newEvent.setPrefSize(230, 60);
+        newEnergy.setPrefSize(230, 60);
+
         newChargingStation.setOnAction(e -> newChargingStationMI.fire());
 
         newEvent.setOnAction(e -> {
@@ -204,12 +225,18 @@ public class EVLibSim extends Application {
             bt2.setPrefSize(230, 60);
             bt3.setPrefSize(230, 60);
             bt4.setPrefSize(230, 60);
-            grid.setMaxSize(400, 400);
-            grid.setMinSize(400, 400);
             grid.add(bt1, 0, 0);
             grid.add(bt2, 0, 1);
             grid.add(bt3, 0, 2);
             grid.add(bt4, 0, 3);
+            Button back = new Button();
+            back.setGraphic(new ImageView(image));
+            back.setPrefSize(image.getWidth(), image.getHeight());
+            HBox box = new HBox();
+            box.setAlignment(Pos.CENTER);
+            box.getChildren().add(back);
+            grid.add(box, 0, 4);
+            back.setOnAction(ey -> startScreen.fire());
             root.setCenter(grid);
         });
 
@@ -225,17 +252,28 @@ public class EVLibSim extends Application {
             bt5.setPrefSize(230, 60);
             bt6.setPrefSize(230, 60);
             bt7.setPrefSize(230, 60);
-            grid.setMaxSize(400, 400);
-            grid.setMinSize(400, 400);
+            bt8.setPrefSize(230, 60);
             grid.add(bt5, 0, 0);
             grid.add(bt6, 0, 1);
             grid.add(bt7, 0, 2);
+            grid.add(bt8, 0, 3);
+            Button back = new Button();
+            back.setGraphic(new ImageView(image));
+            back.setPrefSize(image.getWidth(), image.getHeight());
+            HBox box = new HBox();
+            box.setAlignment(Pos.CENTER);
+            box.getChildren().add(back);
+            grid.add(box, 0, 4);
+            back.setOnAction(ey -> startScreen.fire());
             root.setCenter(grid);
         });
 
         bt5.setOnAction(e -> newEnergyPackages.fire());
         bt6.setOnAction(e -> newEnergySource.fire());
         bt7.setOnAction(e -> deleteEnergySource.fire());
+        bt8.setOnAction(e -> sortEnergies.fire());
+
+        //File's menu items
 
         about.setOnAction(e ->
         {
@@ -246,9 +284,15 @@ public class EVLibSim extends Application {
             alert.showAndWait();
         });
 
+        exitMenuItem.setOnAction(e -> {
+            Platform.exit();
+            System.exit(0);
+        });
+
         saveAs.setOnAction(e -> {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Save File");
+            fileChooser.setInitialFileName("evlibsimProgress.txt");
             fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text Files(.txt)", "*.txt"));
             File selectedFile = fileChooser.showSaveDialog(primaryStage);
             if (selectedFile != null) {
@@ -280,7 +324,7 @@ public class EVLibSim extends Application {
                 }
         });
 
-
+        //Handling of exit button
         primaryStage.addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, e -> {
             ThreadGroup currentGroup = Thread.currentThread().getThreadGroup();
             int noThreads = currentGroup.activeCount();
@@ -308,6 +352,7 @@ public class EVLibSim extends Application {
 
         });
 
+        //Timeline controling the leftbox
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), ev -> {
             if (currentStation == null) {
                 waitTimeSlow.setText("Slow: -");
@@ -335,6 +380,7 @@ public class EVLibSim extends Application {
         timeline.play();
     }
 
+    //Load file function
     private void openFile(File selectedFile) throws IOException {
         BufferedReader in = new BufferedReader(new FileReader(selectedFile));
         String line;
@@ -485,6 +531,7 @@ public class EVLibSim extends Application {
         in.close();
     }
 
+    //Returns a ChargingStation according to its name
     private ChargingStation searchStation(String name) {
         for (ChargingStation st : stations)
             if (name.equals(st.getName()))
@@ -492,6 +539,11 @@ public class EVLibSim extends Application {
         return stations.get(0);
     }
 
+    public static HBox getButtonsBox() {
+        return buttonsBox;
+    }
+
+    //Saves a file
     private void saveFile(File selectedFile) {
         OutputStreamWriter writer;
         try {
@@ -544,6 +596,7 @@ public class EVLibSim extends Application {
         }
     }
 
+    //Class for the redirection of the system output to the leftbox's text area
     private static class Console extends OutputStream {
         private final TextArea output;
 

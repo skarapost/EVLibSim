@@ -9,6 +9,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 import static evlibsim.EVLibSim.*;
 
@@ -110,23 +112,19 @@ class Event {
             boo = new TextField();
             grid.add(boo, 3, 3);
             textfields.add(boo);
-            grid.add(chargingEventCreation, 0, 4);
             //Suggestion button in the New ChargingEvent MenuItem
             suggest1.setOnAction(eu -> {
                 Stage popupwindow = new Stage();
                 popupwindow.initModality(Modality.APPLICATION_MODAL);
                 popupwindow.setTitle("Suggestions Box");
-
                 GridPane g = new GridPane();
                 g.setAlignment(Pos.CENTER);
                 g.setStyle("-fx-background-color:#D8E2F2;");
                 g.setHgap(30);
                 g.setVgap(30);
                 g.setPadding(new Insets(15, 15, 15, 15));
-
                 VBox outside;
                 Label title;
-
                 ArrayList<ChargingStation> tempStations = new ArrayList<>(Arrays.asList(bestEnergy()).subList(0, Math.min(stations.size(), 5)));
                 VBox inside1 = new VBox();
                 inside1.setStyle("-fx-background-color:#F0F1F3; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
@@ -194,26 +192,26 @@ class Event {
                 outside = new VBox();
                 outside.getChildren().addAll(inside8, inside7);
                 g.add(outside, 3, 0);
-
                 Button close = new Button("Close");
                 g.add(close, 0, 1);
                 close.setOnAction(ew -> popupwindow.close());
-
                 Scene scene1 = new Scene(g, 850, 450);
                 popupwindow.setScene(scene1);
                 popupwindow.showAndWait();
             });
-            grid.add(suggest1, 1, 4);
+            Predicate buttonPredicate = b -> (b != EVLibSim.cancel);
+            HBox buttonsBox = EVLibSim.getButtonsBox();
+            buttonsBox.getChildren().removeIf(buttonPredicate);
+            buttonsBox.getChildren().add(0, chargingEventCreation);
+            buttonsBox.getChildren().add(1, suggest1);
+            grid.add(buttonsBox, 0, 4, 2, 1);
             chargingEventCreation.setDefaultButton(true);
-            grid.add(cancel, 2, 4);
             root.setCenter(grid);
         });
         //Implements the New DisChargingEvent MenuItem
-        discharging.setOnAction(e ->
-        {
+        discharging.setOnAction(e -> {
             if (Maintenance.stationCheck())
                 return;
-
             Maintenance.cleanScreen();
             grid.setMaxSize(800, 500);
             TextField boo;
@@ -248,7 +246,6 @@ class Event {
             boo = new TextField();
             grid.add(boo, 3, 2);
             textfields.add(boo);
-            grid.add(disChargingEventCreation, 0, 3);
             //Suggestion button for DisChargingEvent MenuItem
             suggest2.setOnAction(eu -> {
                 Stage popupwindow = new Stage();
@@ -324,9 +321,13 @@ class Event {
                 popupwindow.setScene(scene1);
                 popupwindow.showAndWait();
             });
-            grid.add(suggest2, 1, 3);
+            Predicate buttonPredicate = b -> (b != EVLibSim.cancel);
+            HBox buttonsBox = EVLibSim.getButtonsBox();
+            buttonsBox.getChildren().removeIf(buttonPredicate);
+            buttonsBox.getChildren().add(0, disChargingEventCreation);
+            buttonsBox.getChildren().add(1, suggest2);
+            grid.add(buttonsBox, 0, 3, 2, 1);
             disChargingEventCreation.setDefaultButton(true);
-            grid.add(cancel, 2, 3);
             root.setCenter(grid);
         });
         //Implements the New ChargingEvent(exchange)
@@ -363,7 +364,6 @@ class Event {
             boo = new TextField();
             grid.add(boo, 1, 2);
             textfields.add(boo);
-            grid.add(exchangeEventCreation, 0, 3);
             //Suggestion button for New ChargingEvent(exchange)
             suggest3.setOnAction(eu -> {
                 Stage popupwindow = new Stage();
@@ -439,9 +439,13 @@ class Event {
                 popupwindow.setScene(scene1);
                 popupwindow.showAndWait();
             });
-            grid.add(suggest3, 1, 3);
+            Predicate buttonPredicate = b -> (b != EVLibSim.cancel);
+            HBox buttonsBox = EVLibSim.getButtonsBox();
+            buttonsBox.getChildren().removeIf(buttonPredicate);
+            buttonsBox.getChildren().add(0, exchangeEventCreation);
+            buttonsBox.getChildren().add(1, suggest3);
+            grid.add(buttonsBox, 0, 3, 2, 1);
             exchangeEventCreation.setDefaultButton(true);
-            grid.add(cancel, 2, 3);
             root.setCenter(grid);
         });
         //Implements the New ParkingEvent MenuItem
@@ -483,7 +487,6 @@ class Event {
             boo = new TextField();
             grid.add(boo, 3, 2);
             textfields.add(boo);
-            grid.add(parkingEventCreation, 0, 3);
             //Suggestion button for New ParkingEvent MenuItem
             suggest4.setOnAction(eu -> {
                 Stage popupwindow = new Stage();
@@ -542,11 +545,16 @@ class Event {
                 popupwindow.setScene(scene1);
                 popupwindow.showAndWait();
             });
-            grid.add(suggest4, 1, 3);
+            Predicate buttonPredicate = b -> (b != EVLibSim.cancel);
+            HBox buttonsBox = EVLibSim.getButtonsBox();
+            buttonsBox.getChildren().removeIf(buttonPredicate);
+            buttonsBox.getChildren().add(0, parkingEventCreation);
+            buttonsBox.getChildren().add(1, suggest4);
+            grid.add(buttonsBox, 0, 3, 2, 1);
             parkingEventCreation.setDefaultButton(true);
-            grid.add(cancel, 2, 3);
             root.setCenter(grid);
         });
+
         planExecution.setOnAction(e -> {
             if (Maintenance.stationCheck())
                 return;

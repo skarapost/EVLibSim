@@ -78,6 +78,7 @@ class ToolBox {
             export.setOnAction(ey -> {
                 FileChooser fileChooser = new FileChooser();
                 fileChooser.setTitle("Export to csv");
+                fileChooser.setInitialFileName("chargings.txt");
                 fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text Files(.txt)", "*.txt"));
                 File selectedFile = fileChooser.showSaveDialog(primaryStage);
                 if (selectedFile != null) {
@@ -141,6 +142,7 @@ class ToolBox {
             export.setOnAction(ey -> {
                 FileChooser fileChooser = new FileChooser();
                 fileChooser.setTitle("Export to csv");
+                fileChooser.setInitialFileName("dischargings.txt");
                 fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text Files(.txt)", "*.txt"));
                 File selectedFile = fileChooser.showSaveDialog(primaryStage);
                 if (selectedFile != null) {
@@ -202,6 +204,7 @@ class ToolBox {
             export.setOnAction(ey -> {
                 FileChooser fileChooser = new FileChooser();
                 fileChooser.setTitle("Export to csv");
+                fileChooser.setInitialFileName("swappings.txt");
                 fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text Files(.txt)", "*.txt"));
                 File selectedFile = fileChooser.showSaveDialog(primaryStage);
                 if (selectedFile != null) {
@@ -265,6 +268,7 @@ class ToolBox {
             export.setOnAction(ey -> {
                 FileChooser fileChooser = new FileChooser();
                 fileChooser.setTitle("Export to csv");
+                fileChooser.setInitialFileName("parkings.txt");
                 fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text Files(.txt)", "*.txt"));
                 File selectedFile = fileChooser.showSaveDialog(primaryStage);
                 if (selectedFile != null) {
@@ -311,6 +315,7 @@ class ToolBox {
                 return;
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Generate Report");
+            fileChooser.setInitialFileName("report.txt");
             fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text Files(.txt)", "*.txt"));
             File selectedFile = fileChooser.showSaveDialog(primaryStage);
             if (selectedFile != null) {
