@@ -64,7 +64,7 @@ class MenuStation {
         newChargingStationMI.setOnAction((ActionEvent e) ->
         {
             Maintenance.cleanScreen();
-            EVLibSim.grid.setMaxSize(1000, 600);
+            EVLibSim.grid.setMaxSize(800, 600);
             TextField boo;
             Label foo;
             foo = new Label("Name: ");
@@ -345,7 +345,7 @@ class MenuStation {
             if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
-            EVLibSim.grid.setMaxSize(1000, 600);
+            EVLibSim.grid.setMaxSize(800, 600);
             EVLibSim.energies.clear();
             TextField boo;
             Label foo;

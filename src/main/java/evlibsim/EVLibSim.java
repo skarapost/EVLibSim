@@ -105,6 +105,8 @@ public class EVLibSim extends Application {
         EVLibSim.primaryStage = primaryStage;
         primaryStage.setTitle("EVLibSim");
         Scene scene = new Scene(root);
+        primaryStage.setMinHeight(650);
+        primaryStage.setMinWidth(1065);
         primaryStage.setMaximized(true);
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -160,8 +162,8 @@ public class EVLibSim extends Application {
 
         Console console = new Console();
         ta.setEditable(false);
-        ta.setMaxHeight(200);
-        ta.setMaxWidth(200);
+        ta.setMaxHeight(180);
+        ta.setMaxWidth(180);
         ta.setStyle("-fx-background-radius: 0 5 5 0; -fx-border-radius: 0 5 5 0;");
         PrintStream ps = new PrintStream(console, true);
         System.setOut(ps);

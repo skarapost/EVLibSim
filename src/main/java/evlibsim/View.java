@@ -228,7 +228,7 @@ class View {
             if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
-            grid.setMaxSize(950, 800);
+            grid.setMaxSize(800, 700);
             ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
             for (int i = 0; i < currentStation.getSources().length; i++) {
                 switch (currentStation.getSources()[i]) {
