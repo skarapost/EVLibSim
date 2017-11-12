@@ -39,7 +39,7 @@ class View {
             if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
-            scroll.setMaxSize(700, 650);
+            scroll.setMaxSize(700, 450);
             scroll.getStyleClass().add("scroll");
             VBox x = new VBox();
             x.setAlignment(Pos.CENTER);
@@ -228,7 +228,7 @@ class View {
             if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
-            grid.setMaxSize(800, 700);
+            grid.setMaxSize(700, 700);
             ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
             for (int i = 0; i < currentStation.getSources().length; i++) {
                 switch (currentStation.getSources()[i]) {
@@ -392,7 +392,7 @@ class View {
             costCol.setCellValueFactory(new PropertyValueFactory<>("cost"));
             elapseTimeCol.setCellValueFactory(new PropertyValueFactory<>("remainingChargingTime"));
             table.setItems(result);
-            table.setMaxSize(1000, 600);
+            table.setMaxSize(1050, 600);
             root.setCenter(table);
         });
         dischargingsMenuItem.setOnAction(et -> {
@@ -423,7 +423,7 @@ class View {
             elapsedDisChargingTimeCol.setCellValueFactory(new PropertyValueFactory<>("remainingDisChargingTime"));
             profitCol.setCellValueFactory(new PropertyValueFactory<>("profit"));
             table.setItems(result);
-            table.setMaxSize(1000, 600);
+            table.setMaxSize(1050, 600);
             root.setCenter(table);
         });
         exchangesMenuItem.setOnAction(et -> {
@@ -451,7 +451,7 @@ class View {
             elapsedExchangeTimeCol.setCellValueFactory(new PropertyValueFactory<>("remainingChargingTime"));
             profitCol.setCellValueFactory(new PropertyValueFactory<>("cost"));
             table.setItems(result);
-            table.setMaxSize(1000, 600);
+            table.setMaxSize(1050, 600);
             root.setCenter(table);
         });
         parkingsMenuItem.setOnAction(et -> {
@@ -486,7 +486,7 @@ class View {
             conditionCol.setCellValueFactory(new PropertyValueFactory<>("condition"));
             costCol.setCellValueFactory(new PropertyValueFactory<>("cost"));
             table.setItems(result);
-            table.setMaxSize(1000, 600);
+            table.setMaxSize(1050, 600);
             root.setCenter(table);
         });
         return view;

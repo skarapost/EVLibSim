@@ -12,6 +12,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -47,6 +48,7 @@ public class EVLibSim extends Application {
     private static final MenuBar menuBar = new MenuBar();
     //File menu item
     private static final Menu file = new Menu("File");
+    private static final MenuItem export = new MenuItem("Export to csv...");
     private static final Menu rec = new Menu("Suggestions");
     private static final RadioMenuItem enable = new RadioMenuItem("Enable");
     private static final RadioMenuItem disable = new RadioMenuItem("Disable");
@@ -105,13 +107,13 @@ public class EVLibSim extends Application {
         EVLibSim.primaryStage = primaryStage;
         primaryStage.setTitle("EVLibSim");
         Scene scene = new Scene(root);
-        primaryStage.setMinHeight(650);
-        primaryStage.setMinWidth(1065);
+        primaryStage.setMinHeight(550);
+        primaryStage.setMinWidth(950);
         primaryStage.setMaximized(true);
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        file.getItems().addAll(startScreen, new SeparatorMenuItem(), load, save, saveAs, new SeparatorMenuItem(), s, about, rec, exitMenuItem);
+        file.getItems().addAll(startScreen, new SeparatorMenuItem(), load, save, saveAs, new SeparatorMenuItem(), s, about, rec, new SeparatorMenuItem(), export, exitMenuItem);
         menuBar.getMenus().addAll(file, View.createViewMenu(), MenuStation.createStationMenu(), Event.createEventMenu(), Energy.createEnergyMenu());
         scene.getStylesheets().add(EVLibSim.class.getResource("/EVLibSim.css").toExternalForm());
         grid.getStyleClass().add("grid");
@@ -162,7 +164,7 @@ public class EVLibSim extends Application {
 
         Console console = new Console();
         ta.setEditable(false);
-        ta.setMaxHeight(180);
+        ta.setMaxHeight(150);
         ta.setMaxWidth(180);
         ta.setStyle("-fx-background-radius: 0 5 5 0; -fx-border-radius: 0 5 5 0;");
         PrintStream ps = new PrintStream(console, true);
@@ -199,10 +201,10 @@ public class EVLibSim extends Application {
                         currentStation = cs;
                         waitTimeSlow.setText("Slow: " + currentStation.getWaitingTime("slow"));
                         waitTimeFast.setText("Fast: " + currentStation.getWaitingTime("fast"));
-                        waitTimeDis.setText("DisCharging: " + currentStation.getWaitingTime("discharging"));
+                        waitTimeDis.setText("Discharging: " + currentStation.getWaitingTime("discharging"));
                         waitTimeEx.setText("Exchange: " + currentStation.getWaitingTime("exchange"));
                         unitPrice.setText("Charging: " + currentStation.getCurrentPrice());
-                        disUnitPrice.setText("DisCharging: " + currentStation.getDisUnitPrice());
+                        disUnitPrice.setText("Discharging: " + currentStation.getDisUnitPrice());
                         exchangePrice.setText("Exchange: " + currentStation.getExchangePrice());
                         inductivePrice.setText("Inductive: " + currentStation.getInductivePrice());
                         Energy.updateStorage.setDisable(currentStation.getUpdateMode());
@@ -286,6 +288,125 @@ public class EVLibSim extends Application {
             alert.showAndWait();
         });
 
+        export.setOnAction(e -> {
+            if (Maintenance.stationCheck())
+                return;
+            Dialog<ArrayList<Boolean>> dialog = new Dialog<>();
+            ArrayList<Boolean> results = new ArrayList<>();
+            for(int i=0; i<4; i++)
+                results.add(false);
+            dialog.setTitle("Export to csv");
+            dialog.setHeaderText(null);
+            ButtonType exportButtonType = new ButtonType("Export", ButtonBar.ButtonData.OK_DONE);
+            dialog.getDialogPane().getButtonTypes().addAll(exportButtonType, ButtonType.CANCEL);
+
+            GridPane gp = new GridPane();
+            gp.setHgap(10);
+            gp.setVgap(10);
+            gp.setPadding(new Insets(20, 150, 10, 10));
+
+            RadioButton box1 = new RadioButton("Chargings");
+            box1.setOnAction(w -> {
+                results.remove(0);
+                results.add(0, box1.isSelected());
+            });
+            RadioButton box2 = new RadioButton("Dischargings");
+            box2.setOnAction(w -> {
+                results.remove(1);
+                results.add(1, box2.isSelected());
+            });
+            RadioButton box3 = new RadioButton("Battery exchanges");
+            box3.setOnAction(w -> {
+                results.remove(2);
+                results.add(2, box3.isSelected());
+            });
+            RadioButton box4 = new RadioButton("Parkings/Inductive chargings");
+            box4.setOnAction(w -> {
+                results.remove(3);
+                results.add(3, box4.isSelected());
+            });
+            ToggleGroup gr = new ToggleGroup();
+            gr.getToggles().addAll(box1, box2, box3, box4);
+
+            gp.add(box1, 0, 0);
+            gp.add(box2, 0, 1);
+            gp.add(box3, 0, 2);
+            gp.add(box4, 0, 3);
+
+            dialog.getDialogPane().setContent(gp);
+
+            dialog.setResultConverter(dialogButton -> {
+                if (dialogButton == exportButtonType)
+                    return results;
+                return null;
+            });
+
+            Optional<ArrayList<Boolean>> result = dialog.showAndWait();
+
+            result.ifPresent(s -> {
+                FileChooser fileChooser = new FileChooser();
+                fileChooser.setTitle("Save file");
+                fileChooser.setInitialFileName("results.csv");
+                fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text Files(.csv)", "*.csv"));
+                File selectedFile = fileChooser.showSaveDialog(primaryStage);
+                OutputStreamWriter writer = null;
+                try {
+                    writer = new OutputStreamWriter(new FileOutputStream(selectedFile.getPath(), false), "utf-8");
+                    StringBuilder line;
+                    if (selectedFile != null) {
+                        if (results.indexOf(true) == 0) {
+                            line = new StringBuilder("Id,StationName,KindOfCharging,AskingAmount,EnergyReceived,ChargingTime,WaitingTime,MaxWaitingTime,Cost");
+                            line.append(System.getProperty("line.separator"));
+                            writer.write(line.toString());
+                            for (ChargingEvent event : ChargingEvent.chargingLog) {
+                                line = new StringBuilder(event.getId() + "," + event.getChargingStationName() + "," + event.getKindOfCharging() + "," +
+                                        event.getAmountOfEnergy() + "," + event.getEnergyToBeReceived() +  "," + event.getChargingTime() +  "," + event.getWaitingTime() + "," +
+                                        event.getMaxWaitingTime() + "," + event.getCost());
+                                line.append(System.getProperty("line.separator"));
+                                writer.write(line.toString());
+                            }
+                        } else if (results.indexOf(true) == 1) {
+                            line = new StringBuilder("Id,StationName,AskingAmount,DisChargingTime,WaitingTime,MaxWaitingTime,Profit");
+                            line.append(System.getProperty("line.separator"));
+                            writer.write(line.toString());
+                            for (DisChargingEvent event : DisChargingEvent.dischargingLog) {
+                                line = new StringBuilder(event.getId() + "," + event.getChargingStationName() + "," +
+                                        event.getAmountOfEnergy() + "," + event.getDisChargingTime() + "," + event.getWaitingTime() + ","
+                                        + event.getMaxWaitingTime() + "," + event.getProfit());
+                                line.append(System.getProperty("line.separator"));
+                                writer.write(line.toString());
+                            }
+                        } else if (results.indexOf(true) == 2) {
+                            line = new StringBuilder("Id,StationName,ChargingTime,WaitingTime,MaxWaitingTime,Cost");
+                            line.append(System.getProperty("line.separator"));
+                            writer.write(line.toString());
+                            for (ChargingEvent event : ChargingEvent.exchangeLog) {
+                                line = new StringBuilder(event.getId() + "," + event.getChargingStationName() + "," +
+                                        event.getChargingTime() + "," + event.getWaitingTime() + ","
+                                        + event.getMaxWaitingTime() + "," + event.getCost());
+                                line.append(System.getProperty("line.separator"));
+                                writer.write(line.toString());
+                            }
+                        } else {
+                            line = new StringBuilder("Id,StationName,AskingAmount,EnergyReceived,ChargingTime,ParkingTime,Cost");
+                            line.append(System.getProperty("line.separator"));
+                            writer.write(line.toString());
+                            for (ParkingEvent event : ParkingEvent.parkLog) {
+                                line = new StringBuilder(event.getId() + "," + event.getChargingStationName() + "," +
+                                        event.getAmountOfEnergy() + "," + event.getEnergyToBeReceived() + ","
+                                        + event.getChargingTime() + "," + event.getParkingTime() + "," + event.getCost());
+                                line.append(System.getProperty("line.separator"));
+                                writer.write(line.toString());
+                            }
+                        }
+                        writer.close();
+                    }
+                } catch (Exception er) {
+                    er.printStackTrace();
+                }
+            });
+        });
+
         exitMenuItem.setOnAction(e -> {
             Platform.exit();
             System.exit(0);
@@ -293,7 +414,7 @@ public class EVLibSim extends Application {
 
         saveAs.setOnAction(e -> {
             FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("Save File");
+            fileChooser.setTitle("Save file");
             fileChooser.setInitialFileName("evlibsimProgress.txt");
             fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text Files(.txt)", "*.txt"));
             File selectedFile = fileChooser.showSaveDialog(primaryStage);
@@ -313,7 +434,7 @@ public class EVLibSim extends Application {
 
         load.setOnAction(e -> {
             FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("Open File");
+            fileChooser.setTitle("Open file");
             fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text Files(.txt)", "*.txt"));
             File selectedFile = fileChooser.showOpenDialog(primaryStage);
             if (selectedFile != null)
@@ -359,7 +480,7 @@ public class EVLibSim extends Application {
             if (currentStation == null) {
                 waitTimeSlow.setText("Slow: -");
                 waitTimeFast.setText("Fast: -");
-                waitTimeDis.setText("DisCharging: -");
+                waitTimeDis.setText("Discharging: -");
                 waitTimeEx.setText("Exchange: -");
                 unitPrice.setText("Charging: -");
                 disUnitPrice.setText("DisCharging: -");
@@ -368,10 +489,10 @@ public class EVLibSim extends Application {
             } else {
                 waitTimeSlow.setText("Slow: " + currentStation.getWaitingTime("slow"));
                 waitTimeFast.setText("Fast: " + currentStation.getWaitingTime("fast"));
-                waitTimeDis.setText("DisCharging: " + currentStation.getWaitingTime("discharging"));
+                waitTimeDis.setText("Discharging: " + currentStation.getWaitingTime("discharging"));
                 waitTimeEx.setText("Exchange: " + currentStation.getWaitingTime("exchange"));
                 unitPrice.setText("Charging: " + currentStation.getCurrentPrice());
-                disUnitPrice.setText("DisCharging: " + currentStation.getDisUnitPrice());
+                disUnitPrice.setText("Discharging: " + currentStation.getDisUnitPrice());
                 exchangePrice.setText("Exchange: " + currentStation.getExchangePrice());
                 inductivePrice.setText("Inductive: " + currentStation.getInductivePrice());
             }

@@ -15,9 +15,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
 
 import static evlibsim.EVLibSim.*;
 
@@ -51,7 +48,7 @@ class ToolBox {
             ObservableList<ChargingEvent> result = FXCollections.observableArrayList(ChargingEvent.chargingLog);
             TableView<ChargingEvent> table = new TableView<>();
             table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-            table.setMaxSize(900, 600);
+            table.setMaxSize(900, 500);
 
             TableColumn<ChargingEvent, Integer> idCol = new TableColumn<>("Id");
             TableColumn<ChargingEvent, String> nameCol = new TableColumn<>("StationName");
@@ -77,40 +74,6 @@ class ToolBox {
             costCol.setCellValueFactory(new PropertyValueFactory<>("cost"));
             table.setItems(result);
 
-            final ContextMenu contextMenu = new ContextMenu();
-            MenuItem export = new MenuItem("Export to csv");
-            export.setOnAction(ey -> {
-                FileChooser fileChooser = new FileChooser();
-                fileChooser.setTitle("Export to csv");
-                fileChooser.setInitialFileName("chargings.txt");
-                fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text Files(.txt)", "*.txt"));
-                File selectedFile = fileChooser.showSaveDialog(primaryStage);
-                if (selectedFile != null) {
-                    OutputStreamWriter writer;
-                    StringBuilder line;
-                    try {
-                        writer = new OutputStreamWriter(new FileOutputStream(selectedFile.getPath(), false), "utf-8");
-                        for (ChargingEvent event : result) {
-                            line = new StringBuilder(event.getId() + "," + event.getChargingStationName() + "," + event.getAmountOfEnergy() + ","
-                                    + event.getEnergyToBeReceived() + "," + event.getKindOfCharging() + "," + event.getWaitingTime() + ","
-                                    + event.getMaxWaitingTime() + "," + event.getChargingTime() + "," + event.getCondition() + "," + event.getCost());
-                            line.append(System.getProperty("line.separator"));
-                            writer.write(line.toString());
-                        }
-                        writer.close();
-                    } catch (IOException e1) {
-                        e1.printStackTrace();
-                    }
-                }
-            });
-            contextMenu.getItems().add(export);
-            table.setContextMenu(contextMenu);
-            table.setOnMousePressed(ep -> {
-                if (ep.isSecondaryButtonDown()) {
-                    contextMenu.show(table, ep.getScreenX(), ep.getScreenY());
-                }
-
-            });
             root.setCenter(table);
         });
 
@@ -125,7 +88,7 @@ class ToolBox {
             ObservableList<DisChargingEvent> result = FXCollections.observableArrayList(DisChargingEvent.dischargingLog);
             TableView<DisChargingEvent> table = new TableView<>();
             table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-            table.setMaxSize(900, 600);
+            table.setMaxSize(900, 500);
 
             TableColumn<DisChargingEvent, Integer> idCol = new TableColumn<>("Id");
             TableColumn<DisChargingEvent, String> nameCol = new TableColumn<>("StationName");
@@ -146,40 +109,6 @@ class ToolBox {
             profitCol.setCellValueFactory(new PropertyValueFactory<>("profit"));
             table.setItems(result);
 
-            final ContextMenu contextMenu = new ContextMenu();
-            MenuItem export = new MenuItem("Export to csv");
-            export.setOnAction(ey -> {
-                FileChooser fileChooser = new FileChooser();
-                fileChooser.setTitle("Export to csv");
-                fileChooser.setInitialFileName("dischargings.txt");
-                fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text Files(.txt)", "*.txt"));
-                File selectedFile = fileChooser.showSaveDialog(primaryStage);
-                if (selectedFile != null) {
-                    OutputStreamWriter writer;
-                    StringBuilder line;
-                    try {
-                        writer = new OutputStreamWriter(new FileOutputStream(selectedFile.getPath(), false), "utf-8");
-                        for (DisChargingEvent event : result) {
-                            line = new StringBuilder(event.getId() + "," + event.getChargingStationName() + "," + event.getAmountOfEnergy() + ","
-                                    + event.getCondition() + "," + event.getWaitingTime() + ","
-                                    + event.getMaxWaitingTime() + "," + event.getDisChargingTime() + "," + event.getProfit());
-                            line.append(System.getProperty("line.separator"));
-                            writer.write(line.toString());
-                        }
-                        writer.close();
-                    } catch (IOException e1) {
-                        e1.printStackTrace();
-                    }
-                }
-            });
-            contextMenu.getItems().add(export);
-            table.setContextMenu(contextMenu);
-            table.setOnMousePressed(ep -> {
-                if (ep.isSecondaryButtonDown()) {
-                    contextMenu.show(table, ep.getScreenX(), ep.getScreenY());
-                }
-            });
-
             root.setCenter(table);
         });
 
@@ -194,7 +123,7 @@ class ToolBox {
             ObservableList<ChargingEvent> result = FXCollections.observableArrayList(ChargingEvent.exchangeLog);
             TableView<ChargingEvent> table = new TableView<>();
             table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-            table.setMaxSize(900, 600);
+            table.setMaxSize(900, 500);
 
             TableColumn<ChargingEvent, Integer> idCol = new TableColumn<>("Id");
             TableColumn<ChargingEvent, String> nameCol = new TableColumn<>("StationName");
@@ -213,40 +142,6 @@ class ToolBox {
             profitCol.setCellValueFactory(new PropertyValueFactory<>("cost"));
             table.setItems(result);
 
-            final ContextMenu contextMenu = new ContextMenu();
-            MenuItem export = new MenuItem("Export to csv");
-            export.setOnAction(ey -> {
-                FileChooser fileChooser = new FileChooser();
-                fileChooser.setTitle("Export to csv");
-                fileChooser.setInitialFileName("swappings.txt");
-                fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text Files(.txt)", "*.txt"));
-                File selectedFile = fileChooser.showSaveDialog(primaryStage);
-                if (selectedFile != null) {
-                    OutputStreamWriter writer;
-                    StringBuilder line;
-                    try {
-                        writer = new OutputStreamWriter(new FileOutputStream(selectedFile.getPath(), false), "utf-8");
-                        for (ChargingEvent event : result) {
-                            line = new StringBuilder(event.getId() + "," + event.getChargingStationName() + "," + event.getWaitingTime() + ","
-                                    + event.getMaxWaitingTime() + "," + event.getCondition() + "," + event.getChargingTime() + ","
-                                    + event.getCost());
-                            line.append(System.getProperty("line.separator"));
-                            writer.write(line.toString());
-                        }
-                        writer.close();
-                    } catch (IOException e1) {
-                        e1.printStackTrace();
-                    }
-                }
-            });
-            contextMenu.getItems().add(export);
-            table.setContextMenu(contextMenu);
-            table.setOnMousePressed(ep -> {
-                if (ep.isSecondaryButtonDown()) {
-                    contextMenu.show(table, ep.getScreenX(), ep.getScreenY());
-                }
-            });
-
             root.setCenter(table);
         });
 
@@ -261,7 +156,7 @@ class ToolBox {
             ObservableList<ParkingEvent> result = FXCollections.observableArrayList(ParkingEvent.parkLog);
             TableView<ParkingEvent> table = new TableView<>();
             table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-            table.setMaxSize(900, 600);
+            table.setMaxSize(900, 500);
 
             TableColumn<ParkingEvent, Integer> idCol = new TableColumn<>("Id");
             TableColumn<ParkingEvent, String> nameCol = new TableColumn<>("StationName");
@@ -280,40 +175,6 @@ class ToolBox {
             chargingTimeCol.setCellValueFactory(new PropertyValueFactory<>("chargingTime"));
             costCol.setCellValueFactory(new PropertyValueFactory<>("cost"));
             table.setItems(result);
-
-            final ContextMenu contextMenu = new ContextMenu();
-            MenuItem export = new MenuItem("Export to csv");
-            export.setOnAction(ey -> {
-                FileChooser fileChooser = new FileChooser();
-                fileChooser.setTitle("Export to csv");
-                fileChooser.setInitialFileName("parkings.txt");
-                fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text Files(.txt)", "*.txt"));
-                File selectedFile = fileChooser.showSaveDialog(primaryStage);
-                if (selectedFile != null) {
-                    OutputStreamWriter writer;
-                    StringBuilder line;
-                    try {
-                        writer = new OutputStreamWriter(new FileOutputStream(selectedFile.getPath(), false), "utf-8");
-                        for (ParkingEvent event : result) {
-                            line = new StringBuilder(event.getId() + "," + event.getChargingStationName() + "," + event.getAmountOfEnergy() + ","
-                                    + event.getEnergyToBeReceived() + "," + event.getParkingTime() + "," + event.getChargingTime() + "," + event.getCondition() + ","
-                                    + event.getCost());
-                            line.append(System.getProperty("line.separator"));
-                            writer.write(line.toString());
-                        }
-                        writer.close();
-                    } catch (IOException e1) {
-                        e1.printStackTrace();
-                    }
-                }
-            });
-            contextMenu.getItems().add(export);
-            table.setContextMenu(contextMenu);
-            table.setOnMousePressed(ep -> {
-                if (ep.isSecondaryButtonDown()) {
-                    contextMenu.show(table, ep.getScreenX(), ep.getScreenY());
-                }
-            });
 
             root.setCenter(table);
         });
@@ -349,7 +210,7 @@ class ToolBox {
             if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
-            grid.setMaxSize(700, 300);
+            grid.setMaxSize(600, 300);
             Label foo;
             TextField boo;
             foo = new Label("Total energy: ");
@@ -405,7 +266,7 @@ class ToolBox {
             boo = new TextField(String.valueOf(currentStation.getSpecificAmount("Geothermal")));
             boo.setEditable(false);
             grid.add(boo, 1, 3);
-            foo = new Label("DisCharging*: ");
+            foo = new Label("Discharging*: ");
             grid.add(foo, 2, 3);
             boo = new TextField(String.valueOf(currentStation.getSpecificAmount("DisCharging")));
             boo.setEditable(false);
@@ -420,7 +281,7 @@ class ToolBox {
         bar.getItems().addAll(chargingLog, disChargingLog, exchangeLog, parkingLog,
                 showTotalActivity, totalEnergy, report);
         bar.setOrientation(Orientation.VERTICAL);
-        bar.setStyle("-fx-alignment: center; -fx-spacing: 20;" +
+        bar.setStyle("-fx-alignment: center; -fx-spacing: 10;" +
                 " -fx-background-color: transparent;");
         BorderPane.setAlignment(bar, Pos.CENTER);
         createLogButtons();

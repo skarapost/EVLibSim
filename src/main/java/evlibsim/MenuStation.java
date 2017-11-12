@@ -64,7 +64,7 @@ class MenuStation {
         newChargingStationMI.setOnAction((ActionEvent e) ->
         {
             Maintenance.cleanScreen();
-            EVLibSim.grid.setMaxSize(800, 600);
+            EVLibSim.grid.setMaxSize(700, 600);
             TextField boo;
             Label foo;
             foo = new Label("Name: ");
@@ -117,7 +117,7 @@ class MenuStation {
             boo = new TextField("1.0");
             EVLibSim.grid.add(boo, 3, 3);
             textfields.add(boo);
-            foo = new Label("DisCharging fee per unit: ");
+            foo = new Label("Discharging fee per unit: ");
             EVLibSim.grid.add(foo, 0, 4);
             boo = new TextField("1.0");
             EVLibSim.grid.add(boo, 1, 4);
@@ -245,7 +245,7 @@ class MenuStation {
             if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
-            EVLibSim.grid.setMaxSize(400, 400);
+            EVLibSim.grid.setMaxSize(300, 300);
             TextField boo;
             Label foo;
             foo = new Label("Kind: ");
@@ -289,7 +289,7 @@ class MenuStation {
             if (Maintenance.stationCheck())
                 return;
             TextInputDialog alert = new TextInputDialog();
-            alert.setTitle("Name for DisCharger");
+            alert.setTitle("Name for Discharger");
             alert.setHeaderText(null);
             alert.setContentText("Please give a name: ");
             Optional<String> result = alert.showAndWait();
@@ -308,7 +308,7 @@ class MenuStation {
             if (Maintenance.stationCheck())
                 return;
             TextInputDialog alert = new TextInputDialog();
-            alert.setTitle("Name for ExchangeHandler");
+            alert.setTitle("Name for exchange handler");
             alert.setHeaderText(null);
             alert.setContentText("Please give a name: ");
             Optional<String> result = alert.showAndWait();
@@ -317,7 +317,7 @@ class MenuStation {
                 ch = new ExchangeHandler(currentStation);
                 ch.setName(s);
                 currentStation.addExchangeHandler(ch);
-                Maintenance.completionMessage("ExchangeHandler creation");
+                Maintenance.completionMessage("Exchange handler creation");
             });
         });
 
@@ -327,7 +327,7 @@ class MenuStation {
             if (Maintenance.stationCheck())
                 return;
             TextInputDialog alert = new TextInputDialog();
-            alert.setTitle("Name for ParkingSlot");
+            alert.setTitle("Name for parking slot");
             alert.setHeaderText(null);
             alert.setContentText("Please give a name: ");
             Optional<String> result = alert.showAndWait();
@@ -336,7 +336,7 @@ class MenuStation {
                 ch = new ParkingSlot(currentStation);
                 ch.setName(s);
                 currentStation.addParkingSlot(ch);
-                Maintenance.completionMessage("ParkingSlot creation");
+                Maintenance.completionMessage("Parking slot creation");
             });
         });
 
@@ -345,7 +345,7 @@ class MenuStation {
             if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
-            EVLibSim.grid.setMaxSize(800, 600);
+            EVLibSim.grid.setMaxSize(700, 600);
             EVLibSim.energies.clear();
             TextField boo;
             Label foo;
@@ -363,7 +363,7 @@ class MenuStation {
             boo = new TextField(Double.toString(currentStation.getUnitPrice()));
             EVLibSim.grid.add(boo, 3, 0);
             textfields.add(boo);
-            foo = new Label("DisCharging fee per unit: ");
+            foo = new Label("Discharging fee per unit: ");
             EVLibSim.grid.add(foo, 0, 1);
             boo = new TextField(Double.toString(currentStation.getDisUnitPrice()));
             EVLibSim.grid.add(boo, 1, 1);
@@ -537,13 +537,13 @@ class MenuStation {
                     if (ch.getDisChargingEvent() == null) {
                         if (Maintenance.confirmDeletion()) {
                             currentStation.deleteDisCharger(ch);
-                            Maintenance.completionMessage("DisCharger deletion");
+                            Maintenance.completionMessage("Discharger deletion");
                         }
                     } else {
                         Alert alert = new Alert(Alert.AlertType.ERROR);
                         alert.setTitle("Error");
                         alert.setHeaderText(null);
-                        alert.setContentText("DisCharger is busy now. It cannot be deleted.");
+                        alert.setContentText("Discharger is busy now. It cannot be deleted.");
                         alert.showAndWait();
                     }
                     allDisChargersMI.fire();
@@ -586,13 +586,13 @@ class MenuStation {
                     if (ch.getChargingEvent() == null) {
                         if (Maintenance.confirmDeletion()) {
                             currentStation.deleteExchangeHandler(ch);
-                            Maintenance.completionMessage("ExchangeHandler deletion");
+                            Maintenance.completionMessage("Exchange handler deletion");
                         }
                     } else {
                         Alert alert = new Alert(Alert.AlertType.ERROR);
                         alert.setTitle("Error");
                         alert.setHeaderText(null);
-                        alert.setContentText("ExchangeHandler is busy now. It cannot be deleted.");
+                        alert.setContentText("Exchange handler is busy now. It cannot be deleted.");
                         alert.showAndWait();
                     }
                     allExchangeHandlersMI.fire();
@@ -635,13 +635,13 @@ class MenuStation {
                     if (ch.getParkingEvent() == null) {
                         if (Maintenance.confirmDeletion()) {
                             currentStation.deleteParkingSlot(ch);
-                            Maintenance.completionMessage("ParkingSlot deletion");
+                            Maintenance.completionMessage("Parking slot deletion");
                         }
                     } else {
                         Alert alert = new Alert(Alert.AlertType.ERROR);
                         alert.setTitle("Error");
                         alert.setHeaderText(null);
-                        alert.setContentText("ParkingSlot is busy now. It cannot be deleted.");
+                        alert.setContentText("Parking slot is busy now. It cannot be deleted.");
                         alert.showAndWait();
                     }
                     allParkingSlotsMI.fire();
@@ -658,7 +658,7 @@ class MenuStation {
             if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
-            EVLibSim.grid.setMaxSize(400, 280);
+            EVLibSim.grid.setMaxSize(300, 250);
             TextField boo;
             Label foo;
             foo = new Label("Battery capacity: ");
@@ -706,9 +706,9 @@ class MenuStation {
                 z.getChildren().add(foo);
                 foo = new Label("Capacity: " + b.getCapacity());
                 z.getChildren().add(foo);
-                foo = new Label("Remaining Amount: " + b.getRemAmount());
+                foo = new Label("Remaining amount: " + b.getRemAmount());
                 z.getChildren().add(foo);
-                foo = new Label("Maximum Chargings: " + b.getMaxNumberOfChargings());
+                foo = new Label("Maximum chargings: " + b.getMaxNumberOfChargings());
                 z.getChildren().add(foo);
                 delete = new Button();
                 delete.setMaxSize(image.getWidth(), image.getHeight());
@@ -898,7 +898,7 @@ class MenuStation {
                 currentStation.setAutomaticQueueHandling(automaticHandling);
                 cs = (RadioMenuItem) group.getSelectedToggle();
                 cs.setText(currentStation.getName());
-                Maintenance.completionMessage("modification of the ChargingStation");
+                Maintenance.completionMessage("modification of the charging station");
                 modifyChargingStationMI.fire();
             } catch (Exception ex) {
                 Maintenance.refillBlanks();

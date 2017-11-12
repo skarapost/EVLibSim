@@ -40,9 +40,9 @@ class Energy {
             uncommon.removeAll(common);
             energies.addAll(uncommon);
             ChoiceDialog<String> dialog = new ChoiceDialog<>(energies.get(0), energies);
-            dialog.setTitle("EnergySource Insertion");
+            dialog.setTitle("Energy source insertion");
             dialog.setHeaderText(null);
-            dialog.setContentText("Choose an EnergySource: ");
+            dialog.setContentText("Choose an energy source: ");
             Optional<String> result = dialog.showAndWait();
             result.ifPresent(s -> {
                 switch (s) {
@@ -65,7 +65,7 @@ class Energy {
                         currentStation.addEnergySource(new Hydroelectric());
                         break;
                 }
-                Maintenance.completionMessage("EnergySource insertion");
+                Maintenance.completionMessage("Energy source insertion");
                 startScreen.fire();
             });
         });
@@ -75,9 +75,9 @@ class Energy {
             ArrayList<String> energies = new ArrayList<>(Arrays.asList(currentStation.getSources()));
             energies.remove("DisCharging");
             ChoiceDialog<String> dialog = new ChoiceDialog<>(energies.get(0), energies);
-            dialog.setTitle("EnergySource Removal");
+            dialog.setTitle("EnergySource removal");
             dialog.setHeaderText(null);
-            dialog.setContentText("Choose an EnergySource: ");
+            dialog.setContentText("Choose an energy source: ");
             Optional<String> result = dialog.showAndWait();
             result.ifPresent(s -> {
                 switch (s) {
@@ -100,7 +100,7 @@ class Energy {
                         currentStation.deleteEnergySource(currentStation.getEnergySource("Hydroelectric"));
                         break;
                 }
-                Maintenance.completionMessage("EnergySource removal");
+                Maintenance.completionMessage("Energy source removal");
                 startScreen.fire();
             });
         });
@@ -126,7 +126,7 @@ class Energy {
             if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
-            grid.setMaxSize(700, 300);
+            grid.setMaxSize(600, 300);
             TextField boo;
             Label foo;
             boo = new TextField(String.valueOf(Arrays.asList(currentStation.getSources()).indexOf("Solar") + 1));
@@ -209,7 +209,7 @@ class Energy {
             if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
-            grid.setMaxSize(700, 300);
+            grid.setMaxSize(600, 300);
             TextField boo;
             Label foo;
             boo = new TextField("0");

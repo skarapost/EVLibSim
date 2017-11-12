@@ -30,7 +30,7 @@ class Maintenance {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText(null);
-            alert.setContentText("Please add a ChargingStation.");
+            alert.setContentText("Please add a charging station.");
             alert.showAndWait();
             return true;
         }

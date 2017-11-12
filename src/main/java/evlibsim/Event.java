@@ -53,7 +53,7 @@ class Event {
             if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
-            grid.setMaxSize(800, 500);
+            grid.setMaxSize(600, 400);
             TextField boo;
             Label foo;
             foo = new Label("Driver's name: ");
@@ -86,7 +86,7 @@ class Event {
             boo = new TextField();
             grid.add(boo, 3, 2);
             textfields.add(boo);
-            foo = new Label("Kind of Charging: ");
+            foo = new Label("Kind of charging: ");
             EVLibSim.grid.add(foo, 0, 3);
             MenuBar sourc = new MenuBar();
             sourc.setId("menubar");
@@ -116,7 +116,7 @@ class Event {
             suggest1.setOnAction(eu -> {
                 Stage popupwindow = new Stage();
                 popupwindow.initModality(Modality.APPLICATION_MODAL);
-                popupwindow.setTitle("Suggestions Box");
+                popupwindow.setTitle("Suggestions box");
                 GridPane g = new GridPane();
                 g.setAlignment(Pos.CENTER);
                 g.setStyle("-fx-background-color:#D8E2F2;");
@@ -213,7 +213,7 @@ class Event {
             if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
-            grid.setMaxSize(800, 500);
+            grid.setMaxSize(600, 400);
             TextField boo;
             Label foo;
             foo = new Label("Driver's name: ");
@@ -250,7 +250,7 @@ class Event {
             suggest2.setOnAction(eu -> {
                 Stage popupwindow = new Stage();
                 popupwindow.initModality(Modality.APPLICATION_MODAL);
-                popupwindow.setTitle("Suggestions Box");
+                popupwindow.setTitle("Suggestions box");
 
                 GridPane g = new GridPane();
                 g.setAlignment(Pos.CENTER);
@@ -336,7 +336,7 @@ class Event {
             if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
-            grid.setMaxSize(800, 500);
+            grid.setMaxSize(600, 400);
             TextField boo;
             Label foo;
             foo = new Label("Driver's name: ");
@@ -368,7 +368,7 @@ class Event {
             suggest3.setOnAction(eu -> {
                 Stage popupwindow = new Stage();
                 popupwindow.initModality(Modality.APPLICATION_MODAL);
-                popupwindow.setTitle("Suggestions Box");
+                popupwindow.setTitle("Suggestions box");
 
                 GridPane g = new GridPane();
                 g.setAlignment(Pos.CENTER);
@@ -454,7 +454,7 @@ class Event {
             if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
-            grid.setMaxSize(800, 500);
+            grid.setMaxSize(600, 400);
             TextField boo;
             Label foo;
             foo = new Label("Driver's name: ");
@@ -491,7 +491,7 @@ class Event {
             suggest4.setOnAction(eu -> {
                 Stage popupwindow = new Stage();
                 popupwindow.initModality(Modality.APPLICATION_MODAL);
-                popupwindow.setTitle("Suggestions Box");
+                popupwindow.setTitle("Suggestions box");
 
                 GridPane g = new GridPane();
                 g.setAlignment(Pos.CENTER);
@@ -579,7 +579,7 @@ class Event {
             alert.setTitle("Information");
             alert.setHeaderText(null);
             alert.setContentText("Please select the kind of policy: ");
-            ButtonType buttonTypeOne = new ButtonType("Stable space");
+            ButtonType buttonTypeOne = new ButtonType("Fixed space");
             ButtonType buttonTypeTwo = new ButtonType("Changing space");
             ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
             alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo, buttonTypeCancel);
@@ -594,7 +594,7 @@ class Event {
                     boo = new TextField();
                     grid.add(boo, 1, 0);
                     textfields.add(boo);
-                    foo = new Label("Prices(Separated with comma): ");
+                    foo = new Label("Prices(separated with comma): ");
                     grid.add(foo, 0, 1);
                     boo = new TextField();
                     grid.add(boo, 1, 1);
@@ -606,12 +606,12 @@ class Event {
                     root.setCenter(grid);
                 } else if (result.get() == buttonTypeTwo) {
                     Maintenance.cleanScreen();
-                    foo = new Label("Durations(Separated with comma): ");
+                    foo = new Label("Durations(separated with comma): ");
                     grid.add(foo, 0, 0);
                     boo = new TextField();
                     grid.add(boo, 1, 0);
                     textfields.add(boo);
-                    foo = new Label("Prices(Separated with comma): ");
+                    foo = new Label("Prices(separated with comma): ");
                     grid.add(foo, 0, 1);
                     boo = new TextField();
                     grid.add(boo, 1, 1);
@@ -681,7 +681,7 @@ class Event {
                 ch.preProcessing();
                 if (ch.getCondition().equals("ready")) {
                     ch.execution();
-                    Maintenance.completionMessage("ChargingEvent creation");
+                    Maintenance.completionMessage("Charging event creation");
                 } else if (ch.getCondition().equals("wait"))
                     Maintenance.queueInsertion();
                 else
@@ -737,7 +737,7 @@ class Event {
                     dsch.preProcessing();
                     if (dsch.getCondition().equals("ready")) {
                         dsch.execution();
-                        Maintenance.completionMessage("DisChargingEvent creation");
+                        Maintenance.completionMessage("Discharging event creation");
                     } else if (dsch.getCondition().equals("wait"))
                         Maintenance.queueInsertion();
                     else
@@ -783,7 +783,7 @@ class Event {
                 ch.preProcessing();
                 if (ch.getCondition().equals("ready")) {
                     ch.execution();
-                    Maintenance.completionMessage("ChargingEvent creation");
+                    Maintenance.completionMessage("Charging event creation");
                 } else if (ch.getCondition().equals("wait"))
                     Maintenance.queueInsertion();
                 else
@@ -838,7 +838,7 @@ class Event {
                     ch.preProcessing();
                     if (ch.getCondition().equals("ready")) {
                         ch.execution();
-                        Maintenance.completionMessage("ParkingEvent creation");
+                        Maintenance.completionMessage("Parking event creation");
                     } else
                         Maintenance.noExecution();
                 } else if (!Objects.equals(textfields.get(5).getText(), "0")) {
@@ -846,7 +846,7 @@ class Event {
                     ch.preProcessing();
                     if (ch.getCondition().equals("ready")) {
                         ch.execution();
-                        Maintenance.completionMessage("ParkingEvent creation");
+                        Maintenance.completionMessage("Parking event creation");
                     } else
                         Maintenance.noExecution();
                 } else {
@@ -874,7 +874,7 @@ class Event {
             try {
                 PricingPolicy policy = new PricingPolicy(Long.parseLong(textfields.get(0).getText()), p);
                 currentStation.setPricingPolicy(policy);
-                Maintenance.completionMessage("PricingPolicy creation");
+                Maintenance.completionMessage("Pricing policy creation");
                 startScreen.fire();
             } catch (Exception ex) {
                 Maintenance.refillBlanks();
@@ -907,7 +907,7 @@ class Event {
             try {
                 PricingPolicy policy = new PricingPolicy(s, p);
                 currentStation.setPricingPolicy(policy);
-                Maintenance.completionMessage("PricingPolicy creation");
+                Maintenance.completionMessage("Pricing policy creation");
                 startScreen.fire();
             } catch (Exception ex) {
                 Maintenance.refillBlanks();
