@@ -107,8 +107,8 @@ public class EVLibSim extends Application {
         EVLibSim.primaryStage = primaryStage;
         primaryStage.setTitle("EVLibSim");
         Scene scene = new Scene(root);
-        primaryStage.setMinHeight(550);
-        primaryStage.setMinWidth(950);
+        primaryStage.setMinHeight(560);
+        primaryStage.setMinWidth(1000);
         primaryStage.setMaximized(true);
         primaryStage.setScene(scene);
         primaryStage.show();

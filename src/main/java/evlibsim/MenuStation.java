@@ -3,14 +3,20 @@ package evlibsim;
 import evlib.ev.Battery;
 import evlib.sources.*;
 import evlib.station.*;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.util.Callback;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -49,7 +55,6 @@ class MenuStation {
     private static boolean automaticHandling;
     private static boolean automaticUpdate;
     private static String kindOfCharging;
-    private static Button delete;
 
     static Menu createStationMenu() {
         chargersM.getItems().addAll(newChargerMI, allChargersMI);
@@ -64,7 +69,7 @@ class MenuStation {
         newChargingStationMI.setOnAction((ActionEvent e) ->
         {
             Maintenance.cleanScreen();
-            EVLibSim.grid.setMaxSize(700, 600);
+            EVLibSim.grid.setMaxSize(750, 600);
             TextField boo;
             Label foo;
             foo = new Label("Name: ");
@@ -460,50 +465,31 @@ class MenuStation {
             if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
-            VBox box = new VBox();
-            HBox z;
-            box.setAlignment(Pos.CENTER);
-            box.setSpacing(15);
-            scroll.setMaxSize(600, 600);
-            scroll.getStyleClass().add("scroll");
-            Label foo;
-            for (Charger ch : currentStation.getChargers()) {
-                z = new HBox();
-                z.setSpacing(15);
-                z.setAlignment(Pos.TOP_LEFT);
-                z.setPadding(new Insets(5, 5, 5, 5));
-                foo = new Label("Id: " + ch.getId());
-                z.getChildren().add(foo);
-                foo = new Label("Name: " + ch.getName());
-                z.getChildren().add(foo);
-                foo = new Label("Kind: " + ch.getKindOfCharging());
-                z.getChildren().add(foo);
-                foo = new Label("Occupied: " + (ch.getChargingEvent() != null));
-                z.getChildren().add(foo);
-                delete = new Button();
-                delete.setMaxSize(image.getWidth(), image.getHeight());
-                delete.setMinSize(image.getWidth(), image.getHeight());
-                delete.setGraphic(new ImageView(image));
-                delete.setOnAction(et -> {
-                    if (ch.getChargingEvent() == null) {
-                        if (Maintenance.confirmDeletion()) {
-                            currentStation.deleteCharger(ch);
-                            Maintenance.completionMessage("Charger deletion");
-                        }
-                    } else {
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Error");
-                        alert.setHeaderText(null);
-                        alert.setContentText("Charger is busy now. It cannot be deleted.");
-                        alert.showAndWait();
-                    }
-                    allChargersMI.fire();
-                });
-                z.getChildren().add(delete);
-                box.getChildren().add(z);
-            }
-            scroll.setContent(box);
-            root.setCenter(scroll);
+            ObservableList<Charger> result = FXCollections.observableArrayList();
+            for (int i = 0; i < currentStation.getChargers().length; i++)
+                result.add(currentStation.getChargers()[i]);
+            TableView<Charger> table = new TableView<>();
+            table.setMaxSize(600, 500);
+            table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+            TableColumn deleteCol = new TableColumn("Delete");
+            deleteCol.setEditable(false);
+            deleteCol.setCellValueFactory((Callback<TableColumn.CellDataFeatures<Charger, Boolean>, ObservableValue>) param -> new SimpleBooleanProperty(param.getValue() != null));
+            deleteCol.setCellFactory((Callback<TableColumn<Charger, Boolean>, TableCell<Charger, Boolean>>) param -> {
+                ButtonCell btn = new ButtonCell(table);
+                btn.chargerOnAction();
+                return btn;
+            });
+            TableColumn<Charger, Integer> idCol = new TableColumn<>("Id");
+            TableColumn<Charger, String> nameCol = new TableColumn<>("Name");
+            TableColumn<Charger, String> kindCol = new TableColumn<>("KindOfCharging");
+            TableColumn<Charger, Boolean> occupiedCol = new TableColumn<>("Occupied");
+            table.getColumns().addAll(idCol, nameCol, kindCol, occupiedCol, deleteCol);
+            idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+            nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+            kindCol.setCellValueFactory(new PropertyValueFactory<>("kindOfCharging"));
+            occupiedCol.setCellValueFactory(new PropertyValueFactory<>("occupied"));
+            table.setItems(result);
+            root.setCenter(table);
         });
 
         //Implements the All DisChargers MenuItem.
@@ -511,48 +497,29 @@ class MenuStation {
             if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
-            VBox box = new VBox();
-            HBox z;
-            box.setAlignment(Pos.CENTER);
-            box.setSpacing(15);
-            scroll.setMaxSize(600, 600);
-            scroll.getStyleClass().add("scroll");
-            Label foo;
-            for (DisCharger ch : currentStation.getDisChargers()) {
-                z = new HBox();
-                z.setSpacing(15);
-                z.setAlignment(Pos.TOP_LEFT);
-                z.setPadding(new Insets(5, 5, 5, 5));
-                foo = new Label("Id: " + ch.getId());
-                z.getChildren().add(foo);
-                foo = new Label("Name: " + ch.getName());
-                z.getChildren().add(foo);
-                foo = new Label("Occupied: " + (ch.getDisChargingEvent() != null));
-                z.getChildren().add(foo);
-                delete = new Button();
-                delete.setMaxSize(image.getWidth(), image.getHeight());
-                delete.setMinSize(image.getWidth(), image.getHeight());
-                delete.setGraphic(new ImageView(image));
-                delete.setOnAction(et -> {
-                    if (ch.getDisChargingEvent() == null) {
-                        if (Maintenance.confirmDeletion()) {
-                            currentStation.deleteDisCharger(ch);
-                            Maintenance.completionMessage("Discharger deletion");
-                        }
-                    } else {
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Error");
-                        alert.setHeaderText(null);
-                        alert.setContentText("Discharger is busy now. It cannot be deleted.");
-                        alert.showAndWait();
-                    }
-                    allDisChargersMI.fire();
-                });
-                z.getChildren().add(delete);
-                box.getChildren().add(z);
-            }
-            scroll.setContent(box);
-            root.setCenter(scroll);
+            ObservableList<DisCharger> result = FXCollections.observableArrayList();
+            for (int i = 0; i < currentStation.getDisChargers().length; i++)
+                result.add(currentStation.getDisChargers()[i]);
+            TableView<DisCharger> table = new TableView<>();
+            table.setMaxSize(600, 500);
+            table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+            TableColumn deleteCol = new TableColumn("Delete");
+            deleteCol.setEditable(false);
+            deleteCol.setCellValueFactory((Callback<TableColumn.CellDataFeatures<DisCharger, Boolean>, ObservableValue>) param -> new SimpleBooleanProperty(param.getValue() != null));
+            deleteCol.setCellFactory((Callback<TableColumn<DisCharger, Boolean>, TableCell<DisCharger, Boolean>>) param -> {
+                ButtonCell btn = new ButtonCell(table);
+                btn.dischargerOnAction();
+                return btn;
+            });
+            TableColumn<DisCharger, Integer> idCol = new TableColumn<>("Id");
+            TableColumn<DisCharger, String> nameCol = new TableColumn<>("Name");
+            TableColumn<DisCharger, Boolean> occupiedCol = new TableColumn<>("Occupied");
+            table.getColumns().addAll(idCol, nameCol, occupiedCol, deleteCol);
+            idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+            nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+            occupiedCol.setCellValueFactory(new PropertyValueFactory<>("occupied"));
+            table.setItems(result);
+            root.setCenter(table);
         });
 
         //Implements the All ExchangeHandlers MenuItem.
@@ -560,48 +527,29 @@ class MenuStation {
             if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
-            VBox box = new VBox();
-            HBox z;
-            box.setAlignment(Pos.CENTER);
-            box.setSpacing(15);
-            scroll.setMaxSize(600, 600);
-            scroll.getStyleClass().add("scroll");
-            Label foo;
-            for (ExchangeHandler ch : currentStation.getExchangeHandlers()) {
-                z = new HBox();
-                z.setSpacing(15);
-                z.setAlignment(Pos.TOP_LEFT);
-                z.setPadding(new Insets(5, 5, 5, 5));
-                foo = new Label("Id: " + ch.getId());
-                z.getChildren().add(foo);
-                foo = new Label("Name: " + ch.getName());
-                z.getChildren().add(foo);
-                foo = new Label("Occupied: " + (ch.getChargingEvent() != null));
-                z.getChildren().add(foo);
-                delete = new Button();
-                delete.setMaxSize(image.getWidth(), image.getHeight());
-                delete.setMinSize(image.getWidth(), image.getHeight());
-                delete.setGraphic(new ImageView(image));
-                delete.setOnAction(et -> {
-                    if (ch.getChargingEvent() == null) {
-                        if (Maintenance.confirmDeletion()) {
-                            currentStation.deleteExchangeHandler(ch);
-                            Maintenance.completionMessage("Exchange handler deletion");
-                        }
-                    } else {
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Error");
-                        alert.setHeaderText(null);
-                        alert.setContentText("Exchange handler is busy now. It cannot be deleted.");
-                        alert.showAndWait();
-                    }
-                    allExchangeHandlersMI.fire();
-                });
-                z.getChildren().add(delete);
-                box.getChildren().add(z);
-            }
-            scroll.setContent(box);
-            root.setCenter(scroll);
+            ObservableList<ExchangeHandler> result = FXCollections.observableArrayList();
+            for (int i = 0; i < currentStation.getExchangeHandlers().length; i++)
+                result.add(currentStation.getExchangeHandlers()[i]);
+            TableView<ExchangeHandler> table = new TableView<>();
+            table.setMaxSize(600, 500);
+            table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+            TableColumn deleteCol = new TableColumn("Delete");
+            deleteCol.setEditable(false);
+            deleteCol.setCellValueFactory((Callback<TableColumn.CellDataFeatures<ExchangeHandler, Boolean>, ObservableValue>) param -> new SimpleBooleanProperty(param.getValue() != null));
+            deleteCol.setCellFactory((Callback<TableColumn<ExchangeHandler, Boolean>, TableCell<ExchangeHandler, Boolean>>) param -> {
+                ButtonCell btn = new ButtonCell(table);
+                btn.exchangeHandlerOnAction();
+                return btn;
+            });
+            TableColumn<ExchangeHandler, Integer> idCol = new TableColumn<>("Id");
+            TableColumn<ExchangeHandler, String> nameCol = new TableColumn<>("Name");
+            TableColumn<ExchangeHandler, Boolean> occupiedCol = new TableColumn<>("Occupied");
+            table.getColumns().addAll(idCol, nameCol, occupiedCol, deleteCol);
+            idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+            nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+            occupiedCol.setCellValueFactory(new PropertyValueFactory<>("occupied"));
+            table.setItems(result);
+            root.setCenter(table);
         });
 
         //Implements the All ParkingSlots MenuItem.
@@ -609,48 +557,29 @@ class MenuStation {
             if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
-            VBox box = new VBox();
-            HBox z;
-            box.setAlignment(Pos.CENTER);
-            box.setSpacing(15);
-            scroll.setMaxSize(600, 600);
-            scroll.getStyleClass().add("scroll");
-            Label foo;
-            for (ParkingSlot ch : currentStation.getParkingSlots()) {
-                z = new HBox();
-                z.setSpacing(15);
-                z.setAlignment(Pos.TOP_LEFT);
-                z.setPadding(new Insets(5, 5, 5, 5));
-                foo = new Label("Id: " + ch.getId());
-                z.getChildren().add(foo);
-                foo = new Label("Name: " + ch.getName());
-                z.getChildren().add(foo);
-                foo = new Label("Occupied: " + (ch.getParkingEvent() != null));
-                z.getChildren().add(foo);
-                delete = new Button();
-                delete.setMaxSize(image.getWidth(), image.getHeight());
-                delete.setMinSize(image.getWidth(), image.getHeight());
-                delete.setGraphic(new ImageView(image));
-                delete.setOnAction(et -> {
-                    if (ch.getParkingEvent() == null) {
-                        if (Maintenance.confirmDeletion()) {
-                            currentStation.deleteParkingSlot(ch);
-                            Maintenance.completionMessage("Parking slot deletion");
-                        }
-                    } else {
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Error");
-                        alert.setHeaderText(null);
-                        alert.setContentText("Parking slot is busy now. It cannot be deleted.");
-                        alert.showAndWait();
-                    }
-                    allParkingSlotsMI.fire();
-                });
-                z.getChildren().add(delete);
-                box.getChildren().add(z);
-            }
-            scroll.setContent(box);
-            root.setCenter(scroll);
+            ObservableList<ParkingSlot> result = FXCollections.observableArrayList();
+            for (int i = 0; i < currentStation.getParkingSlots().length; i++)
+                result.add(currentStation.getParkingSlots()[i]);
+            TableView<ParkingSlot> table = new TableView<>();
+            table.setMaxSize(600, 500);
+            table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+            TableColumn deleteCol = new TableColumn("Delete");
+            deleteCol.setEditable(false);
+            deleteCol.setCellValueFactory((Callback<TableColumn.CellDataFeatures<ParkingSlot, Boolean>, ObservableValue>) param -> new SimpleBooleanProperty(param.getValue() != null));
+            deleteCol.setCellFactory((Callback<TableColumn<ParkingSlot, Boolean>, TableCell<ParkingSlot, Boolean>>) param -> {
+                ButtonCell btn = new ButtonCell(table);
+                btn.parkingSlotOnAction();
+                return btn;
+            });
+            TableColumn<ParkingSlot, Integer> idCol = new TableColumn<>("Id");
+            TableColumn<ParkingSlot, String> nameCol = new TableColumn<>("Name");
+            TableColumn<ParkingSlot, Boolean> occupiedCol = new TableColumn<>("Occupied");
+            table.getColumns().addAll(idCol, nameCol, occupiedCol, deleteCol);
+            idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+            nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+            occupiedCol.setCellValueFactory(new PropertyValueFactory<>("occupied"));
+            table.setItems(result);
+            root.setCenter(table);
         });
 
         //Implements the New Battery MenuItem.
@@ -690,53 +619,31 @@ class MenuStation {
             if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
-            VBox box = new VBox();
-            HBox z;
-            box.setAlignment(Pos.CENTER);
-            box.setSpacing(15);
-            scroll.setMaxSize(600, 600);
-            scroll.getStyleClass().add("scroll");
-            Label foo;
-            for (Battery b : currentStation.getBatteries()) {
-                z = new HBox();
-                z.setSpacing(15);
-                z.setAlignment(Pos.TOP_LEFT);
-                z.setPadding(new Insets(5, 5, 5, 5));
-                foo = new Label("Id: " + b.getId());
-                z.getChildren().add(foo);
-                foo = new Label("Capacity: " + b.getCapacity());
-                z.getChildren().add(foo);
-                foo = new Label("Remaining amount: " + b.getRemAmount());
-                z.getChildren().add(foo);
-                foo = new Label("Maximum chargings: " + b.getMaxNumberOfChargings());
-                z.getChildren().add(foo);
-                delete = new Button();
-                delete.setMaxSize(image.getWidth(), image.getHeight());
-                delete.setMinSize(image.getWidth(), image.getHeight());
-                delete.setGraphic(new ImageView(image));
-                delete.setOnAction(et -> {
-                    for (Charger charger : currentStation.getChargers()) {
-                        if (charger.getChargingEvent() != null)
-                            if (charger.getChargingEvent().getElectricVehicle().getBattery() == b) {
-                                Alert alert = new Alert(Alert.AlertType.ERROR);
-                                alert.setTitle("Error");
-                                alert.setHeaderText(null);
-                                alert.setContentText("Battery is charging now.");
-                                alert.showAndWait();
-                                return;
-                            }
-                    }
-                    if (Maintenance.confirmDeletion()) {
-                        currentStation.deleteBattery(b);
-                        Maintenance.completionMessage("Battery deletion");
-                        allBatteriesMI.fire();
-                    }
-                });
-                z.getChildren().add(delete);
-                box.getChildren().add(z);
-            }
-            scroll.setContent(box);
-            root.setCenter(scroll);
+            ObservableList<ExchangeHandler> result = FXCollections.observableArrayList();
+            for (int i = 0; i < currentStation.getExchangeHandlers().length; i++)
+                result.add(currentStation.getExchangeHandlers()[i]);
+            TableView<ExchangeHandler> table = new TableView<>();
+            table.setMaxSize(600, 500);
+            table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+            TableColumn deleteCol = new TableColumn("Delete");
+            deleteCol.setEditable(false);
+            deleteCol.setCellValueFactory((Callback<TableColumn.CellDataFeatures<ExchangeHandler, Boolean>, ObservableValue>) param -> new SimpleBooleanProperty(param.getValue() != null));
+            deleteCol.setCellFactory((Callback<TableColumn<ExchangeHandler, Boolean>, TableCell<ExchangeHandler, Boolean>>) param -> {
+                ButtonCell btn = new ButtonCell(table);
+                btn.batteriesOnAction();
+                return btn;
+            });
+            TableColumn<ExchangeHandler, Integer> idCol = new TableColumn<>("Id");
+            TableColumn<ExchangeHandler, Double> capacityCol = new TableColumn<>("Capacity");
+            TableColumn<ExchangeHandler, Double> remainingAmountCol = new TableColumn<>("RemAmount");
+            TableColumn<ExchangeHandler, Integer> numberOfChargingsCol = new TableColumn<>("NumberOfChargings");
+            table.getColumns().addAll(idCol, capacityCol, remainingAmountCol, numberOfChargingsCol, deleteCol);
+            idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+            capacityCol.setCellValueFactory(new PropertyValueFactory<>("capacity"));
+            remainingAmountCol.setCellValueFactory(new PropertyValueFactory<>("remAmount"));
+            numberOfChargingsCol.setCellValueFactory(new PropertyValueFactory<>("numberOfChargings"));
+            table.setItems(result);
+            root.setCenter(table);
         });
 
         //Implements the charging of batteries that are for battery exchange
@@ -931,5 +838,120 @@ class MenuStation {
             }
         });
         return stationM;
+    }
+
+    private static class ButtonCell<T> extends TableCell<T, Boolean>{
+        private Button cellButton = new Button();
+        private TableView tableview;
+
+        ButtonCell(TableView tblView) {
+            this.cellButton.setGraphic(new ImageView(image));
+            this.cellButton.setMaxSize(image.getWidth(), image.getHeight());
+            this.cellButton.setMinSize(image.getWidth(), image.getHeight());
+            tableview = tblView;
+        }
+
+        void chargerOnAction() {
+            cellButton.setOnAction((ActionEvent e) -> {
+                int selectdIndex = getTableRow().getIndex();
+                Charger ch = (Charger) tableview.getItems().get(selectdIndex);
+                if (ch.getChargingEvent() == null) {
+                    if (Maintenance.confirmDeletion()) {
+                        currentStation.deleteCharger(ch);
+                    }
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Charger is busy now. It cannot be deleted.");
+                    alert.showAndWait();
+                }
+                allChargersMI.fire();
+            });
+        }
+
+        void dischargerOnAction() {
+            cellButton.setOnAction((ActionEvent e) -> {
+                int selectedIndex = getTableRow().getIndex();
+                DisCharger ch = (DisCharger) tableview.getItems().get(selectedIndex);
+                if (ch.getDisChargingEvent() == null) {
+                    if (Maintenance.confirmDeletion()) {
+                        currentStation.deleteDisCharger(ch);
+                    }
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Discharger is busy now. It cannot be deleted.");
+                    alert.showAndWait();
+                }
+                allDisChargersMI.fire();
+            });
+        }
+
+        void exchangeHandlerOnAction() {
+            cellButton.setOnAction((ActionEvent e) -> {
+                int selectedIndex = getTableRow().getIndex();
+                ExchangeHandler ch = (ExchangeHandler) tableview.getItems().get(selectedIndex);
+                if (ch.getChargingEvent() == null) {
+                    if (Maintenance.confirmDeletion()) {
+                        currentStation.deleteExchangeHandler(ch);
+                    }
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText(null);
+                    alert.setContentText("ExchangeHandler is busy now. It cannot be deleted.");
+                    alert.showAndWait();
+                }
+                allExchangeHandlersMI.fire();
+            });
+        }
+
+        void parkingSlotOnAction() {
+            cellButton.setOnAction((ActionEvent e) -> {
+                int selectedIndex = getTableRow().getIndex();
+                ParkingSlot ch = (ParkingSlot) tableview.getItems().get(selectedIndex);
+                if (ch.getParkingEvent() == null) {
+                    if (Maintenance.confirmDeletion()) {
+                        currentStation.deleteParkingSlot(ch);
+                    }
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Parking slot is busy now. It cannot be deleted.");
+                    alert.showAndWait();
+                }
+                allParkingSlotsMI.fire();
+            });
+        }
+
+        void batteriesOnAction() {
+            cellButton.setOnAction((ActionEvent e) -> {
+                int selectedIndex = getTableRow().getIndex();
+                Battery ch = (Battery) tableview.getItems().get(selectedIndex);
+                for (Charger charger : currentStation.getChargers())
+                    if (charger.getChargingEvent() != null)
+                        if (charger.getChargingEvent().getElectricVehicle().getBattery() == ch) {
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("Error");
+                            alert.setHeaderText(null);
+                            alert.setContentText("Battery is charging now.");
+                            alert.showAndWait();
+                            return;
+                        }
+                if (Maintenance.confirmDeletion())
+                    currentStation.deleteBattery(ch);
+                allBatteriesMI.fire();
+            });
+        }
+
+        @Override
+        protected void updateItem(Boolean t, boolean empty) {
+            super.updateItem(t, empty);
+            if(!empty)
+                setGraphic(cellButton);
+        }
     }
 }

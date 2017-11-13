@@ -142,11 +142,18 @@
     -fx-background-insets: 0, 1, 2;
     -fx-background-radius: 3, 2, 2;
     -fx-max-width: 150;
-    /*-fx-padding: 0.25em 0.416667em  0.333333em 0.416667em;*/
 }
 
 .text-field:focused {
     -fx-background-insets: -0.4, 1, 2;
     -fx-background-radius: 3.4, 2, 2;
     -fx-prompt-text-fill: transparent;
+}
+
+.table-column {
+    -fx-alignment: CENTER;
+}
+
+.table-row-cell {
+    -fx-cell-size: 30px;
 }

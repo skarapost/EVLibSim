@@ -53,7 +53,7 @@ class Event {
             if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
-            grid.setMaxSize(600, 400);
+            grid.setMaxSize(650, 400);
             TextField boo;
             Label foo;
             foo = new Label("Driver's name: ");
@@ -213,7 +213,7 @@ class Event {
             if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
-            grid.setMaxSize(600, 400);
+            grid.setMaxSize(650, 400);
             TextField boo;
             Label foo;
             foo = new Label("Driver's name: ");
@@ -336,7 +336,7 @@ class Event {
             if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
-            grid.setMaxSize(600, 400);
+            grid.setMaxSize(650, 400);
             TextField boo;
             Label foo;
             foo = new Label("Driver's name: ");
@@ -454,7 +454,7 @@ class Event {
             if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
-            grid.setMaxSize(600, 400);
+            grid.setMaxSize(650, 400);
             TextField boo;
             Label foo;
             foo = new Label("Driver's name: ");
@@ -589,6 +589,7 @@ class Event {
             if (result.isPresent()) {
                 if (result.get() == buttonTypeOne) {
                     Maintenance.cleanScreen();
+                    grid.setMaxSize(450, 180);
                     foo = new Label("Duration: ");
                     grid.add(foo, 0, 0);
                     boo = new TextField();
@@ -599,13 +600,16 @@ class Event {
                     boo = new TextField();
                     grid.add(boo, 1, 1);
                     textfields.add(boo);
-                    grid.add(policyCreation1, 0, 2);
+                    Predicate buttonPredicate = b -> (b != EVLibSim.cancel);
+                    HBox buttonsBox = EVLibSim.getButtonsBox();
+                    buttonsBox.getChildren().removeIf(buttonPredicate);
+                    buttonsBox.getChildren().add(0, policyCreation1);
+                    grid.add(buttonsBox, 0, 2, 2, 1);
                     policyCreation1.setDefaultButton(true);
-                    grid.setMaxSize(500, 300);
-                    grid.add(cancel, 1, 2);
                     root.setCenter(grid);
                 } else if (result.get() == buttonTypeTwo) {
                     Maintenance.cleanScreen();
+                    grid.setMaxSize(450, 180);
                     foo = new Label("Durations(separated with comma): ");
                     grid.add(foo, 0, 0);
                     boo = new TextField();
@@ -616,10 +620,12 @@ class Event {
                     boo = new TextField();
                     grid.add(boo, 1, 1);
                     textfields.add(boo);
-                    grid.add(policyCreation2, 0, 2);
+                    Predicate buttonPredicate = b -> (b != EVLibSim.cancel);
+                    HBox buttonsBox = EVLibSim.getButtonsBox();
+                    buttonsBox.getChildren().removeIf(buttonPredicate);
+                    buttonsBox.getChildren().add(0, policyCreation2);
+                    grid.add(buttonsBox, 0, 2, 2, 1);
                     policyCreation2.setDefaultButton(true);
-                    grid.add(cancel, 1, 2);
-                    grid.setMaxSize(500, 300);
                     root.setCenter(grid);
                 }
             }

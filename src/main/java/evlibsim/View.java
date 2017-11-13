@@ -1,229 +1,205 @@
 package evlibsim;
 
 import evlib.station.*;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.util.Callback;
 
 import java.util.function.Predicate;
 
 import static evlibsim.EVLibSim.*;
-import static evlibsim.MenuStation.scroll;
 
 class View {
 
     static final MenuItem totalActivity = new MenuItem("Overview");
     private static final Menu overview = new Menu("Station overview");
     private static final Menu view = new Menu("View");
-    private static final MenuItem queue = new MenuItem("Queue of events");
+    private static final Menu queue = new Menu("Queue of events");
+    private static final MenuItem slowChargingsQueue = new MenuItem("Slow chargings");
+    private static final MenuItem fastChargingsQueue = new MenuItem("Fast chargings");
+    private static final MenuItem dischargingsQueue = new MenuItem("Dischargings");
+    private static final MenuItem exchangesQueue = new MenuItem("Battery exchanges");
     private static final MenuItem chargingsMenuItem = new MenuItem("Running chargings");
     private static final MenuItem dischargingsMenuItem = new MenuItem("Running dischargings");
-    private static final MenuItem exchangesMenuItem = new MenuItem("Running exchanges");
+    private static final MenuItem exchangesMenuItem = new MenuItem("Running battery exchanges");
     private static final MenuItem parkingsMenuItem = new MenuItem("Running parkings");
     private static final Image image = new Image(View.class.getResourceAsStream("/run.png"));
 
     static Menu createViewMenu() {
-        overview.getItems().addAll(totalActivity, new SeparatorMenuItem(), chargingsMenuItem, dischargingsMenuItem, exchangesMenuItem, parkingsMenuItem);
+        overview.getItems().addAll(totalActivity, new SeparatorMenuItem(), chargingsMenuItem, dischargingsMenuItem,
+                exchangesMenuItem, parkingsMenuItem);
+        queue.getItems().addAll(fastChargingsQueue, slowChargingsQueue, dischargingsQueue, exchangesQueue);
         view.getItems().addAll(overview, queue);
 
-        queue.setOnAction(e -> {
+        fastChargingsQueue.setOnAction(ew -> {
             if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
-            scroll.setMaxSize(700, 450);
-            scroll.getStyleClass().add("scroll");
-            VBox x = new VBox();
-            x.setAlignment(Pos.CENTER);
-            x.setSpacing(15);
-            HBox z;
-            Label foo;
-            Button execution;
-            for (int i = 0; i < currentStation.getFast().getSize(); i++) {
-                ChargingEvent et = (ChargingEvent) currentStation.getFast().get(i);
-                z = new HBox();
-                z.setSpacing(15);
-                z.setAlignment(Pos.TOP_LEFT);
-                z.setPadding(new Insets(5, 5, 5, 5));
-                foo = new Label("FastCharging");
-                z.getChildren().add(foo);
-                foo = new Label("Position: " + i);
-                z.getChildren().add(foo);
-                foo = new Label("Id: " + et.getId());
-                z.getChildren().add(foo);
-                foo = new Label("Driver: " + et.getElectricVehicle().getDriver().getName());
-                z.getChildren().add(foo);
-                foo = new Label("Brand: " + et.getElectricVehicle().getBrand());
-                z.getChildren().add(foo);
-                foo = new Label("Energy: " + et.getEnergyToBeReceived());
-                z.getChildren().add(foo);
-                foo = new Label("Kind: " + et.getKindOfCharging());
-                z.getChildren().add(foo);
-                foo = new Label("Cost: " + et.getCost());
-                z.getChildren().add(foo);
-                execution = new Button();
-                execution.setGraphic(new ImageView(image));
-                z.getChildren().add(execution);
-                execution.setMaxSize(image.getWidth(), image.getHeight());
-                execution.setMinSize(image.getWidth(), image.getHeight());
-                execution.setOnAction(er -> {
-                    if (!currentStation.getQueueHandling()) {
-                        et.preProcessing();
-                        if (et.getCondition().equals("charging")) {
-                            et.execution();
-                            queue.fire();
-                        } else if (et.getCondition().equals("wait"))
-                            Maintenance.queueInsertion();
-                    } else {
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Error");
-                        alert.setHeaderText(null);
-                        alert.setContentText("The manual queue handling is disabled.");
-                        alert.showAndWait();
-                    }
-                });
-                x.getChildren().add(z);
-            }
-            for (int i = 0; i < currentStation.getSlow().getSize(); i++) {
-                ChargingEvent et = (ChargingEvent) currentStation.getSlow().get(i);
-                z = new HBox();
-                z.setSpacing(15);
-                z.setAlignment(Pos.TOP_LEFT);
-                z.setPadding(new Insets(5, 5, 5, 5));
-                foo = new Label("SlowCharging");
-                z.getChildren().add(foo);
-                foo = new Label("Position: " + i);
-                z.getChildren().add(foo);
-                foo = new Label("Id: " + et.getId());
-                z.getChildren().add(foo);
-                foo = new Label("Driver: " + et.getElectricVehicle().getDriver().getName());
-                z.getChildren().add(foo);
-                foo = new Label("Brand: " + et.getElectricVehicle().getBrand());
-                z.getChildren().add(foo);
-                foo = new Label("Energy: " + et.getEnergyToBeReceived());
-                z.getChildren().add(foo);
-                foo = new Label("Kind: " + et.getKindOfCharging());
-                z.getChildren().add(foo);
-                foo = new Label("Cost: " + et.getCost());
-                z.getChildren().add(foo);
-                execution = new Button();
-                execution.setGraphic(new ImageView(image));
-                z.getChildren().add(execution);
-                execution.setMaxSize(image.getWidth(), image.getHeight());
-                execution.setMinSize(image.getWidth(), image.getHeight());
-                execution.setOnAction(er -> {
-                    if (!currentStation.getQueueHandling()) {
-                        et.preProcessing();
-                        if (et.getCondition().equals("charging")) {
-                            et.execution();
-                            queue.fire();
-                        } else if (et.getCondition().equals("wait"))
-                            Maintenance.queueInsertion();
-                    } else {
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Error");
-                        alert.setHeaderText(null);
-                        alert.setContentText("The manual queue handling is disabled.");
-                        alert.showAndWait();
-                    }
-                });
-                x.getChildren().add(z);
-            }
-            for (int i = 0; i < currentStation.getDischarging().getSize(); i++) {
-                DisChargingEvent r = (DisChargingEvent) currentStation.getDischarging().get(i);
-                z = new HBox();
-                z.setSpacing(15);
-                z.setAlignment(Pos.TOP_LEFT);
-                z.setPadding(new Insets(5, 5, 5, 5));
-                foo = new Label("DisCharging");
-                z.getChildren().add(foo);
-                foo = new Label("Position: " + i);
-                z.getChildren().add(foo);
-                foo = new Label("Id: " + r.getId());
-                z.getChildren().add(foo);
-                foo = new Label("Driver: " + r.getElectricVehicle().getDriver().getName());
-                z.getChildren().add(foo);
-                foo = new Label("Brand: " + r.getElectricVehicle().getBrand());
-                z.getChildren().add(foo);
-                foo = new Label("Energy: " + r.getAmountOfEnergy());
-                z.getChildren().add(foo);
-                foo = new Label("Profit: " + r.getProfit());
-                z.getChildren().add(foo);
-                execution = new Button();
-                execution.setGraphic(new ImageView(image));
-                z.getChildren().add(execution);
-                execution.setMaxSize(image.getWidth(), image.getHeight());
-                execution.setMinSize(image.getWidth(), image.getHeight());
-                execution.setOnAction(er -> {
-                    if (!currentStation.getQueueHandling()) {
-                        r.preProcessing();
-                        if (r.getCondition().equals("discharging")) {
-                            r.execution();
-                            queue.fire();
-                        } else if (r.getCondition().equals("wait"))
-                            Maintenance.queueInsertion();
-                    } else {
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Error");
-                        alert.setHeaderText(null);
-                        alert.setContentText("The manual queue handling is disabled.");
-                        alert.showAndWait();
-                    }
-                });
-                x.getChildren().add(z);
-            }
-            for (int i = 0; i < currentStation.getExchange().getSize(); i++) {
-                ChargingEvent et = (ChargingEvent) currentStation.getExchange().get(i);
-                z = new HBox();
-                z.setSpacing(15);
-                z.setAlignment(Pos.TOP_LEFT);
-                z.setPadding(new Insets(5, 5, 5, 5));
-                foo = new Label("Exchange");
-                z.getChildren().add(foo);
-                foo = new Label("Position: " + i);
-                z.getChildren().add(foo);
-                foo = new Label("Id: " + et.getId());
-                z.getChildren().add(foo);
-                foo = new Label("Driver: " + et.getElectricVehicle().getDriver().getName());
-                z.getChildren().add(foo);
-                foo = new Label("Brand: " + et.getElectricVehicle().getBrand());
-                z.getChildren().add(foo);
-                foo = new Label("Cost: " + et.getCost());
-                z.getChildren().add(foo);
-                execution = new Button();
-                execution.setGraphic(new ImageView(image));
-                z.getChildren().add(execution);
-                execution.setMaxSize(image.getWidth(), image.getHeight());
-                execution.setMinSize(image.getWidth(), image.getHeight());
-                execution.setOnAction(er -> {
-                    if (!currentStation.getQueueHandling()) {
-                        et.preProcessing();
-                        if (et.getCondition().equals("swapping")) {
-                            et.execution();
-                            queue.fire();
-                        } else if (et.getCondition().equals("wait"))
-                            Maintenance.queueInsertion();
-                    } else {
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Error");
-                        alert.setHeaderText(null);
-                        alert.setContentText("The manual queue handling is disabled.");
-                        alert.showAndWait();
-                    }
-                });
-                x.getChildren().add(z);
-            }
-            scroll.setContent(x);
-            root.setCenter(scroll);
+            ObservableList<ChargingEvent> result = FXCollections.observableArrayList();
+
+            for (int i = 0; i < currentStation.getFast().getSize(); i++)
+                result.add((ChargingEvent) currentStation.getFast().get(i));
+
+            TableView<ChargingEvent> table = new TableView<>();
+            table.setMaxSize(600, 500);
+            table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+            TableColumn executionCol = new TableColumn("Execution");
+            executionCol.setEditable(false);
+
+            executionCol.setCellValueFactory((Callback<TableColumn.CellDataFeatures<ChargingEvent, Boolean>, ObservableValue>) param -> new SimpleBooleanProperty(param.getValue() != null));
+
+            executionCol.setCellFactory((Callback<TableColumn<ChargingEvent, Boolean>, TableCell<ChargingEvent, Boolean>>) param -> {
+                ButtonCell btnCell = new ButtonCell(table);
+                btnCell.chargingOnAction();
+                return btnCell;
+            });
+
+            TableColumn<ChargingEvent, Integer> idCol = new TableColumn<>("Id");
+            TableColumn<ChargingEvent, Double> askingAmountCol = new TableColumn<>("EnergyAmount");
+            TableColumn<ChargingEvent, Long> waitingTimeCol = new TableColumn<>("WaitingTime");
+            TableColumn<ChargingEvent, Long> maxWaitingTimeCol = new TableColumn<>("MaxWaitingTime");
+            table.getColumns().addAll(idCol, askingAmountCol, waitingTimeCol, maxWaitingTimeCol, executionCol);
+
+            idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+            askingAmountCol.setCellValueFactory(new PropertyValueFactory<>("amountOfEnergy"));
+            waitingTimeCol.setCellValueFactory(new PropertyValueFactory<>("waitingTime"));
+            maxWaitingTimeCol.setCellValueFactory(new PropertyValueFactory<>("maxWaitingTime"));
+
+            table.setItems(result);
+
+            root.setCenter(table);
         });
+
+        slowChargingsQueue.setOnAction(ew -> {
+            if (Maintenance.stationCheck())
+                return;
+            Maintenance.cleanScreen();
+            ObservableList<ChargingEvent> result = FXCollections.observableArrayList();
+
+            for (int i = 0; i < currentStation.getSlow().getSize(); i++)
+                result.add((ChargingEvent) currentStation.getSlow().get(i));
+
+            TableView<ChargingEvent> table = new TableView<>();
+            table.setMaxSize(600, 500);
+            table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+            TableColumn executionCol = new TableColumn("Execution");
+            executionCol.setEditable(false);
+
+            executionCol.setCellValueFactory((Callback<TableColumn.CellDataFeatures<ChargingEvent, Boolean>, ObservableValue>) param -> new SimpleBooleanProperty(param.getValue() != null));
+
+            executionCol.setCellFactory((Callback<TableColumn<ChargingEvent, Boolean>, TableCell<ChargingEvent, Boolean>>) param -> {
+                ButtonCell btnCell = new ButtonCell(table);
+                btnCell.chargingOnAction();
+                return btnCell;
+            });
+
+            TableColumn<ChargingEvent, Integer> idCol = new TableColumn<>("Id");
+            TableColumn<ChargingEvent, Double> askingAmountCol = new TableColumn<>("EnergyAmount");
+            TableColumn<ChargingEvent, Long> waitingTimeCol = new TableColumn<>("WaitingTime");
+            TableColumn<ChargingEvent, Long> maxWaitingTimeCol = new TableColumn<>("MaxWaitingTime");
+            table.getColumns().addAll(idCol, askingAmountCol, waitingTimeCol, maxWaitingTimeCol, executionCol);
+
+            idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+            askingAmountCol.setCellValueFactory(new PropertyValueFactory<>("amountOfEnergy"));
+            waitingTimeCol.setCellValueFactory(new PropertyValueFactory<>("waitingTime"));
+            maxWaitingTimeCol.setCellValueFactory(new PropertyValueFactory<>("maxWaitingTime"));
+
+            table.setItems(result);
+
+            root.setCenter(table);
+        });
+
+        dischargingsQueue.setOnAction(ew -> {
+            if (Maintenance.stationCheck())
+                return;
+            Maintenance.cleanScreen();
+            ObservableList<DisChargingEvent> result = FXCollections.observableArrayList();
+
+            for (int i = 0; i < currentStation.getDischarging().getSize(); i++)
+                result.add((DisChargingEvent) currentStation.getDischarging().get(i));
+
+            TableView<DisChargingEvent> table = new TableView<>();
+            table.setMaxSize(600, 500);
+            table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+            TableColumn executionCol = new TableColumn("Execution");
+            executionCol.setEditable(false);
+
+            executionCol.setCellValueFactory((Callback<TableColumn.CellDataFeatures<DisChargingEvent, Boolean>, ObservableValue>) param -> new SimpleBooleanProperty(param.getValue() != null));
+
+            executionCol.setCellFactory((Callback<TableColumn<DisChargingEvent, Boolean>, TableCell<DisChargingEvent, Boolean>>) param -> {
+                ButtonCell btnCell = new ButtonCell(table);
+                btnCell.disChargingOnAction();
+                return btnCell;
+            });
+
+            TableColumn<DisChargingEvent, Integer> idCol = new TableColumn<>("Id");
+            TableColumn<DisChargingEvent, Double> askingAmountCol = new TableColumn<>("EnergyAmount");
+            TableColumn<DisChargingEvent, Long> waitingTimeCol = new TableColumn<>("WaitingTime");
+            TableColumn<DisChargingEvent, Long> maxWaitingTimeCol = new TableColumn<>("MaxWaitingTime");
+            table.getColumns().addAll(idCol, askingAmountCol, waitingTimeCol, maxWaitingTimeCol, executionCol);
+
+            idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+            askingAmountCol.setCellValueFactory(new PropertyValueFactory<>("amountOfEnergy"));
+            waitingTimeCol.setCellValueFactory(new PropertyValueFactory<>("waitingTime"));
+            maxWaitingTimeCol.setCellValueFactory(new PropertyValueFactory<>("maxWaitingTime"));
+
+            table.setItems(result);
+
+            root.setCenter(table);
+        });
+
+        exchangesQueue.setOnAction(ew -> {
+            if (Maintenance.stationCheck())
+                return;
+            Maintenance.cleanScreen();
+            ObservableList<ChargingEvent> result = FXCollections.observableArrayList();
+
+            for (int i = 0; i < currentStation.getExchange().getSize(); i++)
+                result.add((ChargingEvent) currentStation.getExchange().get(i));
+
+            TableView<ChargingEvent> table = new TableView<>();
+            table.setMaxSize(600, 500);
+            table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+            TableColumn executionCol = new TableColumn("Execution");
+            executionCol.setEditable(false);
+
+            executionCol.setCellValueFactory((Callback<TableColumn.CellDataFeatures<ChargingEvent, Boolean>, ObservableValue>) param -> new SimpleBooleanProperty(param.getValue() != null));
+
+            executionCol.setCellFactory((Callback<TableColumn<ChargingEvent, Boolean>, TableCell<ChargingEvent, Boolean>>) param -> {
+                ButtonCell btnCell = new ButtonCell(table);
+                btnCell.exchangeOnAction();
+                return btnCell;
+            });
+
+            TableColumn<ChargingEvent, Integer> idCol = new TableColumn<>("Id");
+            TableColumn<ChargingEvent, Double> askingAmountCol = new TableColumn<>("EnergyAmount");
+            TableColumn<ChargingEvent, Long> waitingTimeCol = new TableColumn<>("WaitingTime");
+            TableColumn<ChargingEvent, Long> maxWaitingTimeCol = new TableColumn<>("MaxWaitingTime");
+            table.getColumns().addAll(idCol, askingAmountCol, waitingTimeCol, maxWaitingTimeCol, executionCol);
+
+            idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+            askingAmountCol.setCellValueFactory(new PropertyValueFactory<>("amountOfEnergy"));
+            waitingTimeCol.setCellValueFactory(new PropertyValueFactory<>("waitingTime"));
+            maxWaitingTimeCol.setCellValueFactory(new PropertyValueFactory<>("maxWaitingTime"));
+
+            table.setItems(result);
+
+            root.setCenter(table);
+        });
+
         totalActivity.setOnAction((ActionEvent e) -> {
             if (Maintenance.stationCheck())
                 return;
@@ -288,13 +264,7 @@ class View {
             });
             grid.add(chart, 0, 0);
             root.setCenter(grid);
-            applyCustomColorSequence(pieChartData, "aqua",
-                    "bisque",
-                    "chocolate",
-                    "coral",
-                    "crimson",
-                    "yellow",
-                    "black");
+            applyCustomColorSequence(pieChartData, "aqua", "bisque", "chocolate", "coral", "crimson", "yellow", "black");
             CategoryAxis xAxis = new CategoryAxis();
             NumberAxis yAxis = new NumberAxis();
             BarChart barChart = new BarChart(xAxis, yAxis);
@@ -369,18 +339,19 @@ class View {
                 if ((ch.getChargingEvent() != null) && ch.getChargingEvent().getCondition().equals("charging"))
                     result.add(ch.getChargingEvent());
             TableView<ChargingEvent> table = new TableView<>();
+            table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
             TableColumn<ChargingEvent, Integer> idCol = new TableColumn<>("Id");
             TableColumn<ChargingEvent, Double> askingAmountCol = new TableColumn<>("EnergyAmount");
-            TableColumn<ChargingEvent, Double> energyToBeReceivedCol = new TableColumn<>("EnergyToBeReceived");
+            TableColumn<ChargingEvent, Double> energyToBeReceivedCol = new TableColumn<>("EnergyReceived");
             TableColumn<ChargingEvent, String> kindCol = new TableColumn<>("Kind");
-            TableColumn<ChargingEvent, Long> waitingTimeCol = new TableColumn<>("WaitingTime");
-            TableColumn<ChargingEvent, Long> maxWaitingTimeCol = new TableColumn<>("MaxWaitingTime");
-            TableColumn<ChargingEvent, Long> chargingTimeCol = new TableColumn<>("ChargingTime");
-            TableColumn<ChargingEvent, String> conditionCol = new TableColumn<>("Condition");
-            TableColumn<ChargingEvent, Double> costCol = new TableColumn<>("Cost");
-            TableColumn<ChargingEvent, Long> elapseTimeCol = new TableColumn<>("RemainingChargingTime");
+            TableColumn<ChargingEvent, Long> waitingTimeCol = new TableColumn<>("Wait");
+            TableColumn<ChargingEvent, Long> maxWaitingTimeCol = new TableColumn<>("MaxWait");
+            TableColumn<ChargingEvent, Long> chargingTimeCol = new TableColumn<>("ChargTime");
+            TableColumn<ChargingEvent, Long> elapseTimeCol = new TableColumn<>("RemChargTime");
             table.getColumns().addAll(idCol, askingAmountCol, energyToBeReceivedCol, kindCol, waitingTimeCol, maxWaitingTimeCol, chargingTimeCol,
-                    conditionCol, costCol, elapseTimeCol);
+                    elapseTimeCol);
+
             idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
             askingAmountCol.setCellValueFactory(new PropertyValueFactory<>("amountOfEnergy"));
             energyToBeReceivedCol.setCellValueFactory(new PropertyValueFactory<>("energyToBeReceived"));
@@ -388,11 +359,11 @@ class View {
             waitingTimeCol.setCellValueFactory(new PropertyValueFactory<>("waitingTime"));
             maxWaitingTimeCol.setCellValueFactory(new PropertyValueFactory<>("maxWaitingTime"));
             chargingTimeCol.setCellValueFactory(new PropertyValueFactory<>("chargingTime"));
-            conditionCol.setCellValueFactory(new PropertyValueFactory<>("condition"));
-            costCol.setCellValueFactory(new PropertyValueFactory<>("cost"));
             elapseTimeCol.setCellValueFactory(new PropertyValueFactory<>("remainingChargingTime"));
+
             table.setItems(result);
-            table.setMaxSize(1050, 600);
+            table.setMaxSize(900, 500);
+
             root.setCenter(table);
         });
         dischargingsMenuItem.setOnAction(et -> {
@@ -406,24 +377,24 @@ class View {
             TableView<DisChargingEvent> table = new TableView<>();
             TableColumn<DisChargingEvent, Integer> idCol = new TableColumn<>("Id");
             TableColumn<DisChargingEvent, Double> amountOfEnergyCol = new TableColumn<>("EnergyAmount");
-            TableColumn<DisChargingEvent, String> conditionCol = new TableColumn<>("Condition");
-            TableColumn<DisChargingEvent, Long> waitingTimeCol = new TableColumn<>("WaitingTime");
-            TableColumn<DisChargingEvent, Long> maxWaitingTimeCol = new TableColumn<>("MaxWaitingTime");
-            TableColumn<DisChargingEvent, Long> disChargingTimeCol = new TableColumn<>("DisChargingTime");
-            TableColumn<DisChargingEvent, Long> elapsedDisChargingTimeCol = new TableColumn<>("RemainingDisChargingTime");
-            TableColumn<DisChargingEvent, Double> profitCol = new TableColumn<>("Profit");
-            table.getColumns().addAll(idCol, amountOfEnergyCol, conditionCol, maxWaitingTimeCol, waitingTimeCol,
-                    disChargingTimeCol, elapsedDisChargingTimeCol, profitCol);
+            TableColumn<DisChargingEvent, Long> waitingTimeCol = new TableColumn<>("Wait");
+            TableColumn<DisChargingEvent, Long> maxWaitingTimeCol = new TableColumn<>("MaxWait");
+            TableColumn<DisChargingEvent, Long> disChargingTimeCol = new TableColumn<>("DisChargTime");
+            TableColumn<DisChargingEvent, Long> elapsedDisChargingTimeCol = new TableColumn<>("RemDisChargTime");
+            table.getColumns().addAll(idCol, amountOfEnergyCol, disChargingTimeCol, maxWaitingTimeCol, waitingTimeCol,
+                    elapsedDisChargingTimeCol);
+
             idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
             amountOfEnergyCol.setCellValueFactory(new PropertyValueFactory<>("amountOfEnergy"));
-            conditionCol.setCellValueFactory(new PropertyValueFactory<>("condition"));
             waitingTimeCol.setCellValueFactory(new PropertyValueFactory<>("waitingTime"));
             maxWaitingTimeCol.setCellValueFactory(new PropertyValueFactory<>("maxWaitingTime"));
             disChargingTimeCol.setCellValueFactory(new PropertyValueFactory<>("disChargingTime"));
             elapsedDisChargingTimeCol.setCellValueFactory(new PropertyValueFactory<>("remainingDisChargingTime"));
-            profitCol.setCellValueFactory(new PropertyValueFactory<>("profit"));
+
             table.setItems(result);
-            table.setMaxSize(1050, 600);
+            table.setMaxSize(900, 500);
+            table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
             root.setCenter(table);
         });
         exchangesMenuItem.setOnAction(et -> {
@@ -436,22 +407,19 @@ class View {
                     result.add(ch.getChargingEvent());
             TableView<ChargingEvent> table = new TableView<>();
             TableColumn<ChargingEvent, Integer> idCol = new TableColumn<>("Id");
-            TableColumn<ChargingEvent, Long> waitingTimeCol = new TableColumn<>("WaitingTime");
-            TableColumn<ChargingEvent, Long> maxWaitingTimeCol = new TableColumn<>("MaxWaitingTime");
-            TableColumn<ChargingEvent, String> conditionCol = new TableColumn<>("Condition");
-            TableColumn<ChargingEvent, Long> chargingTimeCol = new TableColumn<>("ChargingTime");
-            TableColumn<ChargingEvent, Long> elapsedExchangeTimeCol = new TableColumn<>("RemainingChargingTime");
-            TableColumn<ChargingEvent, Double> profitCol = new TableColumn<>("Cost");
-            table.getColumns().addAll(idCol, waitingTimeCol, maxWaitingTimeCol, conditionCol, chargingTimeCol, elapsedExchangeTimeCol, profitCol);
+            TableColumn<ChargingEvent, Long> waitingTimeCol = new TableColumn<>("Wait");
+            TableColumn<ChargingEvent, Long> maxWaitingTimeCol = new TableColumn<>("MaxWait");
+            TableColumn<ChargingEvent, Long> chargingTimeCol = new TableColumn<>("ChargTime");
+            TableColumn<ChargingEvent, Long> elapsedExchangeTimeCol = new TableColumn<>("RemChargTime");
+            table.getColumns().addAll(idCol, chargingTimeCol, waitingTimeCol, maxWaitingTimeCol, elapsedExchangeTimeCol);
             idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
             waitingTimeCol.setCellValueFactory(new PropertyValueFactory<>("waitingTime"));
             maxWaitingTimeCol.setCellValueFactory(new PropertyValueFactory<>("maxWaitingTime"));
-            conditionCol.setCellValueFactory(new PropertyValueFactory<>("condition"));
             chargingTimeCol.setCellValueFactory(new PropertyValueFactory<>("chargingTime"));
             elapsedExchangeTimeCol.setCellValueFactory(new PropertyValueFactory<>("remainingChargingTime"));
-            profitCol.setCellValueFactory(new PropertyValueFactory<>("cost"));
             table.setItems(result);
-            table.setMaxSize(1050, 600);
+            table.setMaxSize(900, 500);
+            table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
             root.setCenter(table);
         });
         parkingsMenuItem.setOnAction(et -> {
@@ -465,28 +433,23 @@ class View {
             TableView<ParkingEvent> table = new TableView<>();
             TableColumn<ParkingEvent, Integer> idCol = new TableColumn<>("Id");
             TableColumn<ParkingEvent, Double> askingAmountCol = new TableColumn<>("AskingAmount");
-            TableColumn<ParkingEvent, Double> energyToBeReceivedCol = new TableColumn<>("EnergyToBeReceived");
-            TableColumn<ParkingEvent, String> parkingTimeCol = new TableColumn<>("ParkingTime");
-            TableColumn<ParkingEvent, Long> waitingTimeCol = new TableColumn<>("WaitingTime");
-            TableColumn<ParkingEvent, Long> chargingTimeCol = new TableColumn<>("ChargingTime");
-            TableColumn<ParkingEvent, Long> elapsedParkingTimeCol = new TableColumn<>("RemainingParkingTime");
-            TableColumn<ParkingEvent, Long> elapsedChargingTimeCol = new TableColumn<>("RemainingChargingTime");
-            TableColumn<ParkingEvent, String> conditionCol = new TableColumn<>("condition");
-            TableColumn<ParkingEvent, Double> costCol = new TableColumn<>("Cost");
-            table.getColumns().addAll(idCol, askingAmountCol, energyToBeReceivedCol, parkingTimeCol, waitingTimeCol,
-                    chargingTimeCol, elapsedParkingTimeCol, elapsedChargingTimeCol, conditionCol, costCol);
+            TableColumn<ParkingEvent, Double> energyToBeReceivedCol = new TableColumn<>("EnergyReceived");
+            TableColumn<ParkingEvent, String> parkingTimeCol = new TableColumn<>("ParkTime");
+            TableColumn<ParkingEvent, Long> chargingTimeCol = new TableColumn<>("ChargTime");
+            TableColumn<ParkingEvent, Long> elapsedParkingTimeCol = new TableColumn<>("RemParkTime");
+            TableColumn<ParkingEvent, Long> elapsedChargingTimeCol = new TableColumn<>("RemChargTime");
+            table.getColumns().addAll(idCol, askingAmountCol, energyToBeReceivedCol, parkingTimeCol,
+                    chargingTimeCol, elapsedParkingTimeCol, elapsedChargingTimeCol);
             idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
             askingAmountCol.setCellValueFactory(new PropertyValueFactory<>("amountOfEnergy"));
             energyToBeReceivedCol.setCellValueFactory(new PropertyValueFactory<>("energyToBeReceived"));
             parkingTimeCol.setCellValueFactory(new PropertyValueFactory<>("parkingTime"));
-            waitingTimeCol.setCellValueFactory(new PropertyValueFactory<>("waitingTime"));
             chargingTimeCol.setCellValueFactory(new PropertyValueFactory<>("chargingTime"));
             elapsedParkingTimeCol.setCellValueFactory(new PropertyValueFactory<>("remainingParkingTime"));
             elapsedChargingTimeCol.setCellValueFactory(new PropertyValueFactory<>("remainingChargingTime"));
-            conditionCol.setCellValueFactory(new PropertyValueFactory<>("condition"));
-            costCol.setCellValueFactory(new PropertyValueFactory<>("cost"));
             table.setItems(result);
-            table.setMaxSize(1050, 600);
+            table.setMaxSize(900, 500);
+            table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
             root.setCenter(table);
         });
         return view;
@@ -497,6 +460,99 @@ class View {
         for (PieChart.Data data : pieChartData) {
             data.getNode().setStyle("-fx-pie-color: " + pieColors[i % pieColors.length] + ";");
             i++;
+        }
+    }
+
+    private static class ButtonCell<T> extends TableCell<T, Boolean>
+    {
+        private Button cellButton = new Button();
+        private TableView tableView;
+        private String kind = null;
+
+        ButtonCell(TableView tblView) {
+            this.tableView = tblView;
+            this.cellButton.setGraphic(new ImageView(image));
+            this.cellButton.setMaxSize(image.getWidth(), image.getHeight());
+            this.cellButton.setMinSize(image.getWidth(), image.getHeight());
+        }
+
+        void chargingOnAction() {
+            cellButton.setOnAction(e -> {
+                int selectedIndex = getTableRow().getIndex();
+
+                ChargingEvent event = (ChargingEvent) tableView.getItems().get(selectedIndex);
+                kind = event.getKindOfCharging();
+
+                if (!currentStation.getQueueHandling()) {
+                    event.preProcessing();
+                    if (event.getCondition().equals("charging")) {
+                        event.execution();
+                        if (this.kind.equalsIgnoreCase("slow"))
+                            slowChargingsQueue.fire();
+                        else
+                            fastChargingsQueue.fire();
+                    } else if (event.getCondition().equals("wait"))
+                        Maintenance.queueInsertion();
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText(null);
+                    alert.setContentText("The manual queue handling is disabled.");
+                    alert.showAndWait();
+                }
+            });
+        }
+
+        void disChargingOnAction() {
+            cellButton.setOnAction(e -> {
+                int selectedIndex = getTableRow().getIndex();
+
+                DisChargingEvent event = (DisChargingEvent) tableView.getItems().get(selectedIndex);
+
+                if (!currentStation.getQueueHandling()) {
+                    event.preProcessing();
+                    if (event.getCondition().equals("discharging")) {
+                        event.execution();
+                        dischargingsQueue.fire();
+                    } else if (event.getCondition().equals("wait"))
+                        Maintenance.queueInsertion();
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText(null);
+                    alert.setContentText("The manual queue handling is disabled.");
+                    alert.showAndWait();
+                }
+            });
+        }
+
+        void exchangeOnAction() {
+            cellButton.setOnAction(e -> {
+                int selectedIndex = getTableRow().getIndex();
+
+                ChargingEvent event = (ChargingEvent) tableView.getItems().get(selectedIndex);
+
+                if (!currentStation.getQueueHandling()) {
+                    event.preProcessing();
+                    if (event.getCondition().equals("swapping")) {
+                        event.execution();
+                        exchangesQueue.fire();
+                    } else if (event.getCondition().equals("wait"))
+                        Maintenance.queueInsertion();
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText(null);
+                    alert.setContentText("The manual queue handling is disabled.");
+                    alert.showAndWait();
+                }
+            });
+        }
+
+        protected void updateItem(Boolean t, boolean empty) {
+            super.updateItem(t, empty);
+            if (!empty)
+                setGraphic(cellButton);
         }
     }
 }

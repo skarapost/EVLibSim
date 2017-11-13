@@ -55,9 +55,9 @@ class ToolBox {
             TableColumn<ChargingEvent, Double> askingAmountCol = new TableColumn<>("AskingAmount");
             TableColumn<ChargingEvent, Double> energyToBeReceivedCol = new TableColumn<>("ReceivedEnergy");
             TableColumn<ChargingEvent, String> kindCol = new TableColumn<>("Kind");
-            TableColumn<ChargingEvent, Long> waitingTimeCol = new TableColumn<>("WaitingTime");
-            TableColumn<ChargingEvent, Long> maxWaitingTimeCol = new TableColumn<>("MaxWaitingTime");
-            TableColumn<ChargingEvent, Long> chargingTimeCol = new TableColumn<>("ChargingTime");
+            TableColumn<ChargingEvent, Long> waitingTimeCol = new TableColumn<>("Wait");
+            TableColumn<ChargingEvent, Long> maxWaitingTimeCol = new TableColumn<>("MaxWait");
+            TableColumn<ChargingEvent, Long> chargingTimeCol = new TableColumn<>("ChargTime");
             TableColumn<ChargingEvent, Double> costCol = new TableColumn<>("Cost");
 
             table.getColumns().addAll(idCol, nameCol, kindCol, askingAmountCol, energyToBeReceivedCol, chargingTimeCol,
@@ -93,9 +93,9 @@ class ToolBox {
             TableColumn<DisChargingEvent, Integer> idCol = new TableColumn<>("Id");
             TableColumn<DisChargingEvent, String> nameCol = new TableColumn<>("StationName");
             TableColumn<DisChargingEvent, Double> amountOfEnergyCol = new TableColumn<>("GivenAmount");
-            TableColumn<DisChargingEvent, Long> waitingTimeCol = new TableColumn<>("WaitingTime");
-            TableColumn<DisChargingEvent, Long> maxWaitingTimeCol = new TableColumn<>("MaxWaitingTime");
-            TableColumn<DisChargingEvent, Long> disChargingTimeCol = new TableColumn<>("DisChargingTime");
+            TableColumn<DisChargingEvent, Long> waitingTimeCol = new TableColumn<>("Wait");
+            TableColumn<DisChargingEvent, Long> maxWaitingTimeCol = new TableColumn<>("MaxWait");
+            TableColumn<DisChargingEvent, Long> disChargingTimeCol = new TableColumn<>("DisChargTime");
             TableColumn<DisChargingEvent, Double> profitCol = new TableColumn<>("Profit");
 
             table.getColumns().addAll(idCol, nameCol, amountOfEnergyCol, disChargingTimeCol, waitingTimeCol, maxWaitingTimeCol, profitCol);
@@ -127,9 +127,9 @@ class ToolBox {
 
             TableColumn<ChargingEvent, Integer> idCol = new TableColumn<>("Id");
             TableColumn<ChargingEvent, String> nameCol = new TableColumn<>("StationName");
-            TableColumn<ChargingEvent, Long> waitingTimeCol = new TableColumn<>("WaitingTime");
-            TableColumn<ChargingEvent, Long> maxWaitingTimeCol = new TableColumn<>("MaxWaitingTime");
-            TableColumn<ChargingEvent, Long> chargingTimeCol = new TableColumn<>("ChargingTime");
+            TableColumn<ChargingEvent, Long> waitingTimeCol = new TableColumn<>("Wait");
+            TableColumn<ChargingEvent, Long> maxWaitingTimeCol = new TableColumn<>("MaxWait");
+            TableColumn<ChargingEvent, Long> chargingTimeCol = new TableColumn<>("ChargTime");
             TableColumn<ChargingEvent, Double> profitCol = new TableColumn<>("Cost");
 
             table.getColumns().addAll(idCol, nameCol, chargingTimeCol, waitingTimeCol, maxWaitingTimeCol, profitCol);
@@ -162,8 +162,8 @@ class ToolBox {
             TableColumn<ParkingEvent, String> nameCol = new TableColumn<>("StationName");
             TableColumn<ParkingEvent, Double> askingAmountCol = new TableColumn<>("AskingAmount");
             TableColumn<ParkingEvent, Double> energyaToBeReceivedCol = new TableColumn<>("ReceivedEnergy");
-            TableColumn<ParkingEvent, String> parkingTimeCol = new TableColumn<>("ParkingTime");
-            TableColumn<ParkingEvent, Long> chargingTimeCol = new TableColumn<>("ChargingTime");
+            TableColumn<ParkingEvent, String> parkingTimeCol = new TableColumn<>("ParkTime");
+            TableColumn<ParkingEvent, Long> chargingTimeCol = new TableColumn<>("ChargTime");
             TableColumn<ParkingEvent, Double> costCol = new TableColumn<>("Cost");
             table.getColumns().addAll(idCol, nameCol, askingAmountCol, energyaToBeReceivedCol, parkingTimeCol, chargingTimeCol, costCol);
 
