@@ -92,12 +92,10 @@
 }
 
 .menu-bar {
-    -fx-pref-height: 40;
-    -fx-min-height: 40;
-    -fx-max-height: 40;
+    -fx-pref-height: 50;
+    -fx-min-height: 50;
+    -fx-max-height: 50;
     -fx-background-color: -fx-color-500;
-    -fx-padding: 0 16 0 16;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);
     -fx-alignment: center-left;
 }
 

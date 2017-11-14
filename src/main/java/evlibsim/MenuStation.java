@@ -8,14 +8,11 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
 import java.util.Arrays;
@@ -466,8 +463,7 @@ class MenuStation {
                 return;
             Maintenance.cleanScreen();
             ObservableList<Charger> result = FXCollections.observableArrayList();
-            for (int i = 0; i < currentStation.getChargers().length; i++)
-                result.add(currentStation.getChargers()[i]);
+            result.addAll(Arrays.asList(currentStation.getChargers()));
             TableView<Charger> table = new TableView<>();
             table.setMaxSize(600, 500);
             table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -487,7 +483,7 @@ class MenuStation {
             idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
             nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
             kindCol.setCellValueFactory(new PropertyValueFactory<>("kindOfCharging"));
-            occupiedCol.setCellValueFactory(new PropertyValueFactory<>("occupied"));
+            occupiedCol.setCellValueFactory(p -> new SimpleBooleanProperty(p.getValue().getChargingEvent() != null));
             table.setItems(result);
             root.setCenter(table);
         });
@@ -498,8 +494,7 @@ class MenuStation {
                 return;
             Maintenance.cleanScreen();
             ObservableList<DisCharger> result = FXCollections.observableArrayList();
-            for (int i = 0; i < currentStation.getDisChargers().length; i++)
-                result.add(currentStation.getDisChargers()[i]);
+            result.addAll(Arrays.asList(currentStation.getDisChargers()));
             TableView<DisCharger> table = new TableView<>();
             table.setMaxSize(600, 500);
             table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -517,7 +512,7 @@ class MenuStation {
             table.getColumns().addAll(idCol, nameCol, occupiedCol, deleteCol);
             idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
             nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
-            occupiedCol.setCellValueFactory(new PropertyValueFactory<>("occupied"));
+            occupiedCol.setCellValueFactory(p -> new SimpleBooleanProperty(p.getValue().getDisChargingEvent() != null));
             table.setItems(result);
             root.setCenter(table);
         });
@@ -528,8 +523,7 @@ class MenuStation {
                 return;
             Maintenance.cleanScreen();
             ObservableList<ExchangeHandler> result = FXCollections.observableArrayList();
-            for (int i = 0; i < currentStation.getExchangeHandlers().length; i++)
-                result.add(currentStation.getExchangeHandlers()[i]);
+            result.addAll(Arrays.asList(currentStation.getExchangeHandlers()));
             TableView<ExchangeHandler> table = new TableView<>();
             table.setMaxSize(600, 500);
             table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -547,7 +541,7 @@ class MenuStation {
             table.getColumns().addAll(idCol, nameCol, occupiedCol, deleteCol);
             idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
             nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
-            occupiedCol.setCellValueFactory(new PropertyValueFactory<>("occupied"));
+            occupiedCol.setCellValueFactory(p -> new SimpleBooleanProperty(p.getValue().getChargingEvent() != null));
             table.setItems(result);
             root.setCenter(table);
         });
@@ -558,8 +552,7 @@ class MenuStation {
                 return;
             Maintenance.cleanScreen();
             ObservableList<ParkingSlot> result = FXCollections.observableArrayList();
-            for (int i = 0; i < currentStation.getParkingSlots().length; i++)
-                result.add(currentStation.getParkingSlots()[i]);
+            result.addAll(Arrays.asList(currentStation.getParkingSlots()));
             TableView<ParkingSlot> table = new TableView<>();
             table.setMaxSize(600, 500);
             table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -577,7 +570,7 @@ class MenuStation {
             table.getColumns().addAll(idCol, nameCol, occupiedCol, deleteCol);
             idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
             nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
-            occupiedCol.setCellValueFactory(new PropertyValueFactory<>("occupied"));
+            occupiedCol.setCellValueFactory(p -> new SimpleBooleanProperty(p.getValue().getParkingEvent() != null));
             table.setItems(result);
             root.setCenter(table);
         });
@@ -619,24 +612,23 @@ class MenuStation {
             if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
-            ObservableList<ExchangeHandler> result = FXCollections.observableArrayList();
-            for (int i = 0; i < currentStation.getExchangeHandlers().length; i++)
-                result.add(currentStation.getExchangeHandlers()[i]);
-            TableView<ExchangeHandler> table = new TableView<>();
+            ObservableList<Battery> result = FXCollections.observableArrayList();
+            result.addAll(Arrays.asList(currentStation.getBatteries()));
+            TableView<Battery> table = new TableView<>();
             table.setMaxSize(600, 500);
             table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
             TableColumn deleteCol = new TableColumn("Delete");
             deleteCol.setEditable(false);
-            deleteCol.setCellValueFactory((Callback<TableColumn.CellDataFeatures<ExchangeHandler, Boolean>, ObservableValue>) param -> new SimpleBooleanProperty(param.getValue() != null));
-            deleteCol.setCellFactory((Callback<TableColumn<ExchangeHandler, Boolean>, TableCell<ExchangeHandler, Boolean>>) param -> {
+            deleteCol.setCellValueFactory((Callback<TableColumn.CellDataFeatures<Battery, Boolean>, ObservableValue>) param -> new SimpleBooleanProperty(param.getValue() != null));
+            deleteCol.setCellFactory((Callback<TableColumn<Battery, Boolean>, TableCell<Battery, Boolean>>) param -> {
                 ButtonCell btn = new ButtonCell(table);
                 btn.batteriesOnAction();
                 return btn;
             });
-            TableColumn<ExchangeHandler, Integer> idCol = new TableColumn<>("Id");
-            TableColumn<ExchangeHandler, Double> capacityCol = new TableColumn<>("Capacity");
-            TableColumn<ExchangeHandler, Double> remainingAmountCol = new TableColumn<>("RemAmount");
-            TableColumn<ExchangeHandler, Integer> numberOfChargingsCol = new TableColumn<>("NumberOfChargings");
+            TableColumn<Battery, Integer> idCol = new TableColumn<>("Id");
+            TableColumn<Battery, Double> capacityCol = new TableColumn<>("Capacity");
+            TableColumn<Battery, Double> remainingAmountCol = new TableColumn<>("RemAmount");
+            TableColumn<Battery, Integer> numberOfChargingsCol = new TableColumn<>("NumberOfChargings");
             table.getColumns().addAll(idCol, capacityCol, remainingAmountCol, numberOfChargingsCol, deleteCol);
             idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
             capacityCol.setCellValueFactory(new PropertyValueFactory<>("capacity"));
@@ -840,9 +832,9 @@ class MenuStation {
         return stationM;
     }
 
-    private static class ButtonCell<T> extends TableCell<T, Boolean>{
-        private Button cellButton = new Button();
-        private TableView tableview;
+    private static class ButtonCell<T> extends TableCell<T, Boolean> {
+        private final Button cellButton = new Button();
+        private final TableView tableview;
 
         ButtonCell(TableView tblView) {
             this.cellButton.setGraphic(new ImageView(image));
@@ -950,7 +942,7 @@ class MenuStation {
         @Override
         protected void updateItem(Boolean t, boolean empty) {
             super.updateItem(t, empty);
-            if(!empty)
+            if (!empty)
                 setGraphic(cellButton);
         }
     }

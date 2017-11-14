@@ -9,20 +9,20 @@
     <version>1.0</version>
 
     <properties>
-      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-      <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
 
     <dependencies>
-      <dependency>
-         <groupId>evlib</groupId>
-         <artifactId>evlib</artifactId>
-         <version>1.0</version>
-      </dependency>
+        <dependency>
+            <groupId>evlib</groupId>
+            <artifactId>evlib</artifactId>
+            <version>1.0</version>
+        </dependency>
     </dependencies>
 
     <build>
-      <finalName>evlibsim</finalName>
+        <finalName>evlibsim</finalName>
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>

@@ -44,6 +44,7 @@ class ToolBox {
             if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
+            refreshButton.setDisable(false);
 
             ObservableList<ChargingEvent> result = FXCollections.observableArrayList(ChargingEvent.chargingLog);
             TableView<ChargingEvent> table = new TableView<>();
@@ -84,6 +85,7 @@ class ToolBox {
             if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
+            refreshButton.setDisable(false);
 
             ObservableList<DisChargingEvent> result = FXCollections.observableArrayList(DisChargingEvent.dischargingLog);
             TableView<DisChargingEvent> table = new TableView<>();
@@ -119,6 +121,7 @@ class ToolBox {
             if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
+            refreshButton.setDisable(false);
 
             ObservableList<ChargingEvent> result = FXCollections.observableArrayList(ChargingEvent.exchangeLog);
             TableView<ChargingEvent> table = new TableView<>();
@@ -152,6 +155,7 @@ class ToolBox {
             if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
+            refreshButton.setDisable(false);
 
             ObservableList<ParkingEvent> result = FXCollections.observableArrayList(ParkingEvent.parkLog);
             TableView<ParkingEvent> table = new TableView<>();

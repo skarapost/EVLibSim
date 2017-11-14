@@ -11,10 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
 import javafx.util.Callback;
-
-import java.util.function.Predicate;
 
 import static evlibsim.EVLibSim.*;
 
@@ -84,6 +81,7 @@ class View {
             if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
+            refreshButton.setDisable(false);
             ObservableList<ChargingEvent> result = FXCollections.observableArrayList();
 
             for (int i = 0; i < currentStation.getSlow().getSize(); i++)
@@ -124,6 +122,7 @@ class View {
             if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
+            refreshButton.setDisable(false);
             ObservableList<DisChargingEvent> result = FXCollections.observableArrayList();
 
             for (int i = 0; i < currentStation.getDischarging().getSize(); i++)
@@ -164,6 +163,7 @@ class View {
             if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
+            refreshButton.setDisable(false);
             ObservableList<ChargingEvent> result = FXCollections.observableArrayList();
 
             for (int i = 0; i < currentStation.getExchange().getSize(); i++)
@@ -204,7 +204,8 @@ class View {
             if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
-            grid.setMaxSize(700, 700);
+            refreshButton.setDisable(false);
+            grid.setMaxSize(800, 700);
             ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
             for (int i = 0; i < currentStation.getSources().length; i++) {
                 switch (currentStation.getSources()[i]) {
@@ -320,13 +321,6 @@ class View {
             barChart.getData().add(dataSeries1);
 
             grid.add(barChart, 1, 1);
-            Button refresh = new Button("Refresh");
-            refresh.setOnAction(q -> totalActivity.fire());
-            Predicate buttonPredicate = b -> (b != EVLibSim.cancel);
-            HBox buttonsBox = EVLibSim.getButtonsBox();
-            buttonsBox.getChildren().removeIf(buttonPredicate);
-            buttonsBox.getChildren().add(0, refresh);
-            grid.add(buttonsBox, 0, 2);
         });
 
         //Buttons
@@ -334,6 +328,7 @@ class View {
             if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
+            refreshButton.setDisable(false);
             ObservableList<ChargingEvent> result = FXCollections.observableArrayList();
             for (Charger ch : currentStation.getChargers())
                 if ((ch.getChargingEvent() != null) && ch.getChargingEvent().getCondition().equals("charging"))
@@ -370,6 +365,7 @@ class View {
             if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
+            refreshButton.setDisable(false);
             ObservableList<DisChargingEvent> result = FXCollections.observableArrayList();
             for (DisCharger ch : currentStation.getDisChargers())
                 if ((ch.getDisChargingEvent() != null) && ch.getDisChargingEvent().getCondition().equals("discharging"))
@@ -401,6 +397,7 @@ class View {
             if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
+            refreshButton.setDisable(false);
             ObservableList<ChargingEvent> result = FXCollections.observableArrayList();
             for (ExchangeHandler ch : currentStation.getExchangeHandlers())
                 if ((ch.getChargingEvent() != null) && ch.getChargingEvent().getCondition().equals("swapping"))
@@ -426,6 +423,7 @@ class View {
             if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
+            refreshButton.setDisable(false);
             ObservableList<ParkingEvent> result = FXCollections.observableArrayList();
             for (ParkingSlot ch : currentStation.getParkingSlots())
                 if ((ch.getParkingEvent() != null) && (ch.getParkingEvent().getCondition().equals("parking") || ch.getParkingEvent().getCondition().equals("charging")))
@@ -463,10 +461,9 @@ class View {
         }
     }
 
-    private static class ButtonCell<T> extends TableCell<T, Boolean>
-    {
-        private Button cellButton = new Button();
-        private TableView tableView;
+    private static class ButtonCell<T> extends TableCell<T, Boolean> {
+        private final Button cellButton = new Button();
+        private final TableView tableView;
         private String kind = null;
 
         ButtonCell(TableView tblView) {
