@@ -4,6 +4,7 @@ import evlib.ev.Battery;
 import evlib.ev.Driver;
 import evlib.ev.ElectricVehicle;
 import evlib.station.*;
+import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -44,6 +45,7 @@ class Event {
     private static final Button policyCreation1 = new Button("Creation");
     private static final Button policyCreation2 = new Button("Creation");
     private static String kindOfCharging;
+    private static String type;
 
     //Builds the Event category in the main MenuBar
     static Menu createEventMenu() {
@@ -76,8 +78,17 @@ class Event {
             boo = new TextField();
             grid.add(boo, 3, 1);
             textfields.add(boo);
-            foo = new Label("Amount of energy: ");
-            grid.add(foo, 0, 2);
+            ChoiceBox<String> cb = new ChoiceBox<String>(FXCollections.observableArrayList("Energy", "Money"));
+            type = "Energy";
+            cb.getSelectionModel().selectedIndexProperty().addListener((ov, value, newValue) -> {
+                if (newValue.intValue() == 0)
+                    type = "Energy";
+                else
+                    type = "Money";
+            });
+            cb.getSelectionModel().selectFirst();
+            cb.setMaxWidth(150);
+            grid.add(cb, 0, 2);
             boo = new TextField();
             grid.add(boo, 1, 2);
             textfields.add(boo);
@@ -88,30 +99,17 @@ class Event {
             textfields.add(boo);
             foo = new Label("Kind of charging: ");
             EVLibSim.grid.add(foo, 0, 3);
-            MenuBar sourc = new MenuBar();
-            sourc.setId("menubar");
-            sourc.setMaxWidth(100);
-            Menu src = new Menu("Kinds");
-            ToggleGroup r = new ToggleGroup();
-            RadioMenuItem slow = new RadioMenuItem("slow");
-            RadioMenuItem fast = new RadioMenuItem("fast");
-            r.getToggles().addAll(slow, fast);
-            slow.setSelected(true);
-            kindOfCharging = "slow";
-            r.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
-                if (slow.isSelected())
-                    kindOfCharging = "slow";
-                else
+            kindOfCharging = "fast";
+            cb = new ChoiceBox(FXCollections.observableArrayList("Fast", "Slow"));
+            cb.getSelectionModel().selectedIndexProperty().addListener((ov, value, newValue) -> {
+                if (newValue.intValue() == 0)
                     kindOfCharging = "fast";
+                else
+                    kindOfCharging = "slow";
             });
-            src.getItems().addAll(slow, fast);
-            sourc.getMenus().add(src);
-            grid.add(sourc, 1, 3);
-            foo = new Label("Money: ");
-            grid.add(foo, 2, 3);
-            boo = new TextField();
-            grid.add(boo, 3, 3);
-            textfields.add(boo);
+            cb.getSelectionModel().selectFirst();
+            cb.setMaxWidth(150);
+            grid.add(cb, 1, 3);
             //Suggestion button in the New ChargingEvent MenuItem
             suggest1.setOnAction(eu -> {
                 Stage popupwindow = new Stage();
@@ -641,20 +639,11 @@ class Event {
             if (Double.parseDouble(textfields.get(2).getText()) < 0 ||
                     Double.parseDouble(textfields.get(3).getText()) < 0 ||
                     Double.parseDouble(textfields.get(4).getText()) < 0 ||
-                    Double.parseDouble(textfields.get(5).getText()) < 0 ||
-                    Double.parseDouble(textfields.get(6).getText()) < 0) {
+                    Double.parseDouble(textfields.get(5).getText()) < 0) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setHeaderText(null);
                 alert.setContentText("Please fill with positive numbers or zero.");
-                alert.showAndWait();
-                return;
-            }
-            if (Double.parseDouble(textfields.get(4).getText()) == 0 && Double.parseDouble(textfields.get(6).getText()) == 0) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText(null);
-                alert.setContentText("Money and asking amount cannot be both zero.");
                 alert.showAndWait();
                 return;
             }
@@ -666,7 +655,7 @@ class Event {
                 alert.showAndWait();
                 return;
             }
-            if (Double.parseDouble(textfields.get(4).getText()) > (Double.parseDouble(textfields.get(2).getText()) - Double.parseDouble(textfields.get(3).getText()))) {
+            if ((Double.parseDouble(textfields.get(4).getText()) > (Double.parseDouble(textfields.get(2).getText()) - Double.parseDouble(textfields.get(3).getText())))&&(type.equalsIgnoreCase("Energy"))) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setHeaderText(null);
@@ -681,10 +670,10 @@ class Event {
                 ElectricVehicle el = new ElectricVehicle(textfields.get(1).getText());
                 el.setBattery(b);
                 el.setDriver(d);
-                if (!Objects.equals(textfields.get(4).getText(), "0"))
+                if (type.equalsIgnoreCase("Energy"))
                     ch = new ChargingEvent(currentStation, el, Double.parseDouble(textfields.get(4).getText()), kindOfCharging);
                 else
-                    ch = new ChargingEvent(currentStation, el, kindOfCharging, Double.parseDouble(textfields.get(6).getText()));
+                    ch = new ChargingEvent(currentStation, el, kindOfCharging, Double.parseDouble(textfields.get(4).getText()));
                 ch.setWaitingTime(Long.parseLong(textfields.get(5).getText()));
                 ch.preProcessing();
                 if (ch.getCondition().equals("ready")) {

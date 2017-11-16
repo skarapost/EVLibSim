@@ -25,7 +25,6 @@ import static evlibsim.EVLibSim.*;
 class MenuStation {
 
     static final MenuItem newChargingStationMI = new MenuItem("New station");
-    static final ScrollPane scroll = new ScrollPane();
     private static final Menu stationM = new Menu("Station");
     private static final Menu chargersM = new Menu("Charger");
     private static final MenuItem newChargerMI = new MenuItem("New charger");
@@ -49,8 +48,8 @@ class MenuStation {
     private static final Button batteryCreationB = new Button("Creation");
     private static final Image image = new Image(MenuStation.class.getResourceAsStream("/d.png"));
     static RadioMenuItem cs;
-    private static boolean automaticHandling;
-    private static boolean automaticUpdate;
+    private static String automaticHandling;
+    private static String automaticUpdate;
     private static String kindOfCharging;
 
     static Menu createStationMenu() {
@@ -101,19 +100,58 @@ class MenuStation {
             textfields.add(boo);
             foo = new Label("Energy sources: ");
             EVLibSim.grid.add(foo, 0, 3);
-            MenuBar sourc = new MenuBar();
-            sourc.setId("menubar");
-            sourc.setMaxWidth(100);
-            Menu src = new Menu("Choice");
-            RadioMenuItem sol = new RadioMenuItem("Solar");
-            RadioMenuItem win = new RadioMenuItem("Wind");
-            RadioMenuItem wav = new RadioMenuItem("Wave");
-            RadioMenuItem hydr = new RadioMenuItem("Hydroelectric");
-            RadioMenuItem non = new RadioMenuItem("Nonrenewable");
-            RadioMenuItem geo = new RadioMenuItem("Geothermal");
-            src.getItems().addAll(sol, win, wav, hydr, non, geo);
-            sourc.getMenus().add(src);
-            EVLibSim.grid.add(sourc, 1, 3);
+            CheckBox chb1 = new CheckBox("Solar");
+            CustomMenuItem item1 = new CustomMenuItem(chb1);
+            chb1.setOnAction(d -> {
+                if (chb1.isSelected() == true)
+                    energies.add("Solar");
+                else
+                    energies.remove("Solar");
+            });
+            CheckBox chb2 = new CheckBox("Wind");
+            CustomMenuItem item2 = new CustomMenuItem(chb2);
+            chb2.setOnAction(d -> {
+                if (chb2.isSelected() == true)
+                    energies.add("Wind");
+                else
+                    energies.remove("Wind");
+            });
+            CheckBox chb3 = new CheckBox("Nonrenewable");
+            CustomMenuItem item3 = new CustomMenuItem(chb3);
+            chb3.setOnAction(d -> {
+                if (chb3.isSelected() == true)
+                    energies.add("Nonrenewable");
+                else
+                    energies.remove("Nonrenewable");
+            });
+            CheckBox chb4 = new CheckBox("Wave");
+            CustomMenuItem item4 = new CustomMenuItem(chb4);
+            chb4.setOnAction(d -> {
+                if (chb4.isSelected() == true)
+                    energies.add("Wave");
+                else
+                    energies.remove("Wave");
+            });
+            CheckBox chb5 = new CheckBox("Geothermal");
+            CustomMenuItem item5 = new CustomMenuItem(chb5);
+            chb5.setOnAction(d -> {
+                if (chb5.isSelected() == true)
+                    energies.add("Geothermal");
+                else
+                    energies.remove("Geothermal");
+            });
+            CheckBox chb6 = new CheckBox("Hydroelectric");
+            CustomMenuItem item6 = new CustomMenuItem(chb6);
+            chb6.setOnAction(d -> {
+                if (chb6.isSelected() == true)
+                    energies.add("Hydroelectric");
+                else
+                    energies.remove("Hydroelectric");
+            });
+            MenuButton menuButton = new MenuButton("Choices");
+            menuButton.setMaxWidth(150);
+            menuButton.getItems().setAll(item1, item2, item3, item4, item5, item6);
+            EVLibSim.grid.add(menuButton, 1, 3);
             foo = new Label("Charging fee per unit: ");
             EVLibSim.grid.add(foo, 2, 3);
             boo = new TextField("1.0");
@@ -154,38 +192,32 @@ class MenuStation {
             boo = new TextField("0.01");
             EVLibSim.grid.add(boo, 1, 7);
             textfields.add(boo);
-            foo = new Label("Automatic energy update: ");
+            foo = new Label("Energy update: ");
             EVLibSim.grid.add(foo, 2, 7);
-            sourc = new MenuBar();
-            sourc.setId("menubar");
-            sourc.setMaxWidth(100);
-            src = new Menu("Choice");
-            ToggleGroup r = new ToggleGroup();
-            RadioMenuItem te = new RadioMenuItem("True");
-            RadioMenuItem fe = new RadioMenuItem("False");
-            r.getToggles().addAll(te, fe);
-            te.setSelected(true);
-            automaticUpdate = true;
-            r.selectedToggleProperty().addListener((observable, newValue, oldValue) -> automaticUpdate = te.isSelected());
-            src.getItems().addAll(te, fe);
-            sourc.getMenus().add(src);
-            EVLibSim.grid.add(sourc, 3, 7);
-            foo = new Label("Automatic queue handling: ");
+            automaticUpdate = "Automatic";
+            ChoiceBox cb = new ChoiceBox(FXCollections.observableArrayList("Automatic", "Manual"));
+            cb.setMaxWidth(150);
+            cb.getSelectionModel().selectFirst();
+            cb.getSelectionModel().selectedIndexProperty().addListener((ov, oldValue, newValue) -> {
+                if (newValue.intValue() == 0)
+                    automaticUpdate = "Automatic";
+                else
+                    automaticUpdate = "Manual";
+            });
+            EVLibSim.grid.add(cb, 3, 7);
+            foo = new Label("Queue handling: ");
             EVLibSim.grid.add(foo, 0, 8);
-            sourc = new MenuBar();
-            sourc.setMaxWidth(100);
-            sourc.setId("menubar");
-            src = new Menu("Choice");
-            ToggleGroup t = new ToggleGroup();
-            RadioMenuItem tr = new RadioMenuItem("True");
-            RadioMenuItem fa = new RadioMenuItem("False");
-            t.getToggles().addAll(tr, fa);
-            tr.setSelected(true);
-            automaticHandling = true;
-            t.selectedToggleProperty().addListener((observable, oldValue, newValue) -> automaticHandling = tr.isSelected());
-            src.getItems().addAll(tr, fa);
-            sourc.getMenus().add(src);
-            EVLibSim.grid.add(sourc, 1, 8);
+            automaticHandling = "Automatic";
+            ChoiceBox cb1 = new ChoiceBox(FXCollections.observableArrayList("Automatic", "Manual"));
+            cb1.setMaxWidth(150);
+            cb1.getSelectionModel().selectFirst();
+            cb1.getSelectionModel().selectedIndexProperty().addListener((ov, oldValue, newValue) -> {
+                if (newValue.intValue() == 0)
+                    automaticUpdate = "Automatic";
+                else
+                    automaticUpdate = "Manual";
+            });
+            EVLibSim.grid.add(cb1, 1, 8);
             foo = new Label("Update space(millis): ");
             EVLibSim.grid.add(foo, 2, 8);
             boo = new TextField("1000");
@@ -203,42 +235,6 @@ class MenuStation {
             grid.add(buttonsBox, 0, 10, 2, 1);
             chargingStationCreationB.setDefaultButton(true);
             EVLibSim.root.setCenter(EVLibSim.grid);
-            sol.setOnAction((ActionEvent et) -> {
-                if (sol.isSelected())
-                    EVLibSim.energies.add("Solar");
-                else
-                    EVLibSim.energies.remove("Solar");
-            });
-            win.setOnAction((ActionEvent et) -> {
-                if (win.isSelected())
-                    EVLibSim.energies.add("Wind");
-                else
-                    EVLibSim.energies.remove("Wind");
-            });
-            wav.setOnAction((ActionEvent et) -> {
-                if (wav.isSelected())
-                    EVLibSim.energies.add("Wave");
-                else
-                    EVLibSim.energies.remove("Wave");
-            });
-            hydr.setOnAction((ActionEvent et) -> {
-                if (hydr.isSelected())
-                    EVLibSim.energies.add("Hydroelectric");
-                else
-                    EVLibSim.energies.remove("Hydroelectric");
-            });
-            geo.setOnAction((ActionEvent et) -> {
-                if (geo.isSelected())
-                    EVLibSim.energies.add("Geothermal");
-                else
-                    EVLibSim.energies.remove("Geothermal");
-            });
-            non.setOnAction((ActionEvent et) -> {
-                if (non.isSelected())
-                    EVLibSim.energies.add("Nonrenewable");
-                else
-                    EVLibSim.energies.remove("Nonrenewable");
-            });
         });
 
         //Implements the New Charger MenuItem
@@ -252,25 +248,17 @@ class MenuStation {
             Label foo;
             foo = new Label("Kind: ");
             EVLibSim.grid.add(foo, 0, 0);
-            MenuBar sourc = new MenuBar();
-            sourc.setId("menubar");
-            sourc.setMaxWidth(100);
-            Menu src = new Menu("Choice");
-            ToggleGroup r = new ToggleGroup();
-            RadioMenuItem slow = new RadioMenuItem("Slow");
-            RadioMenuItem fast = new RadioMenuItem("Fast");
-            r.getToggles().addAll(slow, fast);
-            kindOfCharging = "slow";
-            slow.setSelected(true);
-            r.selectedToggleProperty().addListener((observable, newValue, oldValue) -> {
-                if (slow.isSelected())
-                    kindOfCharging = "slow";
-                else
+            kindOfCharging = "fast";
+            ChoiceBox cb = new ChoiceBox(FXCollections.observableArrayList("Fast", "Slow"));
+            cb.getSelectionModel().selectedIndexProperty().addListener((ov, value, newValue) -> {
+                if (newValue.intValue() == 0)
                     kindOfCharging = "fast";
+                else
+                    kindOfCharging = "slow";
             });
-            src.getItems().addAll(slow, fast);
-            sourc.getMenus().add(src);
-            grid.add(sourc, 1, 0);
+            cb.getSelectionModel().selectFirst();
+            cb.setMaxWidth(150);
+            grid.add(cb, 1, 0);
             foo = new Label("Name: ");
             EVLibSim.grid.add(foo, 0, 1);
             boo = new TextField();
@@ -347,7 +335,7 @@ class MenuStation {
             if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
-            EVLibSim.grid.setMaxSize(700, 600);
+            EVLibSim.grid.setMaxSize(750, 600);
             EVLibSim.energies.clear();
             TextField boo;
             Label foo;
@@ -356,10 +344,6 @@ class MenuStation {
             boo = new TextField(currentStation.getName());
             EVLibSim.grid.add(boo, 1, 0);
             textfields.add(boo);
-            MenuBar sourc = new MenuBar();
-            sourc.setId("menubar");
-            sourc.setMaxWidth(70);
-            Menu src;
             foo = new Label("Charging fee per unit: ");
             EVLibSim.grid.add(foo, 2, 0);
             boo = new TextField(Double.toString(currentStation.getUnitPrice()));
@@ -400,44 +384,42 @@ class MenuStation {
             boo = new TextField(Double.toString(currentStation.getInductiveRatio()));
             EVLibSim.grid.add(boo, 1, 4);
             textfields.add(boo);
-            foo = new Label("Automatic energy update: ");
+            foo = new Label("Energy update: ");
             EVLibSim.grid.add(foo, 2, 4);
-            sourc = new MenuBar();
-            sourc.setId("menubar");
-            sourc.setMaxWidth(100);
-            src = new Menu("Choice");
-            ToggleGroup r = new ToggleGroup();
-            RadioMenuItem te = new RadioMenuItem("True");
-            RadioMenuItem fe = new RadioMenuItem("False");
-            r.getToggles().addAll(te, fe);
-            automaticUpdate = currentStation.getUpdateMode();
-            if (automaticUpdate)
-                te.setSelected(true);
-            else
-                fe.setSelected(true);
-            r.selectedToggleProperty().addListener((observable, oldValue, newValue) -> automaticUpdate = te.isSelected());
-            src.getItems().addAll(te, fe);
-            sourc.getMenus().add(src);
-            EVLibSim.grid.add(sourc, 3, 4);
-            foo = new Label("Automatic queue handling: ");
+            ChoiceBox cb = new ChoiceBox(FXCollections.observableArrayList("Automatic", "Manual"));
+            if (currentStation.getUpdateMode()) {
+                automaticUpdate = "Automatic";
+                cb.getSelectionModel().selectFirst();
+            }
+            else {
+                automaticUpdate = "Manual";
+                cb.getSelectionModel().selectLast();
+            }
+            cb.getSelectionModel().selectedIndexProperty().addListener((ov, oldValue, newValue) -> {
+                if (newValue.intValue() == 0)
+                    automaticUpdate = "Automatic";
+                else
+                    automaticUpdate = "Manual";
+            });
+            EVLibSim.grid.add(cb, 3, 4);
+            foo = new Label("Queue handling: ");
             EVLibSim.grid.add(foo, 0, 5);
-            sourc = new MenuBar();
-            sourc.setId("menubar");
-            sourc.setMaxWidth(100);
-            src = new Menu("Choice");
-            ToggleGroup t = new ToggleGroup();
-            RadioMenuItem tr = new RadioMenuItem("True");
-            RadioMenuItem fa = new RadioMenuItem("False");
-            t.getToggles().addAll(tr, fa);
-            automaticHandling = currentStation.getQueueHandling();
-            if (automaticHandling)
-                tr.setSelected(true);
-            else
-                fa.setSelected(true);
-            t.selectedToggleProperty().addListener((observable, oldValue, newValue) -> automaticHandling = tr.isSelected());
-            src.getItems().addAll(tr, fa);
-            sourc.getMenus().add(src);
-            EVLibSim.grid.add(sourc, 1, 5);
+            cb = new ChoiceBox(FXCollections.observableArrayList("Automatic", "Manual"));
+            if (currentStation.getQueueHandling()) {
+                automaticHandling = "Automatic";
+                cb.getSelectionModel().selectFirst();
+            }
+            else {
+                automaticHandling = "Manual";
+                cb.getSelectionModel().selectLast();
+            }
+            cb.getSelectionModel().selectedIndexProperty().addListener((ov, oldValue, newValue) -> {
+                if (newValue.intValue() == 0)
+                    automaticHandling = "Automatic";
+                else
+                    automaticHandling = "Manual";
+            });
+            EVLibSim.grid.add(cb, 1, 5);
             foo = new Label("Update space(millis): ");
             EVLibSim.grid.add(foo, 2, 5);
             boo = new TextField(Long.toString(currentStation.getUpdateSpace()));
@@ -720,10 +702,17 @@ class MenuStation {
                 st.setDisChargingRatio(Double.parseDouble(textfields.get(12).getText()));
                 st.setInductiveChargingRatio(Double.parseDouble(textfields.get(13).getText()));
                 st.setTimeofExchange(Long.parseLong(textfields.get(15).getText()));
-                st.setAutomaticUpdateMode(automaticUpdate);
-                Energy.updateStorage.setDisable(automaticUpdate);
+                if(automaticUpdate.equals("Automatic"))
+                    st.setAutomaticUpdateMode(true);
+                else {
+                    st.setAutomaticUpdateMode(false);
+                    Energy.updateStorage.setDisable(false);
+                }
                 st.setUpdateSpace(Integer.parseInt(textfields.get(14).getText()));
-                st.setAutomaticQueueHandling(automaticHandling);
+                if(automaticHandling.equals("Automatic"))
+                    st.setAutomaticQueueHandling(true);
+                else
+                    st.setAutomaticQueueHandling(false);
                 if (textfields.get(1).getText() != null) {
                     int len = Integer.parseInt(textfields.get(1).getText());
                     for (int i = 0; i < len; i++)
@@ -763,14 +752,13 @@ class MenuStation {
                     else if (Objects.equals(enr, "Hydroelectric"))
                         st.addEnergySource(new Hydroelectric());
                 }
+                Maintenance.completionMessage("ChargingStation creation");
                 stations.add(st);
                 cs = new RadioMenuItem(st.getName());
                 group.getToggles().add(cs);
                 s.getItems().add(cs);
                 if (s.getItems().size() == 1)
                     cs.setSelected(true);
-                Maintenance.completionMessage("ChargingStation creation");
-                newChargingStationMI.fire();
             } catch (Exception ex) {
                 Maintenance.refillBlanks();
                 newChargingStationMI.fire();
@@ -790,13 +778,18 @@ class MenuStation {
                 currentStation.setChargingRatioSlow((Double.parseDouble(textfields.get(6).getText())));
                 currentStation.setDisChargingRatio((Double.parseDouble(textfields.get(7).getText())));
                 currentStation.setInductiveChargingRatio((Double.parseDouble(textfields.get(8).getText())));
-                currentStation.setAutomaticUpdateMode(automaticUpdate);
-                Energy.updateStorage.setDisable(automaticUpdate);
-                currentStation.setUpdateSpace((Integer.parseInt(textfields.get(9).getText())));
                 currentStation.setTimeofExchange(Long.parseLong(textfields.get(10).getText()));
-                currentStation.setAutomaticQueueHandling(automaticHandling);
-                cs = (RadioMenuItem) group.getSelectedToggle();
-                cs.setText(currentStation.getName());
+                if(automaticUpdate.equals("Automatic"))
+                    currentStation.setAutomaticUpdateMode(true);
+                else {
+                    currentStation.setAutomaticUpdateMode(false);
+                    Energy.updateStorage.setDisable(false);
+                }
+                currentStation.setUpdateSpace(Integer.parseInt(textfields.get(9).getText()));
+                if(automaticHandling.equals("Automatic"))
+                    currentStation.setAutomaticQueueHandling(true);
+                else
+                    currentStation.setAutomaticQueueHandling(false);
                 Maintenance.completionMessage("modification of the charging station");
                 modifyChargingStationMI.fire();
             } catch (Exception ex) {

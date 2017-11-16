@@ -44,9 +44,9 @@ public class EVLibSim extends Application {
     static final ToggleGroup group = new ToggleGroup();
     //Top menu bar
     private static final MenuBar leftMenuBar = new MenuBar();
-    private static final MenuBar rightMenuBar = new MenuBar();
+    private static final HBox rightMenuBar = new HBox();
     private static final HBox topMenuBar = new HBox();
-    static final Menu refreshButton = new Menu();
+    static final Button refreshButton = new Button();
     private static final Image refreshImage = new Image("/refresh.png");
     //File menu item
     private static final Menu file = new Menu("File");
@@ -102,6 +102,8 @@ public class EVLibSim extends Application {
     private static final Image image = new Image(View.class.getResourceAsStream("/backArrow.png"));
     static final Button cancel = new Button("Cancel");
 
+    static String panel;
+
     public static void main(String[] args) {
         launch(args);
     }
@@ -126,13 +128,59 @@ public class EVLibSim extends Application {
                 Energy.createEnergyMenu());
 
         refreshButton.setGraphic(new ImageView(refreshImage));
-        rightMenuBar.getMenus().add(refreshButton);
 
-        Region spacer = new Region();
-        spacer.getStyleClass().add("menu-bar");
-        HBox.setHgrow(spacer, Priority.SOMETIMES);
+        refreshButton.setOnAction(et -> {
+            switch (panel) {
+                case "slowChargingsQueue":
+                        View.slowChargingsQueue.fire();
+                        break;
+                case "fastChargingsQueue":
+                        View.fastChargingsQueue.fire();
+                        break;
+                case "dischargingsQueue":
+                        View.dischargingsQueue.fire();
+                        break;
+                case "exchangesQueue":
+                        View.exchangesQueue.fire();
+                        break;
+                case "chargingsMenuItem":
+                        View.chargingsMenuItem.fire();
+                        break;
+                case "dischargingsMenuItem":
+                        View.dischargingsMenuItem.fire();
+                        break;
+                case "exchangesMenuItem":
+                        View.exchangesMenuItem.fire();
+                        break;
+                case "parkingsMenuItem":
+                        View.parkingsMenuItem.fire();
+                        break;
+                case "chargingLog":
+                        ToolBox.chargingLog.fire();
+                        break;
+                case "disChargingLog":
+                        ToolBox.disChargingLog.fire();
+                        break;
+                case "exchangeLog":
+                        ToolBox.exchangeLog.fire();
+                        break;
+                case "parkingLog":
+                        ToolBox.parkingLog.fire();
+                        break;
+                case "overview":
+                        View.totalActivity.fire();
+                        break;
+                default:
+                        System.out.println("System problem");
+            }
+        });
 
-        topMenuBar.getChildren().addAll(leftMenuBar, spacer, rightMenuBar);
+        rightMenuBar.getStyleClass().add("menu-bar");
+        HBox.setHgrow(leftMenuBar, Priority.ALWAYS);
+        HBox.setHgrow(rightMenuBar, Priority.NEVER);
+        rightMenuBar.getChildren().add(refreshButton);
+
+        topMenuBar.getChildren().addAll(leftMenuBar, rightMenuBar);
 
         scene.getStylesheets().add(EVLibSim.class.getResource("/EVLibSim.css").toExternalForm());
 

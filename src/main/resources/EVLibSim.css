@@ -12,6 +12,7 @@
     -fx-background-size: cover;
 }
 
+/*Style for the central grid*/
 .grid {
     -fx-background-color: -fx-color-500;
     -fx-background-radius: 5px;
@@ -19,10 +20,11 @@
     -fx-hgap: 15px;
     -fx-vgap: 15px;
     -fx-border-radius: 5px;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.4), 5, 0.4, 0, 0);
     -fx-alignment: center;
 }
 
+/*Style for left panel's boxes*/
 .box {
     -fx-background-color: -fx-color-500;
     -fx-background-radius: 0 5 5 0;
@@ -34,46 +36,10 @@
     -fx-alignment: center;
     -fx-padding: 5;
     -fx-spacing: 15;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.4), 5, 0.4, 0, 0);
 }
 
-#menubar {
-    -fx-alignment: center;
-    -fx-background-radius: 10;
-    -fx-border-radius: 10;
-    -fx-effect: none;
-    -fx-background-color: #ECEDED;
-    -fx-font-weight: bold;
-    -fx-min-width: 150;
-}
-
-#menubar .menu-button {
-    -fx-background-color: #ECEDED;
-}
-
-#menubar .menu-item {
-    -fx-background-color: #ECEDED;
-}
-
-#menubar .context-menu {
-    -fx-background-color: #ECEDED;
-}
-
-#menubar > .container > .menu-button > .label {
-    -fx-graphic: url("downArrow.png");
-}
-
-.scroll {
-    -fx-background-color: -fx-color-500;
-    -fx-background: -fx-color-500;
-    -fx-background-radius: 5 5 5 5;
-    -fx-padding: 15 15 15 15;
-    -fx-hgap: 20;
-    -fx-vgap: 20;
-    -fx-border-radius: 5 5 5 5;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);
-}
-
+/*Styling for each button*/
 .button {
     -fx-background-color: white;
     -fx-background-radius: 10;
@@ -91,6 +57,7 @@
     -fx-border-color: #3C7DC8;
 }
 
+/*Styling for the menubar, menu items, content menu*/
 .menu-bar {
     -fx-pref-height: 50;
     -fx-min-height: 50;
@@ -99,30 +66,13 @@
     -fx-alignment: center-left;
 }
 
-.menu-bar > .container > .menu-button {
-    -fx-background-color: -fx-color-500;
-}
-
 .menu-bar .context-menu {
     -fx-background-color: -fx-color-500;
 }
 
-.menu-bar > .container > .menu-button > .label {
-    -fx-text-fill: -fx-my-menu-font-color;
+.menu-bar > .container > .menu-button > .label,
+.menu-item .label{
     -fx-font: 15 Lato;
-}
-
-.menu-item {
-    -fx-background-color: -fx-color-500;
-}
-
-.menu-item .label {
-    -fx-text-fill: -fx-my-menu-font-color;
-    -fx-font: 15 Lato;
-}
-
-.menu-bar > .container > .menu-button > .label:disabled {
-    -fx-opacity: 1.0;
 }
 
 .menu-bar > .container > .menu-button:hover,
@@ -131,11 +81,11 @@
 .menu-item:hover,
 .menu-item:focused,
 .menu-item:showing {
-    -fx-background-color: -fx-my-menu-color-highlighted;
     -fx-border-radius: 5 5 5 5;
     -fx-background-radius: 5 5 5 5;
 }
 
+/*Styling for textfields*/
 .text-field {
     -fx-background-insets: 0, 1, 2;
     -fx-background-radius: 3, 2, 2;
@@ -148,6 +98,7 @@
     -fx-prompt-text-fill: transparent;
 }
 
+/*Styling for TableView */
 .table-column {
     -fx-alignment: CENTER;
 }

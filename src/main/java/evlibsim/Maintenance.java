@@ -7,7 +7,6 @@ import javafx.scene.control.TextField;
 import java.util.Optional;
 
 import static evlibsim.EVLibSim.*;
-import static evlibsim.MenuStation.scroll;
 
 class Maintenance {
 
@@ -42,7 +41,6 @@ class Maintenance {
         grid.getChildren().clear();
         root.setCenter(null);
         root.setBottom(null);
-        scroll.setContent(null);
         textfields.clear();
     }
 

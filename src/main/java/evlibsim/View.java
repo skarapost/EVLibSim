@@ -21,14 +21,14 @@ class View {
     private static final Menu overview = new Menu("Station overview");
     private static final Menu view = new Menu("View");
     private static final Menu queue = new Menu("Queue of events");
-    private static final MenuItem slowChargingsQueue = new MenuItem("Slow chargings");
-    private static final MenuItem fastChargingsQueue = new MenuItem("Fast chargings");
-    private static final MenuItem dischargingsQueue = new MenuItem("Dischargings");
-    private static final MenuItem exchangesQueue = new MenuItem("Battery exchanges");
-    private static final MenuItem chargingsMenuItem = new MenuItem("Running chargings");
-    private static final MenuItem dischargingsMenuItem = new MenuItem("Running dischargings");
-    private static final MenuItem exchangesMenuItem = new MenuItem("Running battery exchanges");
-    private static final MenuItem parkingsMenuItem = new MenuItem("Running parkings");
+    static final MenuItem slowChargingsQueue = new MenuItem("Slow chargings");
+    static final MenuItem fastChargingsQueue = new MenuItem("Fast chargings");
+    static final MenuItem dischargingsQueue = new MenuItem("Dischargings");
+    static final MenuItem exchangesQueue = new MenuItem("Battery exchanges");
+    static final MenuItem chargingsMenuItem = new MenuItem("Running chargings");
+    static final MenuItem dischargingsMenuItem = new MenuItem("Running dischargings");
+    static final MenuItem exchangesMenuItem = new MenuItem("Running battery exchanges");
+    static final MenuItem parkingsMenuItem = new MenuItem("Running parkings");
     private static final Image image = new Image(View.class.getResourceAsStream("/run.png"));
 
     static Menu createViewMenu() {
@@ -41,6 +41,8 @@ class View {
             if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
+            refreshButton.setDisable(false);
+            EVLibSim.panel = "fastChargingsQueue";
             ObservableList<ChargingEvent> result = FXCollections.observableArrayList();
 
             for (int i = 0; i < currentStation.getFast().getSize(); i++)
@@ -82,6 +84,7 @@ class View {
                 return;
             Maintenance.cleanScreen();
             refreshButton.setDisable(false);
+            EVLibSim.panel = "slowChargingsQueue";
             ObservableList<ChargingEvent> result = FXCollections.observableArrayList();
 
             for (int i = 0; i < currentStation.getSlow().getSize(); i++)
@@ -123,6 +126,7 @@ class View {
                 return;
             Maintenance.cleanScreen();
             refreshButton.setDisable(false);
+            EVLibSim.panel = "dischargingsQueue";
             ObservableList<DisChargingEvent> result = FXCollections.observableArrayList();
 
             for (int i = 0; i < currentStation.getDischarging().getSize(); i++)
@@ -164,6 +168,7 @@ class View {
                 return;
             Maintenance.cleanScreen();
             refreshButton.setDisable(false);
+            EVLibSim.panel = "exchangesQueue";
             ObservableList<ChargingEvent> result = FXCollections.observableArrayList();
 
             for (int i = 0; i < currentStation.getExchange().getSize(); i++)
@@ -205,6 +210,8 @@ class View {
                 return;
             Maintenance.cleanScreen();
             refreshButton.setDisable(false);
+            EVLibSim.panel = "overview";
+            EVLibSim.panel = "overview";
             grid.setMaxSize(800, 700);
             ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
             for (int i = 0; i < currentStation.getSources().length; i++) {
@@ -329,6 +336,7 @@ class View {
                 return;
             Maintenance.cleanScreen();
             refreshButton.setDisable(false);
+            EVLibSim.panel = "chargingsMenuItem";
             ObservableList<ChargingEvent> result = FXCollections.observableArrayList();
             for (Charger ch : currentStation.getChargers())
                 if ((ch.getChargingEvent() != null) && ch.getChargingEvent().getCondition().equals("charging"))
@@ -366,6 +374,7 @@ class View {
                 return;
             Maintenance.cleanScreen();
             refreshButton.setDisable(false);
+            EVLibSim.panel = "dischargingsMenuItem";
             ObservableList<DisChargingEvent> result = FXCollections.observableArrayList();
             for (DisCharger ch : currentStation.getDisChargers())
                 if ((ch.getDisChargingEvent() != null) && ch.getDisChargingEvent().getCondition().equals("discharging"))
@@ -398,6 +407,7 @@ class View {
                 return;
             Maintenance.cleanScreen();
             refreshButton.setDisable(false);
+            EVLibSim.panel = "exchangesMenuItem";
             ObservableList<ChargingEvent> result = FXCollections.observableArrayList();
             for (ExchangeHandler ch : currentStation.getExchangeHandlers())
                 if ((ch.getChargingEvent() != null) && ch.getChargingEvent().getCondition().equals("swapping"))
@@ -424,6 +434,7 @@ class View {
                 return;
             Maintenance.cleanScreen();
             refreshButton.setDisable(false);
+            EVLibSim.panel = "parkingsMenuItem";
             ObservableList<ParkingEvent> result = FXCollections.observableArrayList();
             for (ParkingSlot ch : currentStation.getParkingSlots())
                 if ((ch.getParkingEvent() != null) && (ch.getParkingEvent().getCondition().equals("parking") || ch.getParkingEvent().getCondition().equals("charging")))

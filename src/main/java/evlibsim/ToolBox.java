@@ -20,10 +20,10 @@ import static evlibsim.EVLibSim.*;
 
 class ToolBox {
 
-    private static final Button chargingLog = new Button();
-    private static final Button disChargingLog = new Button();
-    private static final Button exchangeLog = new Button();
-    private static final Button parkingLog = new Button();
+    static final Button chargingLog = new Button();
+    static final Button disChargingLog = new Button();
+    static final Button exchangeLog = new Button();
+    static final Button parkingLog = new Button();
     private static final Button showTotalActivity = new Button();
     private static final Button report = new Button();
     private static final Button totalEnergy = new Button();
@@ -45,6 +45,7 @@ class ToolBox {
                 return;
             Maintenance.cleanScreen();
             refreshButton.setDisable(false);
+            EVLibSim.panel = "chargingLog";
 
             ObservableList<ChargingEvent> result = FXCollections.observableArrayList(ChargingEvent.chargingLog);
             TableView<ChargingEvent> table = new TableView<>();
@@ -86,6 +87,7 @@ class ToolBox {
                 return;
             Maintenance.cleanScreen();
             refreshButton.setDisable(false);
+            EVLibSim.panel = "disChargingLog";
 
             ObservableList<DisChargingEvent> result = FXCollections.observableArrayList(DisChargingEvent.dischargingLog);
             TableView<DisChargingEvent> table = new TableView<>();
@@ -122,6 +124,7 @@ class ToolBox {
                 return;
             Maintenance.cleanScreen();
             refreshButton.setDisable(false);
+            EVLibSim.panel = "exchangeLog";
 
             ObservableList<ChargingEvent> result = FXCollections.observableArrayList(ChargingEvent.exchangeLog);
             TableView<ChargingEvent> table = new TableView<>();
@@ -156,6 +159,7 @@ class ToolBox {
                 return;
             Maintenance.cleanScreen();
             refreshButton.setDisable(false);
+            EVLibSim.panel = "parkingLog";
 
             ObservableList<ParkingEvent> result = FXCollections.observableArrayList(ParkingEvent.parkLog);
             TableView<ParkingEvent> table = new TableView<>();
