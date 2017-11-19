@@ -28,6 +28,9 @@ class Energy {
 
         //Building of NewEnergySource menu item
         newEnergySource.setOnAction(e -> {
+            if (Maintenance.stationCheck())
+                return;
+            Maintenance.cleanScreen();
             List<String> energies = new ArrayList<>();
             String[] a = {"Solar", "Wind", "Wave", "Nonrenewable", "Hydroelectric", "Geothermal", "DisCharging"};
             String[] b = currentStation.getSources();
@@ -72,6 +75,9 @@ class Energy {
 
         //Creates the Delete EnergySource MenuItem
         deleteEnergySource.setOnAction(e -> {
+            if (Maintenance.stationCheck())
+                return;
+            Maintenance.cleanScreen();
             ArrayList<String> energies = new ArrayList<>(Arrays.asList(currentStation.getSources()));
             energies.remove("DisCharging");
             ChoiceDialog<String> dialog = new ChoiceDialog<>(energies.get(0), energies);
@@ -200,7 +206,7 @@ class Energy {
             HBox buttonsBox = EVLibSim.getButtonsBox();
             buttonsBox.getChildren().removeIf(buttonPredicate);
             buttonsBox.getChildren().add(0, sort);
-            grid.add(buttonsBox, 0, 5, 2, 1);
+            grid.add(buttonsBox, 2, 4, 2, 1);
             sort.setDefaultButton(true);
             root.setCenter(grid);
         });
@@ -278,7 +284,7 @@ class Energy {
             HBox buttonsBox = EVLibSim.getButtonsBox();
             buttonsBox.getChildren().removeIf(buttonPredicate);
             buttonsBox.getChildren().add(0, addEnergies);
-            grid.add(buttonsBox, 0, 4, 2, 1);
+            grid.add(buttonsBox, 2, 3, 2, 1);
             addEnergies.setDefaultButton(true);
             root.setCenter(grid);
         });
@@ -311,7 +317,7 @@ class Energy {
                             break;
                     }
                 Maintenance.completionMessage("insertion of energy amounts");
-                newEnergyPackages.fire();
+                startScreen.fire();
             } catch (Exception ex) {
                 Maintenance.refillBlanks();
                 newEnergyPackages.fire();
@@ -365,7 +371,7 @@ class Energy {
                     sources[Integer.parseInt(textfields.get(6).getText()) - 1] = "DisCharging";
                 currentStation.customEnergySorting(sources);
                 Maintenance.completionMessage("sorting");
-                sortEnergies.fire();
+                startScreen.fire();
             } catch (Exception ex) {
                 Maintenance.refillBlanks();
                 sortEnergies.fire();

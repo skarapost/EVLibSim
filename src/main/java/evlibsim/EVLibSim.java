@@ -193,7 +193,7 @@ public class EVLibSim extends Application {
 
         //Configuration of buttons's box
         buttonsBox.getChildren().addAll(EVLibSim.cancel);
-        buttonsBox.setAlignment(Pos.CENTER_LEFT);
+        buttonsBox.setAlignment(Pos.CENTER_RIGHT);
         buttonsBox.setStyle("-fx-background-color: transparent; -fx-spacing: 15px;");
 
         //Global buttons(cancel)

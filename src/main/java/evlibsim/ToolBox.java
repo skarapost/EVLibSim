@@ -206,9 +206,8 @@ class ToolBox {
             fileChooser.setInitialFileName("report.txt");
             fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text Files(.txt)", "*.txt"));
             File selectedFile = fileChooser.showSaveDialog(primaryStage);
-            if (selectedFile != null) {
+            if (selectedFile != null)
                 currentStation.genReport(selectedFile.getPath());
-            }
         });
 
         totalEnergy.setGraphic(new ImageView(image7));

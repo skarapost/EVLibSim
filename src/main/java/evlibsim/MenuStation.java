@@ -172,22 +172,22 @@ class MenuStation {
             boo = new TextField("1.0");
             EVLibSim.grid.add(boo, 1, 5);
             textfields.add(boo);
-            foo = new Label("Fast charging ratio: ");
+            foo = new Label("Fast charging ratio*: ");
             EVLibSim.grid.add(foo, 2, 5);
             boo = new TextField("0.01");
             EVLibSim.grid.add(boo, 3, 5);
             textfields.add(boo);
-            foo = new Label("Slow charging ratio: ");
+            foo = new Label("Slow charging ratio*: ");
             EVLibSim.grid.add(foo, 0, 6);
             boo = new TextField("0.001");
             EVLibSim.grid.add(boo, 1, 6);
             textfields.add(boo);
-            foo = new Label("Discharging ratio: ");
+            foo = new Label("Discharging ratio*: ");
             EVLibSim.grid.add(foo, 2, 6);
             boo = new TextField("0.01");
             EVLibSim.grid.add(boo, 3, 6);
             textfields.add(boo);
-            foo = new Label("Inductive charging ratio: ");
+            foo = new Label("Inductive charging ratio*: ");
             EVLibSim.grid.add(foo, 0, 7);
             boo = new TextField("0.01");
             EVLibSim.grid.add(boo, 1, 7);
@@ -218,7 +218,7 @@ class MenuStation {
                     automaticUpdate = "Manual";
             });
             EVLibSim.grid.add(cb1, 1, 8);
-            foo = new Label("Update space(millis): ");
+            foo = new Label("Update space(milliseconds): ");
             EVLibSim.grid.add(foo, 2, 8);
             boo = new TextField("1000");
             EVLibSim.grid.add(boo, 3, 8);
@@ -232,8 +232,9 @@ class MenuStation {
             HBox buttonsBox = EVLibSim.getButtonsBox();
             buttonsBox.getChildren().removeIf(buttonPredicate);
             buttonsBox.getChildren().add(0, chargingStationCreationB);
-            grid.add(buttonsBox, 0, 10, 2, 1);
+            grid.add(buttonsBox, 2, 10, 2, 1);
             chargingStationCreationB.setDefaultButton(true);
+            grid.add(new Label("*Energy unit per millisecond"), 0, 10);
             EVLibSim.root.setCenter(EVLibSim.grid);
         });
 
@@ -274,8 +275,7 @@ class MenuStation {
         });
 
         //Implements the New DisCharge MenuItem.
-        newDisChargerMI.setOnAction(e ->
-        {
+        newDisChargerMI.setOnAction(e -> {
             if (Maintenance.stationCheck())
                 return;
             TextInputDialog alert = new TextInputDialog();
@@ -293,8 +293,7 @@ class MenuStation {
         });
 
         //Implements the New ExchangeHandler MenuItem.
-        newExchangeHandlerMI.setOnAction(e ->
-        {
+        newExchangeHandlerMI.setOnAction(e -> {
             if (Maintenance.stationCheck())
                 return;
             TextInputDialog alert = new TextInputDialog();
@@ -312,8 +311,7 @@ class MenuStation {
         });
 
         //Implements the New ParkingSlot MenuItem.
-        newParkingSlotMI.setOnAction(e ->
-        {
+        newParkingSlotMI.setOnAction(e -> {
             if (Maintenance.stationCheck())
                 return;
             TextInputDialog alert = new TextInputDialog();
@@ -364,22 +362,22 @@ class MenuStation {
             boo = new TextField(Double.toString(currentStation.getInductivePrice()));
             EVLibSim.grid.add(boo, 1, 2);
             textfields.add(boo);
-            foo = new Label("Fast charging ratio: ");
+            foo = new Label("Fast charging ratio*: ");
             EVLibSim.grid.add(foo, 2, 2);
             boo = new TextField(Double.toString(currentStation.getChargingRatioFast()));
             EVLibSim.grid.add(boo, 3, 2);
             textfields.add(boo);
-            foo = new Label("Slow charging ratio: ");
+            foo = new Label("Slow charging ratio*: ");
             EVLibSim.grid.add(foo, 0, 3);
             boo = new TextField(Double.toString(currentStation.getChargingRatioSlow()));
             EVLibSim.grid.add(boo, 1, 3);
             textfields.add(boo);
-            foo = new Label("Discharging ratio: ");
+            foo = new Label("Discharging ratio*: ");
             EVLibSim.grid.add(foo, 2, 3);
             boo = new TextField(Double.toString(currentStation.getDisChargingRatio()));
             EVLibSim.grid.add(boo, 3, 3);
             textfields.add(boo);
-            foo = new Label("Inductive charging ratio: ");
+            foo = new Label("Inductive charging ratio*: ");
             EVLibSim.grid.add(foo, 0, 4);
             boo = new TextField(Double.toString(currentStation.getInductiveRatio()));
             EVLibSim.grid.add(boo, 1, 4);
@@ -434,8 +432,9 @@ class MenuStation {
             HBox buttonsBox = EVLibSim.getButtonsBox();
             buttonsBox.getChildren().removeIf(buttonPredicate);
             buttonsBox.getChildren().add(0, modifyStationB);
-            grid.add(buttonsBox, 0, 7, 2, 1);
+            grid.add(buttonsBox, 2, 7, 2, 1);
             modifyStationB.setDefaultButton(true);
+            grid.add(new Label("*Energy unit per millisecond"), 0, 7);
             EVLibSim.root.setCenter(EVLibSim.grid);
         });
 
@@ -447,7 +446,7 @@ class MenuStation {
             ObservableList<Charger> result = FXCollections.observableArrayList();
             result.addAll(Arrays.asList(currentStation.getChargers()));
             TableView<Charger> table = new TableView<>();
-            table.setMaxSize(600, 500);
+            table.setMaxSize(700, 500);
             table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
             TableColumn deleteCol = new TableColumn("Delete");
             deleteCol.setEditable(false);
@@ -478,7 +477,7 @@ class MenuStation {
             ObservableList<DisCharger> result = FXCollections.observableArrayList();
             result.addAll(Arrays.asList(currentStation.getDisChargers()));
             TableView<DisCharger> table = new TableView<>();
-            table.setMaxSize(600, 500);
+            table.setMaxSize(700, 500);
             table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
             TableColumn deleteCol = new TableColumn("Delete");
             deleteCol.setEditable(false);
@@ -507,7 +506,7 @@ class MenuStation {
             ObservableList<ExchangeHandler> result = FXCollections.observableArrayList();
             result.addAll(Arrays.asList(currentStation.getExchangeHandlers()));
             TableView<ExchangeHandler> table = new TableView<>();
-            table.setMaxSize(600, 500);
+            table.setMaxSize(700, 500);
             table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
             TableColumn deleteCol = new TableColumn("Delete");
             deleteCol.setEditable(false);
@@ -536,7 +535,7 @@ class MenuStation {
             ObservableList<ParkingSlot> result = FXCollections.observableArrayList();
             result.addAll(Arrays.asList(currentStation.getParkingSlots()));
             TableView<ParkingSlot> table = new TableView<>();
-            table.setMaxSize(600, 500);
+            table.setMaxSize(700, 500);
             table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
             TableColumn deleteCol = new TableColumn("Delete");
             deleteCol.setEditable(false);
@@ -597,7 +596,7 @@ class MenuStation {
             ObservableList<Battery> result = FXCollections.observableArrayList();
             result.addAll(Arrays.asList(currentStation.getBatteries()));
             TableView<Battery> table = new TableView<>();
-            table.setMaxSize(600, 500);
+            table.setMaxSize(700, 500);
             table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
             TableColumn deleteCol = new TableColumn("Delete");
             deleteCol.setEditable(false);
@@ -610,12 +609,14 @@ class MenuStation {
             TableColumn<Battery, Integer> idCol = new TableColumn<>("Id");
             TableColumn<Battery, Double> capacityCol = new TableColumn<>("Capacity");
             TableColumn<Battery, Double> remainingAmountCol = new TableColumn<>("RemAmount");
-            TableColumn<Battery, Integer> numberOfChargingsCol = new TableColumn<>("NumberOfChargings");
-            table.getColumns().addAll(idCol, capacityCol, remainingAmountCol, numberOfChargingsCol, deleteCol);
+            TableColumn<Battery, Integer> numberOfChargingsCol = new TableColumn<>("Chargings");
+            TableColumn<Battery, Integer> maxNumberOfChargings = new TableColumn<>("MaximumChargings");
+            table.getColumns().addAll(idCol, capacityCol, remainingAmountCol, numberOfChargingsCol, maxNumberOfChargings, deleteCol);
             idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
             capacityCol.setCellValueFactory(new PropertyValueFactory<>("capacity"));
             remainingAmountCol.setCellValueFactory(new PropertyValueFactory<>("remAmount"));
             numberOfChargingsCol.setCellValueFactory(new PropertyValueFactory<>("numberOfChargings"));
+            maxNumberOfChargings.setCellValueFactory(new PropertyValueFactory<>("maxNumberOfChargings"));
             table.setItems(result);
             root.setCenter(table);
         });
@@ -640,35 +641,34 @@ class MenuStation {
             });
         });
         //Buttons
-        chargerCreationB.setOnAction(e ->
-        {
-            Charger ch;
-            textfields.forEach(field -> field.setText(field.getText().replaceAll("[^a-zA-Z]", "")));
+        chargerCreationB.setOnAction(e -> {
             try {
+                Charger ch;
+                textfields.forEach(field -> field.setText(field.getText().replaceAll("[^a-zA-Z]", "")));
                 ch = new Charger(currentStation, kindOfCharging);
                 currentStation.addCharger(ch);
                 ch.setName(textfields.get(0).getText());
                 Maintenance.completionMessage("Charger creation");
-                newChargerMI.fire();
+                startScreen.fire();
             } catch (Exception ex) {
                 Maintenance.refillBlanks();
                 newChargerMI.fire();
             }
         });
-        chargingStationCreationB.setOnAction(e ->
-        {
-            if (Maintenance.fieldCompletionCheck())
-                return;
-            textfields.forEach(field -> field.setText(field.getText().replaceAll("[^a-zA-Z0-9.]", "")));
-            if (energies.size() == 0) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText(null);
-                alert.setContentText("Please choose at least one energy source.");
-                alert.showAndWait();
-                return;
-            }
-            if (Double.parseDouble(textfields.get(1).getText()) < 0 ||
+        chargingStationCreationB.setOnAction(e -> {
+            try {
+                if (Maintenance.fieldCompletionCheck())
+                    return;
+                textfields.forEach(field -> field.setText(field.getText().replaceAll("[^a-zA-Z0-9.]", "")));
+                if (energies.size() == 0) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Please choose at least one energy source.");
+                    alert.showAndWait();
+                    return;
+                }
+                if (Double.parseDouble(textfields.get(1).getText()) < 0 ||
                     Double.parseDouble(textfields.get(2).getText()) < 0 ||
                     Double.parseDouble(textfields.get(3).getText()) < 0 ||
                     Double.parseDouble(textfields.get(4).getText()) < 0 ||
@@ -683,14 +683,13 @@ class MenuStation {
                     Double.parseDouble(textfields.get(13).getText()) < 0 ||
                     Double.parseDouble(textfields.get(14).getText()) < 0 ||
                     Double.parseDouble(textfields.get(15).getText()) < 0) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText(null);
-                alert.setContentText("Please fill with positive numbers.");
-                alert.showAndWait();
-                return;
-            }
-            try {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Please fill with positive numbers.");
+                    alert.showAndWait();
+                    return;
+                }
                 ChargingStation st;
                 st = new ChargingStation(textfields.get(0).getText());
                 st.setUnitPrice(Double.parseDouble(textfields.get(6).getText()));
@@ -759,16 +758,18 @@ class MenuStation {
                 s.getItems().add(cs);
                 if (s.getItems().size() == 1)
                     cs.setSelected(true);
+                else
+                    startScreen.fire();
             } catch (Exception ex) {
                 Maintenance.refillBlanks();
                 newChargingStationMI.fire();
             }
         });
         modifyStationB.setOnAction(e -> {
-            if (Maintenance.fieldCompletionCheck())
-                return;
-            textfields.forEach(field -> field.setText(field.getText().replaceAll("[^a-zA-Z0-9.]", "")));
             try {
+                if (Maintenance.fieldCompletionCheck())
+                    return;
+                textfields.forEach(field -> field.setText(field.getText().replaceAll("[^a-zA-Z0-9.]", "")));
                 currentStation.setName(textfields.get(0).getText());
                 currentStation.setUnitPrice(Double.parseDouble(textfields.get(1).getText()));
                 currentStation.setDisUnitPrice(Double.parseDouble(textfields.get(2).getText()));
@@ -791,7 +792,9 @@ class MenuStation {
                 else
                     currentStation.setAutomaticQueueHandling(false);
                 Maintenance.completionMessage("modification of the charging station");
-                modifyChargingStationMI.fire();
+                startScreen.fire();
+                RadioMenuItem item = (RadioMenuItem) group.getSelectedToggle();
+                item.setText(textfields.get(0).getText());
             } catch (Exception ex) {
                 Maintenance.refillBlanks();
                 modifyChargingStationMI.fire();
@@ -800,23 +803,31 @@ class MenuStation {
 
 
         batteryCreationB.setOnAction(e -> {
-            if (Maintenance.fieldCompletionCheck())
-                return;
-            textfields.forEach(field -> field.setText(field.getText().replaceAll("[^0-9.]", "")));
-            if (Double.parseDouble(textfields.get(0).getText()) < Double.parseDouble(textfields.get(1).getText())) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText(null);
-                alert.setContentText("The capacity cannot be smaller than the remaining amount.");
-                alert.showAndWait();
-                return;
-            }
             try {
+                if (Maintenance.fieldCompletionCheck())
+                    return;
+                textfields.forEach(field -> field.setText(field.getText().replaceAll("[^0-9.]", "")));
+                if (Double.parseDouble(textfields.get(0).getText()) < Double.parseDouble(textfields.get(1).getText())) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText(null);
+                    alert.setContentText("The capacity cannot be smaller than the remaining amount.");
+                    alert.showAndWait();
+                    return;
+                }
+                if (Double.parseDouble(textfields.get(2).getText()) < 1) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText(null);
+                    alert.setContentText("The number of chargings has to be at least 1.");
+                    alert.showAndWait();
+                    return;
+                }
                 Battery bat = new Battery(Integer.parseInt(textfields.get(1).getText()), Integer.parseInt(textfields.get(0).getText()));
                 bat.setMaxNumberOfChargings(Integer.parseInt(textfields.get(2).getText()));
                 currentStation.joinBattery(bat);
                 Maintenance.completionMessage("Battery creation");
-                newBatteryMI.fire();
+                startScreen.fire();
             } catch (Exception ex) {
                 Maintenance.refillBlanks();
                 newBatteryMI.fire();
