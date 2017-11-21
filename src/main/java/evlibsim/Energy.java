@@ -30,7 +30,6 @@ class Energy {
         newEnergySource.setOnAction(e -> {
             if (Maintenance.stationCheck())
                 return;
-            Maintenance.cleanScreen();
             List<String> energies = new ArrayList<>();
             String[] a = {"Solar", "Wind", "Wave", "Nonrenewable", "Hydroelectric", "Geothermal", "DisCharging"};
             String[] b = currentStation.getSources();
@@ -77,7 +76,6 @@ class Energy {
         deleteEnergySource.setOnAction(e -> {
             if (Maintenance.stationCheck())
                 return;
-            Maintenance.cleanScreen();
             ArrayList<String> energies = new ArrayList<>(Arrays.asList(currentStation.getSources()));
             energies.remove("DisCharging");
             ChoiceDialog<String> dialog = new ChoiceDialog<>(energies.get(0), energies);

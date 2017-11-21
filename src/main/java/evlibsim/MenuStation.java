@@ -103,7 +103,7 @@ class MenuStation {
             CheckBox chb1 = new CheckBox("Solar");
             CustomMenuItem item1 = new CustomMenuItem(chb1);
             chb1.setOnAction(d -> {
-                if (chb1.isSelected() == true)
+                if (chb1.isSelected())
                     energies.add("Solar");
                 else
                     energies.remove("Solar");
@@ -111,7 +111,7 @@ class MenuStation {
             CheckBox chb2 = new CheckBox("Wind");
             CustomMenuItem item2 = new CustomMenuItem(chb2);
             chb2.setOnAction(d -> {
-                if (chb2.isSelected() == true)
+                if (chb2.isSelected())
                     energies.add("Wind");
                 else
                     energies.remove("Wind");
@@ -119,7 +119,7 @@ class MenuStation {
             CheckBox chb3 = new CheckBox("Nonrenewable");
             CustomMenuItem item3 = new CustomMenuItem(chb3);
             chb3.setOnAction(d -> {
-                if (chb3.isSelected() == true)
+                if (chb3.isSelected())
                     energies.add("Nonrenewable");
                 else
                     energies.remove("Nonrenewable");
@@ -127,7 +127,7 @@ class MenuStation {
             CheckBox chb4 = new CheckBox("Wave");
             CustomMenuItem item4 = new CustomMenuItem(chb4);
             chb4.setOnAction(d -> {
-                if (chb4.isSelected() == true)
+                if (chb4.isSelected())
                     energies.add("Wave");
                 else
                     energies.remove("Wave");
@@ -135,7 +135,7 @@ class MenuStation {
             CheckBox chb5 = new CheckBox("Geothermal");
             CustomMenuItem item5 = new CustomMenuItem(chb5);
             chb5.setOnAction(d -> {
-                if (chb5.isSelected() == true)
+                if (chb5.isSelected())
                     energies.add("Geothermal");
                 else
                     energies.remove("Geothermal");
@@ -143,7 +143,7 @@ class MenuStation {
             CheckBox chb6 = new CheckBox("Hydroelectric");
             CustomMenuItem item6 = new CustomMenuItem(chb6);
             chb6.setOnAction(d -> {
-                if (chb6.isSelected() == true)
+                if (chb6.isSelected())
                     energies.add("Hydroelectric");
                 else
                     energies.remove("Hydroelectric");
@@ -660,6 +660,15 @@ class MenuStation {
                 if (Maintenance.fieldCompletionCheck())
                     return;
                 textfields.forEach(field -> field.setText(field.getText().replaceAll("[^a-zA-Z0-9.]", "")));
+                for (ChargingStation station: stations)
+                    if (station.getName().equals(textfields.get(0).getText())) {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Error");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Please select another name.");
+                        alert.showAndWait();
+                        return;
+                    }
                 if (energies.size() == 0) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Error");
@@ -792,9 +801,9 @@ class MenuStation {
                 else
                     currentStation.setAutomaticQueueHandling(false);
                 Maintenance.completionMessage("modification of the charging station");
-                startScreen.fire();
                 RadioMenuItem item = (RadioMenuItem) group.getSelectedToggle();
                 item.setText(textfields.get(0).getText());
+                startScreen.fire();
             } catch (Exception ex) {
                 Maintenance.refillBlanks();
                 modifyChargingStationMI.fire();

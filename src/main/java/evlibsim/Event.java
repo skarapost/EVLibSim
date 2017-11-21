@@ -78,7 +78,7 @@ class Event {
             boo = new TextField();
             grid.add(boo, 3, 1);
             textfields.add(boo);
-            ChoiceBox<String> cb = new ChoiceBox<String>(FXCollections.observableArrayList("Energy", "Money"));
+            ChoiceBox<String> cb = new ChoiceBox<>(FXCollections.observableArrayList("Energy", "Money"));
             type = "Energy";
             cb.getSelectionModel().selectedIndexProperty().addListener((ov, value, newValue) -> {
                 if (newValue.intValue() == 0)
@@ -354,8 +354,7 @@ class Event {
             root.setCenter(grid);
         });
         //Implements the New ChargingEvent(exchange)
-        exchange.setOnAction(e ->
-        {
+        exchange.setOnAction(e -> {
             if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
@@ -483,8 +482,7 @@ class Event {
             root.setCenter(grid);
         });
         //Implements the New ParkingEvent MenuItem
-        parking.setOnAction(e ->
-        {
+        parking.setOnAction(e -> {
             if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();

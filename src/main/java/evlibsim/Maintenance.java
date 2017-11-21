@@ -38,6 +38,7 @@ class Maintenance {
 
     static void cleanScreen() {
         EVLibSim.refreshButton.setDisable(true);
+        energies.clear();
         grid.getChildren().clear();
         root.setCenter(null);
         root.setBottom(null);

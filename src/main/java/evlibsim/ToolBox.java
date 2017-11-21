@@ -3,6 +3,7 @@ package evlibsim;
 import evlib.station.ChargingEvent;
 import evlib.station.DisChargingEvent;
 import evlib.station.ParkingEvent;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Orientation;
@@ -13,6 +14,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
+import javafx.scene.control.ToolBar;
 
 import java.io.File;
 
@@ -53,24 +55,23 @@ class ToolBox {
             table.setMaxSize(900, 500);
 
             TableColumn<ChargingEvent, Integer> idCol = new TableColumn<>("Id");
-            TableColumn<ChargingEvent, String> nameCol = new TableColumn<>("StationName");
+            TableColumn<ChargingEvent, String> stationNameCol = new TableColumn<>("StationName");
             TableColumn<ChargingEvent, Double> askingAmountCol = new TableColumn<>("AskingAmount");
             TableColumn<ChargingEvent, Double> energyToBeReceivedCol = new TableColumn<>("ReceivedEnergy");
-            TableColumn<ChargingEvent, String> kindCol = new TableColumn<>("Kind");
-            TableColumn<ChargingEvent, Long> waitingTimeCol = new TableColumn<>("Wait");
+            TableColumn<ChargingEvent, String> nameCol = new TableColumn<>("Name");
+            TableColumn<ChargingEvent, String> brandCol = new TableColumn<>("Brand");
             TableColumn<ChargingEvent, Long> maxWaitingTimeCol = new TableColumn<>("MaxWait");
             TableColumn<ChargingEvent, Long> chargingTimeCol = new TableColumn<>("ChargTime");
             TableColumn<ChargingEvent, Double> costCol = new TableColumn<>("Cost");
 
-            table.getColumns().addAll(idCol, nameCol, kindCol, askingAmountCol, energyToBeReceivedCol, chargingTimeCol,
-                    waitingTimeCol, maxWaitingTimeCol, costCol);
+            table.getColumns().addAll(idCol, nameCol, brandCol, stationNameCol, askingAmountCol, energyToBeReceivedCol, chargingTimeCol, maxWaitingTimeCol, costCol);
 
             idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
-            nameCol.setCellValueFactory(new PropertyValueFactory<>("chargingStationName"));
+            stationNameCol.setCellValueFactory(new PropertyValueFactory<>("chargingStationName"));
             askingAmountCol.setCellValueFactory(new PropertyValueFactory<>("amountOfEnergy"));
             energyToBeReceivedCol.setCellValueFactory(new PropertyValueFactory<>("energyToBeReceived"));
-            kindCol.setCellValueFactory(new PropertyValueFactory<>("kindOfCharging"));
-            waitingTimeCol.setCellValueFactory(new PropertyValueFactory<>("waitingTime"));
+            nameCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getDriver().getName()));
+            brandCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getBrand()));
             maxWaitingTimeCol.setCellValueFactory(new PropertyValueFactory<>("maxWaitingTime"));
             chargingTimeCol.setCellValueFactory(new PropertyValueFactory<>("chargingTime"));
             costCol.setCellValueFactory(new PropertyValueFactory<>("cost"));
@@ -95,19 +96,21 @@ class ToolBox {
             table.setMaxSize(900, 500);
 
             TableColumn<DisChargingEvent, Integer> idCol = new TableColumn<>("Id");
-            TableColumn<DisChargingEvent, String> nameCol = new TableColumn<>("StationName");
+            TableColumn<DisChargingEvent, String> stationNameCol = new TableColumn<>("StationName");
             TableColumn<DisChargingEvent, Double> amountOfEnergyCol = new TableColumn<>("GivenAmount");
-            TableColumn<DisChargingEvent, Long> waitingTimeCol = new TableColumn<>("Wait");
+            TableColumn<DisChargingEvent, String> nameCol = new TableColumn<>("Name");
+            TableColumn<DisChargingEvent, String> brandCol = new TableColumn<>("Brand");
             TableColumn<DisChargingEvent, Long> maxWaitingTimeCol = new TableColumn<>("MaxWait");
             TableColumn<DisChargingEvent, Long> disChargingTimeCol = new TableColumn<>("DisChargTime");
             TableColumn<DisChargingEvent, Double> profitCol = new TableColumn<>("Profit");
 
-            table.getColumns().addAll(idCol, nameCol, amountOfEnergyCol, disChargingTimeCol, waitingTimeCol, maxWaitingTimeCol, profitCol);
+            table.getColumns().addAll(idCol, nameCol, brandCol, stationNameCol, amountOfEnergyCol, disChargingTimeCol, maxWaitingTimeCol, profitCol);
 
             idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
-            nameCol.setCellValueFactory(new PropertyValueFactory<>("chargingStationName"));
+            stationNameCol.setCellValueFactory(new PropertyValueFactory<>("chargingStationName"));
             amountOfEnergyCol.setCellValueFactory(new PropertyValueFactory<>("amountOfEnergy"));
-            waitingTimeCol.setCellValueFactory(new PropertyValueFactory<>("waitingTime"));
+            nameCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getDriver().getName()));
+            brandCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getBrand()));
             maxWaitingTimeCol.setCellValueFactory(new PropertyValueFactory<>("maxWaitingTime"));
             disChargingTimeCol.setCellValueFactory(new PropertyValueFactory<>("disChargingTime"));
             profitCol.setCellValueFactory(new PropertyValueFactory<>("profit"));
@@ -132,20 +135,22 @@ class ToolBox {
             table.setMaxSize(900, 500);
 
             TableColumn<ChargingEvent, Integer> idCol = new TableColumn<>("Id");
-            TableColumn<ChargingEvent, String> nameCol = new TableColumn<>("StationName");
-            TableColumn<ChargingEvent, Long> waitingTimeCol = new TableColumn<>("Wait");
+            TableColumn<ChargingEvent, String> stationNameCol = new TableColumn<>("StationName");
+            TableColumn<ChargingEvent, String> nameCol = new TableColumn<>("Name");
+            TableColumn<ChargingEvent, String> brandCol = new TableColumn<>("Brand");
             TableColumn<ChargingEvent, Long> maxWaitingTimeCol = new TableColumn<>("MaxWait");
             TableColumn<ChargingEvent, Long> chargingTimeCol = new TableColumn<>("ChargTime");
-            TableColumn<ChargingEvent, Double> profitCol = new TableColumn<>("Cost");
+            TableColumn<ChargingEvent, Double> costCol = new TableColumn<>("Cost");
 
-            table.getColumns().addAll(idCol, nameCol, chargingTimeCol, waitingTimeCol, maxWaitingTimeCol, profitCol);
+            table.getColumns().addAll(idCol, nameCol, brandCol, stationNameCol, chargingTimeCol, maxWaitingTimeCol, costCol);
 
             idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
-            nameCol.setCellValueFactory(new PropertyValueFactory<>("chargingStationName"));
-            waitingTimeCol.setCellValueFactory(new PropertyValueFactory<>("waitingTime"));
+            stationNameCol.setCellValueFactory(new PropertyValueFactory<>("chargingStationName"));
+            brandCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getBrand()));
+            nameCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getDriver().getName()));
             maxWaitingTimeCol.setCellValueFactory(new PropertyValueFactory<>("maxWaitingTime"));
             chargingTimeCol.setCellValueFactory(new PropertyValueFactory<>("chargingTime"));
-            profitCol.setCellValueFactory(new PropertyValueFactory<>("cost"));
+            costCol.setCellValueFactory(new PropertyValueFactory<>("cost"));
             table.setItems(result);
 
             root.setCenter(table);
@@ -167,16 +172,20 @@ class ToolBox {
             table.setMaxSize(900, 500);
 
             TableColumn<ParkingEvent, Integer> idCol = new TableColumn<>("Id");
-            TableColumn<ParkingEvent, String> nameCol = new TableColumn<>("StationName");
+            TableColumn<ParkingEvent, String> stationNameCol = new TableColumn<>("StationName");
+            TableColumn<ParkingEvent, String> nameCol = new TableColumn<>("Name");
+            TableColumn<ParkingEvent, String> brandCol = new TableColumn<>("Brand");
             TableColumn<ParkingEvent, Double> askingAmountCol = new TableColumn<>("AskingAmount");
             TableColumn<ParkingEvent, Double> energyaToBeReceivedCol = new TableColumn<>("ReceivedEnergy");
             TableColumn<ParkingEvent, String> parkingTimeCol = new TableColumn<>("ParkTime");
             TableColumn<ParkingEvent, Long> chargingTimeCol = new TableColumn<>("ChargTime");
             TableColumn<ParkingEvent, Double> costCol = new TableColumn<>("Cost");
-            table.getColumns().addAll(idCol, nameCol, askingAmountCol, energyaToBeReceivedCol, parkingTimeCol, chargingTimeCol, costCol);
+            table.getColumns().addAll(idCol, nameCol, brandCol, stationNameCol, askingAmountCol, energyaToBeReceivedCol, parkingTimeCol, chargingTimeCol, costCol);
 
             idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
-            nameCol.setCellValueFactory(new PropertyValueFactory<>("chargingStationName"));
+            stationNameCol.setCellValueFactory(new PropertyValueFactory<>("chargingStationName"));
+            nameCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getDriver().getName()));
+            brandCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getBrand()));
             askingAmountCol.setCellValueFactory(new PropertyValueFactory<>("amountOfEnergy"));
             energyaToBeReceivedCol.setCellValueFactory(new PropertyValueFactory<>("energyToBeReceived"));
             parkingTimeCol.setCellValueFactory(new PropertyValueFactory<>("parkingTime"));
@@ -284,7 +293,7 @@ class ToolBox {
         });
     }
 
-    static javafx.scene.control.ToolBar createToolBar() {
+    static ToolBar createToolBar() {
         bar.getItems().addAll(chargingLog, disChargingLog, exchangeLog, parkingLog,
                 showTotalActivity, totalEnergy, report);
         bar.setOrientation(Orientation.VERTICAL);
