@@ -413,7 +413,7 @@ class Event {
                 VBox inside2 = new VBox();
                 inside2.setMaxSize(100, 30);
                 inside2.setMinSize(100, 30);
-                title = new Label("BatInventory");
+                title = new Label("Batteries");
                 inside2.getChildren().add(title);
                 inside2.setStyle("-fx-background-color:#F0F1F3; -fx-border-radius: 5 5 0 0; -fx-background-radius: 5 5 0 0; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
                 inside2.setPadding(new Insets(10, 10, 10, 10));

@@ -7,11 +7,13 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.scene.Node;
 import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
 import static evlibsim.EVLibSim.*;
@@ -19,9 +21,6 @@ import static evlibsim.EVLibSim.*;
 class View {
 
     static final MenuItem totalActivity = new MenuItem("Overview");
-    private static final Menu overview = new Menu("Station overview");
-    private static final Menu view = new Menu("View");
-    private static final Menu queue = new Menu("Queue of events");
     static final MenuItem slowChargingsQueue = new MenuItem("Slow chargings");
     static final MenuItem fastChargingsQueue = new MenuItem("Fast chargings");
     static final MenuItem dischargingsQueue = new MenuItem("Dischargings");
@@ -30,6 +29,9 @@ class View {
     static final MenuItem dischargingsMenuItem = new MenuItem("Running dischargings");
     static final MenuItem exchangesMenuItem = new MenuItem("Running battery exchanges");
     static final MenuItem parkingsMenuItem = new MenuItem("Running parkings");
+    private static final Menu overview = new Menu("Station overview");
+    private static final Menu view = new Menu("View");
+    private static final Menu queue = new Menu("Queue of events");
     private static final Image image = new Image(View.class.getResourceAsStream("/run.png"));
 
     static Menu createViewMenu() {
@@ -53,7 +55,7 @@ class View {
             table.setMaxSize(900, 500);
             table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-            TableColumn executionCol = new TableColumn("Execution");
+            TableColumn executionCol = new TableColumn<>("Execution");
             executionCol.setEditable(false);
 
             executionCol.setCellValueFactory((Callback<TableColumn.CellDataFeatures<ChargingEvent, Boolean>, ObservableValue>) param -> new SimpleBooleanProperty(param.getValue() != null));
@@ -275,74 +277,157 @@ class View {
                         break;
                 }
             }
+
             PieChart chart = new PieChart(pieChartData);
             chart.setTitle("Energy Division");
             chart.setLegendVisible(false);
-            chart.setLabelLineLength(25);
+            chart.setLabelLineLength(10);
             chart.setClockwise(true);
+            chart.setLabelsVisible(true);
             chart.getData().forEach(data -> {
                 Tooltip tooltip = new Tooltip();
                 tooltip.setText(String.valueOf(data.getPieValue()));
                 Tooltip.install(data.getNode(), tooltip);
             });
-            grid.add(chart, 0, 0);
+
+            applyCustomColorSequence(pieChartData, "#B96E6E", "#B9A46E", "#A1B96E", "#6EB97A", "#6EB9AF", "#6E8DB9", "#B96E82");
+
+            grid.add(new VBox(chart), 0, 0);
+
             root.setCenter(grid);
-            applyCustomColorSequence(pieChartData, "aqua", "bisque", "chocolate", "coral", "crimson", "yellow", "black");
+
             CategoryAxis xAxis = new CategoryAxis();
             NumberAxis yAxis = new NumberAxis();
-            BarChart barChart = new BarChart(xAxis, yAxis);
-            XYChart.Series dataSeries1 = new XYChart.Series();
-            dataSeries1.setName("Running Events");
+            BarChart<String, Number> barChart = new BarChart<>(xAxis, yAxis);
+            XYChart.Series<String, Number> dataSeries1 = new XYChart.Series<>();
+            barChart.setTitle("Running Events");
             int counter = 0;
             for (Charger ch : currentStation.getChargers())
                 if ((ch.getChargingEvent() != null) && ch.getChargingEvent().getCondition().equals("charging"))
                     counter++;
-            dataSeries1.getData().add(new XYChart.Data("Char", counter));
+            dataSeries1.getData().add(new XYChart.Data<>("Char", counter));
             counter = 0;
             for (DisCharger ch : currentStation.getDisChargers())
                 if ((ch.getDisChargingEvent() != null) && ch.getDisChargingEvent().getCondition().equals("discharging"))
                     counter++;
-            dataSeries1.getData().add(new XYChart.Data("Dis", counter));
+            dataSeries1.getData().add(new XYChart.Data<>("Dis", counter));
             counter = 0;
             for (ExchangeHandler ch : currentStation.getExchangeHandlers())
                 if ((ch.getChargingEvent() != null) && ch.getChargingEvent().getCondition().equals("swapping"))
                     counter++;
-            dataSeries1.getData().add(new XYChart.Data("Exch", counter));
+            dataSeries1.getData().add(new XYChart.Data<>("Exch", counter));
             counter = 0;
             for (ParkingSlot ch : currentStation.getParkingSlots())
                 if ((ch.getParkingEvent() != null) && (ch.getParkingEvent().getCondition().equals("parking") || ch.getParkingEvent().getCondition().equals("charging")))
                     counter++;
-            dataSeries1.getData().add(new XYChart.Data("Park", counter));
+            dataSeries1.getData().add(new XYChart.Data<>("Park", counter));
             barChart.getData().add(dataSeries1);
 
-            grid.add(barChart, 0, 1);
+            for (XYChart.Series<String, Number> s : barChart.getData()) {
+                for (XYChart.Data<String, Number> d : s.getData()) {
+                    if (d.getXValue().equals("Char"))
+                        Tooltip.install(d.getNode(), new Tooltip("Chargings"));
+                    else if (d.getXValue().equals("Dis"))
+                        Tooltip.install(d.getNode(), new Tooltip("Dischargings"));
+                    else if (d.getXValue().equals("Exch"))
+                        Tooltip.install(d.getNode(), new Tooltip("Battery exchanges"));
+                    else
+                        Tooltip.install(d.getNode(), new Tooltip("Parkings/inductive chargings"));
+                }
+            }
+
+            Node n = barChart.lookup(".data0.chart-bar");
+            n.setStyle("-fx-bar-fill: #B97879");
+            n = barChart.lookup(".data1.chart-bar");
+            n.setStyle("-fx-bar-fill: #8378B9");
+            n = barChart.lookup(".data2.chart-bar");
+            n.setStyle("-fx-bar-fill: #78B9A2");
+            n = barChart.lookup(".data3.chart-bar");
+            n.setStyle("-fx-bar-fill: #87B978");
+
+
+            barChart.setLegendVisible(false);
+
+            grid.add(new VBox(barChart), 0, 1);
 
             xAxis = new CategoryAxis();
             yAxis = new NumberAxis();
-            barChart = new BarChart(xAxis, yAxis);
-            dataSeries1 = new XYChart.Series();
-            dataSeries1.setName("Infastructure");
-            dataSeries1.getData().add(new XYChart.Data("Slow", currentStation.SLOW_CHARGERS));
-            dataSeries1.getData().add(new XYChart.Data("Fast", currentStation.FAST_CHARGERS));
-            dataSeries1.getData().add(new XYChart.Data("Dis", currentStation.getDisChargers().length));
-            dataSeries1.getData().add(new XYChart.Data("Park", currentStation.getParkingSlots().length));
-            dataSeries1.getData().add(new XYChart.Data("Exch", currentStation.getExchangeHandlers().length));
+            barChart = new BarChart<>(xAxis, yAxis);
+            barChart.setTitle("Infrastructure");
+            dataSeries1 = new XYChart.Series<>();
+            dataSeries1.getData().add(new XYChart.Data<>("Slow", currentStation.SLOW_CHARGERS));
+            dataSeries1.getData().add(new XYChart.Data<>("Fast", currentStation.FAST_CHARGERS));
+            dataSeries1.getData().add(new XYChart.Data<>("Dis", currentStation.getDisChargers().length));
+            dataSeries1.getData().add(new XYChart.Data<>("Exch", currentStation.getExchangeHandlers().length));
+            dataSeries1.getData().add(new XYChart.Data<>("Park", currentStation.getParkingSlots().length));
             barChart.getData().add(dataSeries1);
 
-            grid.add(barChart, 1, 0);
+            for (XYChart.Series<String, Number> s : barChart.getData()) {
+                for (XYChart.Data<String, Number> d : s.getData()) {
+                    if (d.getXValue().equals("Slow"))
+                        Tooltip.install(d.getNode(), new Tooltip("Slow chargers"));
+                    else if (d.getXValue().equals("Fast"))
+                        Tooltip.install(d.getNode(), new Tooltip("Fast chargers"));
+                    else if (d.getXValue().equals("Dis"))
+                        Tooltip.install(d.getNode(), new Tooltip("Dischargers"));
+                    else if (d.getXValue().equals("Park"))
+                        Tooltip.install(d.getNode(), new Tooltip("Parking slots"));
+                    else
+                        Tooltip.install(d.getNode(), new Tooltip("Exchange handlers"));
+                }
+            }
+
+            n = barChart.lookup(".data0.chart-bar");
+            n.setStyle("-fx-bar-fill: #B97879");
+            n = barChart.lookup(".data1.chart-bar");
+            n.setStyle("-fx-bar-fill: #8378B9");
+            n = barChart.lookup(".data2.chart-bar");
+            n.setStyle("-fx-bar-fill: #78B9A2");
+            n = barChart.lookup(".data3.chart-bar");
+            n.setStyle("-fx-bar-fill: #87B978");
+            n = barChart.lookup(".data4.chart-bar");
+            n.setStyle("-fx-bar-fill: #B9A478");
+
+            barChart.setLegendVisible(false);
+
+            grid.add(new VBox(barChart), 1, 0);
 
             xAxis = new CategoryAxis();
             yAxis = new NumberAxis();
-            barChart = new BarChart(xAxis, yAxis);
-            dataSeries1 = new XYChart.Series();
-            dataSeries1.setName("Waiting List");
-            dataSeries1.getData().add(new XYChart.Data("Slow", currentStation.getSlow().getSize()));
-            dataSeries1.getData().add(new XYChart.Data("Fast", currentStation.getFast().getSize()));
-            dataSeries1.getData().add(new XYChart.Data("Dis", currentStation.getDischarging().getSize()));
-            dataSeries1.getData().add(new XYChart.Data("Exch", currentStation.getExchange().getSize()));
+            barChart = new BarChart<>(xAxis, yAxis);
+            barChart.setTitle("Waiting List");
+            dataSeries1 = new XYChart.Series<>();
+            dataSeries1.getData().add(new XYChart.Data<>("Slow", currentStation.getSlow().getSize()));
+            dataSeries1.getData().add(new XYChart.Data<>("Fast", currentStation.getFast().getSize()));
+            dataSeries1.getData().add(new XYChart.Data<>("Dis", currentStation.getDischarging().getSize()));
+            dataSeries1.getData().add(new XYChart.Data<>("Exch", currentStation.getExchange().getSize()));
             barChart.getData().add(dataSeries1);
 
-            grid.add(barChart, 1, 1);
+            for (XYChart.Series<String, Number> s : barChart.getData()) {
+                for (XYChart.Data<String, Number> d : s.getData()) {
+                    if (d.getXValue().equals("Slow"))
+                        Tooltip.install(d.getNode(), new Tooltip("Queue for slow charging"));
+                    else if (d.getXValue().equals("Fast"))
+                        Tooltip.install(d.getNode(), new Tooltip("Queue for fast charging"));
+                    else if (d.getXValue().equals("Dis"))
+                        Tooltip.install(d.getNode(), new Tooltip("Queue for discharging"));
+                    else
+                        Tooltip.install(d.getNode(), new Tooltip("Queue for battery exchange"));
+                }
+            }
+
+            n = barChart.lookup(".data0.chart-bar");
+            n.setStyle("-fx-bar-fill: #B97879");
+            n = barChart.lookup(".data1.chart-bar");
+            n.setStyle("-fx-bar-fill: #8378B9");
+            n = barChart.lookup(".data2.chart-bar");
+            n.setStyle("-fx-bar-fill: #78B9A2");
+            n = barChart.lookup(".data3.chart-bar");
+            n.setStyle("-fx-bar-fill: #87B978");
+
+            barChart.setLegendVisible(false);
+
+            grid.add(new VBox(barChart), 1, 1);
         });
         //contagiar, lembrarias
         //Buttons

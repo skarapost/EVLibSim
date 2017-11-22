@@ -7,12 +7,12 @@
     -fx-font-size: 14;
 }
 
-.root {
+.main-root {
     -fx-background-image: url("back1.png");
     -fx-background-size: cover;
 }
 
-/*Style for the central grid*/
+/* Styling for the central grid */
 .grid {
     -fx-background-color: -fx-color-500;
     -fx-background-radius: 5px;
@@ -24,26 +24,26 @@
     -fx-alignment: center;
 }
 
-/*Style for left panel's boxes*/
+/* Styling for left panel's individual boxes */
 .box {
     -fx-background-color: -fx-color-500;
     -fx-background-radius: 0 5 5 0;
     -fx-border-radius: 0 5 5 0;
-    -fx-max-height: 180;
-    -fx-min-height: 150;
-    -fx-max-width: 180;
-    -fx-min-width: 180;
+    -fx-max-height: 180px;
+    -fx-min-height: 150px;
+    -fx-max-width: 180px;
+    -fx-min-width: 180px;
     -fx-alignment: center;
-    -fx-padding: 5;
-    -fx-spacing: 15;
+    -fx-padding: 5px;
+    -fx-spacing: 15px;
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.4), 5, 0.4, 0, 0);
 }
 
-/*Styling for each button*/
+/* Styling for each button */
 .button {
     -fx-background-color: white;
-    -fx-background-radius: 10;
-    -fx-border-radius: 10;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
     -fx-text-fill: #75A2D5;
     -fx-font-size: 15px;
     -fx-font-weight: bold;
@@ -57,11 +57,11 @@
     -fx-border-color: #3C7DC8;
 }
 
-/*Styling for the menubar, menu items, content menu*/
+/* Styling for the menubar, menu items, content menu */
 .menu-bar {
-    -fx-pref-height: 50;
-    -fx-min-height: 50;
-    -fx-max-height: 50;
+    -fx-pref-height: 50px;
+    -fx-min-height: 50px;
+    -fx-max-height: 50px;
     -fx-background-color: -fx-color-500;
     -fx-alignment: center-left;
 }
@@ -85,7 +85,7 @@
     -fx-background-radius: 5 5 5 5;
 }
 
-/*Styling for textfields*/
+/* Styling for textfields */
 .text-field {
     -fx-background-insets: 0, 1, 2;
     -fx-background-radius: 3, 2, 2;
@@ -98,11 +98,31 @@
     -fx-prompt-text-fill: transparent;
 }
 
-/*Styling for TableView */
+/* Styling for TableView */
 .table-column {
     -fx-alignment: CENTER;
 }
 
 .table-row-cell {
     -fx-cell-size: 30px;
+}
+
+/* Styling of charts */
+.chart-title {
+  -fx-font-weight: bold;
+  -fx-font-size: 15px;
+}
+
+/* Styling for buttons box */
+.buttonsBox {
+  -fx-background-color: transparent;
+  -fx-spacing: 15px;
+  -fx-alignment: CENTER-RIGHT;
+}
+
+/* Styling for side panels */
+.sidePanels {
+    -fx-alignment: center;
+    -fx-spacing: 10px;
+    -fx-background-color: transparent;
 }

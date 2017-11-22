@@ -68,7 +68,6 @@ class Energy {
                         break;
                 }
                 Maintenance.completionMessage("Energy source insertion");
-                startScreen.fire();
             });
         });
 
@@ -105,7 +104,6 @@ class Energy {
                         break;
                 }
                 Maintenance.completionMessage("Energy source removal");
-                startScreen.fire();
             });
         });
 

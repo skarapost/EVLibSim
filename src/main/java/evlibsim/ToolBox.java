@@ -7,12 +7,10 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Orientation;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import javafx.scene.control.ToolBar;
 
@@ -297,9 +295,7 @@ class ToolBox {
         bar.getItems().addAll(chargingLog, disChargingLog, exchangeLog, parkingLog,
                 showTotalActivity, totalEnergy, report);
         bar.setOrientation(Orientation.VERTICAL);
-        bar.setStyle("-fx-alignment: center; -fx-spacing: 10;" +
-                " -fx-background-color: transparent;");
-        BorderPane.setAlignment(bar, Pos.CENTER);
+        bar.getStyleClass().add("sidePanels");
         createLogButtons();
         createOverviewMenu();
         return bar;

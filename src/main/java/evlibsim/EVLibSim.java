@@ -183,6 +183,7 @@ public class EVLibSim extends Application {
         topMenuBar.getChildren().addAll(leftMenuBar, rightMenuBar);
 
         scene.getStylesheets().add(EVLibSim.class.getResource("/EVLibSim.css").toExternalForm());
+        scene.getRoot().getStyleClass().add("main-root");
 
         grid.getStyleClass().add("grid");
 
@@ -193,8 +194,7 @@ public class EVLibSim extends Application {
 
         //Configuration of buttons's box
         buttonsBox.getChildren().addAll(EVLibSim.cancel);
-        buttonsBox.setAlignment(Pos.CENTER_RIGHT);
-        buttonsBox.setStyle("-fx-background-color: transparent; -fx-spacing: 15px;");
+        buttonsBox.getStyleClass().add("buttonsBox");
 
         //Global buttons(cancel)
         cancel.setOnAction(e -> startScreen.fire());
@@ -223,9 +223,9 @@ public class EVLibSim extends Application {
         Label wait = new Label("Wait");
         Label output = new Label("Output");
 
-        prices.setStyle("-fx-font-weight: bold; -fx-font-size: 15;");
-        wait.setStyle("-fx-font-weight: bold; -fx-font-size: 15");
-        output.setStyle("-fx-font-weight: bold; -fx-font-size: 15");
+        prices.getStyleClass().add("chart-title");
+        wait.getStyleClass().add("chart-title");
+        output.getStyleClass().add("chart-title");
 
         Console console = new Console();
         ta.setEditable(false);
@@ -244,11 +244,8 @@ public class EVLibSim extends Application {
         box3.getChildren().addAll(output, ta);
         box3.getStyleClass().add("box");
 
-        leftBox.setAlignment(Pos.CENTER);
-        leftBox.setStyle("-fx-spacing: 25;");
+        leftBox.getStyleClass().add("sidePanels");
         leftBox.getChildren().addAll(box1, box2, box3);
-
-        BorderPane.setAlignment(leftBox, Pos.CENTER);
 
         //Start screen
         startScreen.setOnAction((ActionEvent e) -> {
