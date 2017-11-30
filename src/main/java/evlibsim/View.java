@@ -2,6 +2,8 @@ package evlibsim;
 
 import evlib.station.*;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -70,16 +72,17 @@ class View {
             TableColumn<ChargingEvent, String> nameCol = new TableColumn<>("Name");
             TableColumn<ChargingEvent, String> brandCol = new TableColumn<>("Brand");
             TableColumn<ChargingEvent, Double> askingAmountCol = new TableColumn<>("EnergyAmount");
-            TableColumn<ChargingEvent, Long> waitingTimeCol = new TableColumn<>("WaitingTime");
-            TableColumn<ChargingEvent, Long> maxWaitingTimeCol = new TableColumn<>("MaxWaitingTime");
-            table.getColumns().addAll(idCol, nameCol, brandCol, askingAmountCol, waitingTimeCol, maxWaitingTimeCol, executionCol);
+            TableColumn<ChargingEvent, Number> maxWaitingTimeCol = new TableColumn<>("MaxWaitingTime");
+            table.getColumns().addAll(idCol, nameCol, brandCol, askingAmountCol, maxWaitingTimeCol, executionCol);
 
             idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
             nameCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getDriver().getName()));
             brandCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getBrand()));
             askingAmountCol.setCellValueFactory(new PropertyValueFactory<>("amountOfEnergy"));
-            waitingTimeCol.setCellValueFactory(new PropertyValueFactory<>("waitingTime"));
-            maxWaitingTimeCol.setCellValueFactory(new PropertyValueFactory<>("maxWaitingTime"));
+            if (EVLibSim.timeUnit.getSelectionModel().getSelectedIndex() == 0)
+                maxWaitingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getMaxWaitingTime() / 1000));
+            else
+                maxWaitingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getMaxWaitingTime() / 60000));
 
             table.setItems(result);
 
@@ -116,16 +119,17 @@ class View {
             TableColumn<ChargingEvent, String> nameCol = new TableColumn<>("Name");
             TableColumn<ChargingEvent, String> brandCol = new TableColumn<>("Brand");
             TableColumn<ChargingEvent, Double> askingAmountCol = new TableColumn<>("EnergyAmount");
-            TableColumn<ChargingEvent, Long> waitingTimeCol = new TableColumn<>("WaitingTime");
-            TableColumn<ChargingEvent, Long> maxWaitingTimeCol = new TableColumn<>("MaxWaitingTime");
-            table.getColumns().addAll(idCol, nameCol, brandCol, askingAmountCol, waitingTimeCol, maxWaitingTimeCol, executionCol);
+            TableColumn<ChargingEvent, Number> maxWaitingTimeCol = new TableColumn<>("MaxWaitingTime");
+            table.getColumns().addAll(idCol, nameCol, brandCol, askingAmountCol, maxWaitingTimeCol, executionCol);
 
             idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
             nameCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getDriver().getName()));
             brandCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getBrand()));
             askingAmountCol.setCellValueFactory(new PropertyValueFactory<>("amountOfEnergy"));
-            waitingTimeCol.setCellValueFactory(new PropertyValueFactory<>("waitingTime"));
-            maxWaitingTimeCol.setCellValueFactory(new PropertyValueFactory<>("maxWaitingTime"));
+            if (EVLibSim.timeUnit.getSelectionModel().getSelectedIndex() == 0)
+                maxWaitingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getMaxWaitingTime() / 1000));
+            else
+                maxWaitingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getMaxWaitingTime() / 60000));
 
             table.setItems(result);
 
@@ -162,16 +166,17 @@ class View {
             TableColumn<DisChargingEvent, String> nameCol = new TableColumn<>("Name");
             TableColumn<DisChargingEvent, String> brandCol = new TableColumn<>("Brand");
             TableColumn<DisChargingEvent, Double> askingAmountCol = new TableColumn<>("EnergyAmount");
-            TableColumn<DisChargingEvent, Long> waitingTimeCol = new TableColumn<>("WaitingTime");
-            TableColumn<DisChargingEvent, Long> maxWaitingTimeCol = new TableColumn<>("MaxWaitingTime");
-            table.getColumns().addAll(idCol, nameCol, brandCol, askingAmountCol, waitingTimeCol, maxWaitingTimeCol, executionCol);
+            TableColumn<DisChargingEvent, Number> maxWaitingTimeCol = new TableColumn<>("MaxWaitingTime");
+            table.getColumns().addAll(idCol, nameCol, brandCol, askingAmountCol, maxWaitingTimeCol, executionCol);
 
             idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
             nameCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getDriver().getName()));
             brandCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getBrand()));
             askingAmountCol.setCellValueFactory(new PropertyValueFactory<>("amountOfEnergy"));
-            waitingTimeCol.setCellValueFactory(new PropertyValueFactory<>("waitingTime"));
-            maxWaitingTimeCol.setCellValueFactory(new PropertyValueFactory<>("maxWaitingTime"));
+            if (EVLibSim.timeUnit.getSelectionModel().getSelectedIndex() == 0)
+                maxWaitingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getMaxWaitingTime() / 1000));
+            else
+                maxWaitingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getMaxWaitingTime() / 60000));
 
             table.setItems(result);
 
@@ -207,15 +212,16 @@ class View {
             TableColumn<ChargingEvent, Integer> idCol = new TableColumn<>("Id");
             TableColumn<ChargingEvent, String> nameCol = new TableColumn<>("Name");
             TableColumn<ChargingEvent, String> brandCol = new TableColumn<>("Brand");
-            TableColumn<ChargingEvent, Long> waitingTimeCol = new TableColumn<>("WaitingTime");
-            TableColumn<ChargingEvent, Long> maxWaitingTimeCol = new TableColumn<>("MaxWaitingTime");
-            table.getColumns().addAll(idCol, nameCol, brandCol, waitingTimeCol, maxWaitingTimeCol, executionCol);
+            TableColumn<ChargingEvent, Number> maxWaitingTimeCol = new TableColumn<>("MaxWaitingTime");
+            table.getColumns().addAll(idCol, nameCol, brandCol, maxWaitingTimeCol, executionCol);
 
             idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
             nameCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getDriver().getName()));
             brandCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getBrand()));
-            waitingTimeCol.setCellValueFactory(new PropertyValueFactory<>("waitingTime"));
-            maxWaitingTimeCol.setCellValueFactory(new PropertyValueFactory<>("maxWaitingTime"));
+            if (EVLibSim.timeUnit.getSelectionModel().getSelectedIndex() == 0)
+                maxWaitingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getMaxWaitingTime() / 1000));
+            else
+                maxWaitingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getMaxWaitingTime() / 60000));
 
             table.setItems(result);
 
@@ -286,6 +292,7 @@ class View {
             chart.setLabelsVisible(true);
             chart.getData().forEach(data -> {
                 Tooltip tooltip = new Tooltip();
+                tooltip.setWrapText(true);
                 tooltip.setText(String.valueOf(data.getPieValue()));
                 Tooltip.install(data.getNode(), tooltip);
             });
@@ -451,8 +458,8 @@ class View {
             TableColumn<ChargingEvent, Double> energyToBeReceivedCol = new TableColumn<>("EnergyReceived");
             TableColumn<ChargingEvent, String> kindCol = new TableColumn<>("Kind");
             TableColumn<ChargingEvent, Long> maxWaitingTimeCol = new TableColumn<>("MaxWait");
-            TableColumn<ChargingEvent, Long> chargingTimeCol = new TableColumn<>("ChargTime");
-            TableColumn<ChargingEvent, Long> elapseTimeCol = new TableColumn<>("RemChargTime");
+            TableColumn<ChargingEvent, Number> chargingTimeCol = new TableColumn<>("ChargTime");
+            TableColumn<ChargingEvent, Number> elapseTimeCol = new TableColumn<>("RemChargTime");
             table.getColumns().addAll(idCol, nameCol, brandCol, askingAmountCol, energyToBeReceivedCol, kindCol, maxWaitingTimeCol, chargingTimeCol,
                     elapseTimeCol);
 
@@ -463,8 +470,14 @@ class View {
             energyToBeReceivedCol.setCellValueFactory(new PropertyValueFactory<>("energyToBeReceived"));
             kindCol.setCellValueFactory(new PropertyValueFactory<>("kindOfCharging"));
             maxWaitingTimeCol.setCellValueFactory(new PropertyValueFactory<>("maxWaitingTime"));
-            chargingTimeCol.setCellValueFactory(new PropertyValueFactory<>("chargingTime"));
-            elapseTimeCol.setCellValueFactory(new PropertyValueFactory<>("remainingChargingTime"));
+            if (EVLibSim.timeUnit.getSelectionModel().getSelectedIndex() == 0) {
+                chargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getChargingTime() / 1000));
+                elapseTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getRemainingChargingTime() / 1000));
+            }
+            else {
+                chargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getChargingTime() / 60000));
+                elapseTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getRemainingChargingTime() / 60000));
+            }
 
             table.setItems(result);
             table.setMaxSize(900, 500);
@@ -487,8 +500,8 @@ class View {
             TableColumn<DisChargingEvent, String> brandCol = new TableColumn<>("Brand");
             TableColumn<DisChargingEvent, Double> amountOfEnergyCol = new TableColumn<>("EnergyAmount");
             TableColumn<DisChargingEvent, Long> maxWaitingTimeCol = new TableColumn<>("MaxWait");
-            TableColumn<DisChargingEvent, Long> disChargingTimeCol = new TableColumn<>("DisChargTime");
-            TableColumn<DisChargingEvent, Long> elapsedDisChargingTimeCol = new TableColumn<>("RemDisChargTime");
+            TableColumn<DisChargingEvent, Number> disChargingTimeCol = new TableColumn<>("DisChargTime");
+            TableColumn<DisChargingEvent, Number> elapsedDisChargingTimeCol = new TableColumn<>("RemDisChargTime");
             table.getColumns().addAll(idCol, nameCol, brandCol, amountOfEnergyCol, disChargingTimeCol, maxWaitingTimeCol, elapsedDisChargingTimeCol);
 
             idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -496,8 +509,14 @@ class View {
             brandCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getBrand()));
             amountOfEnergyCol.setCellValueFactory(new PropertyValueFactory<>("amountOfEnergy"));
             maxWaitingTimeCol.setCellValueFactory(new PropertyValueFactory<>("maxWaitingTime"));
-            disChargingTimeCol.setCellValueFactory(new PropertyValueFactory<>("disChargingTime"));
-            elapsedDisChargingTimeCol.setCellValueFactory(new PropertyValueFactory<>("remainingDisChargingTime"));
+            if (EVLibSim.timeUnit.getSelectionModel().getSelectedIndex() == 0) {
+                disChargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getDisChargingTime() / 1000));
+                elapsedDisChargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getRemainingDisChargingTime() / 1000));
+            }
+            else {
+                disChargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getDisChargingTime() / 60000));
+                elapsedDisChargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getRemainingDisChargingTime() / 60000));
+            }
 
             table.setItems(result);
             table.setMaxSize(900, 500);
@@ -520,16 +539,23 @@ class View {
             TableColumn<ChargingEvent, String> nameCol = new TableColumn<>("Name");
             TableColumn<ChargingEvent, String> brandCol = new TableColumn<>("Brand");
             TableColumn<ChargingEvent, Long> maxWaitingTimeCol = new TableColumn<>("MaxWait");
-            TableColumn<ChargingEvent, Long> chargingTimeCol = new TableColumn<>("ChargTime");
-            TableColumn<ChargingEvent, Long> elapsedExchangeTimeCol = new TableColumn<>("RemChargTime");
+            TableColumn<ChargingEvent, Number> chargingTimeCol = new TableColumn<>("ChargTime");
+            TableColumn<ChargingEvent, Number> elapsedExchangeTimeCol = new TableColumn<>("RemChargTime");
             table.getColumns().addAll(idCol, nameCol, brandCol, chargingTimeCol, maxWaitingTimeCol, elapsedExchangeTimeCol);
 
             idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
             nameCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getDriver().getName()));
             brandCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getBrand()));
             maxWaitingTimeCol.setCellValueFactory(new PropertyValueFactory<>("maxWaitingTime"));
-            chargingTimeCol.setCellValueFactory(new PropertyValueFactory<>("chargingTime"));
-            elapsedExchangeTimeCol.setCellValueFactory(new PropertyValueFactory<>("remainingChargingTime"));
+            if (EVLibSim.timeUnit.getSelectionModel().getSelectedIndex() == 0) {
+                chargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty( (double)p.getValue().getChargingTime() / 1000));
+                elapsedExchangeTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getRemainingChargingTime() / 1000));
+            }
+            else {
+                chargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getChargingTime() / 60000));
+                elapsedExchangeTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getRemainingChargingTime() / 60000));
+            }
+
             table.setItems(result);
             table.setMaxSize(900, 500);
             table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -551,10 +577,10 @@ class View {
             TableColumn<ParkingEvent, String> brandCol = new TableColumn<>("Brand");
             TableColumn<ParkingEvent, Double> askingAmountCol = new TableColumn<>("AskingAmount");
             TableColumn<ParkingEvent, Double> energyToBeReceivedCol = new TableColumn<>("EnergyReceived");
-            TableColumn<ParkingEvent, String> parkingTimeCol = new TableColumn<>("ParkTime");
-            TableColumn<ParkingEvent, Long> chargingTimeCol = new TableColumn<>("ChargTime");
-            TableColumn<ParkingEvent, Long> elapsedParkingTimeCol = new TableColumn<>("RemParkTime");
-            TableColumn<ParkingEvent, Long> elapsedChargingTimeCol = new TableColumn<>("RemChargTime");
+            TableColumn<ParkingEvent, Number> parkingTimeCol = new TableColumn<>("ParkTime");
+            TableColumn<ParkingEvent, Number> chargingTimeCol = new TableColumn<>("ChargTime");
+            TableColumn<ParkingEvent, Number> elapsedParkingTimeCol = new TableColumn<>("RemParkTime");
+            TableColumn<ParkingEvent, Number> elapsedChargingTimeCol = new TableColumn<>("RemChargTime");
             table.getColumns().addAll(idCol, nameCol, brandCol, askingAmountCol, energyToBeReceivedCol, parkingTimeCol,
                     chargingTimeCol, elapsedParkingTimeCol, elapsedChargingTimeCol);
 
@@ -563,10 +589,23 @@ class View {
             brandCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getBrand()));
             askingAmountCol.setCellValueFactory(new PropertyValueFactory<>("amountOfEnergy"));
             energyToBeReceivedCol.setCellValueFactory(new PropertyValueFactory<>("energyToBeReceived"));
-            parkingTimeCol.setCellValueFactory(new PropertyValueFactory<>("parkingTime"));
-            chargingTimeCol.setCellValueFactory(new PropertyValueFactory<>("chargingTime"));
-            elapsedParkingTimeCol.setCellValueFactory(new PropertyValueFactory<>("remainingParkingTime"));
-            elapsedChargingTimeCol.setCellValueFactory(new PropertyValueFactory<>("remainingChargingTime"));
+            if (EVLibSim.timeUnit.getSelectionModel().getSelectedIndex() == 0) {
+                parkingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getParkingTime() / 1000));
+                elapsedParkingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getRemainingParkingTime() / 1000));
+            }
+            else {
+                parkingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getParkingTime() / 60000));
+                elapsedParkingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getRemainingParkingTime() / 60000));
+            }
+            if (EVLibSim.timeUnit.getSelectionModel().getSelectedIndex() == 0) {
+                chargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getChargingTime() / 1000));
+                elapsedChargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getRemainingChargingTime() / 1000));
+            }
+            else {
+                chargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getChargingTime() / 60000));
+                elapsedChargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getRemainingChargingTime() / 60000));
+            }
+
             table.setItems(result);
             table.setMaxSize(900, 500);
             table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);

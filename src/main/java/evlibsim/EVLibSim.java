@@ -11,6 +11,7 @@ import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -45,9 +46,13 @@ public class EVLibSim extends Application {
     //Top menu bar
     private static final MenuBar leftMenuBar = new MenuBar();
     private static final HBox rightMenuBar = new HBox();
+    private static final HBox middleMenuBar = new HBox();
     private static final HBox topMenuBar = new HBox();
     static final Button refreshButton = new Button();
+    private static final Button homeButton = new Button();
     private static final Image refreshImage = new Image("/refresh.png");
+    private static final Label timeUnitLabel = new Label("Time metering unit:");
+    static final ChoiceBox<String> timeUnit = new ChoiceBox(FXCollections.observableArrayList("Second", "Minute"));
     //File menu item
     private static final Menu file = new Menu("File");
     private static final MenuItem export = new MenuItem("Export to csv...");
@@ -56,7 +61,8 @@ public class EVLibSim extends Application {
     private static final RadioMenuItem disable = new RadioMenuItem("Disable");
     static final MenuItem startScreen = new MenuItem("Start Screen");
     static final Menu s = new Menu("Stations");
-    private static final MenuItem load = new MenuItem("Load");
+    private static final MenuItem newSession = new MenuItem("New");
+    private static final MenuItem load = new MenuItem("Open...");
     private static final MenuItem save = new MenuItem("Save");
     private static final MenuItem saveAs = new MenuItem("Save as...");
     private static final MenuItem exitMenuItem = new MenuItem("Exit");
@@ -99,8 +105,9 @@ public class EVLibSim extends Application {
 
     private File f = null;
 
-    private static final Image image = new Image(View.class.getResourceAsStream("/backArrow.png"));
+    private static final Image image = new Image("/backArrow.png");
     static final Button cancel = new Button("Cancel");
+    private static final Image imageHome = new Image("/home.png");
 
     static String panel;
 
@@ -114,12 +121,12 @@ public class EVLibSim extends Application {
         primaryStage.setTitle("EVLibSim");
         Scene scene = new Scene(root);
         primaryStage.setMinHeight(600);
-        primaryStage.setMinWidth(1000);
+        primaryStage.setMinWidth(1100);
         primaryStage.setMaximized(true);
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        file.getItems().addAll(startScreen, new SeparatorMenuItem(), load,
+        file.getItems().addAll(startScreen, new SeparatorMenuItem(), newSession, load,
                 save, saveAs, new SeparatorMenuItem(), s, about, rec,
                 new SeparatorMenuItem(), export, exitMenuItem);
 
@@ -175,12 +182,21 @@ public class EVLibSim extends Application {
             }
         });
 
+        homeButton.setGraphic(new ImageView(imageHome));
+
+        homeButton.setOnAction(e -> startScreen.fire());
+
         rightMenuBar.getStyleClass().add("menu-bar");
         HBox.setHgrow(leftMenuBar, Priority.ALWAYS);
         HBox.setHgrow(rightMenuBar, Priority.NEVER);
-        rightMenuBar.getChildren().add(refreshButton);
+        rightMenuBar.getChildren().addAll(timeUnitLabel, timeUnit, homeButton, refreshButton);
+        rightMenuBar.setSpacing(30);
 
-        topMenuBar.getChildren().addAll(leftMenuBar, rightMenuBar);
+        timeUnit.getSelectionModel().selectFirst();
+
+        timeUnit.getSelectionModel().selectedIndexProperty().addListener((ov, oldValue, newValue) -> startScreen.fire());
+
+        topMenuBar.getChildren().addAll(leftMenuBar, middleMenuBar, rightMenuBar);
 
         scene.getStylesheets().add(EVLibSim.class.getResource("/EVLibSim.css").toExternalForm());
         scene.getRoot().getStyleClass().add("main-root");
@@ -269,14 +285,58 @@ public class EVLibSim extends Application {
                 for (ChargingStation cs : stations)
                     if (Objects.equals(cs.getName(), name)) {
                         currentStation = cs;
-                        waitTimeSlow.setText("Slow: " + currentStation.getWaitingTime("slow"));
-                        waitTimeFast.setText("Fast: " + currentStation.getWaitingTime("fast"));
-                        waitTimeDis.setText("Discharging: " + currentStation.getWaitingTime("discharging"));
-                        waitTimeEx.setText("Exchange: " + currentStation.getWaitingTime("exchange"));
+                        if (timeUnit.getSelectionModel().getSelectedIndex() == 0)
+                            waitTimeSlow.setText("Slow: " + ((double) currentStation.getWaitingTime("slow") / 1000));
+                        else
+                            waitTimeSlow.setText("Slow: " + ((double) currentStation.getWaitingTime("slow") / 60000));
+                        waitTimeSlow.setTooltip(new Tooltip("The waiting time for an available slow charger ."));
+                        waitTimeSlow.getTooltip().setPrefWidth(200);
+                        waitTimeSlow.getTooltip().setWrapText(true);
+
+                        if (timeUnit.getSelectionModel().getSelectedIndex() == 0)
+                            waitTimeFast.setText("Fast: " + ((double) currentStation.getWaitingTime("fast") / 1000));
+                        else
+                            waitTimeFast.setText("Fast: " + ((double) currentStation.getWaitingTime("fast") / 60000));
+                        waitTimeFast.setTooltip(new Tooltip("The waiting time for an available fast charger."));
+                        waitTimeFast.getTooltip().setPrefWidth(200);
+                        waitTimeFast.getTooltip().setWrapText(true);
+
+                        if (timeUnit.getSelectionModel().getSelectedIndex() == 0)
+                            waitTimeDis.setText("Discharging: " + ((double) currentStation.getWaitingTime("discharging") / 1000));
+                        else
+                            waitTimeDis.setText("Discharging: " + ((double) currentStation.getWaitingTime("discharging") / 60000));
+                        waitTimeDis.setTooltip(new Tooltip("The waiting time for an available discharger."));
+                        waitTimeDis.getTooltip().setPrefWidth(200);
+                        waitTimeDis.getTooltip().setWrapText(true);
+
+                        if (timeUnit.getSelectionModel().getSelectedIndex() == 0)
+                            waitTimeEx.setText("Exchange: " + ((double) currentStation.getWaitingTime("exchange") / 1000));
+                        else
+                            waitTimeEx.setText("Exchange: " + ((double) currentStation.getWaitingTime("exchange") / 60000));
+                        waitTimeEx.setTooltip(new Tooltip("The waiting time for an available battery exchange handler."));
+                        waitTimeEx.getTooltip().setPrefWidth(200);
+                        waitTimeEx.getTooltip().setWrapText(true);
+
                         unitPrice.setText("Charging: " + currentStation.getCurrentPrice());
+                        unitPrice.setTooltip(new Tooltip("The price of each energy unit for charging."));
+                        unitPrice.getTooltip().setPrefWidth(200);
+                        unitPrice.getTooltip().setWrapText(true);
+
                         disUnitPrice.setText("Discharging: " + currentStation.getDisUnitPrice());
+                        disUnitPrice.setTooltip(new Tooltip("The price of each energy unit for discharging."));
+                        disUnitPrice.getTooltip().setPrefWidth(200);
+                        disUnitPrice.getTooltip().setWrapText(true);
+
                         exchangePrice.setText("Exchange: " + currentStation.getExchangePrice());
+                        exchangePrice.setTooltip(new Tooltip("The price of each battery exchange operation."));
+                        exchangePrice.getTooltip().setPrefWidth(200);
+                        exchangePrice.getTooltip().setWrapText(true);
+
                         inductivePrice.setText("Inductive: " + currentStation.getInductivePrice());
+                        inductivePrice.setTooltip(new Tooltip("The price of each energy unit for inductive charging. A vehicle can charge inductively only through a parking event."));
+                        inductivePrice.getTooltip().setPrefWidth(200);
+                        inductivePrice.getTooltip().setWrapText(true);
+
                         Energy.updateStorage.setDisable(currentStation.getUpdateMode());
                         startScreen.fire();
                     }
@@ -414,64 +474,82 @@ public class EVLibSim extends Application {
             Optional<ArrayList<Boolean>> result = dialog.showAndWait();
 
             result.ifPresent(s -> {
+
+                if (results.indexOf(true) == -1) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText(null);
+                    alert.setContentText("No option selected.");
+                    alert.showAndWait();
+                    return;
+                }
+
                 FileChooser fileChooser = new FileChooser();
                 fileChooser.setTitle("Save file");
                 fileChooser.setInitialFileName("results.csv");
                 fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text Files(.csv)", "*.csv"));
                 File selectedFile = fileChooser.showSaveDialog(primaryStage);
+
                 OutputStreamWriter writer;
+
                 try {
-                    writer = new OutputStreamWriter(new FileOutputStream(selectedFile.getPath(), false), "utf-8");
-                    StringBuilder line;
-                    if (results.indexOf(true) == 0) {
-                        line = new StringBuilder("Id,Name,Brand,StationName,AskingAmount,EnergyReceived,ChargingTime,MaxWaitingTime,Cost");
-                        line.append(System.getProperty("line.separator"));
-                        writer.write(line.toString());
-                        for (ChargingEvent event : ChargingEvent.chargingLog) {
-                            line = new StringBuilder(event.getId() + "," + event.getElectricVehicle().getDriver().getName() + "," +
-                                    event.getElectricVehicle().getBrand() + "," + event.getChargingStationName() + "," +
-                                    event.getAmountOfEnergy() + "," + event.getEnergyToBeReceived() + ","
-                                    + event.getChargingTime() + "," + event.getMaxWaitingTime() + "," + event.getCost());
+                    if (selectedFile != null) {
+
+                        writer = new OutputStreamWriter(new FileOutputStream(selectedFile.getPath(), false), "utf-8");
+                        StringBuilder line;
+
+                        if (results.indexOf(true) == 0) {
+                            line = new StringBuilder("Id,Name,Brand,StationName,AskingAmount,EnergyReceived,Condition,ChargingTime,RemainingChargingTime,Cost");
                             line.append(System.getProperty("line.separator"));
                             writer.write(line.toString());
-                        }
-                    } else if (results.indexOf(true) == 1) {
-                        line = new StringBuilder("Id,Name,Brand,StationName,AskingAmount,DisChargingTime,MaxWaitingTime,Profit");
-                        line.append(System.getProperty("line.separator"));
-                        writer.write(line.toString());
-                        for (DisChargingEvent event : DisChargingEvent.dischargingLog) {
-                            line = new StringBuilder(event.getId() + "," + event.getElectricVehicle().getDriver().getName() + "," +
-                                    event.getElectricVehicle().getBrand() + "," + event.getChargingStationName() + "," +
-                                    event.getAmountOfEnergy() + "," + event.getDisChargingTime() + "," + event.getMaxWaitingTime() + ","
-                                    + event.getProfit());
+                            for (ChargingEvent event : ChargingEvent.chargingLog) {
+                                line = new StringBuilder(event.getId() + "," + event.getElectricVehicle().getDriver().getName() + "," +
+                                        event.getElectricVehicle().getBrand() + "," + event.getChargingStationName() + "," +
+                                        event.getAmountOfEnergy() + "," + event.getEnergyToBeReceived() + "," + event.getCondition() + ","
+                                        + event.getChargingTime() + "," + event.getRemainingChargingTime() + "," + event.getCost());
+                                line.append(System.getProperty("line.separator"));
+                                writer.write(line.toString());
+                            }
+                        } else if (results.indexOf(true) == 1) {
+                            line = new StringBuilder("Id,Name,Brand,StationName,GivenAmount,Condition,DisChargingTime,RemainingChargingTime,Profit");
                             line.append(System.getProperty("line.separator"));
                             writer.write(line.toString());
-                        }
-                    } else if (results.indexOf(true) == 2) {
-                        line = new StringBuilder("Id,Name,Brand,StationName,ChargingTime,MaxWaitingTime,Cost");
-                        line.append(System.getProperty("line.separator"));
-                        writer.write(line.toString());
-                        for (ChargingEvent event : ChargingEvent.exchangeLog) {
-                            line = new StringBuilder(event.getId() + "," + event.getElectricVehicle().getDriver().getName() + ","
-                                    + event.getElectricVehicle().getBrand() + "," + event.getChargingStationName() + "," +
-                                    event.getChargingTime() + "," + event.getMaxWaitingTime() + "," + event.getCost());
+                            for (DisChargingEvent event : DisChargingEvent.dischargingLog) {
+                                line = new StringBuilder(event.getId() + "," + event.getElectricVehicle().getDriver().getName() + "," +
+                                        event.getElectricVehicle().getBrand() + "," + event.getChargingStationName() + "," +
+                                        event.getAmountOfEnergy() + "," + event.getCondition() + "," + event.getDisChargingTime() + "," +
+                                        event.getRemainingDisChargingTime() + "," + event.getProfit());
+                                line.append(System.getProperty("line.separator"));
+                                writer.write(line.toString());
+                            }
+                        } else if (results.indexOf(true) == 2) {
+                            line = new StringBuilder("Id,Name,Brand,StationName,Condition,ChargingTime,RemainingChargingTime,Cost");
                             line.append(System.getProperty("line.separator"));
                             writer.write(line.toString());
-                        }
-                    } else {
-                        line = new StringBuilder("Id,Name,Brand,StationName,AskingAmount,EnergyReceived,ParkingTime,ChargingTime,Cost");
-                        line.append(System.getProperty("line.separator"));
-                        writer.write(line.toString());
-                        for (ParkingEvent event : ParkingEvent.parkLog) {
-                            line = new StringBuilder(event.getId() + "," + event.getElectricVehicle().getDriver().getName() + "," +
-                                    event.getElectricVehicle().getBrand() + "," + event.getChargingStationName() + "," +
-                                    event.getAmountOfEnergy() + "," + event.getEnergyToBeReceived() + ","
-                                    + event.getParkingTime() + "," + event.getChargingTime() + "," + event.getCost());
+                            for (ChargingEvent event : ChargingEvent.exchangeLog) {
+                                line = new StringBuilder(event.getId() + "," + event.getElectricVehicle().getDriver().getName() + ","
+                                        + event.getElectricVehicle().getBrand() + "," + event.getChargingStationName() + "," + event.getCondition() + "," +
+                                        event.getChargingTime() + "," + event.getRemainingChargingTime() + "," + event.getCost());
+                                line.append(System.getProperty("line.separator"));
+                                writer.write(line.toString());
+                            }
+                        } else if (results.indexOf(true) == 3) {
+                            line = new StringBuilder("Id,Name,Brand,StationName,AskingAmount,EnergyReceived,Condition,ParkingTime,RemainingParkingTime," +
+                                    "ChargingTime,RemainingChargingTime,Cost");
                             line.append(System.getProperty("line.separator"));
                             writer.write(line.toString());
+                            for (ParkingEvent event : ParkingEvent.parkLog) {
+                                line = new StringBuilder(event.getId() + "," + event.getElectricVehicle().getDriver().getName() + "," +
+                                        event.getElectricVehicle().getBrand() + "," + event.getChargingStationName() + "," +
+                                        event.getAmountOfEnergy() + "," + event.getEnergyToBeReceived() + "," + event.getCondition() + ","
+                                        + event.getParkingTime() + "," + event.getRemainingParkingTime() + "," + event.getChargingTime() + "," +
+                                        event.getRemainingChargingTime() + "," + event.getCost());
+                                line.append(System.getProperty("line.separator"));
+                                writer.write(line.toString());
+                            }
                         }
+                        writer.close();
                     }
-                    writer.close();
                 } catch (Exception er) {
                     er.printStackTrace();
                 }
@@ -518,6 +596,19 @@ public class EVLibSim extends Application {
                 }
         });
 
+        newSession.setOnAction(e -> {
+            startScreen.fire();
+            stations.clear();
+            energies.clear();
+            s.getItems().clear();
+            currentStation = null;
+            group.getToggles().clear();
+            ChargingEvent.chargingLog.clear();
+            DisChargingEvent.dischargingLog.clear();
+            ChargingEvent.exchangeLog.clear();
+            ParkingEvent.parkLog.clear();
+        });
+
         //Handling of exit button
         primaryStage.addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, e -> {
             ThreadGroup currentGroup = Thread.currentThread().getThreadGroup();
@@ -531,7 +622,7 @@ public class EVLibSim extends Application {
                     alert.setTitle("Information");
                     alert.setHeaderText(null);
                     alert.getButtonTypes().add(ButtonType.CANCEL);
-                    alert.setContentText("There are still some running tasks.\nClose the application?");
+                    alert.setContentText("There are still some running tasks.\nDo you still want to close the application?");
                     Optional<ButtonType> result = alert.showAndWait();
                     if (result.isPresent())
                         if (result.get() == ButtonType.OK) {
@@ -554,14 +645,26 @@ public class EVLibSim extends Application {
                 waitTimeDis.setText("Discharging: -");
                 waitTimeEx.setText("Exchange: -");
                 unitPrice.setText("Charging: -");
-                disUnitPrice.setText("DisCharging: -");
+                disUnitPrice.setText("Discharging: -");
                 exchangePrice.setText("Exchange: -");
                 inductivePrice.setText("Inductive: -");
             } else {
-                waitTimeSlow.setText("Slow: " + currentStation.getWaitingTime("slow"));
-                waitTimeFast.setText("Fast: " + currentStation.getWaitingTime("fast"));
-                waitTimeDis.setText("Discharging: " + currentStation.getWaitingTime("discharging"));
-                waitTimeEx.setText("Exchange: " + currentStation.getWaitingTime("exchange"));
+                if (timeUnit.getSelectionModel().getSelectedIndex() == 0)
+                    waitTimeSlow.setText("Slow: " + ((double) currentStation.getWaitingTime("slow") / 1000));
+                else
+                    waitTimeSlow.setText("Slow: " + ((double) currentStation.getWaitingTime("slow") / 60000));
+                if (timeUnit.getSelectionModel().getSelectedIndex() == 0)
+                    waitTimeFast.setText("Fast: " + ((double) currentStation.getWaitingTime("fast") / 1000));
+                else
+                    waitTimeFast.setText("Fast: " + ((double) currentStation.getWaitingTime("fast") / 60000));
+                if (timeUnit.getSelectionModel().getSelectedIndex() == 0)
+                    waitTimeDis.setText("Discharging: " + ((double) currentStation.getWaitingTime("discharging") / 1000));
+                else
+                    waitTimeDis.setText("Discharging: " + ((double) currentStation.getWaitingTime("discharging") / 60000));
+                if (timeUnit.getSelectionModel().getSelectedIndex() == 0)
+                    waitTimeEx.setText("Exchange: " + ((double) currentStation.getWaitingTime("exchange") / 1000));
+                else
+                    waitTimeEx.setText("Exchange: " + ((double) currentStation.getWaitingTime("exchange") / 60000));
                 unitPrice.setText("Charging: " + currentStation.getCurrentPrice());
                 disUnitPrice.setText("Discharging: " + currentStation.getDisUnitPrice());
                 exchangePrice.setText("Exchange: " + currentStation.getExchangePrice());
@@ -650,7 +753,8 @@ public class EVLibSim extends Application {
                             counter += 2;
                         }
                         while ((counter + 1) < tokens.length) {
-                            bat = new Battery(Double.parseDouble(tokens[counter + 2]), Double.parseDouble(tokens[counter + 3]));
+                            bat = new Battery(Double.parseDouble(tokens[counter + 2]),
+                                    Double.parseDouble(tokens[counter + 3]));
                             bat.setId(Integer.parseInt(tokens[counter + 1]));
                             bat.setNumberOfChargings(Integer.parseInt(tokens[counter + 4]));
                             bat.setMaxNumberOfChargings(Integer.parseInt(tokens[counter + 5]));
@@ -668,44 +772,139 @@ public class EVLibSim extends Application {
                     case "ch":
                         vehicle = new ElectricVehicle(tokens[10]);
                         vehicle.setDriver(new Driver(tokens[9]));
-                        event = new ChargingEvent(searchStation(tokens[2]), vehicle, Double.parseDouble(tokens[3]), tokens[4]);
+                        vehicle.getDriver().setId(Integer.parseInt(tokens[18]));
+                        event = new ChargingEvent(searchStation(tokens[2]), vehicle,
+                                Double.parseDouble(tokens[3]), tokens[4]);
                         event.setId(Integer.parseInt(tokens[1]));
                         event.setCost(Double.parseDouble(tokens[5]));
                         event.setEnergyToBeReceived(Double.parseDouble(tokens[6]));
                         event.setChargingTime(Long.parseLong(tokens[7]));
                         event.setMaxWaitingTime(Long.parseLong(tokens[8]));
-                        ChargingEvent.chargingLog.add(event);
+                        event.getElectricVehicle().setBattery(
+                                new Battery(Double.parseDouble(tokens[14]), Double.parseDouble(tokens[15])));
+                        event.getElectricVehicle().getBattery().setId(Integer.parseInt(tokens[13]));
+                        event.getElectricVehicle().getBattery().setMaxNumberOfChargings(Integer.parseInt(tokens[16]));
+                        event.getElectricVehicle().getBattery().setNumberOfChargings(Integer.parseInt(tokens[17]));
+                        if (tokens[12].equals("finished"))
+                            event.setCondition("finished");
+                        else if (tokens[12].equals("charging")) {
+                            currentStation.assignCharger(event);
+                            event.setCondition("ready");
+                            event.setChargingTime(Long.parseLong(tokens[11]));
+                            event.execution();
+                        }
+                        else if (tokens[12].equals("wait")) {
+                            event.setCondition("wait");
+                            if (tokens[4].equals("slow"))
+                                currentStation.getSlow().add(event);
+                            else
+                                currentStation.getFast().add(event);
+                        }
+                        else if (tokens[12].equals("nonExecutable"))
+                            event.setCondition("nonExecutable");
                         break;
                     case "dis":
                         vehicle = new ElectricVehicle(tokens[8]);
                         vehicle.setDriver(new Driver(tokens[7]));
-                        disEvent = new DisChargingEvent(searchStation(tokens[2]), vehicle, Double.parseDouble(tokens[3]));
+                        vehicle.getDriver().setId(Integer.parseInt(tokens[16]));
+                        disEvent = new DisChargingEvent(searchStation(tokens[2]), vehicle,
+                                Double.parseDouble(tokens[3]));
                         disEvent.setId(Integer.parseInt(tokens[1]));
                         disEvent.setProfit(Double.parseDouble(tokens[4]));
                         disEvent.setDisChargingTime(Long.parseLong(tokens[5]));
                         disEvent.setMaxWaitingTime(Long.parseLong(tokens[6]));
-                        DisChargingEvent.dischargingLog.add(disEvent);
+                        disEvent.getElectricVehicle().setBattery(
+                                new Battery(Double.parseDouble(tokens[12]), Double.parseDouble(tokens[13])));
+                        disEvent.getElectricVehicle().getBattery().setId(Integer.parseInt(tokens[11]));
+                        disEvent.getElectricVehicle().getBattery().setMaxNumberOfChargings(Integer.parseInt(tokens[14]));
+                        disEvent.getElectricVehicle().getBattery().setNumberOfChargings(Integer.parseInt(tokens[15]));
+                        if (tokens[10].equals("finished"))
+                            disEvent.setCondition("finished");
+                        else if (tokens[10].equals("discharging")) {
+                            currentStation.assignDisCharger(disEvent);
+                            disEvent.setCondition("ready");
+                            disEvent.setDisChargingTime(Long.parseLong(tokens[9]));
+                            disEvent.execution();
+                        }
+                        else if (tokens[10].equals("wait")) {
+                            disEvent.setCondition("wait");
+                            currentStation.getDischarging().add(disEvent);
+                        }
+                        else if (tokens[10].equals("nonExecutable"))
+                            disEvent.setCondition("nonExecutable");
                         break;
                     case "ex":
                         vehicle = new ElectricVehicle(tokens[7]);
                         vehicle.setDriver(new Driver(tokens[6]));
+                        vehicle.getDriver().setId(Integer.parseInt(tokens[15]));
                         event = new ChargingEvent(searchStation(tokens[2]), vehicle);
                         event.setId(Integer.parseInt(tokens[1]));
                         event.setCost(Double.parseDouble(tokens[3]));
                         event.setChargingTime(Long.parseLong(tokens[4]));
                         event.setMaxWaitingTime(Long.parseLong(tokens[5]));
-                        ChargingEvent.exchangeLog.add(event);
+                        event.getElectricVehicle().setBattery(
+                                new Battery(Double.parseDouble(tokens[11]), Double.parseDouble(tokens[12])));
+                        event.getElectricVehicle().getBattery().setId(Integer.parseInt(tokens[10]));
+                        event.getElectricVehicle().getBattery().setMaxNumberOfChargings(Integer.parseInt(tokens[13]));
+                        event.getElectricVehicle().getBattery().setNumberOfChargings(Integer.parseInt(tokens[14]));
+                        if (tokens[9].equals("finished"))
+                            event.setCondition("finished");
+                        else if (tokens[9].equals("swapping")) {
+                            currentStation.assignExchangeHandler(event);
+                            bat = currentStation.assignBattery(event);
+                            if (bat != null) {
+                                Battery b = new Battery(bat.getRemAmount(), bat.getCapacity());
+                                b.setId(bat.getId());
+                                b.setMaxNumberOfChargings(bat.getMaxNumberOfChargings());
+                                b.setNumberOfChargings(bat.getNumberOfChargings());
+                                currentStation.joinBattery(b);
+                            } else {
+                                currentStation.joinBattery(new Battery(1500, 1500));
+                                bat = currentStation.assignBattery(event);
+                            }
+                            event.setCondition("ready");
+                            event.setChargingTime(Long.parseLong(tokens[8]));
+                            event.execution();
+                        }
+                        else if (tokens[9].equals("wait")) {
+                            event.setCondition("wait");
+                            currentStation.getExchange().add(event);
+                        }
+                        else if (tokens[9].equals("nonExecutable"))
+                            event.setCondition("nonExecutable");
                         break;
                     default:
                         vehicle = new ElectricVehicle(tokens[9]);
                         vehicle.setDriver(new Driver(tokens[8]));
+                        vehicle.getDriver().setId(Integer.parseInt(tokens[18]));
                         event1 = new ParkingEvent(searchStation(tokens[2]), vehicle,
                                 Long.parseLong(tokens[3]), Double.parseDouble(tokens[4]));
                         event1.setId(Integer.parseInt(tokens[1]));
                         event1.setCost(Double.parseDouble(tokens[5]));
                         event1.setEnergyToBeReceived(Double.parseDouble(tokens[6]));
                         event1.setChargingTime(Long.parseLong(tokens[7]));
-                        ParkingEvent.parkLog.add(event1);
+                        event1.getElectricVehicle().setBattery(
+                                new Battery(Double.parseDouble(tokens[14]), Double.parseDouble(tokens[15])));
+                        event1.getElectricVehicle().getBattery().setId(Integer.parseInt(tokens[13]));
+                        event1.getElectricVehicle().getBattery().setMaxNumberOfChargings(Integer.parseInt(tokens[16]));
+                        event1.getElectricVehicle().getBattery().setNumberOfChargings(Integer.parseInt(tokens[17]));
+                        if (tokens[12].equals("finished"))
+                            event1.setCondition("finished");
+                        else if (tokens[12].equals("charging")) {
+                            currentStation.assignParkingSlot(event1);
+                            event1.setCondition("ready");
+                            event1.setChargingTime(Long.parseLong(tokens[10]));
+                            event1.setParkingTime(Long.parseLong(tokens[11]));
+                            event1.execution();
+                        }
+                        else if (tokens[12].equals("parking")) {
+                            currentStation.assignParkingSlot(event1);
+                            event1.setCondition("ready");
+                            event1.setParkingTime(Long.parseLong(tokens[11]));
+                            event1.execution();
+                        }
+                        else if (tokens[12].equals("nonExecutable"))
+                            event1.setCondition("nonExecutable");
                         break;
                 }
             }
@@ -764,28 +963,40 @@ public class EVLibSim extends Application {
                 line = new StringBuilder("ch" + "," + event.getId() + "," + event.getStation().getName() + "," + event.getAmountOfEnergy() + ","
                         + event.getKindOfCharging() + "," + event.getCost() + "," + event.getEnergyToBeReceived() + ","
                         + event.getChargingTime() + "," + event.getMaxWaitingTime() + "," + event.getElectricVehicle().getDriver().getName() + "," +
-                        event.getElectricVehicle().getBrand());
+                        event.getElectricVehicle().getBrand() + "," + event.getRemainingChargingTime() + "," + event.getCondition() + "," +
+                        event.getElectricVehicle().getBattery().getId() + "," + event.getElectricVehicle().getBattery().getRemAmount() + "," + event.getElectricVehicle().getBattery().getCapacity() + ","
+                        + event.getElectricVehicle().getBattery().getMaxNumberOfChargings() + "," + event.getElectricVehicle().getBattery().getNumberOfChargings() + ","
+                        + event.getElectricVehicle().getDriver().getId());
                 line.append(System.getProperty("line.separator"));
                 writer.write(line.toString());
             }
             for (DisChargingEvent event : DisChargingEvent.dischargingLog) {
                 line = new StringBuilder("dis" + "," + event.getId() + "," + event.getStation().getName() + "," + event.getAmountOfEnergy() + ","
                         + event.getProfit() + "," + event.getDisChargingTime() + "," + event.getMaxWaitingTime() +
-                        "," + event.getElectricVehicle().getDriver().getName() + "," + event.getElectricVehicle().getBrand());
+                        "," + event.getElectricVehicle().getDriver().getName() + "," + event.getElectricVehicle().getBrand() + "," + event.getRemainingDisChargingTime()
+                        + "," + event.getCondition() + "," + event.getElectricVehicle().getBattery().getId() + "," + event.getElectricVehicle().getBattery().getRemAmount() + "," + event.getElectricVehicle().getBattery().getNumberOfChargings() + ","
+                        + event.getElectricVehicle().getBattery().getMaxNumberOfChargings() + "," + event.getElectricVehicle().getBattery().getNumberOfChargings() + "," +
+                        event.getElectricVehicle().getDriver().getId());
                 line.append(System.getProperty("line.separator"));
                 writer.write(line.toString());
             }
             for (ChargingEvent event : ChargingEvent.exchangeLog) {
                 line = new StringBuilder("ex" + "," + event.getId() + "," + event.getStation().getName() + ","
                         + event.getCost() + "," + event.getChargingTime() + "," + event.getMaxWaitingTime() + ","
-                        + event.getElectricVehicle().getDriver().getName() + "," + event.getElectricVehicle().getBrand());
+                        + event.getElectricVehicle().getDriver().getName() + "," + event.getElectricVehicle().getBrand() + "," + event.getRemainingChargingTime()
+                        + "," + event.getCondition() + "," + event.getElectricVehicle().getBattery().getId() + "," + event.getElectricVehicle().getBattery().getRemAmount() + "," + event.getElectricVehicle().getBattery().getCapacity() + ","
+                        + event.getElectricVehicle().getBattery().getMaxNumberOfChargings() + "," + event.getElectricVehicle().getBattery().getNumberOfChargings()
+                        + "," + event.getElectricVehicle().getDriver().getId());
                 line.append(System.getProperty("line.separator"));
                 writer.write(line.toString());
             }
             for (ParkingEvent event : ParkingEvent.parkLog) {
                 line = new StringBuilder("park" + "," + event.getId() + "," + event.getStation().getName() + "," + event.getParkingTime() + ","
                         + event.getAmountOfEnergy() + "," + event.getCost() + "," + event.getEnergyToBeReceived() + "," + event.getChargingTime() + ","
-                        + event.getElectricVehicle().getDriver().getName() + "," + event.getElectricVehicle().getBrand());
+                        + event.getElectricVehicle().getDriver().getName() + "," + event.getElectricVehicle().getBrand() + "," + event.getRemainingChargingTime()
+                        + "," + event.getRemainingParkingTime() + "," + event.getCondition() + "," + event.getElectricVehicle().getBattery().getId() + "," + event.getElectricVehicle().getBattery().getRemAmount() + "," + event.getElectricVehicle().getBattery().getCapacity() + ","
+                        + event.getElectricVehicle().getBattery().getMaxNumberOfChargings() + "," + event.getElectricVehicle().getBattery().getNumberOfChargings() + "," +
+                        event.getElectricVehicle().getDriver().getId());
                 line.append(System.getProperty("line.separator"));
                 writer.write(line.toString());
             }
@@ -799,7 +1010,8 @@ public class EVLibSim extends Application {
     private static class Console extends OutputStream {
         private final TextArea output;
 
-        Console() {
+        Console()
+        {
             this.output = EVLibSim.ta;
         }
 

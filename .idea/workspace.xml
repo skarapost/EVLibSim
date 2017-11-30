@@ -2,9 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0a687d2b-2b82-4f20-947b-715c90b3538d" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/evlibsim/EVLibSim.java" afterPath="$PROJECT_DIR$/src/main/java/evlibsim/EVLibSim.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/evlibsim/Energy.java" afterPath="$PROJECT_DIR$/src/main/java/evlibsim/Energy.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/evlibsim/Event.java" afterPath="$PROJECT_DIR$/src/main/java/evlibsim/Event.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/evlibsim/Maintenance.java" afterPath="$PROJECT_DIR$/src/main/java/evlibsim/Maintenance.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/evlibsim/MenuStation.java" afterPath="$PROJECT_DIR$/src/main/java/evlibsim/MenuStation.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/evlibsim/ToolBox.java" afterPath="$PROJECT_DIR$/src/main/java/evlibsim/ToolBox.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/evlibsim/View.java" afterPath="$PROJECT_DIR$/src/main/java/evlibsim/View.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/EVLibSim.css" afterPath="$PROJECT_DIR$/src/main/resources/EVLibSim.css" />
@@ -23,8 +26,8 @@
       <file leaf-file-name="Energy.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/evlibsim/Energy.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-4287">
-              <caret line="105" column="71" lean-forward="false" selection-start-line="105" selection-start-column="71" selection-end-line="105" selection-end-column="71" />
+            <state relative-caret-position="3942">
+              <caret line="219" column="48" lean-forward="false" selection-start-line="219" selection-start-column="48" selection-end-line="219" selection-end-column="48" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -32,23 +35,14 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/pom.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="18">
-              <caret line="20" column="21" lean-forward="false" selection-start-line="20" selection-start-column="21" selection-end-line="20" selection-end-column="21" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="Event.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/evlibsim/Event.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-15102">
-              <caret line="173" column="42" lean-forward="true" selection-start-line="173" selection-start-column="42" selection-end-line="173" selection-end-column="42" />
+            <state relative-caret-position="-2304">
+              <caret line="763" column="16" lean-forward="true" selection-start-line="763" selection-start-column="16" selection-end-line="763" selection-end-column="16" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <marker date="1512054706463" expanded="true" signature="2275:2671" ph="{...}" />
               </folding>
             </state>
           </provider>
@@ -57,8 +51,8 @@
       <file leaf-file-name="EVLibSim.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/evlibsim/EVLibSim.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="162">
-              <caret line="185" column="57" lean-forward="false" selection-start-line="185" selection-start-column="57" selection-end-line="185" selection-end-column="57" />
+            <state relative-caret-position="234">
+              <caret line="192" column="34" lean-forward="false" selection-start-line="192" selection-start-column="34" selection-end-line="192" selection-end-column="34" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -69,8 +63,8 @@
       <file leaf-file-name="EVLibSim.css" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/resources/EVLibSim.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="162">
-              <caret line="9" column="6" lean-forward="false" selection-start-line="9" selection-start-column="6" selection-end-line="9" selection-end-column="6" />
+            <state relative-caret-position="501">
+              <caret line="137" column="33" lean-forward="false" selection-start-line="137" selection-start-column="33" selection-end-line="137" selection-end-column="33" />
               <folding />
             </state>
           </provider>
@@ -79,10 +73,11 @@
       <file leaf-file-name="MenuStation.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/evlibsim/MenuStation.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-14799">
-              <caret line="105" column="20" lean-forward="false" selection-start-line="105" selection-start-column="20" selection-end-line="105" selection-end-column="20" />
+            <state relative-caret-position="-972">
+              <caret line="965" column="48" lean-forward="false" selection-start-line="965" selection-start-column="48" selection-end-line="965" selection-end-column="48" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <marker date="1512054706527" expanded="true" signature="3517:3835" ph="{...}" />
               </folding>
             </state>
           </provider>
@@ -91,10 +86,12 @@
       <file leaf-file-name="Maintenance.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/evlibsim/Maintenance.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1386">
-              <caret line="77" column="44" lean-forward="false" selection-start-line="77" selection-start-column="44" selection-end-line="77" selection-end-column="44" />
+            <state relative-caret-position="216">
+              <caret line="14" column="58" lean-forward="false" selection-start-line="14" selection-start-column="58" selection-end-line="14" selection-end-column="58" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#742#743#0" expanded="true" />
+                <element signature="e#812#813#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -103,9 +100,11 @@
       <file leaf-file-name="ToolBox.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/evlibsim/ToolBox.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-4697">
-              <caret line="8" column="35" lean-forward="false" selection-start-line="8" selection-start-column="35" selection-end-line="8" selection-end-column="35" />
-              <folding />
+            <state relative-caret-position="7632">
+              <caret line="592" column="1" lean-forward="false" selection-start-line="592" selection-start-column="1" selection-end-line="592" selection-end-column="1" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -113,8 +112,8 @@
       <file leaf-file-name="View.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/evlibsim/View.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="365">
-              <caret line="334" column="67" lean-forward="false" selection-start-line="334" selection-start-column="67" selection-end-line="334" selection-end-column="67" />
+            <state relative-caret-position="10080">
+              <caret line="605" column="92" lean-forward="false" selection-start-line="605" selection-start-column="92" selection-end-line="605" selection-end-column="92" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -135,7 +134,29 @@
       <find>search</find>
       <find>searchStation</find>
       <find>root</find>
+      <find>modification</find>
+      <find>charger</find>
+      <find>export</find>
+      <find>tool</find>
+      <find>Tooltip</find>
+      <find>foo.getTooltip().setWrapText(true);</find>
+      <find>openFile</find>
+      <find>chargingLog</find>
+      <find>getWaiting</find>
+      <find>assign</find>
+      <find>exchange</find>
+      <find>assignBattery</find>
+      <find>givenBattery</find>
+      <find>ChoiceBox</find>
+      <find>choi</find>
+      <find>addListener</find>
+      <find>policy</find>
+      <find>load</find>
+      <find>group</find>
     </findStrings>
+    <replaceStrings>
+      <replace>foo.getTooltip().setPrefWidth(200);foo.getTooltip().setWrapText(true);</replace>
+    </replaceStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -149,16 +170,23 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/pom.xml" />
-        <option value="$PROJECT_DIR$/src/main/java/evlibsim/Maintenance.java" />
-        <option value="$PROJECT_DIR$/src/main/java/evlibsim/MenuStation.java" />
-        <option value="$PROJECT_DIR$/src/main/java/evlibsim/Energy.java" />
-        <option value="$PROJECT_DIR$/src/main/java/evlibsim/Event.java" />
+        <option value="$MAVEN_REPOSITORY$/evlib/evlib/1.0/evlib-1.0.jar!/evlib/station/ChargingEvent.class" />
+        <option value="$PROJECT_DIR$/src/main/resources/EVLibSim.css" />
         <option value="$PROJECT_DIR$/src/main/java/evlibsim/View.java" />
         <option value="$PROJECT_DIR$/src/main/java/evlibsim/ToolBox.java" />
-        <option value="$PROJECT_DIR$/src/main/resources/EVLibSim.css" />
+        <option value="$PROJECT_DIR$/src/main/java/evlibsim/MenuStation.java" />
+        <option value="$PROJECT_DIR$/src/main/java/evlibsim/Maintenance.java" />
+        <option value="$PROJECT_DIR$/src/main/java/evlibsim/Event.java" />
+        <option value="$PROJECT_DIR$/src/main/java/evlibsim/Energy.java" />
         <option value="$PROJECT_DIR$/src/main/java/evlibsim/EVLibSim.java" />
       </list>
     </option>
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="MavenImportPreferences">
     <option name="importingSettings">
@@ -185,13 +213,13 @@
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="55" />
-    <option name="y" value="35" />
-    <option name="width" value="1381" />
-    <option name="height" value="832" />
+    <option name="y" value="219" />
+    <option name="width" value="1379" />
+    <option name="height" value="824" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
-    <navigator proportions="" version="1">
+    <navigator currentView="ProjectPane" proportions="" version="1">
       <flattenPackages />
       <showMembers />
       <showModules />
@@ -204,16 +232,48 @@
       <manualOrder />
       <foldersAlwaysOnTop value="true" />
     </navigator>
-    <panes />
+    <panes>
+      <pane id="PackagesPane" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="evlibsim" type="b2602c69:ProjectViewProjectNode" />
+              <item name="EVLibSim" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="evlibsim" type="b2602c69:ProjectViewProjectNode" />
+              <item name="EVLibSim" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="evlibsim" type="b2602c69:ProjectViewProjectNode" />
+              <item name="EVLibSim" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="evlibsim" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="Scope" />
+      <pane id="Scratches" />
+    </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="SearchEverywhereHistoryKey" value="Maven Projects&#9;ACTION&#9;ActivateMavenProjectsToolWindow&#10;Maven &#9;ACTION&#9;ActivateMavenProjectsToolWindow&#10;Mav&#9;ACTION&#9;ActivateMavenProjectsToolWindow&#10;Maven&#9;ACTION&#9;ActivateMavenProjectsToolWindow" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../SySoft" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../EVLib" />
     <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -336,46 +396,68 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1510006154799</updated>
+      <workItem from="1511390667211" duration="732000" />
+      <workItem from="1511521992082" duration="12000" />
+      <workItem from="1511695093297" duration="3415000" />
+      <workItem from="1511702720431" duration="18570000" />
+      <workItem from="1511734626338" duration="4521000" />
+      <workItem from="1511783883854" duration="316000" />
+      <workItem from="1511785194601" duration="19053000" />
+      <workItem from="1511816140104" duration="6210000" />
+      <workItem from="1511826827735" duration="1306000" />
+      <workItem from="1511868228117" duration="14979000" />
+      <workItem from="1511902082534" duration="9566000" />
+      <workItem from="1511941738605" duration="661000" />
+      <workItem from="1511968087111" duration="3357000" />
+      <workItem from="1511971750538" duration="2022000" />
+      <workItem from="1511990063747" duration="5744000" />
+      <workItem from="1512045121473" duration="9845000" />
     </task>
     <servers />
   </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="100309000" />
+  </component>
   <component name="ToolWindowManager">
-    <frame x="55" y="35" width="1387" height="912" extended-state="6" />
-    <editor active="true" />
+    <frame x="55" y="-4" width="1385" height="904" extended-state="6" />
     <layout>
-      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3299748" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug Logs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3299748" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="WINDOWED" visible="false" show_stripe_button="true" weight="0.3299639" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" x="516" y="217" width="467" height="572" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3299748" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="WINDOWED" visible="false" show_stripe_button="true" weight="0.3299639" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" x="513" y="196" width="473" height="596" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3299748" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3299748" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Execute Anonymous" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24981949" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17833935" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4974811" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Salesforce" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug Logs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Execute Anonymous" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Metrics" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3299748" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection Results" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3299748" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Salesforce" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Documentation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" x="155" y="135" width="1187" height="712" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3299748" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
   </component>
   <component name="UnknownFeatures">
     <option featureType="com.intellij.fileTypeFactory" implementationName="*.css" />
@@ -385,21 +467,11 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="11" />
+      <option name="time" value="18" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/evlibsim/EVLibSim.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="9990">
-          <caret line="591" column="13" lean-forward="false" selection-start-line="591" selection-start-column="13" selection-end-line="591" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/resources/EVLibSim.css">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -414,6 +486,8 @@
           <caret line="77" column="21" lean-forward="false" selection-start-line="77" selection-start-column="21" selection-end-line="77" selection-end-column="21" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#742#743#0" expanded="true" />
+            <element signature="e#812#813#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -424,6 +498,7 @@
           <caret line="746" column="59" lean-forward="false" selection-start-line="746" selection-start-column="59" selection-end-line="746" selection-end-column="59" />
           <folding>
             <element signature="imports" expanded="true" />
+            <marker date="1512054706527" expanded="true" signature="3517:3835" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -432,83 +507,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="5364">
           <caret line="317" column="57" lean-forward="false" selection-start-line="317" selection-start-column="57" selection-end-line="317" selection-end-column="57" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/evlibsim/View.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="144">
-          <caret line="8" column="28" lean-forward="false" selection-start-line="8" selection-start-column="28" selection-end-line="8" selection-end-column="28" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/evlibsim/Energy.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/evlibsim/Event.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="9846">
-          <caret line="547" column="67" lean-forward="false" selection-start-line="547" selection-start-column="67" selection-end-line="547" selection-end-column="67" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/evlibsim/EVLibSim.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="10638">
-          <caret line="591" column="13" lean-forward="false" selection-start-line="591" selection-start-column="13" selection-end-line="591" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/EVLibSim.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/evlibsim/Maintenance.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1260">
-          <caret line="77" column="21" lean-forward="false" selection-start-line="77" selection-start-column="21" selection-end-line="77" selection-end-column="21" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/evlibsim/MenuStation.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="13122">
-          <caret line="746" column="59" lean-forward="false" selection-start-line="746" selection-start-column="59" selection-end-line="746" selection-end-column="59" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/evlibsim/ToolBox.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5364">
-          <caret line="317" column="57" lean-forward="false" selection-start-line="317" selection-start-column="57" selection-end-line="317" selection-end-column="57" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -538,6 +539,7 @@
           <caret line="547" column="67" lean-forward="false" selection-start-line="547" selection-start-column="67" selection-end-line="547" selection-end-column="67" />
           <folding>
             <element signature="imports" expanded="true" />
+            <marker date="1512054706463" expanded="true" signature="2275:2671" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -566,6 +568,8 @@
           <caret line="77" column="21" lean-forward="false" selection-start-line="77" selection-start-column="21" selection-end-line="77" selection-end-column="21" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#742#743#0" expanded="true" />
+            <element signature="e#812#813#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -576,6 +580,7 @@
           <caret line="746" column="59" lean-forward="false" selection-start-line="746" selection-start-column="59" selection-end-line="746" selection-end-column="59" />
           <folding>
             <element signature="imports" expanded="true" />
+            <marker date="1512054706527" expanded="true" signature="3517:3835" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -584,7 +589,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="5706">
           <caret line="317" column="57" lean-forward="false" selection-start-line="317" selection-start-column="57" selection-end-line="317" selection-end-column="57" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -614,6 +621,7 @@
           <caret line="206" column="37" lean-forward="false" selection-start-line="206" selection-start-column="37" selection-end-line="206" selection-end-column="37" />
           <folding>
             <element signature="imports" expanded="true" />
+            <marker date="1512054706463" expanded="true" signature="2275:2671" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -632,6 +640,8 @@
           <caret line="11" column="6" lean-forward="false" selection-start-line="11" selection-start-column="6" selection-end-line="11" selection-end-column="6" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#742#743#0" expanded="true" />
+            <element signature="e#812#813#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -642,6 +652,7 @@
           <caret line="20" column="6" lean-forward="false" selection-start-line="20" selection-start-column="6" selection-end-line="20" selection-end-column="6" />
           <folding>
             <element signature="imports" expanded="true" />
+            <marker date="1512054706527" expanded="true" signature="3517:3835" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -650,7 +661,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="234">
           <caret line="32" column="55" lean-forward="false" selection-start-line="32" selection-start-column="55" selection-end-line="32" selection-end-column="55" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -690,6 +703,7 @@
           <caret line="24" column="6" lean-forward="false" selection-start-line="24" selection-start-column="6" selection-end-line="24" selection-end-column="6" />
           <folding>
             <element signature="imports" expanded="true" />
+            <marker date="1512054706463" expanded="true" signature="2275:2671" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -710,6 +724,8 @@
           <caret line="11" column="6" lean-forward="false" selection-start-line="11" selection-start-column="6" selection-end-line="11" selection-end-column="6" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#742#743#0" expanded="true" />
+            <element signature="e#812#813#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -720,6 +736,7 @@
           <caret line="20" column="6" lean-forward="false" selection-start-line="20" selection-start-column="6" selection-end-line="20" selection-end-column="6" />
           <folding>
             <element signature="imports" expanded="true" />
+            <marker date="1512054706527" expanded="true" signature="3517:3835" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -738,7 +755,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="414">
           <caret line="23" column="6" lean-forward="false" selection-start-line="23" selection-start-column="6" selection-end-line="23" selection-end-column="6" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -754,20 +773,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/evlib/evlib/1.0/evlib-1.0.jar!/evlib/station/Charger.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="12" column="13" lean-forward="false" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/evlib/evlib/1.0/evlib-1.0.jar!/evlib/ev/Battery.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="9" column="13" lean-forward="false" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar:///usr/lib/jvm/java-8-oracle/javafx-src.zip!/javafx/event/EventHandler.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="223">
@@ -777,46 +782,93 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="18">
+        <state relative-caret-position="360">
           <caret line="20" column="21" lean-forward="false" selection-start-line="20" selection-start-column="21" selection-end-line="20" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///usr/lib/jvm/java-8-oracle/javafx-src.zip!/javafx/scene/control/TableRow.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="319">
+          <caret line="267" column="0" lean-forward="false" selection-start-line="267" selection-start-column="0" selection-end-line="267" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/evlib/evlib/1.0/evlib-1.0.jar!/evlib/station/Charger.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-756">
+          <caret line="12" column="13" lean-forward="false" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/evlib/evlib/1.0/evlib-1.0.jar!/evlib/station/DisChargingEvent.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="12" column="13" lean-forward="false" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/evlib/evlib/1.0/evlib-1.0.jar!/evlib/station/DisCharger.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="9" column="13" lean-forward="false" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/evlib/evlib/1.0/evlib-1.0.jar!/evlib/station/ChargingEvent.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="324">
+          <caret line="26" column="24" lean-forward="false" selection-start-line="26" selection-start-column="12" selection-end-line="26" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/evlib/evlib/1.0/evlib-1.0.jar!/evlib/station/ChargingStation.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="116">
+          <caret line="386" column="32" lean-forward="false" selection-start-line="386" selection-start-column="19" selection-end-line="386" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/evlib/evlib/1.0/evlib-1.0.jar!/evlib/station/ParkingEvent.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1494">
+          <caret line="15" column="13" lean-forward="false" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/evlib/evlib/1.0/evlib-1.0.jar!/evlib/ev/Battery.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="18">
+          <caret line="9" column="13" lean-forward="false" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/evlib/evlib/1.0/evlib-1.0.jar!/evlib/station/ExchangeHandler.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="18">
+          <caret line="9" column="13" lean-forward="false" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///usr/lib/jvm/java-8-oracle/javafx-src.zip!/javafx/scene/control/Cell.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="245">
+          <caret line="668" column="19" lean-forward="false" selection-start-line="668" selection-start-column="19" selection-end-line="668" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/EVLibSim.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="501">
+          <caret line="137" column="33" lean-forward="false" selection-start-line="137" selection-start-column="33" selection-end-line="137" selection-end-column="33" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/evlibsim/Event.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/evlibsim/View.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-15102">
-          <caret line="173" column="42" lean-forward="true" selection-start-line="173" selection-start-column="42" selection-end-line="173" selection-end-column="42" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/evlibsim/Energy.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-4287">
-          <caret line="105" column="71" lean-forward="false" selection-start-line="105" selection-start-column="71" selection-end-line="105" selection-end-column="71" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/evlibsim/Maintenance.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1386">
-          <caret line="77" column="44" lean-forward="false" selection-start-line="77" selection-start-column="44" selection-end-line="77" selection-end-column="44" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/evlibsim/MenuStation.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-14799">
-          <caret line="105" column="20" lean-forward="false" selection-start-line="105" selection-start-column="20" selection-end-line="105" selection-end-column="20" />
+        <state relative-caret-position="10080">
+          <caret line="605" column="92" lean-forward="false" selection-start-line="605" selection-start-column="92" selection-end-line="605" selection-end-column="92" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -825,34 +877,67 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/evlibsim/ToolBox.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-4697">
-          <caret line="8" column="35" lean-forward="false" selection-start-line="8" selection-start-column="35" selection-end-line="8" selection-end-column="35" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/evlibsim/View.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="365">
-          <caret line="334" column="67" lean-forward="false" selection-start-line="334" selection-start-column="67" selection-end-line="334" selection-end-column="67" />
+        <state relative-caret-position="7632">
+          <caret line="592" column="1" lean-forward="false" selection-start-line="592" selection-start-column="1" selection-end-line="592" selection-end-column="1" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/EVLibSim.css">
+    <entry file="file://$PROJECT_DIR$/src/main/java/evlibsim/Maintenance.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="162">
-          <caret line="9" column="6" lean-forward="false" selection-start-line="9" selection-start-column="6" selection-end-line="9" selection-end-column="6" />
-          <folding />
+        <state relative-caret-position="216">
+          <caret line="14" column="58" lean-forward="false" selection-start-line="14" selection-start-column="58" selection-end-line="14" selection-end-column="58" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#742#743#0" expanded="true" />
+            <element signature="e#812#813#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/evlibsim/Event.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2304">
+          <caret line="763" column="16" lean-forward="true" selection-start-line="763" selection-start-column="16" selection-end-line="763" selection-end-column="16" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <marker date="1512054706463" expanded="true" signature="2275:2671" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/evlibsim/MenuStation.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-972">
+          <caret line="965" column="48" lean-forward="false" selection-start-line="965" selection-start-column="48" selection-end-line="965" selection-end-column="48" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <marker date="1512054706527" expanded="true" signature="3517:3835" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/refresh.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/evlibsim/Energy.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3942">
+          <caret line="219" column="48" lean-forward="false" selection-start-line="219" selection-start-column="48" selection-end-line="219" selection-end-column="48" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/evlibsim/EVLibSim.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="162">
-          <caret line="185" column="57" lean-forward="false" selection-start-line="185" selection-start-column="57" selection-end-line="185" selection-end-column="57" />
+        <state relative-caret-position="234">
+          <caret line="192" column="34" lean-forward="false" selection-start-line="192" selection-start-column="34" selection-end-line="192" selection-end-column="34" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

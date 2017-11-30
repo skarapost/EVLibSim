@@ -9,6 +9,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -36,7 +38,7 @@ class Event {
     static final Button suggest3 = new Button("Suggestions");
     static final Button suggest4 = new Button("Suggestions");
     private static final Menu event = new Menu("Event");
-    private static final MenuItem policy = new MenuItem("New pricing policy");
+    private static final MenuItem policy = new MenuItem("New charging pricing policy");
     private static final MenuItem planExecution = new MenuItem("Plan execution");
     private static final Button chargingEventCreation = new Button("Creation");
     private static final Button disChargingEventCreation = new Button("Creation");
@@ -45,7 +47,7 @@ class Event {
     private static final Button policyCreation1 = new Button("Creation");
     private static final Button policyCreation2 = new Button("Creation");
     private static String kindOfCharging;
-    private static String type;
+    private static final Image help = new Image("/help.png");
 
     //Builds the Event category in the main MenuBar
     static Menu createEventMenu() {
@@ -55,52 +57,62 @@ class Event {
             if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
-            grid.setMaxSize(650, 400);
+            grid.setMaxSize(700, 400);
             TextField boo;
             Label foo;
-            foo = new Label("Driver's name: ");
+            foo = new Label("Driver's name*: ");
+            foo.setGraphic(new ImageView(help));
+            foo.setTooltip(new Tooltip("The name of the driver."));
+            foo.getTooltip().setPrefWidth(200);
+            foo.getTooltip().setWrapText(true);
             grid.add(foo, 0, 0);
             boo = new TextField();
             grid.add(boo, 1, 0);
             textfields.add(boo);
-            foo = new Label("Vehicle's brand: ");
+            foo = new Label("Vehicle's brand*: ");
+            foo.setGraphic(new ImageView(help));
+            foo.setTooltip(new Tooltip("The brand of the vehicle."));
+            foo.getTooltip().setPrefWidth(200);
+            foo.getTooltip().setWrapText(true);
             grid.add(foo, 2, 0);
             boo = new TextField();
             grid.add(boo, 3, 0);
             textfields.add(boo);
-            foo = new Label("Battery capacity: ");
+            foo = new Label("Battery capacity*: ");
+            foo.setGraphic(new ImageView(help));
+            foo.setTooltip(new Tooltip("The capacity of the battery."));
+            foo.getTooltip().setPrefWidth(200);
+            foo.getTooltip().setWrapText(true);
             grid.add(foo, 0, 1);
             boo = new TextField();
             grid.add(boo, 1, 1);
             textfields.add(boo);
-            foo = new Label("Battery remaining: ");
+            foo = new Label("Battery remaining*: ");
+            foo.setGraphic(new ImageView(help));
+            foo.setTooltip(new Tooltip("The remaining energy in the battery."));
+            foo.getTooltip().setPrefWidth(200);
+            foo.getTooltip().setWrapText(true);
             grid.add(foo, 2, 1);
             boo = new TextField();
             grid.add(boo, 3, 1);
             textfields.add(boo);
-            ChoiceBox<String> cb = new ChoiceBox<>(FXCollections.observableArrayList("Energy", "Money"));
-            type = "Energy";
-            cb.getSelectionModel().selectedIndexProperty().addListener((ov, value, newValue) -> {
-                if (newValue.intValue() == 0)
-                    type = "Energy";
-                else
-                    type = "Money";
-            });
-            cb.getSelectionModel().selectFirst();
-            cb.setMaxWidth(150);
-            grid.add(cb, 0, 2);
+            foo = new Label("Amount of energy*: ");
+            foo.setGraphic(new ImageView(help));
+            foo.setTooltip(new Tooltip("The asking amount of energy."));
+            foo.getTooltip().setPrefWidth(200);
+            foo.getTooltip().setWrapText(true);
+            grid.add(foo, 0, 2);
             boo = new TextField();
             grid.add(boo, 1, 2);
             textfields.add(boo);
-            foo = new Label("Waiting time: ");
-            grid.add(foo, 2, 2);
-            boo = new TextField();
-            grid.add(boo, 3, 2);
-            textfields.add(boo);
-            foo = new Label("Kind of charging: ");
-            EVLibSim.grid.add(foo, 0, 3);
+            foo = new Label("Kind of charging*: ");
+            foo.setGraphic(new ImageView(help));
+            foo.setTooltip(new Tooltip("The desired charging ratio."));
+            foo.getTooltip().setPrefWidth(200);
+            foo.getTooltip().setWrapText(true);
+            EVLibSim.grid.add(foo, 2, 2);
             kindOfCharging = "fast";
-            cb = new ChoiceBox(FXCollections.observableArrayList("Fast", "Slow"));
+            ChoiceBox cb = new ChoiceBox(FXCollections.observableArrayList("Fast", "Slow"));
             cb.getSelectionModel().selectedIndexProperty().addListener((ov, value, newValue) -> {
                 if (newValue.intValue() == 0)
                     kindOfCharging = "fast";
@@ -109,7 +121,7 @@ class Event {
             });
             cb.getSelectionModel().selectFirst();
             cb.setMaxWidth(150);
-            grid.add(cb, 1, 3);
+            grid.add(cb, 3, 2);
             //Suggestion button in the New ChargingEvent MenuItem
             suggest1.setOnAction(eu -> {
                 Stage popupwindow = new Stage();
@@ -117,7 +129,7 @@ class Event {
                 popupwindow.setTitle("Suggestions box");
                 GridPane g = new GridPane();
                 g.setAlignment(Pos.CENTER);
-                g.setStyle("-fx-background-color:#D8E2F2;");
+                g.setStyle("-fx-background-color: #D8E2F2;");
                 g.setHgap(15);
                 g.setVgap(15);
                 g.setPadding(new Insets(15, 15, 15, 15));
@@ -127,7 +139,7 @@ class Event {
                 VBox inside1 = new VBox();
                 inside1.setMinWidth(200);
                 inside1.setMaxWidth(200);
-                inside1.setStyle("-fx-background-color:#F0F1F3; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
+                inside1.setStyle("-fx-background-color: #F0F1F3; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
                 inside1.setPadding(new Insets(10, 10, 10, 10));
                 inside1.setSpacing(20);
                 tempStations.forEach(temp -> inside1.getChildren().add(new Label(temp.getName() + ": " + temp.getTotalEnergy())));
@@ -216,8 +228,9 @@ class Event {
             buttonsBox.getChildren().removeIf(buttonPredicate);
             buttonsBox.getChildren().add(0, chargingEventCreation);
             buttonsBox.getChildren().add(1, suggest1);
-            grid.add(buttonsBox, 2, 4, 2, 1);
+            grid.add(buttonsBox, 2, 3, 2, 1);
             chargingEventCreation.setDefaultButton(true);
+            grid.add(new Label("*Required"), 0, 3);
             root.setCenter(grid);
         });
         //Implements the New DisChargingEvent MenuItem
@@ -225,38 +238,53 @@ class Event {
             if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
-            grid.setMaxSize(650, 400);
+            grid.setMaxSize(700, 400);
             TextField boo;
             Label foo;
-            foo = new Label("Driver's name: ");
+            foo = new Label("Driver's name*: ");
+            foo.setGraphic(new ImageView(help));
+            foo.setTooltip(new Tooltip("The name of the driver."));
+            foo.getTooltip().setPrefWidth(200);
+            foo.getTooltip().setWrapText(true);
             grid.add(foo, 0, 0);
             boo = new TextField();
             grid.add(boo, 1, 0);
             textfields.add(boo);
-            foo = new Label("Vehicle's brand: ");
+            foo = new Label("Vehicle's brand*: ");
+            foo.setGraphic(new ImageView(help));
+            foo.setTooltip(new Tooltip("The brand of the vehicle."));
+            foo.getTooltip().setPrefWidth(200);
+            foo.getTooltip().setWrapText(true);
             grid.add(foo, 2, 0);
             boo = new TextField();
             grid.add(boo, 3, 0);
             textfields.add(boo);
-            foo = new Label("Battery capacity: ");
+            foo = new Label("Battery capacity*: ");
+            foo.setGraphic(new ImageView(help));
+            foo.setTooltip(new Tooltip("The capacity of the battery."));
+            foo.getTooltip().setPrefWidth(200);
+            foo.getTooltip().setWrapText(true);
             grid.add(foo, 0, 1);
             boo = new TextField();
             grid.add(boo, 1, 1);
             textfields.add(boo);
-            foo = new Label("Battery remaining: ");
+            foo = new Label("Battery remaining*: ");
+            foo.setGraphic(new ImageView(help));
+            foo.setTooltip(new Tooltip("The remaining energy in the battery."));
+            foo.getTooltip().setPrefWidth(200);
+            foo.getTooltip().setWrapText(true);
             grid.add(foo, 2, 1);
             boo = new TextField();
             grid.add(boo, 3, 1);
             textfields.add(boo);
-            foo = new Label("Amount of energy: ");
+            foo = new Label("Amount of energy*: ");
+            foo.setGraphic(new ImageView(help));
+            foo.setTooltip(new Tooltip("The providing amount of energy."));
+            foo.getTooltip().setPrefWidth(200);
+            foo.getTooltip().setWrapText(true);
             grid.add(foo, 0, 2);
             boo = new TextField();
             grid.add(boo, 1, 2);
-            textfields.add(boo);
-            foo = new Label("Waiting time: ");
-            grid.add(foo, 2, 2);
-            boo = new TextField();
-            grid.add(boo, 3, 2);
             textfields.add(boo);
             //Suggestion button for DisChargingEvent MenuItem
             suggest2.setOnAction(eu -> {
@@ -351,6 +379,7 @@ class Event {
             buttonsBox.getChildren().add(1, suggest2);
             grid.add(buttonsBox, 2, 3, 2, 1);
             disChargingEventCreation.setDefaultButton(true);
+            grid.add(new Label("*Required"), 0, 3);
             root.setCenter(grid);
         });
         //Implements the New ChargingEvent(exchange)
@@ -358,33 +387,44 @@ class Event {
             if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
-            grid.setMaxSize(650, 400);
+            grid.setMaxSize(700, 400);
             TextField boo;
             Label foo;
-            foo = new Label("Driver's name: ");
+            foo = new Label("Driver's name*: ");
+            foo.setGraphic(new ImageView(help));
+            foo.setTooltip(new Tooltip("The name of the driver."));
+            foo.getTooltip().setPrefWidth(200);
+            foo.getTooltip().setWrapText(true);
             grid.add(foo, 0, 0);
             boo = new TextField();
             grid.add(boo, 1, 0);
             textfields.add(boo);
-            foo = new Label("Vehicle's brand: ");
+            foo = new Label("Vehicle's brand*: ");
+            foo.setGraphic(new ImageView(help));
+            foo.setTooltip(new Tooltip("The brand of the vehicle."));
+            foo.getTooltip().setPrefWidth(200);
+            foo.getTooltip().setWrapText(true);
             grid.add(foo, 2, 0);
             boo = new TextField();
             grid.add(boo, 3, 0);
             textfields.add(boo);
-            foo = new Label("Battery capacity: ");
+            foo = new Label("Battery capacity*: ");
+            foo.setGraphic(new ImageView(help));
+            foo.setTooltip(new Tooltip("The capacity of the battery."));
+            foo.getTooltip().setPrefWidth(200);
+            foo.getTooltip().setWrapText(true);
             grid.add(foo, 0, 1);
             boo = new TextField();
             grid.add(boo, 1, 1);
             textfields.add(boo);
-            foo = new Label("Battery remaining: ");
+            foo = new Label("Battery remaining*: ");
+            foo.setGraphic(new ImageView(help));
+            foo.setTooltip(new Tooltip("The remaining energy in the battery."));
+            foo.getTooltip().setPrefWidth(200);
+            foo.getTooltip().setWrapText(true);
             grid.add(foo, 2, 1);
             boo = new TextField();
             grid.add(boo, 3, 1);
-            textfields.add(boo);
-            foo = new Label("Waiting time: ");
-            grid.add(foo, 0, 2);
-            boo = new TextField();
-            grid.add(boo, 1, 2);
             textfields.add(boo);
             //Suggestion button for New ChargingEvent(exchange)
             suggest3.setOnAction(eu -> {
@@ -477,8 +517,9 @@ class Event {
             buttonsBox.getChildren().removeIf(buttonPredicate);
             buttonsBox.getChildren().add(0, exchangeEventCreation);
             buttonsBox.getChildren().add(1, suggest3);
-            grid.add(buttonsBox, 2, 3, 2, 1);
+            grid.add(buttonsBox, 2, 2, 2, 1);
             exchangeEventCreation.setDefaultButton(true);
+            grid.add(new Label("*Required"), 0 , 2);
             root.setCenter(grid);
         });
         //Implements the New ParkingEvent MenuItem
@@ -486,35 +527,59 @@ class Event {
             if (Maintenance.stationCheck())
                 return;
             Maintenance.cleanScreen();
-            grid.setMaxSize(650, 400);
+            grid.setMaxSize(700, 400);
             TextField boo;
             Label foo;
-            foo = new Label("Driver's name: ");
+            foo = new Label("Driver's name*: ");
+            foo.setGraphic(new ImageView(help));
+            foo.setTooltip(new Tooltip("The name of the driver."));
+            foo.getTooltip().setPrefWidth(200);
+            foo.getTooltip().setWrapText(true);
             grid.add(foo, 0, 0);
             boo = new TextField();
             grid.add(boo, 1, 0);
             textfields.add(boo);
-            foo = new Label("Vehicle's brand: ");
+            foo = new Label("Vehicle's brand*: ");
+            foo.setGraphic(new ImageView(help));
+            foo.setTooltip(new Tooltip("The brand of the vehicle."));
+            foo.getTooltip().setPrefWidth(200);
+            foo.getTooltip().setWrapText(true);
             grid.add(foo, 2, 0);
             boo = new TextField();
             grid.add(boo, 3, 0);
             textfields.add(boo);
-            foo = new Label("Battery capacity: ");
+            foo = new Label("Battery capacity*: ");
+            foo.setGraphic(new ImageView(help));
+            foo.setTooltip(new Tooltip("The capacity of the battery."));
+            foo.getTooltip().setPrefWidth(200);
+            foo.getTooltip().setWrapText(true);
             grid.add(foo, 0, 1);
             boo = new TextField();
             grid.add(boo, 1, 1);
             textfields.add(boo);
-            foo = new Label("Battery remaining: ");
+            foo = new Label("Battery remaining*: ");
+            foo.setGraphic(new ImageView(help));
+            foo.setTooltip(new Tooltip("The remaining energy in the battery."));
+            foo.getTooltip().setPrefWidth(200);
+            foo.getTooltip().setWrapText(true);
             grid.add(foo, 2, 1);
             boo = new TextField();
             grid.add(boo, 3, 1);
             textfields.add(boo);
-            foo = new Label("Amount of energy: ");
+            foo = new Label("Amount of energy*: ");
+            foo.setGraphic(new ImageView(help));
+            foo.setTooltip(new Tooltip("The amount of energy the vehicle receives via inductive charging."));
+            foo.getTooltip().setPrefWidth(200);
+            foo.getTooltip().setWrapText(true);
             grid.add(foo, 0, 2);
             boo = new TextField();
             grid.add(boo, 1, 2);
             textfields.add(boo);
-            foo = new Label("Parking time: ");
+            foo = new Label("Parking time*: ");
+            foo.setGraphic(new ImageView(help));
+            foo.setTooltip(new Tooltip("The time the vehicle wants to park. During this time the vehicle either is parked, or it charges. If the amount of energy demands more time to be transfered then the vehicle receives energy as long as the parking time."));
+            foo.getTooltip().setPrefWidth(200);
+            foo.getTooltip().setWrapText(true);
             grid.add(foo, 2, 2);
             boo = new TextField();
             grid.add(boo, 3, 2);
@@ -592,6 +657,7 @@ class Event {
             buttonsBox.getChildren().add(1, suggest4);
             grid.add(buttonsBox, 2, 3, 2, 1);
             parkingEventCreation.setDefaultButton(true);
+            grid.add(new Label("*Required"), 0, 3);
             root.setCenter(grid);
         });
 
@@ -619,8 +685,8 @@ class Event {
             alert.setTitle("Information");
             alert.setHeaderText(null);
             alert.setContentText("Please select the kind of policy: ");
-            ButtonType buttonTypeOne = new ButtonType("Fixed space");
-            ButtonType buttonTypeTwo = new ButtonType("Changing space");
+            ButtonType buttonTypeOne = new ButtonType("Fixed time");
+            ButtonType buttonTypeTwo = new ButtonType("Changing time");
             ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
             alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo, buttonTypeCancel);
             Optional<ButtonType> result = alert.showAndWait();
@@ -630,17 +696,25 @@ class Event {
                 if (result.get() == buttonTypeOne) {
                     Maintenance.cleanScreen();
                     grid.setMaxSize(450, 180);
-                    foo = new Label("Duration: ");
+                    foo = new Label("Duration*: ");
+                    foo.setGraphic(new ImageView(help));
+                    foo.setTooltip(new Tooltip("The time duration of each price."));
+                    foo.getTooltip().setPrefWidth(200);
+                    foo.getTooltip().setWrapText(true);
                     grid.add(foo, 0, 0);
                     boo = new TextField();
                     grid.add(boo, 1, 0);
                     textfields.add(boo);
                     foo = new Label("Prices*: ");
+                    foo.setGraphic(new ImageView(help));
+                    foo.setTooltip(new Tooltip("The prices of the time spaces. All values need to be separated by commas."));
+                    foo.getTooltip().setPrefWidth(200);
+                    foo.getTooltip().setWrapText(true);
                     grid.add(foo, 0, 1);
                     boo = new TextField();
                     grid.add(boo, 1, 1);
                     textfields.add(boo);
-                    grid.add(new Label("*Separated with commas"), 0, 2);
+                    grid.add(new Label("*Required"), 0, 2);
                     Predicate buttonPredicate = b -> (b != EVLibSim.cancel);
                     HBox buttonsBox = EVLibSim.getButtonsBox();
                     buttonsBox.getChildren().removeIf(buttonPredicate);
@@ -654,14 +728,22 @@ class Event {
                     foo = new Label("Durations*: ");
                     grid.add(foo, 0, 0);
                     boo = new TextField();
+                    foo.setTooltip(new Tooltip("The time duration of each price. All values need to be separated by commas."));
+                    foo.setGraphic(new ImageView(help));
+                    foo.getTooltip().setPrefWidth(200);
+                    foo.getTooltip().setWrapText(true);
                     grid.add(boo, 1, 0);
                     textfields.add(boo);
                     foo = new Label("Prices*: ");
+                    foo.setTooltip(new Tooltip("The prices of the time spaces. All values need to be separated by commas."));
+                    foo.setGraphic(new ImageView(help));
+                    foo.getTooltip().setPrefWidth(200);
+                    foo.getTooltip().setWrapText(true);
                     grid.add(foo, 0, 1);
                     boo = new TextField();
                     grid.add(boo, 1, 1);
                     textfields.add(boo);
-                    grid.add(new Label("*Separated with commas"), 0, 2);
+                    grid.add(new Label("*Required"), 0, 2);
                     Predicate buttonPredicate = b -> (b != EVLibSim.cancel);
                     HBox buttonsBox = EVLibSim.getButtonsBox();
                     buttonsBox.getChildren().removeIf(buttonPredicate);
@@ -675,52 +757,40 @@ class Event {
 
         //Buttons
         chargingEventCreation.setOnAction(e -> {
+            Maintenance.trimTextfields();
             if (Maintenance.fieldCompletionCheck())
                 return;
-            textfields.forEach(field -> field.setText(field.getText().replaceAll("[^a-zA-Z0-9.]", "")));
-            if (Double.parseDouble(textfields.get(2).getText()) < 0 ||
-                    Double.parseDouble(textfields.get(3).getText()) < 0 ||
-                    Double.parseDouble(textfields.get(4).getText()) < 0 ||
-                    Double.parseDouble(textfields.get(5).getText()) < 0) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText(null);
-                alert.setContentText("Please fill with positive numbers or zero.");
-                alert.showAndWait();
-                return;
-            }
-            if (Double.parseDouble(textfields.get(2).getText()) < Double.parseDouble(textfields.get(3).getText())) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText(null);
-                alert.setContentText("The capacity cannot be smaller than the remaining amount.");
-                alert.showAndWait();
-                return;
-            }
-            if ((Double.parseDouble(textfields.get(4).getText()) > (Double.parseDouble(textfields.get(2).getText()) - Double.parseDouble(textfields.get(3).getText())))&&(type.equalsIgnoreCase("Energy"))) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText(null);
-                alert.setContentText("The asking amount of energy cannot be greater than the remaining capacity.");
-                alert.showAndWait();
-                return;
-            }
             try {
+                if (Maintenance.positiveOrZero(2, 3, 4))
+                    return;
+                if (Double.parseDouble(textfields.get(2).getText()) < Double.parseDouble(textfields.get(3).getText())) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText(null);
+                    alert.setContentText("The capacity cannot be smaller than the remaining amount.");
+                    alert.showAndWait();
+                    return;
+                }
+                if ((Double.parseDouble(textfields.get(4).getText()) > (Double.parseDouble(textfields.get(2).getText()) - Double.parseDouble(textfields.get(3).getText())))) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText(null);
+                    alert.setContentText("The asking amount of energy cannot be greater than the remaining capacity.");
+                    alert.showAndWait();
+                    return;
+                }
                 ChargingEvent ch;
                 Driver d = new Driver(textfields.get(0).getText());
                 Battery b = new Battery(Double.parseDouble(textfields.get(3).getText()), Double.parseDouble(textfields.get(2).getText()));
                 ElectricVehicle el = new ElectricVehicle(textfields.get(1).getText());
                 el.setBattery(b);
                 el.setDriver(d);
-                if (type.equalsIgnoreCase("Energy"))
-                    ch = new ChargingEvent(currentStation, el, Double.parseDouble(textfields.get(4).getText()), kindOfCharging);
-                else
-                    ch = new ChargingEvent(currentStation, el, kindOfCharging, Double.parseDouble(textfields.get(4).getText()));
-                ch.setWaitingTime(Long.parseLong(textfields.get(5).getText()));
+                ch = new ChargingEvent(currentStation, el, Double.parseDouble(textfields.get(4).getText()), kindOfCharging);
+                ch.setWaitingTime(currentStation.getWaitingTime(kindOfCharging) + 1000);
                 ch.preProcessing();
                 if (ch.getCondition().equals("ready")) {
                     ch.execution();
-                    Maintenance.completionMessage("Charging event creation");
+                    Maintenance.completionMessage("charging event creation");
                 } else if (ch.getCondition().equals("wait"))
                     Maintenance.queueInsertion();
                 else
@@ -731,23 +801,13 @@ class Event {
                 charging.fire();
             }
         });
-        disChargingEventCreation.setOnAction(e ->
-        {
+        disChargingEventCreation.setOnAction(e -> {
+            Maintenance.trimTextfields();
+            if (Maintenance.fieldCompletionCheck())
+                return;
             try {
-                if (Maintenance.fieldCompletionCheck())
+                if (Maintenance.positiveOrZero(2, 3, 4))
                     return;
-                textfields.forEach(field -> field.setText(field.getText().replaceAll("[^a-zA-Z0-9.]", "")));
-                if (Double.parseDouble(textfields.get(2).getText()) < 0 ||
-                    Double.parseDouble(textfields.get(3).getText()) < 0 ||
-                    Double.parseDouble(textfields.get(4).getText()) < 0 ||
-                    Double.parseDouble(textfields.get(5).getText()) < 0) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Error");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Please fill with positive numbers or zero.");
-                    alert.showAndWait();
-                    return;
-                }
                 if (Double.parseDouble(textfields.get(2).getText()) < Double.parseDouble(textfields.get(3).getText())) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Error");
@@ -770,18 +830,16 @@ class Event {
                 ElectricVehicle el = new ElectricVehicle(textfields.get(1).getText());
                 el.setBattery(b);
                 el.setDriver(d);
-                if (!Objects.equals(textfields.get(4).getText(), "0")) {
-                    dsch = new DisChargingEvent(currentStation, el, Double.parseDouble(textfields.get(4).getText()));
-                    dsch.setWaitingTime(Long.parseLong(textfields.get(5).getText()));
-                    dsch.preProcessing();
-                    if (dsch.getCondition().equals("ready")) {
-                        dsch.execution();
-                        Maintenance.completionMessage("Discharging event creation");
-                    } else if (dsch.getCondition().equals("wait"))
-                        Maintenance.queueInsertion();
-                    else
-                        Maintenance.noExecution();
-                }
+                dsch = new DisChargingEvent(currentStation, el, Double.parseDouble(textfields.get(4).getText()));
+                dsch.setWaitingTime(currentStation.getWaitingTime("discharging") + 1000);
+                dsch.preProcessing();
+                if (dsch.getCondition().equals("ready")) {
+                    dsch.execution();
+                    Maintenance.completionMessage("Discharging event creation");
+                } else if (dsch.getCondition().equals("wait"))
+                    Maintenance.queueInsertion();
+                else
+                    Maintenance.noExecution();
                 startScreen.fire();
             } catch (Exception ex) {
                 Maintenance.refillBlanks();
@@ -789,20 +847,12 @@ class Event {
             }
         });
         exchangeEventCreation.setOnAction(e -> {
+            Maintenance.trimTextfields();
+            if (Maintenance.fieldCompletionCheck())
+                return;
             try {
-                if (Maintenance.fieldCompletionCheck())
+                if (Maintenance.positiveOrZero(2, 3))
                     return;
-                textfields.forEach(field -> field.setText(field.getText().replaceAll("[^a-zA-Z0-9.]", "")));
-                if (Double.parseDouble(textfields.get(2).getText()) < 0 ||
-                    Double.parseDouble(textfields.get(3).getText()) < 0 ||
-                    Double.parseDouble(textfields.get(4).getText()) < 0) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Error");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Please fill with positive numbers or zero.");
-                    alert.showAndWait();
-                    return;
-                }
                 if (Double.parseDouble(textfields.get(2).getText()) < Double.parseDouble(textfields.get(3).getText())) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Error");
@@ -818,7 +868,7 @@ class Event {
                 el.setBattery(b);
                 el.setDriver(d);
                 ch = new ChargingEvent(currentStation, el);
-                ch.setWaitingTime(Long.parseLong(textfields.get(4).getText()));
+                ch.setWaitingTime(currentStation.getWaitingTime("exchange") + 1000);
                 ch.preProcessing();
                 if (ch.getCondition().equals("ready")) {
                     ch.execution();
@@ -834,21 +884,12 @@ class Event {
             }
         });
         parkingEventCreation.setOnAction(e -> {
+            Maintenance.trimTextfields();
+            if (Maintenance.fieldCompletionCheck())
+                return;
             try {
-                if (Maintenance.fieldCompletionCheck())
+                if (Maintenance.positiveOrZero(2, 3, 4, 5))
                     return;
-                textfields.forEach(field -> field.setText(field.getText().replaceAll("[^a-zA-Z0-9.]", "")));
-                if (Double.parseDouble(textfields.get(2).getText()) < 0 ||
-                    Double.parseDouble(textfields.get(3).getText()) < 0 ||
-                    Double.parseDouble(textfields.get(4).getText()) < 0 ||
-                    Double.parseDouble(textfields.get(5).getText()) < 0) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Error");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Please fill with positive numbers or zero.");
-                    alert.showAndWait();
-                    return;
-                }
                 if (Double.parseDouble(textfields.get(2).getText()) < Double.parseDouble(textfields.get(3).getText())) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Error");
@@ -858,7 +899,7 @@ class Event {
                     return;
                 }
                 if (Double.parseDouble(textfields.get(2).getText()) < Double.parseDouble(textfields.get(3).getText()) +
-                    Double.parseDouble(textfields.get(4).getText())) {
+                        Double.parseDouble(textfields.get(4).getText())) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Error");
                     alert.setHeaderText(null);
@@ -873,7 +914,7 @@ class Event {
                 el.setBattery(b);
                 el.setDriver(d);
                 if (!Objects.equals(textfields.get(4).getText(), "0")) {
-                    ch = new ParkingEvent(currentStation, el, Long.parseLong(textfields.get(5).getText()), Double.parseDouble(textfields.get(4).getText()));
+                    ch = new ParkingEvent(currentStation, el, (long) Double.parseDouble(textfields.get(5).getText()), Double.parseDouble(textfields.get(4).getText()));
                     ch.preProcessing();
                     if (ch.getCondition().equals("ready")) {
                         ch.execution();
@@ -881,7 +922,7 @@ class Event {
                     } else
                         Maintenance.noExecution();
                 } else if (!Objects.equals(textfields.get(5).getText(), "0")) {
-                    ch = new ParkingEvent(currentStation, el, Long.parseLong(textfields.get(5).getText()));
+                    ch = new ParkingEvent(currentStation, el, (long) Double.parseDouble(textfields.get(5).getText()));
                     ch.preProcessing();
                     if (ch.getCondition().equals("ready")) {
                         ch.execution();
@@ -892,7 +933,7 @@ class Event {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Error");
                     alert.setHeaderText(null);
-                    alert.setContentText("Please select at least a positive parking time.");
+                    alert.setContentText("Please select a positive parking time.");
                     alert.showAndWait();
                 }
                 startScreen.fire();
@@ -902,18 +943,24 @@ class Event {
             }
         });
         policyCreation1.setOnAction(e -> {
+            Maintenance.trimTextfields();
+            if (Maintenance.fieldCompletionCheck())
+                return;
             try {
-                if (Maintenance.fieldCompletionCheck())
-                    return;
-                String text = textfields.get(1).getText().replaceAll("[^0-9,]+", "");
+                String text = textfields.get(1).getText().replaceAll("[^0-9,.]+", "");
                 textfields.get(1).setText(text);
                 String[] prices = textfields.get(1).getText().split(",");
                 double[] p = new double[prices.length];
+                long timeDuration;
+                if (EVLibSim.timeUnit.getSelectionModel().getSelectedIndex() == 0)
+                    timeDuration = (long) Double.parseDouble(textfields.get(0).getText()) * 1000;
+                else
+                    timeDuration = (long) Double.parseDouble(textfields.get(0).getText()) * 60000;
                 for (int i = 0; i < prices.length; i++)
                     p[i] = Double.parseDouble(prices[i]);
-                PricingPolicy policy = new PricingPolicy(Long.parseLong(textfields.get(0).getText()), p);
+                PricingPolicy policy = new PricingPolicy(timeDuration, p);
                 currentStation.setPricingPolicy(policy);
-                Maintenance.completionMessage("Pricing policy creation");
+                Maintenance.completionMessage("pricing policy creation");
                 startScreen.fire();
             } catch (Exception ex) {
                 Maintenance.refillBlanks();
@@ -921,13 +968,14 @@ class Event {
             }
         });
         policyCreation2.setOnAction(e -> {
+            Maintenance.trimTextfields();
+            if (Maintenance.fieldCompletionCheck())
+                return;
             try {
-                if (Maintenance.fieldCompletionCheck())
-                    return;
-                String text = textfields.get(0).getText().replaceAll("[^0-9,]+", "");
+                String text = textfields.get(0).getText().replaceAll("[^0-9,.]+", "");
                 textfields.get(0).setText(text);
                 String[] spaces = textfields.get(0).getText().split(",");
-                text = textfields.get(1).getText().replaceAll("[^0-9,]+", "");
+                text = textfields.get(1).getText().replaceAll("[^0-9,.]+", "");
                 textfields.get(1).setText(text);
                 String[] prices = textfields.get(1).getText().split(",");
                 if (spaces.length != prices.length) {
@@ -941,12 +989,15 @@ class Event {
                 long[] s = new long[spaces.length];
                 double[] p = new double[prices.length];
                 for (int i = 0; i < spaces.length; i++) {
-                    s[i] = Long.parseLong(spaces[i]);
+                    if (EVLibSim.timeUnit.getSelectionModel().getSelectedIndex() == 0)
+                        s[i] = (long) Double.parseDouble(spaces[i])*1000;
+                    else
+                        s[i] = (long) Double.parseDouble(spaces[i])*60000;
                     p[i] = Double.parseDouble(prices[i]);
                 }
                 PricingPolicy policy = new PricingPolicy(s, p);
                 currentStation.setPricingPolicy(policy);
-                Maintenance.completionMessage("Pricing policy creation");
+                Maintenance.completionMessage("pricing policy creation");
                 startScreen.fire();
             } catch (Exception ex) {
                 Maintenance.refillBlanks();

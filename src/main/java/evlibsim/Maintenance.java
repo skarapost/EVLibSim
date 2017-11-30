@@ -12,11 +12,46 @@ class Maintenance {
 
     static boolean fieldCompletionCheck() {
         for (TextField f : textfields) {
-            if (f.getText().isEmpty() || f.getText().equals(" ") || f.getText().equals("  ") || f.getText().equals("   ") || f.getText().equals("    ")) {
+            if (f.getText().isEmpty() && !f.isDisabled()) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setHeaderText(null);
-                alert.setContentText("Please fill all the fields. Numbers have to be >=0.");
+                alert.setContentText("Please fill all the required fields.");
+                alert.showAndWait();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    static void trimTextfields() {
+        textfields.forEach(a -> a.setText(a.getText().trim()));
+    }
+
+    static boolean positiveOrZero()
+    {
+        for (TextField f: textfields) {
+            if (!f.isDisabled()) {
+                if (Integer.parseInt(f.getText()) < 0) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Please fill with positive numbers or zero.");
+                    alert.showAndWait();
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    static boolean positiveOrZero(int... numbers) {
+        for (int f: numbers) {
+            if (Double.parseDouble(textfields.get(f).getText()) < 0) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText(null);
+                alert.setContentText("Please fill with positive numbers or zero.");
                 alert.showAndWait();
                 return true;
             }
