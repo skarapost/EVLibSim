@@ -42,10 +42,13 @@ class MenuStation {
     private static final MenuItem newBatteryMI = new MenuItem("New battery");
     private static final MenuItem allBatteriesMI = new MenuItem("Batteries");
     private static final MenuItem batteriesChargingMI = new MenuItem("Batteries charging");
+    static final MenuItem policy = new MenuItem("New charging pricing policy");
     private static final Button chargingStationCreationB = new Button("Creation");
     private static final Button chargerCreationB = new Button("Creation");
     private static final Button modifyStationB = new Button("Save changes");
     private static final Button batteryCreationB = new Button("Creation");
+    private static final Button policyCreation1 = new Button("Creation");
+    private static final Button policyCreation2 = new Button("Creation");
     private static final Image image = new Image("/d.png");
     private static final Image help = new Image("/help.png");
     static RadioMenuItem cs;
@@ -58,8 +61,8 @@ class MenuStation {
         disChargersM.getItems().addAll(newDisChargerMI, allDisChargersMI);
         exchangeHandlersM.getItems().addAll(newExchangeHandlerMI, allExchangeHandlersMI);
         parkingSlotsM.getItems().addAll(newParkingSlotMI, allParkingSlotsMI);
-        stationM.getItems().addAll(newChargingStationMI, new SeparatorMenuItem(), chargersM, disChargersM,
-                exchangeHandlersM, parkingSlotsM, new SeparatorMenuItem(), modifyChargingStationMI,
+        stationM.getItems().addAll(newChargingStationMI, modifyChargingStationMI, new SeparatorMenuItem(), chargersM, disChargersM,
+                exchangeHandlersM, parkingSlotsM, new SeparatorMenuItem(), policy,
                 new SeparatorMenuItem(), newBatteryMI, batteriesChargingMI, allBatteriesMI);
 
         //Implements the New ChargingStation MenuItem
@@ -809,6 +812,85 @@ class MenuStation {
                 alert.showAndWait();
             });
         });
+
+        //Implements the New PricingPolicy MenuItem
+        policy.setOnAction(e -> {
+            if (Maintenance.stationCheck())
+                return;
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information");
+            alert.setHeaderText(null);
+            alert.setContentText("Please select the kind of policy: ");
+            ButtonType buttonTypeOne = new ButtonType("Fixed time");
+            ButtonType buttonTypeTwo = new ButtonType("Changing time");
+            ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+            alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo, buttonTypeCancel);
+            Optional<ButtonType> result = alert.showAndWait();
+            TextField boo;
+            Label foo;
+            if (result.isPresent()) {
+                if (result.get() == buttonTypeOne) {
+                    Maintenance.cleanScreen();
+                    grid.setMaxSize(450, 180);
+                    foo = new Label("Duration*: ");
+                    foo.setGraphic(new ImageView(help));
+                    foo.setTooltip(new Tooltip("The time duration of each price."));
+                    foo.getTooltip().setPrefWidth(200);
+                    foo.getTooltip().setWrapText(true);
+                    grid.add(foo, 0, 0);
+                    boo = new TextField();
+                    grid.add(boo, 1, 0);
+                    textfields.add(boo);
+                    foo = new Label("Prices*: ");
+                    foo.setGraphic(new ImageView(help));
+                    foo.setTooltip(new Tooltip("The prices of the time spaces. All values need to be separated by commas."));
+                    foo.getTooltip().setPrefWidth(200);
+                    foo.getTooltip().setWrapText(true);
+                    grid.add(foo, 0, 1);
+                    boo = new TextField();
+                    grid.add(boo, 1, 1);
+                    textfields.add(boo);
+                    grid.add(new Label("*Required"), 0, 2);
+                    Predicate buttonPredicate = b -> (b != EVLibSim.cancel);
+                    HBox buttonsBox = EVLibSim.getButtonsBox();
+                    buttonsBox.getChildren().removeIf(buttonPredicate);
+                    buttonsBox.getChildren().add(0, policyCreation1);
+                    grid.add(buttonsBox, 0, 3, 2, 1);
+                    policyCreation1.setDefaultButton(true);
+                    root.setCenter(grid);
+                } else if (result.get() == buttonTypeTwo) {
+                    Maintenance.cleanScreen();
+                    grid.setMaxSize(450, 180);
+                    foo = new Label("Durations*: ");
+                    grid.add(foo, 0, 0);
+                    boo = new TextField();
+                    foo.setTooltip(new Tooltip("The time duration of each price. All values need to be separated by commas."));
+                    foo.setGraphic(new ImageView(help));
+                    foo.getTooltip().setPrefWidth(200);
+                    foo.getTooltip().setWrapText(true);
+                    grid.add(boo, 1, 0);
+                    textfields.add(boo);
+                    foo = new Label("Prices*: ");
+                    foo.setTooltip(new Tooltip("The prices of the time spaces. All values need to be separated by commas."));
+                    foo.setGraphic(new ImageView(help));
+                    foo.getTooltip().setPrefWidth(200);
+                    foo.getTooltip().setWrapText(true);
+                    grid.add(foo, 0, 1);
+                    boo = new TextField();
+                    grid.add(boo, 1, 1);
+                    textfields.add(boo);
+                    grid.add(new Label("*Required"), 0, 2);
+                    Predicate buttonPredicate = b -> (b != EVLibSim.cancel);
+                    HBox buttonsBox = EVLibSim.getButtonsBox();
+                    buttonsBox.getChildren().removeIf(buttonPredicate);
+                    buttonsBox.getChildren().add(0, policyCreation2);
+                    grid.add(buttonsBox, 0, 3, 2, 1);
+                    policyCreation2.setDefaultButton(true);
+                    root.setCenter(grid);
+                }
+            }
+        });
+
         //Buttons
         chargerCreationB.setOnAction(e -> {
             Maintenance.trimTextfields();
@@ -1025,6 +1107,68 @@ class MenuStation {
             }
         });
 
+        policyCreation1.setOnAction(e -> {
+            Maintenance.trimTextfields();
+            if (Maintenance.fieldCompletionCheck())
+                return;
+            try {
+                String text = textfields.get(1).getText().replaceAll("[^0-9,.]+", "");
+                textfields.get(1).setText(text);
+                String[] prices = textfields.get(1).getText().split(",");
+                double[] p = new double[prices.length];
+                long timeDuration;
+                if (EVLibSim.timeUnit.getSelectionModel().getSelectedIndex() == 0)
+                    timeDuration = (long) Double.parseDouble(textfields.get(0).getText()) * 1000;
+                else
+                    timeDuration = (long) Double.parseDouble(textfields.get(0).getText()) * 60000;
+                for (int i = 0; i < prices.length; i++)
+                    p[i] = Double.parseDouble(prices[i]);
+                PricingPolicy policy = new PricingPolicy(timeDuration, p);
+                currentStation.setPricingPolicy(policy);
+                Maintenance.completionMessage("pricing policy creation");
+                startScreen.fire();
+            } catch (Exception ex) {
+                Maintenance.refillBlanks();
+                startScreen.fire();
+            }
+        });
+        policyCreation2.setOnAction(e -> {
+            Maintenance.trimTextfields();
+            if (Maintenance.fieldCompletionCheck())
+                return;
+            try {
+                String text = textfields.get(0).getText().replaceAll("[^0-9,.]+", "");
+                textfields.get(0).setText(text);
+                String[] spaces = textfields.get(0).getText().split(",");
+                text = textfields.get(1).getText().replaceAll("[^0-9,.]+", "");
+                textfields.get(1).setText(text);
+                String[] prices = textfields.get(1).getText().split(",");
+                if (spaces.length != prices.length) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText(null);
+                    alert.setContentText("The number of time spaces and prices have to be equal.");
+                    alert.showAndWait();
+                    return;
+                }
+                long[] s = new long[spaces.length];
+                double[] p = new double[prices.length];
+                for (int i = 0; i < spaces.length; i++) {
+                    if (EVLibSim.timeUnit.getSelectionModel().getSelectedIndex() == 0)
+                        s[i] = (long) Double.parseDouble(spaces[i])*1000;
+                    else
+                        s[i] = (long) Double.parseDouble(spaces[i])*60000;
+                    p[i] = Double.parseDouble(prices[i]);
+                }
+                PricingPolicy policy = new PricingPolicy(s, p);
+                currentStation.setPricingPolicy(policy);
+                Maintenance.completionMessage("pricing policy creation");
+                startScreen.fire();
+            } catch (Exception ex) {
+                Maintenance.refillBlanks();
+                startScreen.fire();
+            }
+        });
 
         batteryCreationB.setOnAction(e -> {
             Maintenance.trimTextfields();

@@ -1,8 +1,8 @@
 package evlibsim;
 
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.TextField;
+import javafx.geometry.Point2D;
+import javafx.scene.Node;
+import javafx.scene.control.*;
 
 import java.util.Optional;
 
@@ -127,4 +127,29 @@ class Maintenance {
         alert.setContentText("Please fill in the blanks again.");
         alert.showAndWait();
     }
+
+    /*static void toolTipCustomization (Node node) {
+        Label label;
+        Button button;
+        if (node instanceof Label) {
+            label = (Label) node;
+            label.getTooltip().setPrefWidth(200);
+            label.getTooltip().setWrapText(true);
+            label.setOnMouseEntered(event -> {
+                Point2D p = label.localToScreen(label.getLayoutBounds().getMaxX(), label.getLayoutBounds().getMaxY());
+                label.getTooltip().show(label, p.getX(), p.getY());
+            });
+            label.setOnMouseExited(event -> label.getTooltip().hide());
+        }
+        else if (node instanceof Button) {
+            button = (Button) node;
+            button.getTooltip().setPrefWidth(200);
+            button.getTooltip().setWrapText(true);
+            button.setOnMouseEntered(event -> {
+                Point2D p = button.localToScreen(button.getLayoutBounds().getMaxX(), button.getLayoutBounds().getMaxY());
+                button.getTooltip().show(button, p.getX(), p.getY());
+            });
+            button.setOnMouseExited(event -> button.getTooltip().hide());
+        }
+    }*/
 }

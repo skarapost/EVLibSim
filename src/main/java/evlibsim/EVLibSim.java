@@ -34,6 +34,7 @@ import static evlibsim.Energy.*;
 import static evlibsim.Event.*;
 import static evlibsim.MenuStation.cs;
 import static evlibsim.MenuStation.newChargingStationMI;
+import static evlibsim.MenuStation.policy;
 
 public class EVLibSim extends Application {
 
@@ -46,13 +47,16 @@ public class EVLibSim extends Application {
     //Top menu bar
     private static final MenuBar leftMenuBar = new MenuBar();
     private static final HBox rightMenuBar = new HBox();
-    private static final HBox middleMenuBar = new HBox();
     private static final HBox topMenuBar = new HBox();
     static final Button refreshButton = new Button();
     private static final Button homeButton = new Button();
     private static final Image refreshImage = new Image("/refresh.png");
-    private static final Label timeUnitLabel = new Label("Time metering unit:");
-    static final ChoiceBox<String> timeUnit = new ChoiceBox(FXCollections.observableArrayList("Second", "Minute"));
+    private static final Label timeUnitLabel = new Label("Time unit: ");
+    private static final Label energyUnitLabel = new Label("Energy unit: ");
+    private static final Label currencyLabel = new Label("Currency: ");
+    static final ChoiceBox<String> timeUnit = new ChoiceBox<>(FXCollections.observableArrayList("Second", "Minute"));
+    static final ChoiceBox<String> currency = new ChoiceBox<>(FXCollections.observableArrayList("Euro", "Usd"));
+    static final ChoiceBox<String> energyUnit = new ChoiceBox<>(FXCollections.observableArrayList("Watt", "KiloWatt"));
     //File menu item
     private static final Menu file = new Menu("File");
     private static final MenuItem export = new MenuItem("Export to csv...");
@@ -87,7 +91,7 @@ public class EVLibSim extends Application {
     private static final HBox buttonsBox = new HBox();
 
     //Buttons of startScreen's grid
-    private static final Button newChargingStation = new Button("New station");
+    private static final Button newStation = new Button("Station");
     private static final Button newEvent = new Button("New event");
     private static final Button newEnergy = new Button("Energy");
     private static final Button bt1 = new Button("New charging");
@@ -98,6 +102,8 @@ public class EVLibSim extends Application {
     private static final Button bt6 = new Button("Add energy source");
     private static final Button bt7 = new Button("Delete energy source");
     private static final Button bt8 = new Button("Sort energies");
+    private static final Button bt9 = new Button("New charging station");
+    private static final Button bt10 = new Button("New charging pricing policy");
 
     static ChargingStation currentStation;
 
@@ -189,14 +195,26 @@ public class EVLibSim extends Application {
         rightMenuBar.getStyleClass().add("menu-bar");
         HBox.setHgrow(leftMenuBar, Priority.ALWAYS);
         HBox.setHgrow(rightMenuBar, Priority.NEVER);
-        rightMenuBar.getChildren().addAll(timeUnitLabel, timeUnit, homeButton, refreshButton);
-        rightMenuBar.setSpacing(30);
+        HBox timeBox = new HBox(timeUnitLabel, timeUnit);
+        timeBox.getStyleClass().add("menu-bar");
+        HBox currencyBox = new HBox(currencyLabel, currency);
+        currencyBox.getStyleClass().add("menu-bar");
+        HBox energyBox = new HBox(energyUnitLabel, energyUnit);
+        energyBox.getStyleClass().add("menu-bar");
+        rightMenuBar.getChildren().addAll(timeBox, currencyBox, energyBox, homeButton, refreshButton);
+        rightMenuBar.setSpacing(10);
 
         timeUnit.getSelectionModel().selectFirst();
+        timeUnit.getSelectionModel().selectedIndexProperty().addListener((ov, oldValue, newValue) -> {
+            if (!refreshButton.isDisabled())
+                refreshButton.fire();
+        });
 
-        timeUnit.getSelectionModel().selectedIndexProperty().addListener((ov, oldValue, newValue) -> startScreen.fire());
+        currency.getSelectionModel().selectFirst();
 
-        topMenuBar.getChildren().addAll(leftMenuBar, middleMenuBar, rightMenuBar);
+        energyUnit.getSelectionModel().selectFirst();
+
+        topMenuBar.getChildren().addAll(leftMenuBar, rightMenuBar);
 
         scene.getStylesheets().add(EVLibSim.class.getResource("/EVLibSim.css").toExternalForm());
         scene.getRoot().getStyleClass().add("main-root");
@@ -268,7 +286,7 @@ public class EVLibSim extends Application {
             Maintenance.cleanScreen();
             grid.setMaxSize(420, 420);
             grid.setMinSize(420, 420);
-            grid.add(newChargingStation, 0, 0);
+            grid.add(newStation, 0, 0);
             grid.add(newEvent, 0, 1);
             grid.add(newEnergy, 0, 2);
             grid.setAlignment(Pos.CENTER);
@@ -345,11 +363,29 @@ public class EVLibSim extends Application {
 
 
         //Start screen buttons
-        newChargingStation.setPrefSize(230, 60);
+        newStation.setPrefSize(230, 60);
         newEvent.setPrefSize(230, 60);
         newEnergy.setPrefSize(230, 60);
 
-        newChargingStation.setOnAction(e -> newChargingStationMI.fire());
+        newStation.setOnAction(e -> {
+            Maintenance.cleanScreen();
+            bt9.setPrefSize(230, 60);
+            bt10.setPrefSize(230, 60);
+            grid.add(bt9, 0, 0);
+            grid.add(bt10, 0, 1);
+            Button back = new Button();
+            back.setGraphic(new ImageView(image));
+            back.setPrefSize(image.getWidth(), image.getHeight());
+            HBox box = new HBox();
+            box.setAlignment(Pos.CENTER);
+            box.getChildren().add(back);
+            grid.add(box, 0, 4);
+            back.setOnAction(ey -> startScreen.fire());
+            root.setCenter(grid);
+        });
+
+        bt9.setOnAction(e -> newChargingStationMI.fire());
+        bt10.setOnAction(e -> policy.fire());
 
         newEvent.setOnAction(e -> {
             if (Maintenance.stationCheck())
