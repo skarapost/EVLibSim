@@ -4,7 +4,12 @@ import evlib.ev.Battery;
 import evlib.ev.Driver;
 import evlib.ev.ElectricVehicle;
 import evlib.station.*;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableObjectValue;
+import javafx.beans.value.ObservableStringValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -22,7 +27,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.function.Predicate;
 
 import static evlibsim.EVLibSim.*;
@@ -45,6 +49,7 @@ class Event {
     private static final Button exchangeEventCreation = new Button("Creation");
     private static String kindOfCharging;
     private static final Image help = new Image("/help.png");
+    //private static ObservableList<ChargingEvent> conditions = FXCollections.observableArrayList();
 
     //Builds the Event category in the main MenuBar
     static Menu createEventMenu() {
@@ -86,7 +91,7 @@ class Event {
             textfields.add(boo);
             foo = new Label("Battery remaining*: ");
             foo.setGraphic(new ImageView(help));
-            foo.setTooltip(new Tooltip("The remaining energy in the battery."));
+            foo.setTooltip(new Tooltip("The remaining energy in the battery before the charging."));
             foo.getTooltip().setPrefWidth(200);
             foo.getTooltip().setWrapText(true);
             grid.add(foo, 2, 1);
@@ -139,7 +144,10 @@ class Event {
                 inside1.setStyle("-fx-background-color: #F0F1F3; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
                 inside1.setPadding(new Insets(10, 10, 10, 10));
                 inside1.setSpacing(20);
-                tempStations.forEach(temp -> inside1.getChildren().add(new Label(temp.getName() + ": " + temp.getTotalEnergy())));
+                if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
+                    tempStations.forEach(temp -> inside1.getChildren().add(new Label(temp.getName() + ": " + temp.getTotalEnergy())));
+                else
+                    tempStations.forEach(temp -> inside1.getChildren().add(new Label(temp.getName() + ": " + temp.getTotalEnergy() / 1000)));
                 VBox inside2 = new VBox();
                 inside2.setMinSize(100, 30);
                 inside2.setMaxSize(100, 30);
@@ -159,7 +167,10 @@ class Event {
                 inside3.setStyle("-fx-background-color:#F0F1F3; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
                 inside3.setPadding(new Insets(10, 10, 10, 10));
                 inside3.setSpacing(20);
-                tempStations.forEach(temp -> inside3.getChildren().add(new Label(temp.getName() + ": " + temp.getCurrentPrice())));
+                if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
+                    tempStations.forEach(temp -> inside3.getChildren().add(new Label(temp.getName() + ": " + temp.getCurrentPrice())));
+                else
+                    tempStations.forEach(temp -> inside3.getChildren().add(new Label(temp.getName() + ": " + temp.getCurrentPrice() * 1000)));
                 VBox inside4 = new VBox();
                 inside4.setMinSize(100, 30);
                 inside4.setMaxSize(100, 30);
@@ -179,7 +190,10 @@ class Event {
                 inside5.setStyle("-fx-background-color:#F0F1F3; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
                 inside5.setPadding(new Insets(10, 10, 10, 10));
                 inside5.setSpacing(20);
-                tempStations.forEach(temp -> inside5.getChildren().add(new Label(temp.getName() + ": " + temp.getWaitingTime("slow"))));
+                if (timeUnit.getSelectionModel().getSelectedIndex() == 0)
+                    tempStations.forEach(temp -> inside5.getChildren().add(new Label(temp.getName() + ": " + temp.getWaitingTime("slow") / 1000)));
+                else
+                    tempStations.forEach(temp -> inside5.getChildren().add(new Label(temp.getName() + ": " + temp.getWaitingTime("slow") / 60000)));
                 VBox inside6 = new VBox();
                 inside6.setMinSize(100, 30);
                 inside6.setMaxSize(100, 30);
@@ -199,7 +213,10 @@ class Event {
                 inside7.setStyle("-fx-background-color:#F0F1F3; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
                 inside7.setPadding(new Insets(10, 10, 10, 10));
                 inside7.setSpacing(20);
-                tempStations.forEach(temp -> inside7.getChildren().add(new Label(temp.getName() + ": " + temp.getWaitingTime("fast"))));
+                if (timeUnit.getSelectionModel().getSelectedIndex() == 0)
+                    tempStations.forEach(temp -> inside7.getChildren().add(new Label(temp.getName() + ": " + temp.getWaitingTime("fast") / 1000)));
+                else
+                    tempStations.forEach(temp -> inside7.getChildren().add(new Label(temp.getName() + ": " + temp.getWaitingTime("fast") / 60000)));
                 VBox inside8 = new VBox();
                 inside8.setMinSize(100, 30);
                 inside8.setMaxSize(100, 30);
@@ -267,7 +284,7 @@ class Event {
             textfields.add(boo);
             foo = new Label("Battery remaining*: ");
             foo.setGraphic(new ImageView(help));
-            foo.setTooltip(new Tooltip("The remaining energy in the battery."));
+            foo.setTooltip(new Tooltip("The remaining energy in the battery before the discharging."));
             foo.getTooltip().setPrefWidth(200);
             foo.getTooltip().setWrapText(true);
             grid.add(foo, 2, 1);
@@ -306,7 +323,10 @@ class Event {
                 inside1.setStyle("-fx-background-color:#F0F1F3; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
                 inside1.setPadding(new Insets(10, 10, 10, 10));
                 inside1.setSpacing(20);
-                tempStations.forEach(temp -> inside1.getChildren().add(new Label(temp.getName() + ": " + temp.getTotalEnergy())));
+                if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
+                    tempStations.forEach(temp -> inside1.getChildren().add(new Label(temp.getName() + ": " + temp.getTotalEnergy())));
+                else
+                    tempStations.forEach(temp -> inside1.getChildren().add(new Label(temp.getName() + ": " + temp.getTotalEnergy() / 1000)));
                 VBox inside2 = new VBox();
                 inside2.setMaxSize(100, 30);
                 inside2.setMinSize(100, 30);
@@ -326,7 +346,10 @@ class Event {
                 inside3.setStyle("-fx-background-color:#F0F1F3; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
                 inside3.setPadding(new Insets(10, 10, 10, 10));
                 inside3.setSpacing(20);
-                tempStations.forEach(temp -> inside3.getChildren().add(new Label(temp.getName() + ": " + temp.getDisUnitPrice())));
+                if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
+                    tempStations.forEach(temp -> inside3.getChildren().add(new Label(temp.getName() + ": " + temp.getDisUnitPrice())));
+                else
+                    tempStations.forEach(temp -> inside3.getChildren().add(new Label(temp.getName() + ": " + temp.getDisUnitPrice() * 1000)));
                 VBox inside4 = new VBox();
                 inside4.setMaxSize(100, 30);
                 inside4.setMinSize(100, 30);
@@ -346,7 +369,10 @@ class Event {
                 inside5.setStyle("-fx-background-color:#F0F1F3; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
                 inside5.setPadding(new Insets(10, 10, 10, 10));
                 inside5.setSpacing(20);
-                tempStations.forEach(temp -> inside5.getChildren().add(new Label(temp.getName() + ": " + temp.getWaitingTime("discharging"))));
+                if (timeUnit.getSelectionModel().getSelectedIndex() == 0)
+                    tempStations.forEach(temp -> inside5.getChildren().add(new Label(temp.getName() + ": " + temp.getWaitingTime("discharging") / 1000)));
+                else
+                    tempStations.forEach(temp -> inside5.getChildren().add(new Label(temp.getName() + ": " + temp.getWaitingTime("discharging") / 60000)));
                 VBox inside6 = new VBox();
                 inside6.setMaxSize(100, 30);
                 inside6.setMinSize(100, 30);
@@ -416,7 +442,7 @@ class Event {
             textfields.add(boo);
             foo = new Label("Battery remaining*: ");
             foo.setGraphic(new ImageView(help));
-            foo.setTooltip(new Tooltip("The remaining energy in the battery."));
+            foo.setTooltip(new Tooltip("The remaining energy in the battery to be exchanged."));
             foo.getTooltip().setPrefWidth(200);
             foo.getTooltip().setWrapText(true);
             grid.add(foo, 2, 1);
@@ -486,7 +512,10 @@ class Event {
                 inside5.setStyle("-fx-background-color:#F0F1F3; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
                 inside5.setPadding(new Insets(10, 10, 10, 10));
                 inside5.setSpacing(20);
-                tempStations.forEach(temp -> inside5.getChildren().add(new Label(temp.getName() + ": " + temp.getWaitingTime("exchange"))));
+                if (timeUnit.getSelectionModel().getSelectedIndex() == 0)
+                    tempStations.forEach(temp -> inside5.getChildren().add(new Label(temp.getName() + ": " + temp.getWaitingTime("exchange") / 1000)));
+                else
+                    tempStations.forEach(temp -> inside5.getChildren().add(new Label(temp.getName() + ": " + temp.getWaitingTime("exchange") / 60000)));
                 VBox inside6 = new VBox();
                 inside6.setMaxSize(100, 30);
                 inside6.setMinSize(100, 30);
@@ -556,7 +585,7 @@ class Event {
             textfields.add(boo);
             foo = new Label("Battery remaining*: ");
             foo.setGraphic(new ImageView(help));
-            foo.setTooltip(new Tooltip("The remaining energy in the battery."));
+            foo.setTooltip(new Tooltip("The remaining energy in the battery before the parking/charging."));
             foo.getTooltip().setPrefWidth(200);
             foo.getTooltip().setWrapText(true);
             grid.add(foo, 2, 1);
@@ -604,7 +633,10 @@ class Event {
                 inside1.setStyle("-fx-background-color:#F0F1F3; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
                 inside1.setPadding(new Insets(10, 10, 10, 10));
                 inside1.setSpacing(20);
-                tempStations.forEach(temp -> inside1.getChildren().add(new Label(temp.getName() + ": " + temp.getTotalEnergy())));
+                if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
+                    tempStations.forEach(temp -> inside1.getChildren().add(new Label(temp.getName() + ": " + temp.getTotalEnergy())));
+                else
+                    tempStations.forEach(temp -> inside1.getChildren().add(new Label(temp.getName() + ": " + temp.getTotalEnergy() / 1000)));
                 VBox inside2 = new VBox();
                 inside2.setMaxSize(100, 30);
                 inside2.setMinSize(100, 30);
@@ -624,7 +656,10 @@ class Event {
                 inside3.setStyle("-fx-background-color:#F0F1F3; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
                 inside3.setPadding(new Insets(10, 10, 10, 10));
                 inside3.setSpacing(20);
-                tempStations.forEach(temp -> inside3.getChildren().add(new Label(temp.getName() + ": " + temp.getInductivePrice())));
+                if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
+                    tempStations.forEach(temp -> inside3.getChildren().add(new Label(temp.getName() + ": " + temp.getInductivePrice())));
+                else
+                    tempStations.forEach(temp -> inside3.getChildren().add(new Label(temp.getName() + ": " + temp.getInductivePrice() * 1000)));
                 VBox inside4 = new VBox();
                 inside4.setMaxSize(100, 30);
                 inside4.setMinSize(100, 30);
@@ -698,18 +733,33 @@ class Event {
                     alert.showAndWait();
                     return;
                 }
+                if (Double.parseDouble(textfields.get(4).getText()) <= 0) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText(null);
+                    alert.setContentText("The asking amount of energy has to be greater than zero.");
+                    alert.showAndWait();
+                    return;
+                }
                 ChargingEvent ch;
+                Battery b;
                 Driver d = new Driver(textfields.get(0).getText());
-                Battery b = new Battery(Double.parseDouble(textfields.get(3).getText()), Double.parseDouble(textfields.get(2).getText()));
+                if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
+                    b = new Battery(Double.parseDouble(textfields.get(3).getText()), Double.parseDouble(textfields.get(2).getText()));
+                else
+                    b = new Battery(Double.parseDouble(textfields.get(3).getText()) * 1000, Double.parseDouble(textfields.get(2).getText()) * 1000);
                 ElectricVehicle el = new ElectricVehicle(textfields.get(1).getText());
                 el.setBattery(b);
                 el.setDriver(d);
-                ch = new ChargingEvent(currentStation, el, Double.parseDouble(textfields.get(4).getText()), kindOfCharging);
+                if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
+                    ch = new ChargingEvent(currentStation, el, Double.parseDouble(textfields.get(4).getText()), kindOfCharging);
+                else
+                    ch = new ChargingEvent(currentStation, el, Double.parseDouble(textfields.get(4).getText()) * 1000, kindOfCharging);
                 ch.setWaitingTime(currentStation.getWaitingTime(kindOfCharging) + 1000);
                 ch.preProcessing();
                 if (ch.getCondition().equals("ready")) {
                     ch.execution();
-                    Maintenance.completionMessage("charging event creation");
+                    Maintenance.completionMessage("creation of the charging event");
                 } else if (ch.getCondition().equals("wait"))
                     Maintenance.queueInsertion();
                 else
@@ -743,18 +793,33 @@ class Event {
                     alert.showAndWait();
                     return;
                 }
+                if (Double.parseDouble(textfields.get(4).getText()) <= 0) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText(null);
+                    alert.setContentText("The given amount of energy has to be greater than zero.");
+                    alert.showAndWait();
+                    return;
+                }
                 DisChargingEvent dsch;
+                Battery b;
                 Driver d = new Driver(textfields.get(0).getText());
-                Battery b = new Battery(Double.parseDouble(textfields.get(3).getText()), Double.parseDouble(textfields.get(2).getText()));
+                if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
+                    b = new Battery(Double.parseDouble(textfields.get(3).getText()), Double.parseDouble(textfields.get(2).getText()));
+                else
+                    b = new Battery(Double.parseDouble(textfields.get(3).getText()) * 1000, Double.parseDouble(textfields.get(2).getText()) * 1000);
                 ElectricVehicle el = new ElectricVehicle(textfields.get(1).getText());
                 el.setBattery(b);
                 el.setDriver(d);
-                dsch = new DisChargingEvent(currentStation, el, Double.parseDouble(textfields.get(4).getText()));
+                if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
+                    dsch = new DisChargingEvent(currentStation, el, Double.parseDouble(textfields.get(4).getText()));
+                else
+                    dsch = new DisChargingEvent(currentStation, el, Double.parseDouble(textfields.get(4).getText()) * 1000);
                 dsch.setWaitingTime(currentStation.getWaitingTime("discharging") + 1000);
                 dsch.preProcessing();
                 if (dsch.getCondition().equals("ready")) {
                     dsch.execution();
-                    Maintenance.completionMessage("Discharging event creation");
+                    Maintenance.completionMessage("creation of the discharging event");
                 } else if (dsch.getCondition().equals("wait"))
                     Maintenance.queueInsertion();
                 else
@@ -781,8 +846,12 @@ class Event {
                     return;
                 }
                 ChargingEvent ch;
+                Battery b;
                 Driver d = new Driver(textfields.get(0).getText());
-                Battery b = new Battery(Double.parseDouble(textfields.get(3).getText()), Double.parseDouble(textfields.get(2).getText()));
+                if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
+                    b = new Battery(Double.parseDouble(textfields.get(3).getText()), Double.parseDouble(textfields.get(2).getText()));
+                else
+                    b = new Battery(Double.parseDouble(textfields.get(3).getText())* 1000, Double.parseDouble(textfields.get(2).getText()) * 1000);
                 ElectricVehicle el = new ElectricVehicle(textfields.get(1).getText());
                 el.setBattery(b);
                 el.setDriver(d);
@@ -791,7 +860,7 @@ class Event {
                 ch.preProcessing();
                 if (ch.getCondition().equals("ready")) {
                     ch.execution();
-                    Maintenance.completionMessage("Charging event creation");
+                    Maintenance.completionMessage("creation of the charging event");
                 } else if (ch.getCondition().equals("wait"))
                     Maintenance.queueInsertion();
                 else
@@ -804,10 +873,20 @@ class Event {
         });
         parkingEventCreation.setOnAction(e -> {
             Maintenance.trimTextfields();
-            if (Maintenance.fieldCompletionCheck())
-                return;
+            for (TextField f : textfields) {
+                if (textfields.indexOf(f) == 4)
+                    continue;
+                if (f.getText().isEmpty() && !f.isDisabled()) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Please fill all the required fields.");
+                    alert.showAndWait();
+                    return;
+                }
+            }
             try {
-                if (Maintenance.positiveOrZero(2, 3, 4, 5))
+                if (Maintenance.positiveOrZero(2, 3, 5))
                     return;
                 if (Double.parseDouble(textfields.get(2).getText()) < Double.parseDouble(textfields.get(3).getText())) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -827,25 +906,39 @@ class Event {
                     return;
                 }
                 ParkingEvent ch;
+                Battery b;
                 Driver d = new Driver(textfields.get(0).getText());
-                Battery b = new Battery(Double.parseDouble(textfields.get(3).getText()), Double.parseDouble(textfields.get(2).getText()));
+                if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
+                    b = new Battery(Double.parseDouble(textfields.get(3).getText()), Double.parseDouble(textfields.get(2).getText()));
+                else
+                    b = new Battery(Double.parseDouble(textfields.get(3).getText()) * 1000, Double.parseDouble(textfields.get(2).getText()) * 1000);
                 ElectricVehicle el = new ElectricVehicle(textfields.get(1).getText());
                 el.setBattery(b);
                 el.setDriver(d);
-                if (!Objects.equals(textfields.get(4).getText(), "0")) {
-                    ch = new ParkingEvent(currentStation, el, (long) Double.parseDouble(textfields.get(5).getText()), Double.parseDouble(textfields.get(4).getText()));
+                if (!textfields.get(4).getText().isEmpty()) {
+                    if ((energyUnit.getSelectionModel().getSelectedIndex() == 0) && (timeUnit.getSelectionModel().getSelectedIndex() == 0))
+                        ch = new ParkingEvent(currentStation, el, (long) Double.parseDouble(textfields.get(5).getText()) * 1000, Double.parseDouble(textfields.get(4).getText()));
+                    else if ((energyUnit.getSelectionModel().getSelectedIndex() == 0) && (timeUnit.getSelectionModel().getSelectedIndex() == 1))
+                        ch = new ParkingEvent(currentStation, el, (long) Double.parseDouble(textfields.get(5).getText()) * 60000, Double.parseDouble(textfields.get(4).getText()));
+                    else if ((energyUnit.getSelectionModel().getSelectedIndex() == 1) && (timeUnit.getSelectionModel().getSelectedIndex() == 0))
+                        ch = new ParkingEvent(currentStation, el, (long) Double.parseDouble(textfields.get(5).getText()) * 1000, Double.parseDouble(textfields.get(4).getText()) * 1000);
+                    else
+                        ch = new ParkingEvent(currentStation, el, (long) Double.parseDouble(textfields.get(5).getText()) * 60000, Double.parseDouble(textfields.get(4).getText()) * 1000);
                     ch.preProcessing();
                     if (ch.getCondition().equals("ready")) {
                         ch.execution();
-                        Maintenance.completionMessage("Parking event creation");
+                        Maintenance.completionMessage("creation of the parking event");
                     } else
                         Maintenance.noExecution();
                 } else if (!Objects.equals(textfields.get(5).getText(), "0")) {
-                    ch = new ParkingEvent(currentStation, el, (long) Double.parseDouble(textfields.get(5).getText()));
+                    if (timeUnit.getSelectionModel().getSelectedIndex() == 0)
+                        ch = new ParkingEvent(currentStation, el, (long) Double.parseDouble(textfields.get(5).getText()) * 1000);
+                    else
+                        ch = new ParkingEvent(currentStation, el, (long) Double.parseDouble(textfields.get(5).getText()) * 60000);
                     ch.preProcessing();
                     if (ch.getCondition().equals("ready")) {
                         ch.execution();
-                        Maintenance.completionMessage("Parking event creation");
+                        Maintenance.completionMessage("creation of the parking event");
                     } else
                         Maintenance.noExecution();
                 } else {

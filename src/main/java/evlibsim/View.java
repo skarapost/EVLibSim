@@ -3,7 +3,6 @@ package evlibsim;
 import evlib.station.*;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -71,14 +70,17 @@ class View {
             TableColumn<ChargingEvent, Integer> idCol = new TableColumn<>("Id");
             TableColumn<ChargingEvent, String> nameCol = new TableColumn<>("Name");
             TableColumn<ChargingEvent, String> brandCol = new TableColumn<>("Brand");
-            TableColumn<ChargingEvent, Double> askingAmountCol = new TableColumn<>("EnergyAmount");
+            TableColumn<ChargingEvent, Number> askingAmountCol = new TableColumn<>("EnergyAmount");
             TableColumn<ChargingEvent, Number> maxWaitingTimeCol = new TableColumn<>("MaxWaitingTime");
             table.getColumns().addAll(idCol, nameCol, brandCol, askingAmountCol, maxWaitingTimeCol, executionCol);
 
             idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
             nameCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getDriver().getName()));
             brandCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getBrand()));
-            askingAmountCol.setCellValueFactory(new PropertyValueFactory<>("amountOfEnergy"));
+            if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
+                askingAmountCol.setCellValueFactory(p -> new SimpleDoubleProperty(p.getValue().getAmountOfEnergy()));
+            else
+                askingAmountCol.setCellValueFactory(p -> new SimpleDoubleProperty(p.getValue().getAmountOfEnergy() / 1000));
             if (EVLibSim.timeUnit.getSelectionModel().getSelectedIndex() == 0)
                 maxWaitingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getMaxWaitingTime() / 1000));
             else
@@ -118,14 +120,17 @@ class View {
             TableColumn<ChargingEvent, Integer> idCol = new TableColumn<>("Id");
             TableColumn<ChargingEvent, String> nameCol = new TableColumn<>("Name");
             TableColumn<ChargingEvent, String> brandCol = new TableColumn<>("Brand");
-            TableColumn<ChargingEvent, Double> askingAmountCol = new TableColumn<>("EnergyAmount");
+            TableColumn<ChargingEvent, Number> askingAmountCol = new TableColumn<>("EnergyAmount");
             TableColumn<ChargingEvent, Number> maxWaitingTimeCol = new TableColumn<>("MaxWaitingTime");
             table.getColumns().addAll(idCol, nameCol, brandCol, askingAmountCol, maxWaitingTimeCol, executionCol);
 
             idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
             nameCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getDriver().getName()));
             brandCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getBrand()));
-            askingAmountCol.setCellValueFactory(new PropertyValueFactory<>("amountOfEnergy"));
+            if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
+                askingAmountCol.setCellValueFactory(p -> new SimpleDoubleProperty(p.getValue().getAmountOfEnergy()));
+            else
+                askingAmountCol.setCellValueFactory(p -> new SimpleDoubleProperty(p.getValue().getAmountOfEnergy() / 1000));
             if (EVLibSim.timeUnit.getSelectionModel().getSelectedIndex() == 0)
                 maxWaitingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getMaxWaitingTime() / 1000));
             else
@@ -165,14 +170,17 @@ class View {
             TableColumn<DisChargingEvent, Integer> idCol = new TableColumn<>("Id");
             TableColumn<DisChargingEvent, String> nameCol = new TableColumn<>("Name");
             TableColumn<DisChargingEvent, String> brandCol = new TableColumn<>("Brand");
-            TableColumn<DisChargingEvent, Double> askingAmountCol = new TableColumn<>("EnergyAmount");
+            TableColumn<DisChargingEvent, Number> askingAmountCol = new TableColumn<>("EnergyAmount");
             TableColumn<DisChargingEvent, Number> maxWaitingTimeCol = new TableColumn<>("MaxWaitingTime");
             table.getColumns().addAll(idCol, nameCol, brandCol, askingAmountCol, maxWaitingTimeCol, executionCol);
 
             idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
             nameCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getDriver().getName()));
             brandCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getBrand()));
-            askingAmountCol.setCellValueFactory(new PropertyValueFactory<>("amountOfEnergy"));
+            if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
+                askingAmountCol.setCellValueFactory(p -> new SimpleDoubleProperty(p.getValue().getAmountOfEnergy()));
+            else
+                askingAmountCol.setCellValueFactory(p -> new SimpleDoubleProperty(p.getValue().getAmountOfEnergy() / 1000));
             if (EVLibSim.timeUnit.getSelectionModel().getSelectedIndex() == 0)
                 maxWaitingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getMaxWaitingTime() / 1000));
             else
@@ -234,50 +242,84 @@ class View {
             Maintenance.cleanScreen();
             refreshButton.setDisable(false);
             EVLibSim.panel = "overview";
-            EVLibSim.panel = "overview";
             grid.setMaxSize(800, 700);
             ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
             for (int i = 0; i < currentStation.getSources().length; i++) {
                 switch (currentStation.getSources()[i]) {
                     case "Solar":
                         if (currentStation.getSpecificAmount("Solar") > 0) {
-                            pieChartData.add(new PieChart.Data("Solar", currentStation.getSpecificAmount("Solar")));
+                            if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
+                                pieChartData.add(new PieChart.Data("Solar-" +
+                                        String.valueOf(currentStation.getSpecificAmount("Solar")), currentStation.getSpecificAmount("Solar")));
+                            else
+                                pieChartData.add(new PieChart.Data("Solar-" +
+                                        String.valueOf(currentStation.getSpecificAmount("Solar")/1000), currentStation.getSpecificAmount("Solar") / 1000));
                             continue;
                         }
                         break;
                     case "Wind":
                         if (currentStation.getSpecificAmount("Wind") > 0) {
-                            pieChartData.add(new PieChart.Data("Wind", currentStation.getSpecificAmount("Wind")));
+                            if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
+                                pieChartData.add(new PieChart.Data("Wind-" +
+                                        String.valueOf(currentStation.getSpecificAmount("Wind")), currentStation.getSpecificAmount("Wind")));
+                            else
+                                pieChartData.add(new PieChart.Data("Wind-" +
+                                        String.valueOf(currentStation.getSpecificAmount("Wind")/1000), currentStation.getSpecificAmount("Wind") / 1000));
                             continue;
                         }
                         break;
                     case "Wave":
                         if (currentStation.getSpecificAmount("Wave") > 0) {
-                            pieChartData.add(new PieChart.Data("Wave", currentStation.getSpecificAmount("Wave")));
+                            if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
+                                pieChartData.add(new PieChart.Data("Wave-" +
+                                        String.valueOf(currentStation.getSpecificAmount("Wave")), currentStation.getSpecificAmount("Wave")));
+                            else
+                                pieChartData.add(new PieChart.Data("Wave-" +
+                                        String.valueOf(currentStation.getSpecificAmount("Wave")/1000), currentStation.getSpecificAmount("Wave") / 1000));
                             continue;
                         }
                         break;
                     case "Hydroelectric":
                         if (currentStation.getSpecificAmount("Hydroelectric") > 0) {
-                            pieChartData.add(new PieChart.Data("Hydroelectric", currentStation.getSpecificAmount("Hydroelectric")));
+                            if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
+                                pieChartData.add(new PieChart.Data("Hydroelectric-" +
+                                        String.valueOf(currentStation.getSpecificAmount("Hydroelectric")), currentStation.getSpecificAmount("Hydroelectric")));
+                            else
+                                pieChartData.add(new PieChart.Data("Hydroelectric-" +
+                                        String.valueOf(currentStation.getSpecificAmount("Hydroelectric")/1000), currentStation.getSpecificAmount("Hydroelectric") / 1000));
                             continue;
                         }
                         break;
                     case "Nonrenewable":
                         if (currentStation.getSpecificAmount("Nonrenewable") > 0) {
-                            pieChartData.add(new PieChart.Data("Nonrenewable", currentStation.getSpecificAmount("Nonrenewable")));
+                            if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
+                                pieChartData.add(new PieChart.Data("Nonrenewable-" +
+                                        String.valueOf(currentStation.getSpecificAmount("Nonrenewable")), currentStation.getSpecificAmount("Nonrenewable")));
+                            else
+                                pieChartData.add(new PieChart.Data("Nonrenewable-" +
+                                        String.valueOf(currentStation.getSpecificAmount("Nonrenewable")/1000), currentStation.getSpecificAmount("Nonrenewable") / 1000));
                             continue;
                         }
                         break;
                     case "Geothermal":
                         if (currentStation.getSpecificAmount("Geothermal") > 0) {
-                            pieChartData.add(new PieChart.Data("Geothermal", currentStation.getSpecificAmount("Geothermal")));
+                            if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
+                                pieChartData.add(new PieChart.Data("Geothermal-" +
+                                        String.valueOf(currentStation.getSpecificAmount("Geothermal")), currentStation.getSpecificAmount("Geothermal")));
+                            else
+                                pieChartData.add(new PieChart.Data("Geothermal-" +
+                                        String.valueOf(currentStation.getSpecificAmount("Geothermal")/1000), currentStation.getSpecificAmount("Geothermal") / 1000));
                             continue;
                         }
                         break;
                     case "DisCharging":
-                        if (currentStation.getSpecificAmount("DisCharging") > 0) {
-                            pieChartData.add(new PieChart.Data("DisCharging", currentStation.getSpecificAmount("DisCharging")));
+                        if (currentStation.getSpecificAmount("Discharging") > 0) {
+                            if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
+                                pieChartData.add(new PieChart.Data("Discharging-" +
+                                        String.valueOf(currentStation.getSpecificAmount("Discharging")), currentStation.getSpecificAmount("Discharging")));
+                            else
+                                pieChartData.add(new PieChart.Data("Discharging-" +
+                                        String.valueOf(currentStation.getSpecificAmount("Discharging")/1000), currentStation.getSpecificAmount("Discharging") / 1000));
                             continue;
                         }
                         break;
@@ -436,7 +478,6 @@ class View {
 
             grid.add(new VBox(barChart), 1, 1);
         });
-        //contagiar, lembrarias
         //Buttons
         chargingsMenuItem.setOnAction(et -> {
             if (Maintenance.stationCheck())
@@ -454,10 +495,10 @@ class View {
             TableColumn<ChargingEvent, Integer> idCol = new TableColumn<>("Id");
             TableColumn<ChargingEvent, String> nameCol = new TableColumn<>("Name");
             TableColumn<ChargingEvent, String> brandCol = new TableColumn<>("Brand");
-            TableColumn<ChargingEvent, Double> askingAmountCol = new TableColumn<>("EnergyAmount");
-            TableColumn<ChargingEvent, Double> energyToBeReceivedCol = new TableColumn<>("EnergyReceived");
+            TableColumn<ChargingEvent, Number> askingAmountCol = new TableColumn<>("EnergyAmount");
+            TableColumn<ChargingEvent, Number> energyToBeReceivedCol = new TableColumn<>("EnergyReceived");
             TableColumn<ChargingEvent, String> kindCol = new TableColumn<>("Kind");
-            TableColumn<ChargingEvent, Long> maxWaitingTimeCol = new TableColumn<>("MaxWait");
+            TableColumn<ChargingEvent, Number> maxWaitingTimeCol = new TableColumn<>("MaxWait");
             TableColumn<ChargingEvent, Number> chargingTimeCol = new TableColumn<>("ChargTime");
             TableColumn<ChargingEvent, Number> elapseTimeCol = new TableColumn<>("RemChargTime");
             table.getColumns().addAll(idCol, nameCol, brandCol, askingAmountCol, energyToBeReceivedCol, kindCol, maxWaitingTimeCol, chargingTimeCol,
@@ -466,17 +507,24 @@ class View {
             idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
             nameCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getDriver().getName()));
             brandCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getBrand()));
-            askingAmountCol.setCellValueFactory(new PropertyValueFactory<>("amountOfEnergy"));
-            energyToBeReceivedCol.setCellValueFactory(new PropertyValueFactory<>("energyToBeReceived"));
+            if (energyUnit.getSelectionModel().getSelectedIndex() == 0) {
+                askingAmountCol.setCellValueFactory(p -> new SimpleDoubleProperty(p.getValue().getAmountOfEnergy()));
+                energyToBeReceivedCol.setCellValueFactory(p -> new SimpleDoubleProperty(p.getValue().getEnergyToBeReceived()));
+            }
+            else {
+                askingAmountCol.setCellValueFactory(p -> new SimpleDoubleProperty(p.getValue().getAmountOfEnergy()/1000));
+                energyToBeReceivedCol.setCellValueFactory(p -> new SimpleDoubleProperty(p.getValue().getEnergyToBeReceived()/1000));
+            }
             kindCol.setCellValueFactory(new PropertyValueFactory<>("kindOfCharging"));
-            maxWaitingTimeCol.setCellValueFactory(new PropertyValueFactory<>("maxWaitingTime"));
             if (EVLibSim.timeUnit.getSelectionModel().getSelectedIndex() == 0) {
                 chargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getChargingTime() / 1000));
                 elapseTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getRemainingChargingTime() / 1000));
+                maxWaitingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getMaxWaitingTime() / 1000));
             }
             else {
                 chargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getChargingTime() / 60000));
                 elapseTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getRemainingChargingTime() / 60000));
+                maxWaitingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getMaxWaitingTime() / 60000));
             }
 
             table.setItems(result);
@@ -498,8 +546,8 @@ class View {
             TableColumn<DisChargingEvent, Integer> idCol = new TableColumn<>("Id");
             TableColumn<DisChargingEvent, String> nameCol = new TableColumn<>("Name");
             TableColumn<DisChargingEvent, String> brandCol = new TableColumn<>("Brand");
-            TableColumn<DisChargingEvent, Double> amountOfEnergyCol = new TableColumn<>("EnergyAmount");
-            TableColumn<DisChargingEvent, Long> maxWaitingTimeCol = new TableColumn<>("MaxWait");
+            TableColumn<DisChargingEvent, Number> amountOfEnergyCol = new TableColumn<>("EnergyAmount");
+            TableColumn<DisChargingEvent, Number> maxWaitingTimeCol = new TableColumn<>("MaxWait");
             TableColumn<DisChargingEvent, Number> disChargingTimeCol = new TableColumn<>("DisChargTime");
             TableColumn<DisChargingEvent, Number> elapsedDisChargingTimeCol = new TableColumn<>("RemDisChargTime");
             table.getColumns().addAll(idCol, nameCol, brandCol, amountOfEnergyCol, disChargingTimeCol, maxWaitingTimeCol, elapsedDisChargingTimeCol);
@@ -507,15 +555,19 @@ class View {
             idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
             nameCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getDriver().getName()));
             brandCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getBrand()));
-            amountOfEnergyCol.setCellValueFactory(new PropertyValueFactory<>("amountOfEnergy"));
-            maxWaitingTimeCol.setCellValueFactory(new PropertyValueFactory<>("maxWaitingTime"));
+            if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
+                amountOfEnergyCol.setCellValueFactory(p -> new SimpleDoubleProperty(p.getValue().getAmountOfEnergy()));
+            else
+                amountOfEnergyCol.setCellValueFactory(p -> new SimpleDoubleProperty(p.getValue().getAmountOfEnergy() / 1000));
             if (EVLibSim.timeUnit.getSelectionModel().getSelectedIndex() == 0) {
                 disChargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getDisChargingTime() / 1000));
                 elapsedDisChargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getRemainingDisChargingTime() / 1000));
+                maxWaitingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getMaxWaitingTime() / 1000));
             }
             else {
                 disChargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getDisChargingTime() / 60000));
                 elapsedDisChargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getRemainingDisChargingTime() / 60000));
+                maxWaitingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getMaxWaitingTime() / 60000));
             }
 
             table.setItems(result);
@@ -538,7 +590,7 @@ class View {
             TableColumn<ChargingEvent, Integer> idCol = new TableColumn<>("Id");
             TableColumn<ChargingEvent, String> nameCol = new TableColumn<>("Name");
             TableColumn<ChargingEvent, String> brandCol = new TableColumn<>("Brand");
-            TableColumn<ChargingEvent, Long> maxWaitingTimeCol = new TableColumn<>("MaxWait");
+            TableColumn<ChargingEvent, Number> maxWaitingTimeCol = new TableColumn<>("MaxWait");
             TableColumn<ChargingEvent, Number> chargingTimeCol = new TableColumn<>("ChargTime");
             TableColumn<ChargingEvent, Number> elapsedExchangeTimeCol = new TableColumn<>("RemChargTime");
             table.getColumns().addAll(idCol, nameCol, brandCol, chargingTimeCol, maxWaitingTimeCol, elapsedExchangeTimeCol);
@@ -546,14 +598,15 @@ class View {
             idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
             nameCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getDriver().getName()));
             brandCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getBrand()));
-            maxWaitingTimeCol.setCellValueFactory(new PropertyValueFactory<>("maxWaitingTime"));
             if (EVLibSim.timeUnit.getSelectionModel().getSelectedIndex() == 0) {
                 chargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty( (double)p.getValue().getChargingTime() / 1000));
                 elapsedExchangeTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getRemainingChargingTime() / 1000));
+                maxWaitingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getMaxWaitingTime() / 1000));
             }
             else {
                 chargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getChargingTime() / 60000));
                 elapsedExchangeTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getRemainingChargingTime() / 60000));
+                maxWaitingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getMaxWaitingTime() / 60000));
             }
 
             table.setItems(result);
@@ -575,37 +628,37 @@ class View {
             TableColumn<ParkingEvent, Integer> idCol = new TableColumn<>("Id");
             TableColumn<ParkingEvent, String> nameCol = new TableColumn<>("Name");
             TableColumn<ParkingEvent, String> brandCol = new TableColumn<>("Brand");
-            TableColumn<ParkingEvent, Double> askingAmountCol = new TableColumn<>("AskingAmount");
-            TableColumn<ParkingEvent, Double> energyToBeReceivedCol = new TableColumn<>("EnergyReceived");
+            TableColumn<ParkingEvent, Number> askingAmountCol = new TableColumn<>("AskingAmount");
+            TableColumn<ParkingEvent, Number> energyToBeReceivedCol = new TableColumn<>("EnergyReceived");
             TableColumn<ParkingEvent, Number> parkingTimeCol = new TableColumn<>("ParkTime");
             TableColumn<ParkingEvent, Number> chargingTimeCol = new TableColumn<>("ChargTime");
             TableColumn<ParkingEvent, Number> elapsedParkingTimeCol = new TableColumn<>("RemParkTime");
             TableColumn<ParkingEvent, Number> elapsedChargingTimeCol = new TableColumn<>("RemChargTime");
             table.getColumns().addAll(idCol, nameCol, brandCol, askingAmountCol, energyToBeReceivedCol, parkingTimeCol,
                     chargingTimeCol, elapsedParkingTimeCol, elapsedChargingTimeCol);
-
             idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
             nameCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getDriver().getName()));
             brandCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getBrand()));
-            askingAmountCol.setCellValueFactory(new PropertyValueFactory<>("amountOfEnergy"));
-            energyToBeReceivedCol.setCellValueFactory(new PropertyValueFactory<>("energyToBeReceived"));
+            if (energyUnit.getSelectionModel().getSelectedIndex() == 0) {
+                askingAmountCol.setCellValueFactory(p -> new SimpleDoubleProperty(p.getValue().getAmountOfEnergy()));
+                energyToBeReceivedCol.setCellValueFactory(p -> new SimpleDoubleProperty(p.getValue().getEnergyToBeReceived()));
+            }
+            else {
+                askingAmountCol.setCellValueFactory(p -> new SimpleDoubleProperty(p.getValue().getAmountOfEnergy() / 1000));
+                energyToBeReceivedCol.setCellValueFactory(p -> new SimpleDoubleProperty(p.getValue().getEnergyToBeReceived() / 1000));
+            }
             if (EVLibSim.timeUnit.getSelectionModel().getSelectedIndex() == 0) {
                 parkingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getParkingTime() / 1000));
                 elapsedParkingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getRemainingParkingTime() / 1000));
-            }
-            else {
-                parkingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getParkingTime() / 60000));
-                elapsedParkingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getRemainingParkingTime() / 60000));
-            }
-            if (EVLibSim.timeUnit.getSelectionModel().getSelectedIndex() == 0) {
                 chargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getChargingTime() / 1000));
                 elapsedChargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getRemainingChargingTime() / 1000));
             }
             else {
+                parkingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getParkingTime() / 60000));
+                elapsedParkingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getRemainingParkingTime() / 60000));
                 chargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getChargingTime() / 60000));
                 elapsedChargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getRemainingChargingTime() / 60000));
             }
-
             table.setItems(result);
             table.setMaxSize(900, 500);
             table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);

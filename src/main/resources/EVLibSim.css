@@ -39,6 +39,15 @@
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.4), 5, 0.4, 0, 0);
 }
 
+.bottomBox {
+    -fx-background-color: -fx-color-500;
+    -fx-max-height: 90px;
+    -fx-pref-height: 90px;
+    -fx-min-height: 90px;
+    -fx-alignment: center-left;
+    -fx-padding: 5px;
+}
+
 /* Styling for each button */
 .button {
     -fx-background-color: white;
@@ -123,7 +132,6 @@
 /* Styling for side panels */
 .sidePanels {
     -fx-alignment: center;
-    -fx-spacing: 10px;
     -fx-background-color: transparent;
 }
 
@@ -143,3 +151,24 @@
     -fx-border-radius: 3px;
     -fx-background-radius: 3px;
 }
+
+/* Styling for text area
+.text-area {
+    -fx-background-color: -fx-color-500;
+    -fx-font-size: 15px;
+    -fx-spacing: 5px;
+    -fx-background-insets: 0;
+}
+
+.text-area .scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.text-area .scroll-pane .viewport{
+    -fx-background-color: transparent;
+}
+
+
+.text-area .scroll-pane .content{
+    -fx-background-color: transparent;
+}*/

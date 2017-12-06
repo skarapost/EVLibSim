@@ -53,9 +53,7 @@ public class EVLibSim extends Application {
     private static final Image refreshImage = new Image("/refresh.png");
     private static final Label timeUnitLabel = new Label("Time unit: ");
     private static final Label energyUnitLabel = new Label("Energy unit: ");
-    private static final Label currencyLabel = new Label("Currency: ");
     static final ChoiceBox<String> timeUnit = new ChoiceBox<>(FXCollections.observableArrayList("Second", "Minute"));
-    static final ChoiceBox<String> currency = new ChoiceBox<>(FXCollections.observableArrayList("Euro", "Usd"));
     static final ChoiceBox<String> energyUnit = new ChoiceBox<>(FXCollections.observableArrayList("Watt", "KiloWatt"));
     //File menu item
     private static final Menu file = new Menu("File");
@@ -145,46 +143,64 @@ public class EVLibSim extends Application {
         refreshButton.setOnAction(et -> {
             switch (panel) {
                 case "slowChargingsQueue":
-                        View.slowChargingsQueue.fire();
-                        break;
+                    View.slowChargingsQueue.fire();
+                    break;
                 case "fastChargingsQueue":
-                        View.fastChargingsQueue.fire();
-                        break;
+                    View.fastChargingsQueue.fire();
+                    break;
                 case "dischargingsQueue":
-                        View.dischargingsQueue.fire();
-                        break;
+                    View.dischargingsQueue.fire();
+                    break;
                 case "exchangesQueue":
-                        View.exchangesQueue.fire();
-                        break;
+                    View.exchangesQueue.fire();
+                    break;
                 case "chargingsMenuItem":
-                        View.chargingsMenuItem.fire();
-                        break;
+                    View.chargingsMenuItem.fire();
+                    break;
                 case "dischargingsMenuItem":
-                        View.dischargingsMenuItem.fire();
-                        break;
+                    View.dischargingsMenuItem.fire();
+                    break;
                 case "exchangesMenuItem":
-                        View.exchangesMenuItem.fire();
-                        break;
+                    View.exchangesMenuItem.fire();
+                    break;
                 case "parkingsMenuItem":
-                        View.parkingsMenuItem.fire();
-                        break;
-                case "chargingLog":
-                        ToolBox.chargingLog.fire();
-                        break;
+                    View.parkingsMenuItem.fire();
+                    break;
+                case "slowChargingLog":
+                    ToolBox.slowChargingLog.fire();
+                    break;
+                case "fastChargingLog":
+                    ToolBox.fastChargingLog.fire();
+                    break;
                 case "disChargingLog":
-                        ToolBox.disChargingLog.fire();
-                        break;
+                    ToolBox.disChargingLog.fire();
+                    break;
                 case "exchangeLog":
-                        ToolBox.exchangeLog.fire();
-                        break;
+                    ToolBox.exchangeLog.fire();
+                    break;
                 case "parkingLog":
-                        ToolBox.parkingLog.fire();
-                        break;
+                    ToolBox.parkingLog.fire();
+                    break;
                 case "overview":
-                        View.totalActivity.fire();
-                        break;
+                    View.totalActivity.fire();
+                    break;
+                case "allChargers":
+                    MenuStation.allChargersMI.fire();
+                    break;
+                case "allDisChargers":
+                    MenuStation.allDisChargersMI.fire();
+                    break;
+                case "allParkingSlots":
+                    MenuStation.allParkingSlotsMI.fire();
+                    break;
+                case "allExchangeHandlers":
+                    MenuStation.allExchangeHandlersMI.fire();
+                    break;
+                case "allBatteries":
+                    MenuStation.allBatteriesMI.fire();
+                    break;
                 default:
-                        System.out.println("System problem");
+                    System.out.println("System problem");
             }
         });
 
@@ -197,11 +213,9 @@ public class EVLibSim extends Application {
         HBox.setHgrow(rightMenuBar, Priority.NEVER);
         HBox timeBox = new HBox(timeUnitLabel, timeUnit);
         timeBox.getStyleClass().add("menu-bar");
-        HBox currencyBox = new HBox(currencyLabel, currency);
-        currencyBox.getStyleClass().add("menu-bar");
         HBox energyBox = new HBox(energyUnitLabel, energyUnit);
         energyBox.getStyleClass().add("menu-bar");
-        rightMenuBar.getChildren().addAll(timeBox, currencyBox, energyBox, homeButton, refreshButton);
+        rightMenuBar.getChildren().addAll(timeBox, energyBox, homeButton, refreshButton);
         rightMenuBar.setSpacing(10);
 
         timeUnit.getSelectionModel().selectFirst();
@@ -210,9 +224,11 @@ public class EVLibSim extends Application {
                 refreshButton.fire();
         });
 
-        currency.getSelectionModel().selectFirst();
-
         energyUnit.getSelectionModel().selectFirst();
+        energyUnit.getSelectionModel().selectedIndexProperty().addListener((ov, oldValue, newValue) -> {
+            if (!refreshButton.isDisabled())
+                refreshButton.fire();
+        });
 
         topMenuBar.getChildren().addAll(leftMenuBar, rightMenuBar);
 
@@ -225,6 +241,7 @@ public class EVLibSim extends Application {
         root.setTop(topMenuBar);
         root.setRight(ToolBox.createToolBar());
         root.setLeft(leftBox);
+        root.setBottom(box3);
 
         //Configuration of buttons's box
         buttonsBox.getChildren().addAll(EVLibSim.cancel);
@@ -263,11 +280,8 @@ public class EVLibSim extends Application {
 
         Console console = new Console();
         ta.setEditable(false);
-        ta.setMaxHeight(150);
-        ta.setMaxWidth(180);
         PrintStream ps = new PrintStream(console, true);
         System.setOut(ps);
-        System.setErr(ps);
 
         box1.getChildren().addAll(prices, unitPrice, disUnitPrice, exchangePrice, inductivePrice);
         box1.getStyleClass().add("box");
@@ -276,10 +290,11 @@ public class EVLibSim extends Application {
         box2.getStyleClass().add("box");
 
         box3.getChildren().addAll(output, ta);
-        box3.getStyleClass().add("box");
+        box3.getStyleClass().add("bottomBox");
 
         leftBox.getStyleClass().add("sidePanels");
-        leftBox.getChildren().addAll(box1, box2, box3);
+        leftBox.setSpacing(45);
+        leftBox.getChildren().addAll(box1, box2);
 
         //Start screen
         startScreen.setOnAction((ActionEvent e) -> {
@@ -335,12 +350,18 @@ public class EVLibSim extends Application {
                         waitTimeEx.getTooltip().setPrefWidth(200);
                         waitTimeEx.getTooltip().setWrapText(true);
 
-                        unitPrice.setText("Charging: " + currentStation.getCurrentPrice());
+                        if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
+                            unitPrice.setText("Charging: " + currentStation.getCurrentPrice());
+                        else
+                            unitPrice.setText("Charging: " + currentStation.getCurrentPrice() * 1000);
                         unitPrice.setTooltip(new Tooltip("The price of each energy unit for charging."));
                         unitPrice.getTooltip().setPrefWidth(200);
                         unitPrice.getTooltip().setWrapText(true);
 
-                        disUnitPrice.setText("Discharging: " + currentStation.getDisUnitPrice());
+                        if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
+                            disUnitPrice.setText("Discharging: " + currentStation.getDisUnitPrice());
+                        else
+                            disUnitPrice.setText("Discharging: " + currentStation.getDisUnitPrice() * 1000);
                         disUnitPrice.setTooltip(new Tooltip("The price of each energy unit for discharging."));
                         disUnitPrice.getTooltip().setPrefWidth(200);
                         disUnitPrice.getTooltip().setWrapText(true);
@@ -350,7 +371,10 @@ public class EVLibSim extends Application {
                         exchangePrice.getTooltip().setPrefWidth(200);
                         exchangePrice.getTooltip().setWrapText(true);
 
-                        inductivePrice.setText("Inductive: " + currentStation.getInductivePrice());
+                        if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
+                            inductivePrice.setText("Inductive: " + currentStation.getInductivePrice());
+                        else
+                            inductivePrice.setText("Inductive: " + currentStation.getInductivePrice() * 1000);
                         inductivePrice.setTooltip(new Tooltip("The price of each energy unit for inductive charging. A vehicle can charge inductively only through a parking event."));
                         inductivePrice.getTooltip().setPrefWidth(200);
                         inductivePrice.getTooltip().setWrapText(true);
@@ -457,139 +481,60 @@ public class EVLibSim extends Application {
         export.setOnAction(e -> {
             if (Maintenance.stationCheck())
                 return;
-            Dialog<ArrayList<Boolean>> dialog = new Dialog<>();
-            ArrayList<Boolean> results = new ArrayList<>();
-            for (int i = 0; i < 4; i++)
-                results.add(false);
-            dialog.setTitle("Export to csv");
-            dialog.setHeaderText(null);
-            ButtonType exportButtonType = new ButtonType("Export", ButtonBar.ButtonData.OK_DONE);
-            dialog.getDialogPane().getButtonTypes().addAll(exportButtonType, ButtonType.CANCEL);
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Save file");
+            fileChooser.setInitialFileName("results.csv");
+            fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text Files(.csv)", "*.csv"));
+            File selectedFile = fileChooser.showSaveDialog(primaryStage);
 
-            GridPane gp = new GridPane();
-            gp.setHgap(10);
-            gp.setVgap(10);
-            gp.setPadding(new Insets(20, 150, 10, 10));
+            OutputStreamWriter writer;
 
-            RadioButton box1 = new RadioButton("Chargings");
-            box1.setOnAction(w -> {
-                results.remove(0);
-                results.add(0, box1.isSelected());
-            });
-            RadioButton box2 = new RadioButton("Dischargings");
-            box2.setOnAction(w -> {
-                results.remove(1);
-                results.add(1, box2.isSelected());
-            });
-            RadioButton box3 = new RadioButton("Battery exchanges");
-            box3.setOnAction(w -> {
-                results.remove(2);
-                results.add(2, box3.isSelected());
-            });
-            RadioButton box4 = new RadioButton("Parkings/Inductive chargings");
-            box4.setOnAction(w -> {
-                results.remove(3);
-                results.add(3, box4.isSelected());
-            });
-            ToggleGroup gr = new ToggleGroup();
-            gr.getToggles().addAll(box1, box2, box3, box4);
+            try {
+                if (selectedFile != null) {
 
-            gp.add(box1, 0, 0);
-            gp.add(box2, 0, 1);
-            gp.add(box3, 0, 2);
-            gp.add(box4, 0, 3);
-
-            dialog.getDialogPane().setContent(gp);
-
-            dialog.setResultConverter(dialogButton -> {
-                if (dialogButton == exportButtonType)
-                    return results;
-                return null;
-            });
-
-            Optional<ArrayList<Boolean>> result = dialog.showAndWait();
-
-            result.ifPresent(s -> {
-
-                if (results.indexOf(true) == -1) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Error");
-                    alert.setHeaderText(null);
-                    alert.setContentText("No option selected.");
-                    alert.showAndWait();
-                    return;
-                }
-
-                FileChooser fileChooser = new FileChooser();
-                fileChooser.setTitle("Save file");
-                fileChooser.setInitialFileName("results.csv");
-                fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text Files(.csv)", "*.csv"));
-                File selectedFile = fileChooser.showSaveDialog(primaryStage);
-
-                OutputStreamWriter writer;
-
-                try {
-                    if (selectedFile != null) {
-
-                        writer = new OutputStreamWriter(new FileOutputStream(selectedFile.getPath(), false), "utf-8");
-                        StringBuilder line;
-
-                        if (results.indexOf(true) == 0) {
-                            line = new StringBuilder("Id,Name,Brand,StationName,AskingAmount,EnergyReceived,Condition,ChargingTime,RemainingChargingTime,Cost");
-                            line.append(System.getProperty("line.separator"));
-                            writer.write(line.toString());
-                            for (ChargingEvent event : ChargingEvent.chargingLog) {
-                                line = new StringBuilder(event.getId() + "," + event.getElectricVehicle().getDriver().getName() + "," +
-                                        event.getElectricVehicle().getBrand() + "," + event.getChargingStationName() + "," +
-                                        event.getAmountOfEnergy() + "," + event.getEnergyToBeReceived() + "," + event.getCondition() + ","
-                                        + event.getChargingTime() + "," + event.getRemainingChargingTime() + "," + event.getCost());
-                                line.append(System.getProperty("line.separator"));
-                                writer.write(line.toString());
-                            }
-                        } else if (results.indexOf(true) == 1) {
-                            line = new StringBuilder("Id,Name,Brand,StationName,GivenAmount,Condition,DisChargingTime,RemainingChargingTime,Profit");
-                            line.append(System.getProperty("line.separator"));
-                            writer.write(line.toString());
-                            for (DisChargingEvent event : DisChargingEvent.dischargingLog) {
-                                line = new StringBuilder(event.getId() + "," + event.getElectricVehicle().getDriver().getName() + "," +
-                                        event.getElectricVehicle().getBrand() + "," + event.getChargingStationName() + "," +
-                                        event.getAmountOfEnergy() + "," + event.getCondition() + "," + event.getDisChargingTime() + "," +
-                                        event.getRemainingDisChargingTime() + "," + event.getProfit());
-                                line.append(System.getProperty("line.separator"));
-                                writer.write(line.toString());
-                            }
-                        } else if (results.indexOf(true) == 2) {
-                            line = new StringBuilder("Id,Name,Brand,StationName,Condition,ChargingTime,RemainingChargingTime,Cost");
-                            line.append(System.getProperty("line.separator"));
-                            writer.write(line.toString());
-                            for (ChargingEvent event : ChargingEvent.exchangeLog) {
-                                line = new StringBuilder(event.getId() + "," + event.getElectricVehicle().getDriver().getName() + ","
-                                        + event.getElectricVehicle().getBrand() + "," + event.getChargingStationName() + "," + event.getCondition() + "," +
-                                        event.getChargingTime() + "," + event.getRemainingChargingTime() + "," + event.getCost());
-                                line.append(System.getProperty("line.separator"));
-                                writer.write(line.toString());
-                            }
-                        } else if (results.indexOf(true) == 3) {
-                            line = new StringBuilder("Id,Name,Brand,StationName,AskingAmount,EnergyReceived,Condition,ParkingTime,RemainingParkingTime," +
-                                    "ChargingTime,RemainingChargingTime,Cost");
-                            line.append(System.getProperty("line.separator"));
-                            writer.write(line.toString());
-                            for (ParkingEvent event : ParkingEvent.parkLog) {
-                                line = new StringBuilder(event.getId() + "," + event.getElectricVehicle().getDriver().getName() + "," +
-                                        event.getElectricVehicle().getBrand() + "," + event.getChargingStationName() + "," +
-                                        event.getAmountOfEnergy() + "," + event.getEnergyToBeReceived() + "," + event.getCondition() + ","
-                                        + event.getParkingTime() + "," + event.getRemainingParkingTime() + "," + event.getChargingTime() + "," +
-                                        event.getRemainingChargingTime() + "," + event.getCost());
-                                line.append(System.getProperty("line.separator"));
-                                writer.write(line.toString());
-                            }
-                        }
-                        writer.close();
+                    writer = new OutputStreamWriter(new FileOutputStream(selectedFile.getPath(), false), "utf-8");
+                    StringBuilder line;
+                    line = new StringBuilder("Id,Name,Brand,StationName,Type,KindOfCharging,Energy,EnergyReceived,Condition," +
+                            "ChargingTime,RemChargingTime,DischargingTime,RemDischargingTime,ParkingTime,RemParkingTime,Cost,Profit");
+                    line.append(System.getProperty("line.separator"));
+                    writer.write(line.toString());
+                    for (ChargingEvent event : ChargingEvent.chargingLog) {
+                        line = new StringBuilder(event.getId() + "," + event.getElectricVehicle().getDriver().getName() + "," +
+                                event.getElectricVehicle().getBrand() + "," + event.getChargingStationName() + "," + "charging," +
+                                event.getKindOfCharging() + "," + event.getAmountOfEnergy() + "," + event.getEnergyToBeReceived() + "," +
+                                event.getCondition() + "," + event.getChargingTime() + "," + event.getRemainingChargingTime() + "," + "0,0,0,0," + event.getCost() + ",0");
+                        line.append(System.getProperty("line.separator"));
+                        writer.write(line.toString());
                     }
-                } catch (Exception er) {
-                    er.printStackTrace();
+                    for (DisChargingEvent event : DisChargingEvent.dischargingLog) {
+                        line = new StringBuilder(event.getId() + "," + event.getElectricVehicle().getDriver().getName() + "," +
+                                event.getElectricVehicle().getBrand() + "," + event.getChargingStationName() + ",discharging,0," +
+                                event.getAmountOfEnergy() + ",0," + event.getCondition() + ",0,0," + event.getDisChargingTime() + "," +
+                                event.getRemainingDisChargingTime() + ",0,0,0," + event.getProfit());
+                        line.append(System.getProperty("line.separator"));
+                        writer.write(line.toString());
+                    }
+                    for (ChargingEvent event : ChargingEvent.exchangeLog) {
+                        line = new StringBuilder(event.getId() + "," + event.getElectricVehicle().getDriver().getName() + ","
+                                + event.getElectricVehicle().getBrand() + "," + event.getChargingStationName() + ",exchange,0,0,0," + event.getCondition() + "," +
+                                event.getChargingTime() + "," + event.getRemainingChargingTime() + ",0,0,0,0," + event.getCost() + ",0");
+                        line.append(System.getProperty("line.separator"));
+                        writer.write(line.toString());
+                    }
+                    for (ParkingEvent event : ParkingEvent.parkLog) {
+                        line = new StringBuilder(event.getId() + "," + event.getElectricVehicle().getDriver().getName() + "," +
+                                event.getElectricVehicle().getBrand() + "," + event.getChargingStationName() + ",parking,0," +
+                                event.getAmountOfEnergy() + "," + event.getEnergyToBeReceived() + "," + event.getCondition() + ",0,0,0,0,"
+                                + event.getParkingTime() + "," + event.getRemainingParkingTime() + "," + event.getChargingTime() + "," +
+                                event.getRemainingChargingTime() + "," + event.getCost() + ",0");
+                        line.append(System.getProperty("line.separator"));
+                        writer.write(line.toString());
+                    }
+                    writer.close();
                 }
-            });
+            } catch (Exception er) {
+                er.printStackTrace();
+            }
         });
 
         exitMenuItem.setOnAction(e -> {
@@ -624,9 +569,8 @@ public class EVLibSim extends Application {
             File selectedFile = fileChooser.showOpenDialog(primaryStage);
             if (selectedFile != null)
                 try {
-                    openFile(selectedFile);
                     f = selectedFile;
-                    primaryStage.setTitle("EVLibSim - [" + selectedFile.getPath() + "]");
+                    openFile(selectedFile);
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
@@ -634,6 +578,14 @@ public class EVLibSim extends Application {
 
         newSession.setOnAction(e -> {
             startScreen.fire();
+            ThreadGroup currentGroup = Thread.currentThread().getThreadGroup();
+            int noThreads = currentGroup.activeCount();
+            Thread[] lsThreads = new Thread[noThreads];
+            currentGroup.enumerate(lsThreads);
+            for (int i = 0; i < noThreads; i++)
+                if (lsThreads[i].getName().contains("Charger") || lsThreads[i].getName().contains("Discharger")
+                        || lsThreads[i].getName().contains("ExchangeHandler") || lsThreads[i].getName().contains("ParkingSlot"))
+                    lsThreads[i].interrupt();
             stations.clear();
             energies.clear();
             s.getItems().clear();
@@ -643,6 +595,7 @@ public class EVLibSim extends Application {
             DisChargingEvent.dischargingLog.clear();
             ChargingEvent.exchangeLog.clear();
             ParkingEvent.parkLog.clear();
+            primaryStage.setTitle("EVLibSim");
         });
 
         //Handling of exit button
@@ -652,7 +605,7 @@ public class EVLibSim extends Application {
             Thread[] lsThreads = new Thread[noThreads];
             currentGroup.enumerate(lsThreads);
             for (int i = 0; i < noThreads; i++)
-                if (lsThreads[i].getName().contains("Charger") || lsThreads[i].getName().contains("DisCharger") || lsThreads[i].getName().contains("ExchangeHandler") || lsThreads[i].getName().contains("ParkingSlot")) {
+                if (lsThreads[i].getName().contains("Charger") || lsThreads[i].getName().contains("Discharger") || lsThreads[i].getName().contains("ExchangeHandler") || lsThreads[i].getName().contains("ParkingSlot")) {
                     e.consume();
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Information");
@@ -685,26 +638,30 @@ public class EVLibSim extends Application {
                 exchangePrice.setText("Exchange: -");
                 inductivePrice.setText("Inductive: -");
             } else {
-                if (timeUnit.getSelectionModel().getSelectedIndex() == 0)
+                if (timeUnit.getSelectionModel().getSelectedIndex() == 0) {
                     waitTimeSlow.setText("Slow: " + ((double) currentStation.getWaitingTime("slow") / 1000));
-                else
-                    waitTimeSlow.setText("Slow: " + ((double) currentStation.getWaitingTime("slow") / 60000));
-                if (timeUnit.getSelectionModel().getSelectedIndex() == 0)
                     waitTimeFast.setText("Fast: " + ((double) currentStation.getWaitingTime("fast") / 1000));
-                else
-                    waitTimeFast.setText("Fast: " + ((double) currentStation.getWaitingTime("fast") / 60000));
-                if (timeUnit.getSelectionModel().getSelectedIndex() == 0)
                     waitTimeDis.setText("Discharging: " + ((double) currentStation.getWaitingTime("discharging") / 1000));
-                else
-                    waitTimeDis.setText("Discharging: " + ((double) currentStation.getWaitingTime("discharging") / 60000));
-                if (timeUnit.getSelectionModel().getSelectedIndex() == 0)
                     waitTimeEx.setText("Exchange: " + ((double) currentStation.getWaitingTime("exchange") / 1000));
-                else
+                }
+                else {
+                    waitTimeSlow.setText("Slow: " + ((double) currentStation.getWaitingTime("slow") / 60000));
+                    waitTimeFast.setText("Fast: " + ((double) currentStation.getWaitingTime("fast") / 60000));
+                    waitTimeDis.setText("Discharging: " + ((double) currentStation.getWaitingTime("discharging") / 60000));
                     waitTimeEx.setText("Exchange: " + ((double) currentStation.getWaitingTime("exchange") / 60000));
-                unitPrice.setText("Charging: " + currentStation.getCurrentPrice());
-                disUnitPrice.setText("Discharging: " + currentStation.getDisUnitPrice());
-                exchangePrice.setText("Exchange: " + currentStation.getExchangePrice());
-                inductivePrice.setText("Inductive: " + currentStation.getInductivePrice());
+                }
+                if (energyUnit.getSelectionModel().getSelectedIndex() == 0) {
+                    unitPrice.setText("Charging: " + currentStation.getCurrentPrice());
+                    disUnitPrice.setText("Discharging: " + currentStation.getDisUnitPrice());
+                    exchangePrice.setText("Exchange: " + currentStation.getExchangePrice());
+                    inductivePrice.setText("Inductive: " + currentStation.getInductivePrice());
+                }
+                else {
+                    unitPrice.setText("Charging: " + currentStation.getCurrentPrice() * 1000);
+                    disUnitPrice.setText("Discharging: " + currentStation.getDisUnitPrice() * 1000);
+                    exchangePrice.setText("Exchange: " + currentStation.getExchangePrice());
+                    inductivePrice.setText("Inductive: " + currentStation.getInductivePrice() * 1000);
+                }
             }
         }));
 
@@ -715,7 +672,6 @@ public class EVLibSim extends Application {
 
     //Load file function
     private void openFile(File selectedFile) throws IOException {
-        BufferedReader in = new BufferedReader(new FileReader(selectedFile));
         String line;
         String[] tokens;
         ChargingEvent event;
@@ -725,15 +681,8 @@ public class EVLibSim extends Application {
         Battery bat;
         ElectricVehicle vehicle;
         int counter;
-        stations.clear();
-        s.getItems().clear();
-        currentStation = null;
-        group.getToggles().clear();
-        ChargingEvent.chargingLog.clear();
-        DisChargingEvent.dischargingLog.clear();
-        ChargingEvent.exchangeLog.clear();
-        ParkingEvent.parkLog.clear();
-        try {
+        newSession.fire();
+        try (BufferedReader in = new BufferedReader(new FileReader(selectedFile))) {
             while ((line = in.readLine()) != null) {
                 tokens = line.split(",");
                 switch (tokens[0]) {
@@ -828,15 +777,13 @@ public class EVLibSim extends Application {
                             event.setCondition("ready");
                             event.setChargingTime(Long.parseLong(tokens[11]));
                             event.execution();
-                        }
-                        else if (tokens[12].equals("wait")) {
+                        } else if (tokens[12].equals("wait")) {
                             event.setCondition("wait");
                             if (tokens[4].equals("slow"))
                                 currentStation.getSlow().add(event);
                             else
                                 currentStation.getFast().add(event);
-                        }
-                        else if (tokens[12].equals("nonExecutable"))
+                        } else if (tokens[12].equals("nonExecutable"))
                             event.setCondition("nonExecutable");
                         break;
                     case "dis":
@@ -861,12 +808,10 @@ public class EVLibSim extends Application {
                             disEvent.setCondition("ready");
                             disEvent.setDisChargingTime(Long.parseLong(tokens[9]));
                             disEvent.execution();
-                        }
-                        else if (tokens[10].equals("wait")) {
+                        } else if (tokens[10].equals("wait")) {
                             disEvent.setCondition("wait");
                             currentStation.getDischarging().add(disEvent);
-                        }
-                        else if (tokens[10].equals("nonExecutable"))
+                        } else if (tokens[10].equals("nonExecutable"))
                             disEvent.setCondition("nonExecutable");
                         break;
                     case "ex":
@@ -901,12 +846,10 @@ public class EVLibSim extends Application {
                             event.setCondition("ready");
                             event.setChargingTime(Long.parseLong(tokens[8]));
                             event.execution();
-                        }
-                        else if (tokens[9].equals("wait")) {
+                        } else if (tokens[9].equals("wait")) {
                             event.setCondition("wait");
                             currentStation.getExchange().add(event);
-                        }
-                        else if (tokens[9].equals("nonExecutable"))
+                        } else if (tokens[9].equals("nonExecutable"))
                             event.setCondition("nonExecutable");
                         break;
                     default:
@@ -932,33 +875,20 @@ public class EVLibSim extends Application {
                             event1.setChargingTime(Long.parseLong(tokens[10]));
                             event1.setParkingTime(Long.parseLong(tokens[11]));
                             event1.execution();
-                        }
-                        else if (tokens[12].equals("parking")) {
+                        } else if (tokens[12].equals("parking")) {
                             currentStation.assignParkingSlot(event1);
                             event1.setCondition("ready");
                             event1.setParkingTime(Long.parseLong(tokens[11]));
                             event1.execution();
-                        }
-                        else if (tokens[12].equals("nonExecutable"))
+                        } else if (tokens[12].equals("nonExecutable"))
                             event1.setCondition("nonExecutable");
                         break;
                 }
             }
+            primaryStage.setTitle("EVLibSim - [" + f.getPath() + "]");
         } catch (Exception ex) {
-            in.close();
+            newSession.fire();
             System.out.println("The file is broken");
-            stations.clear();
-            energies.clear();
-            s.getItems().clear();
-            currentStation = null;
-            group.getToggles().clear();
-            ChargingEvent.chargingLog.clear();
-            DisChargingEvent.dischargingLog.clear();
-            ChargingEvent.exchangeLog.clear();
-            ParkingEvent.parkLog.clear();
-        }
-        finally {
-            in.close();
         }
     }
 
@@ -1046,14 +976,13 @@ public class EVLibSim extends Application {
     private static class Console extends OutputStream {
         private final TextArea output;
 
-        Console()
-        {
+        Console() {
             this.output = EVLibSim.ta;
         }
 
         @Override
         public void write(int i) throws IOException {
-            output.appendText(String.valueOf((char) i));
+            Platform.runLater(() -> output.appendText(String.valueOf((char) i)));
         }
     }
 }

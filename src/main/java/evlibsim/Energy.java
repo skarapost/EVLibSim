@@ -34,7 +34,7 @@ class Energy {
             if (Maintenance.stationCheck())
                 return;
             List<String> energies = new ArrayList<>();
-            String[] a = {"Solar", "Wind", "Wave", "Nonrenewable", "Hydroelectric", "Geothermal", "DisCharging"};
+            String[] a = {"Solar", "Wind", "Wave", "Nonrenewable", "Hydroelectric", "Geothermal", "Discharging"};
             String[] b = currentStation.getSources();
             List<String> aL = Arrays.asList(a);
             List<String> bL = Arrays.asList(b);
@@ -70,7 +70,7 @@ class Energy {
                         currentStation.addEnergySource(new Hydroelectric());
                         break;
                 }
-                Maintenance.completionMessage("Energy source insertion");
+                Maintenance.completionMessage("energy source addition");
             });
         });
 
@@ -79,7 +79,7 @@ class Energy {
             if (Maintenance.stationCheck())
                 return;
             ArrayList<String> energies = new ArrayList<>(Arrays.asList(currentStation.getSources()));
-            energies.remove("DisCharging");
+            energies.remove("Discharging");
             ChoiceDialog<String> dialog = new ChoiceDialog<>(energies.get(0), energies);
             dialog.setTitle("EnergySource removal");
             dialog.setHeaderText(null);
@@ -106,7 +106,7 @@ class Energy {
                         currentStation.deleteEnergySource(currentStation.getEnergySource("Hydroelectric"));
                         break;
                 }
-                Maintenance.completionMessage("Energy source removal");
+                Maintenance.completionMessage("energy source removal");
             });
         });
 
@@ -134,7 +134,7 @@ class Energy {
             grid.setMaxSize(700, 400);
             TextField boo;
             Label foo;
-            boo = new TextField();
+            boo = new TextField(String.valueOf(Arrays.asList(currentStation.getSources()).indexOf("Solar") + 1));
             textfields.add(boo);
             if (Maintenance.checkEnergy("Solar")) {
                 foo = new Label("Solar*: ");
@@ -149,7 +149,7 @@ class Energy {
             foo.setGraphic(new ImageView(help));
             grid.add(foo, 0, 0);
             grid.add(boo, 1, 0);
-            boo = new TextField();
+            boo = new TextField(String.valueOf(Arrays.asList(currentStation.getSources()).indexOf("Wind") + 1));
             textfields.add(boo);
             if (Maintenance.checkEnergy("Wind")) {
                 foo = new Label("Wind*: ");
@@ -163,11 +163,11 @@ class Energy {
             foo.setGraphic(new ImageView(help));
             grid.add(foo, 2, 0);
             grid.add(boo, 3, 0);
-            boo = new TextField();
+            boo = new TextField(String.valueOf(Arrays.asList(currentStation.getSources()).indexOf("Wave") + 1));
             textfields.add(boo);
             if (Maintenance.checkEnergy("Wave")) {
                 foo = new Label("Wave*: ");
-                foo.setTooltip(new Tooltip("The order in which the station looks for energy from wave energy inventory during a charging."));
+                foo.setTooltip(new Tooltip("The order in which the station looks for energy from wave energy repository during a charging."));
                 foo.getTooltip().setPrefWidth(200);
                 foo.getTooltip().setWrapText(true);
             }
@@ -178,11 +178,11 @@ class Energy {
             foo.setGraphic(new ImageView(help));
             grid.add(foo, 0, 1);
             grid.add(boo, 1, 1);
-            boo = new TextField();
+            boo = new TextField(String.valueOf(Arrays.asList(currentStation.getSources()).indexOf("Hydroelectric") + 1));
             textfields.add(boo);
             if (Maintenance.checkEnergy("Hydroelectric")) {
                 foo = new Label("Hydroelectric*: ");
-                foo.setTooltip(new Tooltip("The order in which the station looks for energy from hydroelectric energy inventory during a charging."));
+                foo.setTooltip(new Tooltip("The order in which the station looks for energy from hydroelectric energy repository during a charging."));
                 foo.getTooltip().setPrefWidth(200);
                 foo.getTooltip().setWrapText(true);
             }
@@ -193,11 +193,11 @@ class Energy {
             foo.setGraphic(new ImageView(help));
             grid.add(foo, 2, 1);
             grid.add(boo, 3, 1);
-            boo = new TextField();
+            boo = new TextField(String.valueOf(Arrays.asList(currentStation.getSources()).indexOf("Nonrenewable") + 1));
             textfields.add(boo);
             if (Maintenance.checkEnergy("Nonrenewable")) {
                 foo = new Label("Nonrenewable*: ");
-                foo.setTooltip(new Tooltip("The order in which the station looks for energy from nonrenewable energy inventory during a charging."));
+                foo.setTooltip(new Tooltip("The order in which the station looks for energy from nonrenewable energy repository during a charging."));
                 foo.getTooltip().setPrefWidth(200);
                 foo.getTooltip().setWrapText(true);
             }
@@ -208,11 +208,11 @@ class Energy {
             foo.setGraphic(new ImageView(help));
             grid.add(foo, 0, 2);
             grid.add(boo, 1, 2);
-            boo = new TextField();
+            boo = new TextField(String.valueOf(Arrays.asList(currentStation.getSources()).indexOf("Geothermal") + 1));
             textfields.add(boo);
             if (Maintenance.checkEnergy("Geothermal")) {
                 foo = new Label("Geothermal*: ");
-                foo.setTooltip(new Tooltip("The order in which the station looks for energy from geothermal energy inventory during a charging."));
+                foo.setTooltip(new Tooltip("The order in which the station looks for energy from geothermal energy repository during a charging."));
                 foo.getTooltip().setPrefWidth(200);
                 foo.getTooltip().setWrapText(true);
             }
@@ -223,10 +223,10 @@ class Energy {
             foo.setGraphic(new ImageView(help));
             grid.add(foo, 2, 2);
             grid.add(boo, 3, 2);
-            boo = new TextField();
+            boo = new TextField(String.valueOf(Arrays.asList(currentStation.getSources()).indexOf("Discharging") + 1));
             textfields.add(boo);
-            foo = new Label("DisCharging*: ");
-            foo.setTooltip(new Tooltip("The order in which the station looks for energy from discharging energy inventory during a charging."));
+            foo = new Label("Discharging*: ");
+            foo.setTooltip(new Tooltip("The order in which the station looks for energy from discharging energy repository during a charging."));
             foo.setGraphic(new ImageView(help));
             foo.getTooltip().setPrefWidth(200);
             foo.getTooltip().setWrapText(true);
@@ -349,28 +349,46 @@ class Energy {
             Maintenance.trimTextfields();
             if (Maintenance.fieldCompletionCheck())
                 return;
+            if (Maintenance.positiveOrZero())
+                return;
             try {
-                if (Maintenance.positiveOrZero())
-                    return;
                 for (String en : currentStation.getSources())
                     switch (en) {
                         case "Solar":
-                            currentStation.getEnergySource("Solar").insertAmount(Double.parseDouble(textfields.get(0).getText()));
+                            if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
+                                currentStation.getEnergySource("Solar").insertAmount(Double.parseDouble(textfields.get(0).getText()));
+                            else
+                                currentStation.getEnergySource("Solar").insertAmount(Double.parseDouble(textfields.get(0).getText()) * 1000);
                             break;
                         case "Wind":
-                            currentStation.getEnergySource("Wind").insertAmount(Double.parseDouble(textfields.get(1).getText()));
+                            if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
+                                currentStation.getEnergySource("Wind").insertAmount(Double.parseDouble(textfields.get(1).getText()));
+                            else
+                                currentStation.getEnergySource("Wind").insertAmount(Double.parseDouble(textfields.get(1).getText()) * 1000);
                             break;
                         case "Wave":
-                            currentStation.getEnergySource("Wave").insertAmount(Double.parseDouble(textfields.get(2).getText()));
+                            if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
+                                currentStation.getEnergySource("Wave").insertAmount(Double.parseDouble(textfields.get(2).getText()));
+                            else
+                                currentStation.getEnergySource("Wave").insertAmount(Double.parseDouble(textfields.get(2).getText()) * 1000);
                             break;
                         case "Hydroelectric":
-                            currentStation.getEnergySource("Hydroelectric").insertAmount(Double.parseDouble(textfields.get(3).getText()));
+                            if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
+                                currentStation.getEnergySource("Hydroelectric").insertAmount(Double.parseDouble(textfields.get(3).getText()));
+                            else
+                                currentStation.getEnergySource("Hydroelectric").insertAmount(Double.parseDouble(textfields.get(3).getText()) * 1000);
                             break;
                         case "Nonrenewable":
-                            currentStation.getEnergySource("Nonrenewable").insertAmount(Double.parseDouble(textfields.get(4).getText()));
+                            if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
+                                currentStation.getEnergySource("Nonrenewable").insertAmount(Double.parseDouble(textfields.get(4).getText()));
+                            else
+                                currentStation.getEnergySource("Nonrenewable").insertAmount(Double.parseDouble(textfields.get(4).getText()) * 1000);
                             break;
                         case "Geothermal":
-                            currentStation.getEnergySource("Geothermal").insertAmount(Double.parseDouble(textfields.get(5).getText()));
+                            if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
+                                currentStation.getEnergySource("Geothermal").insertAmount(Double.parseDouble(textfields.get(5).getText()));
+                            else
+                                currentStation.getEnergySource("Geothermal").insertAmount(Double.parseDouble(textfields.get(5).getText()) * 1000);
                             break;
                         default:
                             break;
@@ -386,34 +404,33 @@ class Energy {
             Maintenance.trimTextfields();
             if (Maintenance.fieldCompletionCheck())
                 return;
-            try {
-                HashSet<String> b = new HashSet<>();
-                int counter = 0;
-                for (TextField s : textfields)
-                    if (!s.isDisabled()) {
-                        b.add(s.getText());
-                        counter++;
-                    }
-                if (b.size() != counter) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Error");
-                    alert.setHeaderText(null);
-                    alert.setContentText("All values have to be unique.");
-                    alert.showAndWait();
-                    return;
+            HashSet<String> b = new HashSet<>();
+            int counter = 0;
+            for (TextField s : textfields)
+                if (!s.isDisabled()) {
+                    b.add(s.getText());
+                    counter++;
                 }
-                textfields.forEach(a -> {
-                    if (!a.isDisabled()) {
-                        if (Integer.parseInt(a.getText()) > currentStation.getSources().length || Integer.parseInt(a.getText()) < 1) {
-                            Alert alert = new Alert(Alert.AlertType.ERROR);
-                            alert.setTitle("Error");
-                            alert.setHeaderText(null);
-                            alert.setContentText("Please put numbers from 1-" + currentStation.getSources().length + ".");
-                            alert.showAndWait();
-                            return;
-                        }
+            if (b.size() != counter) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText(null);
+                alert.setContentText("All values have to be unique.");
+                alert.showAndWait();
+                return;
+            }
+            for (TextField a: textfields)
+                if (!a.isDisabled()) {
+                    if (Integer.parseInt(a.getText()) > currentStation.getSources().length || Integer.parseInt(a.getText()) < 1) {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Error");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Please put numbers from 1-" + currentStation.getSources().length + ".");
+                        alert.showAndWait();
+                        return;
                     }
-                });
+                }
+            try {
                 String[] sources = new String[currentStation.getSources().length];
                 if (!textfields.get(0).isDisabled())
                     sources[Integer.parseInt(textfields.get(0).getText()) - 1] = "Solar";
@@ -428,7 +445,7 @@ class Energy {
                 if (!textfields.get(5).isDisabled())
                     sources[Integer.parseInt(textfields.get(5).getText()) - 1] = "Geothermal";
                 if (!textfields.get(6).isDisabled())
-                    sources[Integer.parseInt(textfields.get(6).getText()) - 1] = "DisCharging";
+                    sources[Integer.parseInt(textfields.get(6).getText()) - 1] = "Discharging";
                 currentStation.customEnergySorting(sources);
                 Maintenance.completionMessage("sorting");
                 startScreen.fire();
