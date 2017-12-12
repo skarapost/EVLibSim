@@ -45,14 +45,15 @@ class Maintenance {
 
     static boolean positiveOrZero(int... numbers) {
         for (int f: numbers) {
-            if (Double.parseDouble(textfields.get(f).getText()) < 0) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText(null);
-                alert.setContentText("Please fill with positive numbers or zero.");
-                alert.showAndWait();
-                return true;
-            }
+            if (!textfields.get(f).isDisabled())
+                if (Double.parseDouble(textfields.get(f).getText()) < 0) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Please fill with positive numbers or zero.");
+                    alert.showAndWait();
+                    return true;
+                }
         }
         return false;
     }
@@ -76,6 +77,7 @@ class Maintenance {
         root.setCenter(null);
         textfields.clear();
         timeUnit.setDisable(false);
+        energyUnit.setDisable(false);
     }
 
     static void completionMessage(String message) {

@@ -152,23 +152,6 @@
     -fx-background-radius: 3px;
 }
 
-/* Styling for text area
-.text-area {
-    -fx-background-color: -fx-color-500;
-    -fx-font-size: 15px;
-    -fx-spacing: 5px;
-    -fx-background-insets: 0;
+.choice-box {
+    -fx-max-width: 150px;
 }
-
-.text-area .scroll-pane {
-    -fx-background-color: transparent;
-}
-
-.text-area .scroll-pane .viewport{
-    -fx-background-color: transparent;
-}
-
-
-.text-area .scroll-pane .content{
-    -fx-background-color: transparent;
-}*/

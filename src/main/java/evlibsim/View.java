@@ -17,6 +17,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
+
 import static evlibsim.EVLibSim.*;
 
 class View {
@@ -78,13 +82,13 @@ class View {
             nameCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getDriver().getName()));
             brandCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getBrand()));
             if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
-                askingAmountCol.setCellValueFactory(p -> new SimpleDoubleProperty(p.getValue().getAmountOfEnergy()));
+                askingAmountCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(p.getValue().getAmountOfEnergy()))));
             else
-                askingAmountCol.setCellValueFactory(p -> new SimpleDoubleProperty(p.getValue().getAmountOfEnergy() / 1000));
+                askingAmountCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(p.getValue().getAmountOfEnergy() / 1000))));
             if (EVLibSim.timeUnit.getSelectionModel().getSelectedIndex() == 0)
-                maxWaitingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getMaxWaitingTime() / 1000));
+                maxWaitingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getMaxWaitingTime()/1000))));
             else
-                maxWaitingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getMaxWaitingTime() / 60000));
+                maxWaitingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getMaxWaitingTime()/60000))));
 
             table.setItems(result);
 
@@ -128,13 +132,13 @@ class View {
             nameCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getDriver().getName()));
             brandCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getBrand()));
             if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
-                askingAmountCol.setCellValueFactory(p -> new SimpleDoubleProperty(p.getValue().getAmountOfEnergy()));
+                askingAmountCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(p.getValue().getAmountOfEnergy()))));
             else
-                askingAmountCol.setCellValueFactory(p -> new SimpleDoubleProperty(p.getValue().getAmountOfEnergy() / 1000));
+                askingAmountCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(p.getValue().getAmountOfEnergy() / 1000))));
             if (EVLibSim.timeUnit.getSelectionModel().getSelectedIndex() == 0)
-                maxWaitingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getMaxWaitingTime() / 1000));
+                maxWaitingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getMaxWaitingTime()/1000))));
             else
-                maxWaitingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getMaxWaitingTime() / 60000));
+                maxWaitingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getMaxWaitingTime()/60000))));
 
             table.setItems(result);
 
@@ -178,13 +182,13 @@ class View {
             nameCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getDriver().getName()));
             brandCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getBrand()));
             if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
-                askingAmountCol.setCellValueFactory(p -> new SimpleDoubleProperty(p.getValue().getAmountOfEnergy()));
+                askingAmountCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(p.getValue().getAmountOfEnergy()))));
             else
-                askingAmountCol.setCellValueFactory(p -> new SimpleDoubleProperty(p.getValue().getAmountOfEnergy() / 1000));
+                askingAmountCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(p.getValue().getAmountOfEnergy() / 1000))));
             if (EVLibSim.timeUnit.getSelectionModel().getSelectedIndex() == 0)
-                maxWaitingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getMaxWaitingTime() / 1000));
+                maxWaitingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getMaxWaitingTime()/1000))));
             else
-                maxWaitingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getMaxWaitingTime() / 60000));
+                maxWaitingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getMaxWaitingTime()/60000))));
 
             table.setItems(result);
 
@@ -227,9 +231,9 @@ class View {
             nameCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getDriver().getName()));
             brandCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getBrand()));
             if (EVLibSim.timeUnit.getSelectionModel().getSelectedIndex() == 0)
-                maxWaitingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getMaxWaitingTime() / 1000));
+                maxWaitingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getMaxWaitingTime() / 1000))));
             else
-                maxWaitingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getMaxWaitingTime() / 60000));
+                maxWaitingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getMaxWaitingTime() / 60000))));
 
             table.setItems(result);
 
@@ -404,8 +408,8 @@ class View {
             barChart = new BarChart<>(xAxis, yAxis);
             barChart.setTitle("Infrastructure");
             dataSeries1 = new XYChart.Series<>();
-            dataSeries1.getData().add(new XYChart.Data<>("Slow", currentStation.SLOW_CHARGERS));
             dataSeries1.getData().add(new XYChart.Data<>("Fast", currentStation.FAST_CHARGERS));
+            dataSeries1.getData().add(new XYChart.Data<>("Slow", currentStation.SLOW_CHARGERS));
             dataSeries1.getData().add(new XYChart.Data<>("Dis", currentStation.getDisChargers().length));
             dataSeries1.getData().add(new XYChart.Data<>("Exch", currentStation.getExchangeHandlers().length));
             dataSeries1.getData().add(new XYChart.Data<>("Park", currentStation.getParkingSlots().length));
@@ -413,10 +417,10 @@ class View {
 
             for (XYChart.Series<String, Number> s : barChart.getData()) {
                 for (XYChart.Data<String, Number> d : s.getData()) {
-                    if (d.getXValue().equals("Slow"))
-                        Tooltip.install(d.getNode(), new Tooltip("Slow chargers"));
-                    else if (d.getXValue().equals("Fast"))
+                    if (d.getXValue().equals("Fast"))
                         Tooltip.install(d.getNode(), new Tooltip("Fast chargers"));
+                    else if (d.getXValue().equals("Slow"))
+                        Tooltip.install(d.getNode(), new Tooltip("Slow chargers"));
                     else if (d.getXValue().equals("Dis"))
                         Tooltip.install(d.getNode(), new Tooltip("Dischargers"));
                     else if (d.getXValue().equals("Park"))
@@ -446,18 +450,18 @@ class View {
             barChart = new BarChart<>(xAxis, yAxis);
             barChart.setTitle("Waiting List");
             dataSeries1 = new XYChart.Series<>();
-            dataSeries1.getData().add(new XYChart.Data<>("Slow", currentStation.getSlow().getSize()));
             dataSeries1.getData().add(new XYChart.Data<>("Fast", currentStation.getFast().getSize()));
+            dataSeries1.getData().add(new XYChart.Data<>("Slow", currentStation.getSlow().getSize()));
             dataSeries1.getData().add(new XYChart.Data<>("Dis", currentStation.getDischarging().getSize()));
             dataSeries1.getData().add(new XYChart.Data<>("Exch", currentStation.getExchange().getSize()));
             barChart.getData().add(dataSeries1);
 
             for (XYChart.Series<String, Number> s : barChart.getData()) {
                 for (XYChart.Data<String, Number> d : s.getData()) {
-                    if (d.getXValue().equals("Slow"))
-                        Tooltip.install(d.getNode(), new Tooltip("Queue for slow charging"));
-                    else if (d.getXValue().equals("Fast"))
+                    if (d.getXValue().equals("Fast"))
                         Tooltip.install(d.getNode(), new Tooltip("Queue for fast charging"));
+                    else if (d.getXValue().equals("Slow"))
+                        Tooltip.install(d.getNode(), new Tooltip("Queue for slow charging"));
                     else if (d.getXValue().equals("Dis"))
                         Tooltip.install(d.getNode(), new Tooltip("Queue for discharging"));
                     else
@@ -508,23 +512,23 @@ class View {
             nameCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getDriver().getName()));
             brandCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getBrand()));
             if (energyUnit.getSelectionModel().getSelectedIndex() == 0) {
-                askingAmountCol.setCellValueFactory(p -> new SimpleDoubleProperty(p.getValue().getAmountOfEnergy()));
-                energyToBeReceivedCol.setCellValueFactory(p -> new SimpleDoubleProperty(p.getValue().getEnergyToBeReceived()));
+                askingAmountCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(p.getValue().getAmountOfEnergy()))));
+                energyToBeReceivedCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(p.getValue().getEnergyToBeReceived()))));
             }
             else {
-                askingAmountCol.setCellValueFactory(p -> new SimpleDoubleProperty(p.getValue().getAmountOfEnergy()/1000));
-                energyToBeReceivedCol.setCellValueFactory(p -> new SimpleDoubleProperty(p.getValue().getEnergyToBeReceived()/1000));
+                askingAmountCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(p.getValue().getAmountOfEnergy() / 1000))));
+                energyToBeReceivedCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(p.getValue().getEnergyToBeReceived() / 1000))));
             }
             kindCol.setCellValueFactory(new PropertyValueFactory<>("kindOfCharging"));
             if (EVLibSim.timeUnit.getSelectionModel().getSelectedIndex() == 0) {
-                chargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getChargingTime() / 1000));
-                elapseTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getRemainingChargingTime() / 1000));
-                maxWaitingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getMaxWaitingTime() / 1000));
+                chargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getChargingTime() / 1000))));
+                elapseTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getRemainingChargingTime() / 1000))));
+                maxWaitingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getMaxWaitingTime() / 1000))));
             }
             else {
-                chargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getChargingTime() / 60000));
-                elapseTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getRemainingChargingTime() / 60000));
-                maxWaitingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getMaxWaitingTime() / 60000));
+                chargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getChargingTime() / 60000))));
+                elapseTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getRemainingChargingTime() / 60000))));
+                maxWaitingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getMaxWaitingTime() / 60000))));
             }
 
             table.setItems(result);
@@ -556,18 +560,18 @@ class View {
             nameCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getDriver().getName()));
             brandCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getBrand()));
             if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
-                amountOfEnergyCol.setCellValueFactory(p -> new SimpleDoubleProperty(p.getValue().getAmountOfEnergy()));
+                amountOfEnergyCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(p.getValue().getAmountOfEnergy()))));
             else
-                amountOfEnergyCol.setCellValueFactory(p -> new SimpleDoubleProperty(p.getValue().getAmountOfEnergy() / 1000));
+                amountOfEnergyCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(p.getValue().getAmountOfEnergy() / 1000))));
             if (EVLibSim.timeUnit.getSelectionModel().getSelectedIndex() == 0) {
-                disChargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getDisChargingTime() / 1000));
-                elapsedDisChargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getRemainingDisChargingTime() / 1000));
-                maxWaitingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getMaxWaitingTime() / 1000));
+                disChargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getDisChargingTime() / 1000))));
+                elapsedDisChargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getRemainingDisChargingTime() / 1000))));
+                maxWaitingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getMaxWaitingTime() / 1000))));
             }
             else {
-                disChargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getDisChargingTime() / 60000));
-                elapsedDisChargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getRemainingDisChargingTime() / 60000));
-                maxWaitingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getMaxWaitingTime() / 60000));
+                disChargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getDisChargingTime() / 60000))));
+                elapsedDisChargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getRemainingDisChargingTime() / 60000))));
+                maxWaitingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getMaxWaitingTime() / 60000))));
             }
 
             table.setItems(result);
@@ -599,14 +603,14 @@ class View {
             nameCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getDriver().getName()));
             brandCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getBrand()));
             if (EVLibSim.timeUnit.getSelectionModel().getSelectedIndex() == 0) {
-                chargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty( (double)p.getValue().getChargingTime() / 1000));
-                elapsedExchangeTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getRemainingChargingTime() / 1000));
-                maxWaitingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getMaxWaitingTime() / 1000));
+                chargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getChargingTime() / 1000))));
+                elapsedExchangeTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getRemainingChargingTime() / 1000))));
+                maxWaitingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getMaxWaitingTime() / 1000))));
             }
             else {
-                chargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getChargingTime() / 60000));
-                elapsedExchangeTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getRemainingChargingTime() / 60000));
-                maxWaitingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getMaxWaitingTime() / 60000));
+                chargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getChargingTime() / 60000))));
+                elapsedExchangeTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getRemainingChargingTime() / 60000))));
+                maxWaitingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getMaxWaitingTime() / 60000))));
             }
 
             table.setItems(result);
@@ -640,24 +644,24 @@ class View {
             nameCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getDriver().getName()));
             brandCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getBrand()));
             if (energyUnit.getSelectionModel().getSelectedIndex() == 0) {
-                askingAmountCol.setCellValueFactory(p -> new SimpleDoubleProperty(p.getValue().getAmountOfEnergy()));
-                energyToBeReceivedCol.setCellValueFactory(p -> new SimpleDoubleProperty(p.getValue().getEnergyToBeReceived()));
+                askingAmountCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(p.getValue().getAmountOfEnergy()))));
+                energyToBeReceivedCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(p.getValue().getEnergyToBeReceived()))));
             }
             else {
-                askingAmountCol.setCellValueFactory(p -> new SimpleDoubleProperty(p.getValue().getAmountOfEnergy() / 1000));
-                energyToBeReceivedCol.setCellValueFactory(p -> new SimpleDoubleProperty(p.getValue().getEnergyToBeReceived() / 1000));
+                askingAmountCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(p.getValue().getAmountOfEnergy() / 1000))));
+                energyToBeReceivedCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(p.getValue().getEnergyToBeReceived() / 1000))));
             }
             if (EVLibSim.timeUnit.getSelectionModel().getSelectedIndex() == 0) {
-                parkingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getParkingTime() / 1000));
-                elapsedParkingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getRemainingParkingTime() / 1000));
-                chargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getChargingTime() / 1000));
-                elapsedChargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getRemainingChargingTime() / 1000));
+                parkingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getParkingTime() / 1000))));
+                elapsedParkingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getRemainingParkingTime() / 1000))));
+                chargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getChargingTime() / 1000))));
+                elapsedChargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getRemainingChargingTime() / 1000))));
             }
             else {
-                parkingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getParkingTime() / 60000));
-                elapsedParkingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getRemainingParkingTime() / 60000));
-                chargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getChargingTime() / 60000));
-                elapsedChargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getRemainingChargingTime() / 60000));
+                parkingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getParkingTime() / 60000))));
+                elapsedParkingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getRemainingParkingTime() / 60000))));
+                chargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getChargingTime() / 60000))));
+                elapsedChargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getRemainingChargingTime() / 60000))));
             }
             table.setItems(result);
             table.setMaxSize(900, 500);
@@ -696,12 +700,15 @@ class View {
 
                 if (!currentStation.getQueueHandling()) {
                     event.preProcessing();
-                    if (event.getCondition().equals("charging")) {
+                    if (event.getCondition().equals("ready")) {
                         event.execution();
-                        if (this.kind.equalsIgnoreCase("slow"))
+                        if (this.kind.equalsIgnoreCase("slow")) {
+                            currentStation.getSlow().delete(event);
                             slowChargingsQueue.fire();
-                        else
+                        } else {
+                            currentStation.getFast().delete(event);
                             fastChargingsQueue.fire();
+                        }
                     } else if (event.getCondition().equals("wait"))
                         Maintenance.queueInsertion();
                 } else {
@@ -722,7 +729,8 @@ class View {
 
                 if (!currentStation.getQueueHandling()) {
                     event.preProcessing();
-                    if (event.getCondition().equals("discharging")) {
+                    if (event.getCondition().equals("ready")) {
+                        currentStation.getDischarging().delete(event);
                         event.execution();
                         dischargingsQueue.fire();
                     } else if (event.getCondition().equals("wait"))
@@ -745,7 +753,8 @@ class View {
 
                 if (!currentStation.getQueueHandling()) {
                     event.preProcessing();
-                    if (event.getCondition().equals("swapping")) {
+                    if (event.getCondition().equals("ready")) {
+                        currentStation.getExchange().delete(event);
                         event.execution();
                         exchangesQueue.fire();
                     } else if (event.getCondition().equals("wait"))

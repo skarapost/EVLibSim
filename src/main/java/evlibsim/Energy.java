@@ -1,7 +1,6 @@
 package evlibsim;
 
 import evlib.sources.*;
-import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -17,7 +16,6 @@ class Energy {
     static final MenuItem newEnergyPackages = new MenuItem("Add energy");
     static final MenuItem newEnergySource = new MenuItem("New energy source");
     static final MenuItem deleteEnergySource = new MenuItem("Remove energy source");
-    static final MenuItem updateStorage = new MenuItem("Update storage");
     static final MenuItem sortEnergies = new MenuItem("Sort energies");
     private static final Menu energy = new Menu("Energy");
     private static final Button addEnergies = new Button("Add");
@@ -27,7 +25,7 @@ class Energy {
     //Building of Energy menu item.
     static Menu createEnergyMenu() {
         energy.getItems().addAll(newEnergySource, deleteEnergySource, new SeparatorMenuItem(),
-                newEnergyPackages, updateStorage, new SeparatorMenuItem(), sortEnergies);
+                newEnergyPackages, new SeparatorMenuItem(), sortEnergies);
 
         //Building of NewEnergySource menu item
         newEnergySource.setOnAction(e -> {
@@ -108,22 +106,6 @@ class Energy {
                 }
                 Maintenance.completionMessage("energy source removal");
             });
-        });
-
-        //Implements the energy storage update, in case the automatic update mode is false.
-        updateStorage.setOnAction((ActionEvent e) -> {
-            if (Maintenance.stationCheck())
-                return;
-            if (!currentStation.getUpdateMode()) {
-                currentStation.updateStorage();
-                Maintenance.completionMessage("storage update");
-            } else {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText(null);
-                alert.setContentText("Automatic update storage.");
-                alert.showAndWait();
-            }
         });
 
         //Implements the sorting of the energies. The user sets the order at every charging the Charger will look for energy.
@@ -393,6 +375,8 @@ class Energy {
                         default:
                             break;
                     }
+                if (!currentStation.getUpdateMode())
+                    currentStation.updateStorage();
                 Maintenance.completionMessage("insertion of energy amounts");
                 startScreen.fire();
             } catch (Exception ex) {

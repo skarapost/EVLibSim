@@ -22,6 +22,9 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 
 import java.io.File;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
 
 import static evlibsim.EVLibSim.*;
 
@@ -78,24 +81,24 @@ class ToolBox {
             table.getColumns().addAll(idCol, nameCol, brandCol, stationNameCol,askingAmountCol, energyToBeReceivedCol, chargingTimeCol, remChargingTimeCol, costCol);
 
             idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
-            stationNameCol.setCellValueFactory(new PropertyValueFactory<>("chargingStationName"));
+            stationNameCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getStation().getName()));
             if (energyUnit.getSelectionModel().getSelectedIndex() == 0) {
-                askingAmountCol.setCellValueFactory(p -> new SimpleDoubleProperty(p.getValue().getAmountOfEnergy()));
-                energyToBeReceivedCol.setCellValueFactory(p -> new SimpleDoubleProperty(p.getValue().getEnergyToBeReceived()));
+                askingAmountCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(p.getValue().getAmountOfEnergy()))));
+                energyToBeReceivedCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(p.getValue().getEnergyToBeReceived()))));
             }
             else {
-                askingAmountCol.setCellValueFactory(p -> new SimpleDoubleProperty(p.getValue().getAmountOfEnergy()/1000));
-                energyToBeReceivedCol.setCellValueFactory(p -> new SimpleDoubleProperty(p.getValue().getEnergyToBeReceived()/1000));
+                askingAmountCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(p.getValue().getAmountOfEnergy() / 1000))));
+                energyToBeReceivedCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(p.getValue().getEnergyToBeReceived() / 1000))));
             }
             nameCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getDriver().getName()));
             brandCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getBrand()));
             if (EVLibSim.timeUnit.getSelectionModel().getSelectedIndex() == 0) {
-                chargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getChargingTime()/1000));
-                remChargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getRemainingChargingTime() / 1000));
+                chargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getChargingTime()/1000))));
+                remChargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getRemainingChargingTime()/1000))));
             }
             else {
-                chargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getChargingTime() / 60000));
-                remChargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getRemainingChargingTime() / 60000));
+                chargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getChargingTime() / 60000))));
+                remChargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getRemainingChargingTime() / 60000))));
             }
             costCol.setCellValueFactory(new PropertyValueFactory<>("cost"));
 
@@ -198,24 +201,24 @@ class ToolBox {
             table.getColumns().addAll(idCol, nameCol, brandCol, stationNameCol,askingAmountCol, energyToBeReceivedCol, chargingTimeCol, remChargingTimeCol, costCol);
 
             idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
-            stationNameCol.setCellValueFactory(new PropertyValueFactory<>("chargingStationName"));
+            stationNameCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getStation().getName()));
             if (energyUnit.getSelectionModel().getSelectedIndex() == 0) {
-                askingAmountCol.setCellValueFactory(p -> new SimpleDoubleProperty(p.getValue().getAmountOfEnergy()));
-                energyToBeReceivedCol.setCellValueFactory(p -> new SimpleDoubleProperty(p.getValue().getEnergyToBeReceived()));
+                askingAmountCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(p.getValue().getAmountOfEnergy()))));
+                energyToBeReceivedCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(p.getValue().getEnergyToBeReceived()))));
             }
             else {
-                askingAmountCol.setCellValueFactory(p -> new SimpleDoubleProperty(p.getValue().getAmountOfEnergy()/1000));
-                energyToBeReceivedCol.setCellValueFactory(p -> new SimpleDoubleProperty(p.getValue().getEnergyToBeReceived()/1000));
+                askingAmountCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(p.getValue().getAmountOfEnergy() / 1000))));
+                energyToBeReceivedCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(p.getValue().getEnergyToBeReceived() / 1000))));
             }
             nameCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getDriver().getName()));
             brandCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getBrand()));
             if (EVLibSim.timeUnit.getSelectionModel().getSelectedIndex() == 0) {
-                chargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getChargingTime()/1000));
-                remChargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getRemainingChargingTime() / 1000));
+                chargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getChargingTime()/1000))));
+                remChargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getRemainingChargingTime()/1000))));
             }
             else {
-                chargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getChargingTime() / 60000));
-                remChargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getRemainingChargingTime() / 60000));
+                chargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getChargingTime() / 60000))));
+                remChargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getRemainingChargingTime() / 60000))));
             }
             costCol.setCellValueFactory(new PropertyValueFactory<>("cost"));
 
@@ -313,20 +316,20 @@ class ToolBox {
             table.getColumns().addAll(idCol, nameCol, brandCol, stationNameCol,amountOfEnergyCol, disChargingTimeCol, remDisCharTimeCol, profitCol);
 
             idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
-            stationNameCol.setCellValueFactory(new PropertyValueFactory<>("chargingStationName"));
+            stationNameCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getStation().getName()));
             if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
-                amountOfEnergyCol.setCellValueFactory(p -> new SimpleDoubleProperty(p.getValue().getAmountOfEnergy()));
+                amountOfEnergyCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(p.getValue().getAmountOfEnergy()))));
             else
-                amountOfEnergyCol.setCellValueFactory(p -> new SimpleDoubleProperty(p.getValue().getAmountOfEnergy() / 1000));
+                amountOfEnergyCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(p.getValue().getAmountOfEnergy() / 1000))));
             nameCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getDriver().getName()));
             brandCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getBrand()));
             if (EVLibSim.timeUnit.getSelectionModel().getSelectedIndex() == 0) {
-                disChargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getDisChargingTime() / 1000));
-                remDisCharTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getRemainingDisChargingTime() / 1000));
+                disChargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getDisChargingTime()/1000))));
+                remDisCharTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getRemainingDisChargingTime()/1000))));
             }
             else {
-                disChargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getDisChargingTime() / 60000));
-                remDisCharTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getRemainingDisChargingTime() / 60000));
+                disChargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getDisChargingTime() / 60000))));
+                remDisCharTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getRemainingDisChargingTime() / 60000))));
             }
             profitCol.setCellValueFactory(new PropertyValueFactory<>("profit"));
             table.setItems(result);
@@ -422,16 +425,16 @@ class ToolBox {
             table.getColumns().addAll(idCol, nameCol, brandCol, stationNameCol, chargingTimeCol, remCharTimeCol, costCol);
 
             idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
-            stationNameCol.setCellValueFactory(new PropertyValueFactory<>("chargingStationName"));
+            stationNameCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getStation().getName()));
             brandCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getBrand()));
             nameCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getDriver().getName()));
             if (EVLibSim.timeUnit.getSelectionModel().getSelectedIndex() == 0) {
-                chargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getChargingTime() / 1000));
-                remCharTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getRemainingChargingTime() / 1000));
+                chargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getChargingTime()/1000))));
+                remCharTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getRemainingChargingTime()/1000))));
             }
             else {
-                chargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getChargingTime() / 60000));
-                remCharTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getRemainingChargingTime() / 60000));
+                chargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getChargingTime() / 60000))));
+                remCharTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getRemainingChargingTime() / 60000))));
             }
             costCol.setCellValueFactory(new PropertyValueFactory<>("cost"));
             table.setItems(result);
@@ -532,28 +535,28 @@ class ToolBox {
                     energyToBeReceivedCol, parkingTimeCol, remParkTimeCol, chargingTimeCol, remCharTimeCol, costCol);
 
             idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
-            stationNameCol.setCellValueFactory(new PropertyValueFactory<>("chargingStationName"));
+            stationNameCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getStation().getName()));
             nameCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getDriver().getName()));
             brandCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getBrand()));
             if (energyUnit.getSelectionModel().getSelectedIndex() == 0) {
-                askingAmountCol.setCellValueFactory(p -> new SimpleDoubleProperty(p.getValue().getAmountOfEnergy()));
-                energyToBeReceivedCol.setCellValueFactory(p -> new SimpleDoubleProperty(p.getValue().getEnergyToBeReceived()));
+                askingAmountCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(p.getValue().getAmountOfEnergy()))));
+                energyToBeReceivedCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(p.getValue().getEnergyToBeReceived()))));
             }
             else {
-                askingAmountCol.setCellValueFactory(p -> new SimpleDoubleProperty(p.getValue().getAmountOfEnergy() / 1000));
-                energyToBeReceivedCol.setCellValueFactory(p -> new SimpleDoubleProperty(p.getValue().getEnergyToBeReceived() / 1000));
+                askingAmountCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(p.getValue().getAmountOfEnergy() / 1000))));
+                energyToBeReceivedCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(p.getValue().getEnergyToBeReceived() / 1000))));
             }
             if (EVLibSim.timeUnit.getSelectionModel().getSelectedIndex() == 0) {
-                parkingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getParkingTime() / 1000));
-                remParkTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getRemainingParkingTime() / 1000));
-                chargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getChargingTime() / 1000));
-                remCharTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getRemainingChargingTime() / 1000));
+                chargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getChargingTime()/1000))));
+                remCharTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getRemainingChargingTime()/1000))));
+                parkingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getParkingTime()/1000))));
+                remParkTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getRemainingParkingTime()/1000))));
             }
             else {
-                parkingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getParkingTime() / 60000));
-                remParkTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getRemainingParkingTime() / 60000));
-                chargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getChargingTime() / 60000));
-                remCharTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty((double) p.getValue().getRemainingChargingTime() / 60000));
+                chargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getChargingTime() / 60000))));
+                remCharTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getRemainingChargingTime() / 60000))));
+                parkingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getParkingTime() / 60000))));
+                remParkTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getRemainingParkingTime() / 60000))));
             }
             costCol.setCellValueFactory(new PropertyValueFactory<>("cost"));
             table.setItems(result);
