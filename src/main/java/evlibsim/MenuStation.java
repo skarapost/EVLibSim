@@ -55,7 +55,6 @@ class MenuStation {
     private static final Button policyCreation2 = new Button("Creation");
     private static final Image image = new Image("/d.png");
     private static final Image help = new Image("/help.png");
-    static RadioMenuItem cs;
 
     private static final ChoiceBox<String> cb1 = new ChoiceBox<>();
     private static final ChoiceBox<String> cb2 = new ChoiceBox<>();
@@ -1141,7 +1140,7 @@ class MenuStation {
             Maintenance.trimTextfields();
             if (Maintenance.fieldCompletionCheck())
                 return;
-            //try {
+            try {
                 if (Maintenance.positiveOrZero(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11))
                     return;
                 for (ChargingStation station: stations)
@@ -1297,17 +1296,17 @@ class MenuStation {
                 }
                 Maintenance.completionMessage("creation of the charging station");
                 stations.add(st);
-                cs = new RadioMenuItem(st.getName());
-                group.getToggles().add(cs);
-                s.getItems().add(cs);
-                if (s.getItems().size() == 1)
-                    cs.setSelected(true);
+                s.getItems().add(st.getName());
+                if (s.getItems().size() == 1) {
+                    s.getSelectionModel().select(st.getName());
+                    currentStation = st;
+                }
                 else
                     startScreen.fire();
-            /*} catch (Exception ex) {
+            } catch (Exception ex) {
                 Maintenance.refillBlanks();
                 newChargingStationMI.fire();
-            }*/
+            }
         });
         modifyStationB.setOnAction(e -> {
             Maintenance.trimTextfields();
@@ -1411,12 +1410,11 @@ class MenuStation {
                     currentStation.setAutomaticQueueHandling(true);
                 else
                     currentStation.setAutomaticQueueHandling(false);
+                s.getItems().set(s.getSelectionModel().getSelectedIndex(), textfields.get(0).getText());
+                s.getSelectionModel().select(textfields.get(0).getText());
                 Maintenance.completionMessage("modification of the charging station");
-                RadioMenuItem item = (RadioMenuItem) group.getSelectedToggle();
-                item.setText(textfields.get(0).getText());
                 startScreen.fire();
             } catch (Exception ex) {
-                ex.printStackTrace();
                 Maintenance.refillBlanks();
                 modifyChargingStationMI.fire();
             }

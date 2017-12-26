@@ -34,7 +34,6 @@ import java.util.Optional;
 
 import static evlibsim.Energy.*;
 import static evlibsim.Event.*;
-import static evlibsim.MenuStation.cs;
 import static evlibsim.MenuStation.newChargingStationMI;
 import static evlibsim.MenuStation.policy;
 
@@ -45,7 +44,6 @@ public class EVLibSim extends Application {
     static final ArrayList<TextField> textfields = new ArrayList<>();
     static final ArrayList<ChargingStation> stations = new ArrayList<>();
     static final ArrayList<String> energies = new ArrayList<>();
-    static final ToggleGroup group = new ToggleGroup();
     //Top menu bar
     private static final MenuBar leftMenuBar = new MenuBar();
     private static final HBox rightMenuBar = new HBox();
@@ -55,8 +53,10 @@ public class EVLibSim extends Application {
     private static final Image refreshImage = new Image("/refresh.png");
     private static final Label timeUnitLabel = new Label("Time unit: ");
     private static final Label energyUnitLabel = new Label("Energy unit: ");
+    private static final Label stationLabel = new Label("Station: ");
     static final ChoiceBox<String> timeUnit = new ChoiceBox<>(FXCollections.observableArrayList("Second", "Minute"));
     static final ChoiceBox<String> energyUnit = new ChoiceBox<>(FXCollections.observableArrayList("Watt", "KiloWatt"));
+    static final ChoiceBox<String> s = new ChoiceBox<>();
     //File menu item
     private static final Menu file = new Menu("File");
     private static final MenuItem export = new MenuItem("Export to csv...");
@@ -64,7 +64,7 @@ public class EVLibSim extends Application {
     private static final RadioMenuItem enable = new RadioMenuItem("Enable");
     private static final RadioMenuItem disable = new RadioMenuItem("Disable");
     static final MenuItem startScreen = new MenuItem("Start Screen");
-    static final Menu s = new Menu("Stations");
+    //static final Menu s = new Menu("Stations");
     private static final MenuItem newSession = new MenuItem("New");
     private static final MenuItem load = new MenuItem("Open...");
     private static final MenuItem save = new MenuItem("Save");
@@ -125,6 +125,7 @@ public class EVLibSim extends Application {
     public void start(Stage primaryStage) throws Exception {
         EVLibSim.primaryStage = primaryStage;
         primaryStage.setTitle("EVLibSim");
+        primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/electricVehicles.png")));
         Scene scene = new Scene(root);
         primaryStage.setMinHeight(650);
         primaryStage.setMinWidth(1100);
@@ -132,8 +133,12 @@ public class EVLibSim extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
 
+        timeUnit.getStyleClass().add("customChoiceBox");
+        energyUnit.getStyleClass().add("customChoiceBox");
+        s.getStyleClass().add("customChoiceBox");
+
         file.getItems().addAll(startScreen, new SeparatorMenuItem(), newSession, load,
-                save, saveAs, new SeparatorMenuItem(), s, about, rec,
+                save, saveAs, new SeparatorMenuItem(), about, rec,
                 new SeparatorMenuItem(), export, exitMenuItem);
 
         leftMenuBar.getMenus().addAll(file, View.createViewMenu(),
@@ -213,11 +218,17 @@ public class EVLibSim extends Application {
         rightMenuBar.getStyleClass().add("menu-bar");
         HBox.setHgrow(leftMenuBar, Priority.ALWAYS);
         HBox.setHgrow(rightMenuBar, Priority.NEVER);
+
         HBox timeBox = new HBox(timeUnitLabel, timeUnit);
         timeBox.getStyleClass().add("menu-bar");
+
         HBox energyBox = new HBox(energyUnitLabel, energyUnit);
         energyBox.getStyleClass().add("menu-bar");
-        rightMenuBar.getChildren().addAll(timeBox, energyBox, homeButton, refreshButton);
+
+        HBox stationBox = new HBox(stationLabel, s);
+        stationBox.getStyleClass().add("menu-bar");
+
+        rightMenuBar.getChildren().addAll(stationBox, timeBox, energyBox, homeButton, refreshButton);
         rightMenuBar.setSpacing(10);
 
         timeUnit.getSelectionModel().selectFirst();
@@ -230,6 +241,74 @@ public class EVLibSim extends Application {
         energyUnit.getSelectionModel().selectedIndexProperty().addListener((ov, oldValue, newValue) -> {
             if (!refreshButton.isDisabled())
                 refreshButton.fire();
+        });
+
+        s.getSelectionModel().selectedItemProperty().addListener((ov, oldValue, newValue) -> {
+            for (ChargingStation cs : stations)
+                if (Objects.equals(cs.getName(), newValue)) {
+                    currentStation = cs;
+                    if (timeUnit.getSelectionModel().getSelectedIndex() == 0)
+                        waitTimeSlow.setText("Slow: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getWaitingTime("slow") / 1000));
+                    else
+                        waitTimeSlow.setText("Slow: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getWaitingTime("slow") / 60000));
+                    waitTimeSlow.setTooltip(new Tooltip("The waiting time for an available slow charger ."));
+                    waitTimeSlow.getTooltip().setPrefWidth(200);
+                    waitTimeSlow.getTooltip().setWrapText(true);
+
+                    if (timeUnit.getSelectionModel().getSelectedIndex() == 0)
+                        waitTimeFast.setText("Fast: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getWaitingTime("fast") / 1000));
+                    else
+                        waitTimeFast.setText("Fast: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getWaitingTime("fast") / 60000));
+                    waitTimeFast.setTooltip(new Tooltip("The waiting time for an available fast charger."));
+                    waitTimeFast.getTooltip().setPrefWidth(200);
+                    waitTimeFast.getTooltip().setWrapText(true);
+
+                    if (timeUnit.getSelectionModel().getSelectedIndex() == 0)
+                        waitTimeDis.setText("Discharging: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getWaitingTime("discharging") / 1000));
+                    else
+                        waitTimeDis.setText("Discharging: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getWaitingTime("discharging") / 60000));
+                    waitTimeDis.setTooltip(new Tooltip("The waiting time for an available discharger."));
+                    waitTimeDis.getTooltip().setPrefWidth(200);
+                    waitTimeDis.getTooltip().setWrapText(true);
+
+                    if (timeUnit.getSelectionModel().getSelectedIndex() == 0)
+                        waitTimeEx.setText("Exchange: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getWaitingTime("exchange") / 1000));
+                    else
+                        waitTimeEx.setText("Exchange: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getWaitingTime("exchange") / 60000));
+                    waitTimeEx.setTooltip(new Tooltip("The waiting time for an available battery exchange handler."));
+                    waitTimeEx.getTooltip().setPrefWidth(200);
+                    waitTimeEx.getTooltip().setWrapText(true);
+
+                    if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
+                        unitPrice.setText("Charging: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(currentStation.getCurrentPrice()));
+                    else
+                        unitPrice.setText("Charging: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(currentStation.getCurrentPrice() * 1000));
+                    unitPrice.setTooltip(new Tooltip("The price of each energy unit for charging."));
+                    unitPrice.getTooltip().setPrefWidth(200);
+                    unitPrice.getTooltip().setWrapText(true);
+
+                    if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
+                        disUnitPrice.setText("Discharging: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(currentStation.getDisUnitPrice()));
+                    else
+                        disUnitPrice.setText("Discharging: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(currentStation.getDisUnitPrice() * 1000));
+                    disUnitPrice.setTooltip(new Tooltip("The price of each energy unit for discharging."));
+                    disUnitPrice.getTooltip().setPrefWidth(200);
+                    disUnitPrice.getTooltip().setWrapText(true);
+
+                    exchangePrice.setText("Exchange: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(currentStation.getExchangePrice()));
+                    exchangePrice.setTooltip(new Tooltip("The price of each battery exchange operation."));
+                    exchangePrice.getTooltip().setPrefWidth(200);
+                    exchangePrice.getTooltip().setWrapText(true);
+
+                    if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
+                        inductivePrice.setText("Inductive: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(currentStation.getInductivePrice()));
+                    else
+                        inductivePrice.setText("Inductive: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(currentStation.getInductivePrice() * 1000));
+                    inductivePrice.setTooltip(new Tooltip("The price of each energy unit for inductive charging. A vehicle can charge inductively only through a parking event."));
+                    inductivePrice.getTooltip().setPrefWidth(200);
+                    inductivePrice.getTooltip().setWrapText(true);
+                    startScreen.fire();
+                }
         });
 
         topMenuBar.getChildren().addAll(leftMenuBar, rightMenuBar);
@@ -311,80 +390,6 @@ public class EVLibSim extends Application {
         });
 
         startScreen.fire();
-
-        group.selectedToggleProperty().addListener((ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) -> {
-            if (group.getSelectedToggle() != null) {
-                newValue.setSelected(true);
-                RadioMenuItem rmi = (RadioMenuItem) group.getSelectedToggle();
-                String name = rmi.getText();
-                for (ChargingStation cs : stations)
-                    if (Objects.equals(cs.getName(), name)) {
-                        currentStation = cs;
-                        if (timeUnit.getSelectionModel().getSelectedIndex() == 0)
-                            waitTimeSlow.setText("Slow: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getWaitingTime("slow") / 1000));
-                        else
-                            waitTimeSlow.setText("Slow: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getWaitingTime("slow") / 60000));
-                        waitTimeSlow.setTooltip(new Tooltip("The waiting time for an available slow charger ."));
-                        waitTimeSlow.getTooltip().setPrefWidth(200);
-                        waitTimeSlow.getTooltip().setWrapText(true);
-
-                        if (timeUnit.getSelectionModel().getSelectedIndex() == 0)
-                            waitTimeFast.setText("Fast: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getWaitingTime("fast") / 1000));
-                        else
-                            waitTimeFast.setText("Fast: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getWaitingTime("fast") / 60000));
-                        waitTimeFast.setTooltip(new Tooltip("The waiting time for an available fast charger."));
-                        waitTimeFast.getTooltip().setPrefWidth(200);
-                        waitTimeFast.getTooltip().setWrapText(true);
-
-                        if (timeUnit.getSelectionModel().getSelectedIndex() == 0)
-                            waitTimeDis.setText("Discharging: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getWaitingTime("discharging") / 1000));
-                        else
-                            waitTimeDis.setText("Discharging: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getWaitingTime("discharging") / 60000));
-                        waitTimeDis.setTooltip(new Tooltip("The waiting time for an available discharger."));
-                        waitTimeDis.getTooltip().setPrefWidth(200);
-                        waitTimeDis.getTooltip().setWrapText(true);
-
-                        if (timeUnit.getSelectionModel().getSelectedIndex() == 0)
-                            waitTimeEx.setText("Exchange: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getWaitingTime("exchange") / 1000));
-                        else
-                            waitTimeEx.setText("Exchange: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getWaitingTime("exchange") / 60000));
-                        waitTimeEx.setTooltip(new Tooltip("The waiting time for an available battery exchange handler."));
-                        waitTimeEx.getTooltip().setPrefWidth(200);
-                        waitTimeEx.getTooltip().setWrapText(true);
-
-                        if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
-                            unitPrice.setText("Charging: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(currentStation.getCurrentPrice()));
-                        else
-                            unitPrice.setText("Charging: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(currentStation.getCurrentPrice() * 1000));
-                        unitPrice.setTooltip(new Tooltip("The price of each energy unit for charging."));
-                        unitPrice.getTooltip().setPrefWidth(200);
-                        unitPrice.getTooltip().setWrapText(true);
-
-                        if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
-                            disUnitPrice.setText("Discharging: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(currentStation.getDisUnitPrice()));
-                        else
-                            disUnitPrice.setText("Discharging: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(currentStation.getDisUnitPrice() * 1000));
-                        disUnitPrice.setTooltip(new Tooltip("The price of each energy unit for discharging."));
-                        disUnitPrice.getTooltip().setPrefWidth(200);
-                        disUnitPrice.getTooltip().setWrapText(true);
-
-                        exchangePrice.setText("Exchange: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(currentStation.getExchangePrice()));
-                        exchangePrice.setTooltip(new Tooltip("The price of each battery exchange operation."));
-                        exchangePrice.getTooltip().setPrefWidth(200);
-                        exchangePrice.getTooltip().setWrapText(true);
-
-                        if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
-                            inductivePrice.setText("Inductive: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(currentStation.getInductivePrice()));
-                        else
-                            inductivePrice.setText("Inductive: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(currentStation.getInductivePrice() * 1000));
-                        inductivePrice.setTooltip(new Tooltip("The price of each energy unit for inductive charging. A vehicle can charge inductively only through a parking event."));
-                        inductivePrice.getTooltip().setPrefWidth(200);
-                        inductivePrice.getTooltip().setWrapText(true);
-                        startScreen.fire();
-                    }
-            }
-        });
-
 
         //Start screen buttons
         newStation.setPrefSize(230, 60);
@@ -587,7 +592,7 @@ public class EVLibSim extends Application {
             energies.clear();
             s.getItems().clear();
             currentStation = null;
-            group.getToggles().clear();
+            s.getItems().clear();
             ChargingEvent.chargingLog.clear();
             DisChargingEvent.dischargingLog.clear();
             ChargingEvent.exchangeLog.clear();
@@ -745,11 +750,9 @@ public class EVLibSim extends Application {
                             counter += 6;
                         }
                         stations.add(st);
-                        cs = new RadioMenuItem(st.getName());
-                        group.getToggles().add(cs);
-                        s.getItems().add(cs);
+                        s.getItems().add(st.getName());
                         if (s.getItems().size() == 1)
-                            cs.setSelected(true);
+                            s.getSelectionModel().selectFirst();
                         break;
                     case "ch":
                         vehicle = new ElectricVehicle(tokens[10]);

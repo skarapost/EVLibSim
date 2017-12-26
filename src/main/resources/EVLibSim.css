@@ -153,5 +153,17 @@
 }
 
 .choice-box {
-    -fx-max-width: 150px;
+    -fx-pref-width: 150px;
+}
+
+.choice-box .context-menu {
+    -fx-pref-width: 150px;
+}
+
+.customChoiceBox {
+    -fx-pref-width: 120px;
+}
+
+.customChoiceBox .context-menu {
+    -fx-pref-width: 120px;
 }

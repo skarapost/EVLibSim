@@ -253,77 +253,63 @@ class View {
                     case "Solar":
                         if (currentStation.getSpecificAmount("Solar") > 0) {
                             if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
-                                pieChartData.add(new PieChart.Data("Solar-" +
-                                        String.valueOf(currentStation.getSpecificAmount("Solar")), currentStation.getSpecificAmount("Solar")));
+                                pieChartData.add(new PieChart.Data("Solar", currentStation.getSpecificAmount("Solar")));
                             else
-                                pieChartData.add(new PieChart.Data("Solar-" +
-                                        String.valueOf(currentStation.getSpecificAmount("Solar")/1000), currentStation.getSpecificAmount("Solar") / 1000));
+                                pieChartData.add(new PieChart.Data("Solar", currentStation.getSpecificAmount("Solar") / 1000));
                             continue;
                         }
                         break;
                     case "Wind":
                         if (currentStation.getSpecificAmount("Wind") > 0) {
                             if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
-                                pieChartData.add(new PieChart.Data("Wind-" +
-                                        String.valueOf(currentStation.getSpecificAmount("Wind")), currentStation.getSpecificAmount("Wind")));
+                                pieChartData.add(new PieChart.Data("Wind", currentStation.getSpecificAmount("Wind")));
                             else
-                                pieChartData.add(new PieChart.Data("Wind-" +
-                                        String.valueOf(currentStation.getSpecificAmount("Wind")/1000), currentStation.getSpecificAmount("Wind") / 1000));
+                                pieChartData.add(new PieChart.Data("Wind", currentStation.getSpecificAmount("Wind") / 1000));
                             continue;
                         }
                         break;
                     case "Wave":
                         if (currentStation.getSpecificAmount("Wave") > 0) {
                             if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
-                                pieChartData.add(new PieChart.Data("Wave-" +
-                                        String.valueOf(currentStation.getSpecificAmount("Wave")), currentStation.getSpecificAmount("Wave")));
+                                pieChartData.add(new PieChart.Data("Wave", currentStation.getSpecificAmount("Wave")));
                             else
-                                pieChartData.add(new PieChart.Data("Wave-" +
-                                        String.valueOf(currentStation.getSpecificAmount("Wave")/1000), currentStation.getSpecificAmount("Wave") / 1000));
+                                pieChartData.add(new PieChart.Data("Wave", currentStation.getSpecificAmount("Wave") / 1000));
                             continue;
                         }
                         break;
                     case "Hydroelectric":
                         if (currentStation.getSpecificAmount("Hydroelectric") > 0) {
                             if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
-                                pieChartData.add(new PieChart.Data("Hydroelectric-" +
-                                        String.valueOf(currentStation.getSpecificAmount("Hydroelectric")), currentStation.getSpecificAmount("Hydroelectric")));
+                                pieChartData.add(new PieChart.Data("Hydroelectric", currentStation.getSpecificAmount("Hydroelectric")));
                             else
-                                pieChartData.add(new PieChart.Data("Hydroelectric-" +
-                                        String.valueOf(currentStation.getSpecificAmount("Hydroelectric")/1000), currentStation.getSpecificAmount("Hydroelectric") / 1000));
+                                pieChartData.add(new PieChart.Data("Hydroelectric", currentStation.getSpecificAmount("Hydroelectric") / 1000));
                             continue;
                         }
                         break;
                     case "Nonrenewable":
                         if (currentStation.getSpecificAmount("Nonrenewable") > 0) {
                             if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
-                                pieChartData.add(new PieChart.Data("Nonrenewable-" +
-                                        String.valueOf(currentStation.getSpecificAmount("Nonrenewable")), currentStation.getSpecificAmount("Nonrenewable")));
+                                pieChartData.add(new PieChart.Data("Nonrenewable", currentStation.getSpecificAmount("Nonrenewable")));
                             else
-                                pieChartData.add(new PieChart.Data("Nonrenewable-" +
-                                        String.valueOf(currentStation.getSpecificAmount("Nonrenewable")/1000), currentStation.getSpecificAmount("Nonrenewable") / 1000));
+                                pieChartData.add(new PieChart.Data("Nonrenewable", currentStation.getSpecificAmount("Nonrenewable") / 1000));
                             continue;
                         }
                         break;
                     case "Geothermal":
                         if (currentStation.getSpecificAmount("Geothermal") > 0) {
                             if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
-                                pieChartData.add(new PieChart.Data("Geothermal-" +
-                                        String.valueOf(currentStation.getSpecificAmount("Geothermal")), currentStation.getSpecificAmount("Geothermal")));
+                                pieChartData.add(new PieChart.Data("Geothermal", currentStation.getSpecificAmount("Geothermal")));
                             else
-                                pieChartData.add(new PieChart.Data("Geothermal-" +
-                                        String.valueOf(currentStation.getSpecificAmount("Geothermal")/1000), currentStation.getSpecificAmount("Geothermal") / 1000));
+                                pieChartData.add(new PieChart.Data("Geothermal", currentStation.getSpecificAmount("Geothermal") / 1000));
                             continue;
                         }
                         break;
                     case "DisCharging":
                         if (currentStation.getSpecificAmount("Discharging") > 0) {
                             if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
-                                pieChartData.add(new PieChart.Data("Discharging-" +
-                                        String.valueOf(currentStation.getSpecificAmount("Discharging")), currentStation.getSpecificAmount("Discharging")));
+                                pieChartData.add(new PieChart.Data("Discharging", currentStation.getSpecificAmount("Discharging")));
                             else
-                                pieChartData.add(new PieChart.Data("Discharging-" +
-                                        String.valueOf(currentStation.getSpecificAmount("Discharging")/1000), currentStation.getSpecificAmount("Discharging") / 1000));
+                                pieChartData.add(new PieChart.Data("Discharging", currentStation.getSpecificAmount("Discharging") / 1000));
                             continue;
                         }
                         break;
@@ -339,7 +325,10 @@ class View {
             chart.getData().forEach(data -> {
                 Tooltip tooltip = new Tooltip();
                 tooltip.setWrapText(true);
-                tooltip.setText(String.valueOf(data.getPieValue()));
+                if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
+                    tooltip.setText(new DecimalFormat("##.###", new DecimalFormatSymbols(Locale.US)).format(data.getPieValue()));
+                else
+                    tooltip.setText(new DecimalFormat("##.###", new DecimalFormatSymbols(Locale.US)).format(data.getPieValue()/1000));
                 Tooltip.install(data.getNode(), tooltip);
             });
 
