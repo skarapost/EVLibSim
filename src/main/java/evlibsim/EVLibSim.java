@@ -34,6 +34,7 @@ import java.util.Optional;
 
 import static evlibsim.Energy.*;
 import static evlibsim.Event.*;
+import static evlibsim.MenuStation.modifyChargingStationMI;
 import static evlibsim.MenuStation.newChargingStationMI;
 import static evlibsim.MenuStation.policy;
 
@@ -59,7 +60,9 @@ public class EVLibSim extends Application {
     static final ChoiceBox<String> s = new ChoiceBox<>();
     //File menu item
     private static final Menu file = new Menu("File");
-    private static final MenuItem export = new MenuItem("Export to csv...");
+    private static final Menu export = new Menu("Export");
+    private static final MenuItem eventsExport = new MenuItem("Events report");
+    private static final MenuItem stationExport = new MenuItem("Station report");
     private static final Menu rec = new Menu("Suggestions");
     private static final RadioMenuItem enable = new RadioMenuItem("Enable");
     private static final RadioMenuItem disable = new RadioMenuItem("Disable");
@@ -104,6 +107,7 @@ public class EVLibSim extends Application {
     private static final Button bt8 = new Button("Sort energies");
     private static final Button bt9 = new Button("New charging station");
     private static final Button bt10 = new Button("New charging pricing policy");
+    private static final Button bt11 = new Button("Modify charging station");
 
     static ChargingStation currentStation;
 
@@ -144,6 +148,8 @@ public class EVLibSim extends Application {
         leftMenuBar.getMenus().addAll(file, View.createViewMenu(),
                 MenuStation.createStationMenu(), Event.createEventMenu(),
                 Energy.createEnergyMenu());
+
+        export.getItems().addAll(eventsExport, stationExport);
 
         refreshButton.setGraphic(new ImageView(refreshImage));
 
@@ -190,6 +196,9 @@ public class EVLibSim extends Application {
                     break;
                 case "overview":
                     View.totalActivity.fire();
+                    break;
+                case "totalEnergy":
+                    ToolBox.totalEnergy.fire();
                     break;
                 case "allChargers":
                     MenuStation.allChargersMI.fire();
@@ -400,8 +409,10 @@ public class EVLibSim extends Application {
             Maintenance.cleanScreen();
             bt9.setPrefSize(230, 60);
             bt10.setPrefSize(230, 60);
+            bt11.setPrefSize(230, 60);
             grid.add(bt9, 0, 0);
-            grid.add(bt10, 0, 1);
+            grid.add(bt10, 0, 2);
+            grid.add(bt11, 0, 1);
             Button back = new Button();
             back.setGraphic(new ImageView(image));
             back.setPrefSize(image.getWidth(), image.getHeight());
@@ -415,6 +426,7 @@ public class EVLibSim extends Application {
 
         bt9.setOnAction(e -> newChargingStationMI.fire());
         bt10.setOnAction(e -> policy.fire());
+        bt11.setOnAction(e -> modifyChargingStationMI.fire());
 
         newEvent.setOnAction(e -> {
             if (Maintenance.stationCheck())
@@ -483,7 +495,7 @@ public class EVLibSim extends Application {
             alert.showAndWait();
         });
 
-        export.setOnAction(e -> {
+        eventsExport.setOnAction(e -> {
             if (Maintenance.stationCheck())
                 return;
             FileChooser fileChooser = new FileChooser();
@@ -540,6 +552,18 @@ public class EVLibSim extends Application {
             } catch (Exception er) {
                 er.printStackTrace();
             }
+        });
+
+        stationExport.setOnAction(e -> {
+            if (Maintenance.stationCheck())
+                return;
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Generate Report");
+            fileChooser.setInitialFileName("report.txt");
+            fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text Files(.txt)", "*.txt"));
+            File selectedFile = fileChooser.showSaveDialog(primaryStage);
+            if (selectedFile != null)
+                currentStation.genReport(selectedFile.getPath());
         });
 
         exitMenuItem.setOnAction(e -> {

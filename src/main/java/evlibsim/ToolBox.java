@@ -19,9 +19,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
-import javafx.stage.FileChooser;
 
-import java.io.File;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
@@ -36,7 +34,7 @@ class ToolBox {
     static final Button exchangeLog = new Button();
     static final Button parkingLog = new Button();
     private static final Button showTotalActivity = new Button();
-    private static final Button report = new Button();
+    static final Button totalEnergy = new Button();
     private static final javafx.scene.control.ToolBar bar = new javafx.scene.control.ToolBar();
     private static final Image image1 = new Image(View.class.getResourceAsStream("/hist1.png"));
     private static final Image image2 = new Image(View.class.getResourceAsStream("/hist2.png"));
@@ -44,7 +42,7 @@ class ToolBox {
     private static final Image image4 = new Image(View.class.getResourceAsStream("/hist4.png"));
     private static final Image image5 = new Image(View.class.getResourceAsStream("/hist5.png"));
     private static final Image image6 = new Image(View.class.getResourceAsStream("/totalActivity.png"));
-    private static final Image image7 = new Image(View.class.getResourceAsStream("/report.png"));
+    private static final Image image7 = new Image(View.class.getResourceAsStream("/energy.png"));
 
     private static void createLogButtons() {
         fastChargingLog.setGraphic(new ImageView(image1));
@@ -640,26 +638,37 @@ class ToolBox {
         showTotalActivity.getTooltip().setWrapText(true);
         showTotalActivity.setOnAction(e -> View.totalActivity.fire());
 
-        report.setGraphic(new ImageView(image7));
-        report.setPrefSize(image7.getWidth(), image7.getHeight());
-        report.setTooltip(new Tooltip("Report of the selected charging station."));
-        report.getTooltip().setWrapText(true);
-        report.setOnAction(e -> {
+        totalEnergy.setGraphic(new ImageView(image7));
+        totalEnergy.setPrefSize(image7.getWidth(), image7.getHeight());
+        totalEnergy.setTooltip(new Tooltip("Total energy"));
+        totalEnergy.getTooltip().setWrapText(true);
+        totalEnergy.setOnAction(e -> {
             if (Maintenance.stationCheck())
                 return;
-            FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("Generate Report");
-            fileChooser.setInitialFileName("report.txt");
-            fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text Files(.txt)", "*.txt"));
-            File selectedFile = fileChooser.showSaveDialog(primaryStage);
-            if (selectedFile != null)
-                currentStation.genReport(selectedFile.getPath());
+            Maintenance.cleanScreen();
+            refreshButton.setDisable(false);
+            EVLibSim.panel = "totalEnergy";
+            EVLibSim.grid.setMaxSize(300, 300);
+            Label foo;
+            foo = new Label("Selected Sources");
+            foo.setStyle("-fx-font-weight: bold;");
+            grid.add(foo, 0, 0);
+            int c = 1;
+            for(String source: currentStation.getSources()) {
+                grid.add(new Label(source + ": "), 0, c);
+                if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
+                    grid.add(new Label(String.valueOf(currentStation.getSpecificAmount(source)) + " Watts"), 1, c);
+                else
+                    grid.add(new Label(new DecimalFormat("##.###", new DecimalFormatSymbols(Locale.US)).format(currentStation.getSpecificAmount(source) / 1000) + " kiloWatts"), 1, c);
+                c++;
+            }
+
+            root.setCenter(grid);
         });
     }
 
     static ToolBar createToolBar() {
-        bar.getItems().addAll(fastChargingLog, slowChargingLog, disChargingLog, exchangeLog, parkingLog,
-                showTotalActivity, report);
+        bar.getItems().addAll(showTotalActivity, totalEnergy, fastChargingLog, slowChargingLog, disChargingLog, exchangeLog, parkingLog);
         bar.setOrientation(Orientation.VERTICAL);
         bar.getStyleClass().add("sidePanels");
         bar.setStyle("-fx-spacing: 8px;");

@@ -42,7 +42,7 @@ class MenuStation {
     private static final Menu parkingSlotsM = new Menu("Parking slot");
     private static final MenuItem newParkingSlotMI = new MenuItem("New parking slot");
     static final MenuItem allParkingSlotsMI = new MenuItem("All parking slots");
-    private static final MenuItem modifyChargingStationMI = new MenuItem("Modify station");
+    static final MenuItem modifyChargingStationMI = new MenuItem("Modify station");
     private static final MenuItem newBatteryMI = new MenuItem("New battery");
     static final MenuItem allBatteriesMI = new MenuItem("Batteries");
     private static final MenuItem batteriesChargingMI = new MenuItem("Batteries charging");

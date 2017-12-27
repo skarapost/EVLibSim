@@ -161,9 +161,9 @@
 }
 
 .customChoiceBox {
-    -fx-pref-width: 120px;
+    -fx-pref-width: 110px;
 }
 
 .customChoiceBox .context-menu {
-    -fx-pref-width: 120px;
+    -fx-pref-width: 110px;
 }
