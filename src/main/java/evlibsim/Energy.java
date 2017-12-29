@@ -381,7 +381,6 @@ class Energy {
                 startScreen.fire();
             } catch (Exception ex) {
                 Maintenance.refillBlanks();
-                newEnergyPackages.fire();
             }
         });
         sort.setOnAction(e -> {
@@ -435,7 +434,6 @@ class Energy {
                 startScreen.fire();
             } catch (Exception ex) {
                 Maintenance.refillBlanks();
-                sortEnergies.fire();
             }
         });
         return energy;

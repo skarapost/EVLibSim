@@ -1133,7 +1133,6 @@ class MenuStation {
                 startScreen.fire();
             } catch (Exception ex) {
                 Maintenance.refillBlanks();
-                newChargerMI.fire();
             }
         });
         chargingStationCreationB.setOnAction(e -> {
@@ -1294,18 +1293,16 @@ class MenuStation {
                     else if (Objects.equals(enr, "Hydroelectric"))
                         st.addEnergySource(new Hydroelectric());
                 }
-                Maintenance.completionMessage("creation of the charging station");
                 stations.add(st);
                 s.getItems().add(st.getName());
                 if (s.getItems().size() == 1) {
                     s.getSelectionModel().select(st.getName());
                     currentStation = st;
                 }
-                else
-                    startScreen.fire();
+                Maintenance.completionMessage("creation of the charging station");
+                startScreen.fire();
             } catch (Exception ex) {
                 Maintenance.refillBlanks();
-                newChargingStationMI.fire();
             }
         });
         modifyStationB.setOnAction(e -> {
@@ -1416,7 +1413,6 @@ class MenuStation {
                 startScreen.fire();
             } catch (Exception ex) {
                 Maintenance.refillBlanks();
-                modifyChargingStationMI.fire();
             }
         });
 
@@ -1445,7 +1441,6 @@ class MenuStation {
                 startScreen.fire();
             } catch (Exception ex) {
                 Maintenance.refillBlanks();
-                startScreen.fire();
             }
         });
         policyCreation2.setOnAction(e -> {
@@ -1485,7 +1480,6 @@ class MenuStation {
                 startScreen.fire();
             } catch (Exception ex) {
                 Maintenance.refillBlanks();
-                startScreen.fire();
             }
         });
 
@@ -1521,7 +1515,6 @@ class MenuStation {
                 startScreen.fire();
             } catch (Exception ex) {
                 Maintenance.refillBlanks();
-                newBatteryMI.fire();
             }
         });
         return stationM;

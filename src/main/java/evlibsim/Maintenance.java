@@ -96,11 +96,11 @@ class Maintenance {
         alert.showAndWait();
     }
 
-    static void noExecution() {
+    static void noExecution(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Information");
         alert.setHeaderText(null);
-        alert.setContentText("The event cannot be executed.");
+        alert.setContentText("The event cannot be executed, due to " + message);
         alert.showAndWait();
     }
 
@@ -124,7 +124,7 @@ class Maintenance {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setHeaderText(null);
-        alert.setContentText("Please fill in the blanks again.");
+        alert.setContentText("Please fill in the blanks with valid values.");
         alert.showAndWait();
     }
 }

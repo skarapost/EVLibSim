@@ -46,10 +46,16 @@ class Event {
     private static final Button parkingEventCreation = new Button("Creation");
     private static final Button exchangeEventCreation = new Button("Creation");
     private static final ChoiceBox<String> kindOfCharging = new ChoiceBox<>();
+    private static final ChoiceBox<String> brands = new ChoiceBox<>();
     private static final Image help = new Image("/help.png");
 
     //Builds the Event category in the main MenuBar
     static Menu createEventMenu() {
+
+        brands.setItems(FXCollections.observableArrayList("VW e-Golf", "Hyundai Ioniq",
+                "Tesla Model S", "Renault ZOE", "VW e-up!", "Nissan Leaf", "BMW i3", "Kia Soul EV",
+                "Tesla Model X", "Smart ForTwo ED"));
+
         //Implements the New ChargingEvent MenuItem
         charging.setOnAction(e ->
         {
@@ -74,9 +80,8 @@ class Event {
             foo.getTooltip().setPrefWidth(200);
             foo.getTooltip().setWrapText(true);
             grid.add(foo, 2, 0);
-            boo = new TextField();
-            grid.add(boo, 3, 0);
-            textfields.add(boo);
+            grid.add(brands, 3, 0);
+            brands.getSelectionModel().selectFirst();
             foo = new Label("Battery capacity*: ");
             foo.setGraphic(new ImageView(help));
             foo.setTooltip(new Tooltip("The capacity of the battery."));
@@ -259,9 +264,8 @@ class Event {
             foo.getTooltip().setPrefWidth(200);
             foo.getTooltip().setWrapText(true);
             grid.add(foo, 2, 0);
-            boo = new TextField();
-            grid.add(boo, 3, 0);
-            textfields.add(boo);
+            grid.add(brands, 3, 0);
+            brands.getSelectionModel().selectFirst();
             foo = new Label("Battery capacity*: ");
             foo.setGraphic(new ImageView(help));
             foo.setTooltip(new Tooltip("The capacity of the battery."));
@@ -417,9 +421,8 @@ class Event {
             foo.getTooltip().setPrefWidth(200);
             foo.getTooltip().setWrapText(true);
             grid.add(foo, 2, 0);
-            boo = new TextField();
-            grid.add(boo, 3, 0);
-            textfields.add(boo);
+            grid.add(brands, 3, 0);
+            brands.getSelectionModel().selectFirst();
             foo = new Label("Battery capacity*: ");
             foo.setGraphic(new ImageView(help));
             foo.setTooltip(new Tooltip("The capacity of the battery."));
@@ -560,9 +563,8 @@ class Event {
             foo.getTooltip().setPrefWidth(200);
             foo.getTooltip().setWrapText(true);
             grid.add(foo, 2, 0);
-            boo = new TextField();
-            grid.add(boo, 3, 0);
-            textfields.add(boo);
+            grid.add(brands, 3, 0);
+            brands.getSelectionModel().selectFirst();
             foo = new Label("Battery capacity*: ");
             foo.setGraphic(new ImageView(help));
             foo.setTooltip(new Tooltip("The capacity of the battery."));
@@ -693,7 +695,12 @@ class Event {
                 try {
                     currentStation.execEvents(selectedFile.getPath());
                 } catch (Exception e1) {
-                    System.out.println("Plan execution failed");
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Plan execution failed. Check if there are not " +
+                            "as available chargers as the plan demands, or for any mistakes in the form of the text file.");
+                    alert.showAndWait();
                 }
             }
         });
@@ -704,9 +711,9 @@ class Event {
             if (Maintenance.fieldCompletionCheck())
                 return;
             try {
-                if (Maintenance.positiveOrZero(2, 3, 4))
+                if (Maintenance.positiveOrZero(1, 2, 3))
                     return;
-                if (Double.parseDouble(textfields.get(2).getText()) < Double.parseDouble(textfields.get(3).getText())) {
+                if (Double.parseDouble(textfields.get(1).getText()) < Double.parseDouble(textfields.get(2).getText())) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Error");
                     alert.setHeaderText(null);
@@ -714,7 +721,7 @@ class Event {
                     alert.showAndWait();
                     return;
                 }
-                if ((Double.parseDouble(textfields.get(4).getText()) > (Double.parseDouble(textfields.get(2).getText()) - Double.parseDouble(textfields.get(3).getText())))) {
+                if ((Double.parseDouble(textfields.get(3).getText()) > (Double.parseDouble(textfields.get(1).getText()) - Double.parseDouble(textfields.get(2).getText())))) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Error");
                     alert.setHeaderText(null);
@@ -722,7 +729,7 @@ class Event {
                     alert.showAndWait();
                     return;
                 }
-                if (Double.parseDouble(textfields.get(4).getText()) <= 0) {
+                if (Double.parseDouble(textfields.get(3).getText()) <= 0) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Error");
                     alert.setHeaderText(null);
@@ -734,29 +741,32 @@ class Event {
                 Battery b;
                 Driver d = new Driver(textfields.get(0).getText());
                 if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
-                    b = new Battery(Double.parseDouble(textfields.get(3).getText()), Double.parseDouble(textfields.get(2).getText()));
+                    b = new Battery(Double.parseDouble(textfields.get(2).getText()), Double.parseDouble(textfields.get(1).getText()));
                 else
-                    b = new Battery(Double.parseDouble(textfields.get(3).getText()) * 1000, Double.parseDouble(textfields.get(2).getText()) * 1000);
-                ElectricVehicle el = new ElectricVehicle(textfields.get(1).getText());
+                    b = new Battery(Double.parseDouble(textfields.get(2).getText()) * 1000, Double.parseDouble(textfields.get(1).getText()) * 1000);
+                ElectricVehicle el = new ElectricVehicle(brands.getValue());
                 el.setBattery(b);
                 el.setDriver(d);
                 if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
-                    ch = new ChargingEvent(currentStation, el, Double.parseDouble(textfields.get(4).getText()), kindOfCharging.getValue().toLowerCase());
+                    ch = new ChargingEvent(currentStation, el, Double.parseDouble(textfields.get(3).getText()), kindOfCharging.getValue().toLowerCase());
                 else
-                    ch = new ChargingEvent(currentStation, el, Double.parseDouble(textfields.get(4).getText()) * 1000, kindOfCharging.getValue().toLowerCase());
+                    ch = new ChargingEvent(currentStation, el, Double.parseDouble(textfields.get(3).getText()) * 1000, kindOfCharging.getValue().toLowerCase());
                 ch.setWaitingTime(currentStation.getWaitingTime(kindOfCharging.getValue().toLowerCase()) + 1000);
                 ch.preProcessing();
                 if (ch.getCondition().equals("ready")) {
                     ch.execution();
                     Maintenance.completionMessage("creation of the charging event");
-                } else if (ch.getCondition().equals("wait"))
+                    startScreen.fire();
+                } else if (ch.getCondition().equals("wait")) {
                     Maintenance.queueInsertion();
-                else
-                    Maintenance.noExecution();
-                startScreen.fire();
+                    startScreen.fire();
+                }
+                else {
+                    Maintenance.noExecution("not enough energy in the charging station.");
+                    ChargingEvent.chargingLog.remove(ch);
+                }
             } catch (Exception ex) {
                 Maintenance.refillBlanks();
-                charging.fire();
             }
         });
         disChargingEventCreation.setOnAction(e -> {
@@ -764,9 +774,9 @@ class Event {
             if (Maintenance.fieldCompletionCheck())
                 return;
             try {
-                if (Maintenance.positiveOrZero(2, 3, 4))
+                if (Maintenance.positiveOrZero(1, 2, 3))
                     return;
-                if (Double.parseDouble(textfields.get(2).getText()) < Double.parseDouble(textfields.get(3).getText())) {
+                if (Double.parseDouble(textfields.get(1).getText()) < Double.parseDouble(textfields.get(2).getText())) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Error");
                     alert.setHeaderText(null);
@@ -774,7 +784,7 @@ class Event {
                     alert.showAndWait();
                     return;
                 }
-                if (Double.parseDouble(textfields.get(4).getText()) > (Double.parseDouble(textfields.get(3).getText()))) {
+                if (Double.parseDouble(textfields.get(3).getText()) > (Double.parseDouble(textfields.get(2).getText()))) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Error");
                     alert.setHeaderText(null);
@@ -782,7 +792,7 @@ class Event {
                     alert.showAndWait();
                     return;
                 }
-                if (Double.parseDouble(textfields.get(4).getText()) <= 0) {
+                if (Double.parseDouble(textfields.get(3).getText()) <= 0) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Error");
                     alert.setHeaderText(null);
@@ -794,29 +804,32 @@ class Event {
                 Battery b;
                 Driver d = new Driver(textfields.get(0).getText());
                 if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
-                    b = new Battery(Double.parseDouble(textfields.get(3).getText()), Double.parseDouble(textfields.get(2).getText()));
+                    b = new Battery(Double.parseDouble(textfields.get(2).getText()), Double.parseDouble(textfields.get(1).getText()));
                 else
-                    b = new Battery(Double.parseDouble(textfields.get(3).getText()) * 1000, Double.parseDouble(textfields.get(2).getText()) * 1000);
-                ElectricVehicle el = new ElectricVehicle(textfields.get(1).getText());
+                    b = new Battery(Double.parseDouble(textfields.get(2).getText()) * 1000, Double.parseDouble(textfields.get(1).getText()) * 1000);
+                ElectricVehicle el = new ElectricVehicle(brands.getValue());
                 el.setBattery(b);
                 el.setDriver(d);
                 if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
-                    dsch = new DisChargingEvent(currentStation, el, Double.parseDouble(textfields.get(4).getText()));
+                    dsch = new DisChargingEvent(currentStation, el, Double.parseDouble(textfields.get(3).getText()));
                 else
-                    dsch = new DisChargingEvent(currentStation, el, Double.parseDouble(textfields.get(4).getText()) * 1000);
+                    dsch = new DisChargingEvent(currentStation, el, Double.parseDouble(textfields.get(3).getText()) * 1000);
                 dsch.setWaitingTime(currentStation.getWaitingTime("discharging") + 1000);
                 dsch.preProcessing();
                 if (dsch.getCondition().equals("ready")) {
                     dsch.execution();
                     Maintenance.completionMessage("creation of the discharging event");
-                } else if (dsch.getCondition().equals("wait"))
+                    startScreen.fire();
+                } else if (dsch.getCondition().equals("wait")) {
                     Maintenance.queueInsertion();
-                else
-                    Maintenance.noExecution();
-                startScreen.fire();
+                    startScreen.fire();
+                }
+                else {
+                    Maintenance.noExecution("not enough energy in the charging station.");
+                    DisChargingEvent.dischargingLog.remove(dsch);
+                }
             } catch (Exception ex) {
                 Maintenance.refillBlanks();
-                discharging.fire();
             }
         });
         exchangeEventCreation.setOnAction(e -> {
@@ -824,9 +837,9 @@ class Event {
             if (Maintenance.fieldCompletionCheck())
                 return;
             try {
-                if (Maintenance.positiveOrZero(2, 3))
+                if (Maintenance.positiveOrZero(1, 2))
                     return;
-                if (Double.parseDouble(textfields.get(2).getText()) < Double.parseDouble(textfields.get(3).getText())) {
+                if (Double.parseDouble(textfields.get(1).getText()) < Double.parseDouble(textfields.get(2).getText())) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Error");
                     alert.setHeaderText(null);
@@ -838,10 +851,10 @@ class Event {
                 Battery b;
                 Driver d = new Driver(textfields.get(0).getText());
                 if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
-                    b = new Battery(Double.parseDouble(textfields.get(3).getText()), Double.parseDouble(textfields.get(2).getText()));
+                    b = new Battery(Double.parseDouble(textfields.get(2).getText()), Double.parseDouble(textfields.get(1).getText()));
                 else
-                    b = new Battery(Double.parseDouble(textfields.get(3).getText())* 1000, Double.parseDouble(textfields.get(2).getText()) * 1000);
-                ElectricVehicle el = new ElectricVehicle(textfields.get(1).getText());
+                    b = new Battery(Double.parseDouble(textfields.get(2).getText())* 1000, Double.parseDouble(textfields.get(1).getText()) * 1000);
+                ElectricVehicle el = new ElectricVehicle(brands.getValue());
                 el.setBattery(b);
                 el.setDriver(d);
                 ch = new ChargingEvent(currentStation, el);
@@ -850,20 +863,23 @@ class Event {
                 if (ch.getCondition().equals("ready")) {
                     ch.execution();
                     Maintenance.completionMessage("creation of the charging event");
-                } else if (ch.getCondition().equals("wait"))
+                    startScreen.fire();
+                } else if (ch.getCondition().equals("wait")) {
                     Maintenance.queueInsertion();
-                else
-                    Maintenance.noExecution();
-                startScreen.fire();
+                    startScreen.fire();
+                }
+                else {
+                    Maintenance.noExecution("not an available battery in the charging station.");
+                    ChargingEvent.exchangeLog.remove(ch);
+                }
             } catch (Exception ex) {
                 Maintenance.refillBlanks();
-                exchange.fire();
             }
         });
         parkingEventCreation.setOnAction(e -> {
             Maintenance.trimTextfields();
             for (TextField f : textfields) {
-                if (textfields.indexOf(f) == 4)
+                if (textfields.indexOf(f) == 3)
                     continue;
                 if (f.getText().isEmpty() && !f.isDisabled()) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -875,9 +891,9 @@ class Event {
                 }
             }
             try {
-                if (Maintenance.positiveOrZero(2, 3, 5))
+                if (Maintenance.positiveOrZero(1, 2, 3, 4))
                     return;
-                if (Double.parseDouble(textfields.get(2).getText()) < Double.parseDouble(textfields.get(3).getText())) {
+                if (Double.parseDouble(textfields.get(1).getText()) < Double.parseDouble(textfields.get(2).getText())) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Error");
                     alert.setHeaderText(null);
@@ -885,8 +901,8 @@ class Event {
                     alert.showAndWait();
                     return;
                 }
-                if (Double.parseDouble(textfields.get(2).getText()) < Double.parseDouble(textfields.get(3).getText()) +
-                        Double.parseDouble(textfields.get(4).getText())) {
+                if (Double.parseDouble(textfields.get(1).getText()) < Double.parseDouble(textfields.get(2).getText()) +
+                        Double.parseDouble(textfields.get(3).getText())) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Error");
                     alert.setHeaderText(null);
@@ -898,38 +914,40 @@ class Event {
                 Battery b;
                 Driver d = new Driver(textfields.get(0).getText());
                 if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
-                    b = new Battery(Double.parseDouble(textfields.get(3).getText()), Double.parseDouble(textfields.get(2).getText()));
+                    b = new Battery(Double.parseDouble(textfields.get(2).getText()), Double.parseDouble(textfields.get(1).getText()));
                 else
-                    b = new Battery(Double.parseDouble(textfields.get(3).getText()) * 1000, Double.parseDouble(textfields.get(2).getText()) * 1000);
-                ElectricVehicle el = new ElectricVehicle(textfields.get(1).getText());
+                    b = new Battery(Double.parseDouble(textfields.get(2).getText()) * 1000, Double.parseDouble(textfields.get(1).getText()) * 1000);
+                ElectricVehicle el = new ElectricVehicle(brands.getValue());
                 el.setBattery(b);
                 el.setDriver(d);
-                if (!textfields.get(4).getText().isEmpty()) {
+                if (!textfields.get(3).getText().isEmpty()) {
                     if ((energyUnit.getSelectionModel().getSelectedIndex() == 0) && (timeUnit.getSelectionModel().getSelectedIndex() == 0))
-                        ch = new ParkingEvent(currentStation, el, (long) Double.parseDouble(textfields.get(5).getText()) * 1000, Double.parseDouble(textfields.get(4).getText()));
+                        ch = new ParkingEvent(currentStation, el, (long) Double.parseDouble(textfields.get(4).getText()) * 1000, Double.parseDouble(textfields.get(3).getText()));
                     else if ((energyUnit.getSelectionModel().getSelectedIndex() == 0) && (timeUnit.getSelectionModel().getSelectedIndex() == 1))
-                        ch = new ParkingEvent(currentStation, el, (long) Double.parseDouble(textfields.get(5).getText()) * 60000, Double.parseDouble(textfields.get(4).getText()));
+                        ch = new ParkingEvent(currentStation, el, (long) Double.parseDouble(textfields.get(4).getText()) * 60000, Double.parseDouble(textfields.get(3).getText()));
                     else if ((energyUnit.getSelectionModel().getSelectedIndex() == 1) && (timeUnit.getSelectionModel().getSelectedIndex() == 0))
-                        ch = new ParkingEvent(currentStation, el, (long) Double.parseDouble(textfields.get(5).getText()) * 1000, Double.parseDouble(textfields.get(4).getText()) * 1000);
+                        ch = new ParkingEvent(currentStation, el, (long) Double.parseDouble(textfields.get(4).getText()) * 1000, Double.parseDouble(textfields.get(3).getText()) * 1000);
                     else
-                        ch = new ParkingEvent(currentStation, el, (long) Double.parseDouble(textfields.get(5).getText()) * 60000, Double.parseDouble(textfields.get(4).getText()) * 1000);
+                        ch = new ParkingEvent(currentStation, el, (long) Double.parseDouble(textfields.get(4).getText()) * 60000, Double.parseDouble(textfields.get(3).getText()) * 1000);
                     ch.preProcessing();
                     if (ch.getCondition().equals("ready")) {
                         ch.execution();
                         Maintenance.completionMessage("creation of the parking event");
+                        startScreen.fire();
                     } else
-                        Maintenance.noExecution();
-                } else if (!Objects.equals(textfields.get(5).getText(), "0")) {
+                        Maintenance.noExecution("not an available parking slot.");
+                } else if (!Objects.equals(textfields.get(4).getText(), "0")) {
                     if (timeUnit.getSelectionModel().getSelectedIndex() == 0)
-                        ch = new ParkingEvent(currentStation, el, (long) Double.parseDouble(textfields.get(5).getText()) * 1000);
+                        ch = new ParkingEvent(currentStation, el, (long) Double.parseDouble(textfields.get(4).getText()) * 1000);
                     else
-                        ch = new ParkingEvent(currentStation, el, (long) Double.parseDouble(textfields.get(5).getText()) * 60000);
+                        ch = new ParkingEvent(currentStation, el, (long) Double.parseDouble(textfields.get(4).getText()) * 60000);
                     ch.preProcessing();
                     if (ch.getCondition().equals("ready")) {
                         ch.execution();
                         Maintenance.completionMessage("creation of the parking event");
+                        startScreen.fire();
                     } else
-                        Maintenance.noExecution();
+                        Maintenance.noExecution("not an available parking slot.");
                 } else {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Error");
@@ -937,10 +955,8 @@ class Event {
                     alert.setContentText("Please select a positive parking time.");
                     alert.showAndWait();
                 }
-                startScreen.fire();
             } catch (Exception ex) {
                 Maintenance.refillBlanks();
-                parking.fire();
             }
         });
         event.getItems().addAll(charging, discharging, exchange, parking, new SeparatorMenuItem(), planExecution);
