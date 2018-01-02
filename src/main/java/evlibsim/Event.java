@@ -698,8 +698,7 @@ class Event {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Error");
                     alert.setHeaderText(null);
-                    alert.setContentText("Plan execution failed. Check if there are not " +
-                            "as available chargers as the plan demands, or for any mistakes in the form of the text file.");
+                    alert.setContentText("Plan execution failed. Please check again the text file.");
                     alert.showAndWait();
                 }
             }
@@ -756,15 +755,14 @@ class Event {
                 if (ch.getCondition().equals("ready")) {
                     ch.execution();
                     Maintenance.completionMessage("creation of the charging event");
-                    startScreen.fire();
                 } else if (ch.getCondition().equals("wait")) {
                     Maintenance.queueInsertion();
-                    startScreen.fire();
                 }
                 else {
-                    Maintenance.noExecution("not enough energy in the charging station.");
+                    Maintenance.noExecution("zero energy in the charging station.");
                     ChargingEvent.chargingLog.remove(ch);
                 }
+                startScreen.fire();
             } catch (Exception ex) {
                 Maintenance.refillBlanks();
             }
@@ -819,15 +817,13 @@ class Event {
                 if (dsch.getCondition().equals("ready")) {
                     dsch.execution();
                     Maintenance.completionMessage("creation of the discharging event");
-                    startScreen.fire();
-                } else if (dsch.getCondition().equals("wait")) {
+                } else if (dsch.getCondition().equals("wait"))
                     Maintenance.queueInsertion();
-                    startScreen.fire();
-                }
                 else {
-                    Maintenance.noExecution("not enough energy in the charging station.");
+                    Maintenance.noExecution("zero energy in the charging station.");
                     DisChargingEvent.dischargingLog.remove(dsch);
                 }
+                startScreen.fire();
             } catch (Exception ex) {
                 Maintenance.refillBlanks();
             }
@@ -863,15 +859,13 @@ class Event {
                 if (ch.getCondition().equals("ready")) {
                     ch.execution();
                     Maintenance.completionMessage("creation of the charging event");
-                    startScreen.fire();
-                } else if (ch.getCondition().equals("wait")) {
+                } else if (ch.getCondition().equals("wait"))
                     Maintenance.queueInsertion();
-                    startScreen.fire();
-                }
                 else {
                     Maintenance.noExecution("not an available battery in the charging station.");
                     ChargingEvent.exchangeLog.remove(ch);
                 }
+                startScreen.fire();
             } catch (Exception ex) {
                 Maintenance.refillBlanks();
             }
@@ -933,9 +927,9 @@ class Event {
                     if (ch.getCondition().equals("ready")) {
                         ch.execution();
                         Maintenance.completionMessage("creation of the parking event");
-                        startScreen.fire();
                     } else
                         Maintenance.noExecution("not an available parking slot.");
+                    startScreen.fire();
                 } else if (!Objects.equals(textfields.get(4).getText(), "0")) {
                     if (timeUnit.getSelectionModel().getSelectedIndex() == 0)
                         ch = new ParkingEvent(currentStation, el, (long) Double.parseDouble(textfields.get(4).getText()) * 1000);
@@ -945,9 +939,9 @@ class Event {
                     if (ch.getCondition().equals("ready")) {
                         ch.execution();
                         Maintenance.completionMessage("creation of the parking event");
-                        startScreen.fire();
                     } else
                         Maintenance.noExecution("not an available parking slot.");
+                    startScreen.fire();
                 } else {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Error");
