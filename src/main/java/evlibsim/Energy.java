@@ -328,12 +328,12 @@ class Energy {
 
         //Buttons
         addEnergies.setOnAction(e -> {
-            Maintenance.trimTextfields();
-            if (Maintenance.fieldCompletionCheck())
-                return;
-            if (Maintenance.positiveOrZero())
-                return;
             try {
+                Maintenance.trimTextfields();
+                if (Maintenance.fieldCompletionCheck())
+                    return;
+                if (Maintenance.positiveOrZero())
+                    return;
                 for (String en : currentStation.getSources())
                     switch (en) {
                         case "Solar":
@@ -384,36 +384,36 @@ class Energy {
             }
         });
         sort.setOnAction(e -> {
-            Maintenance.trimTextfields();
-            if (Maintenance.fieldCompletionCheck())
-                return;
-            HashSet<String> b = new HashSet<>();
-            int counter = 0;
-            for (TextField s : textfields)
-                if (!s.isDisabled()) {
-                    b.add(s.getText());
-                    counter++;
-                }
-            if (b.size() != counter) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText(null);
-                alert.setContentText("All values have to be unique.");
-                alert.showAndWait();
-                return;
-            }
-            for (TextField a: textfields)
-                if (!a.isDisabled()) {
-                    if (Integer.parseInt(a.getText()) > currentStation.getSources().length || Integer.parseInt(a.getText()) < 1) {
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Error");
-                        alert.setHeaderText(null);
-                        alert.setContentText("Please put numbers from 1-" + currentStation.getSources().length + ".");
-                        alert.showAndWait();
-                        return;
-                    }
-                }
             try {
+                Maintenance.trimTextfields();
+                if (Maintenance.fieldCompletionCheck())
+                    return;
+                HashSet<String> b = new HashSet<>();
+                int counter = 0;
+                for (TextField s : textfields)
+                    if (!s.isDisabled()) {
+                        b.add(s.getText());
+                        counter++;
+                    }
+                if (b.size() != counter) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText(null);
+                    alert.setContentText("All values have to be unique.");
+                    alert.showAndWait();
+                    return;
+                }
+                for (TextField a: textfields)
+                    if (!a.isDisabled()) {
+                        if (Integer.parseInt(a.getText()) > currentStation.getSources().length || Integer.parseInt(a.getText()) < 1) {
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("Error");
+                            alert.setHeaderText(null);
+                            alert.setContentText("Please put numbers from 1-" + currentStation.getSources().length + ".");
+                            alert.showAndWait();
+                            return;
+                        }
+                    }
                 String[] sources = new String[currentStation.getSources().length];
                 if (!textfields.get(0).isDisabled())
                     sources[Integer.parseInt(textfields.get(0).getText()) - 1] = "Solar";

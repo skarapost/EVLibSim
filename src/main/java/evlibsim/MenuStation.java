@@ -481,6 +481,7 @@ class MenuStation {
             foo.getTooltip().setWrapText(true);
             EVLibSim.grid.add(foo, 2, 0);
             boo = new TextField(String.valueOf(currentStation.FAST_CHARGERS));
+            boo.setDisable(true);
             EVLibSim.grid.add(boo, 3, 0);
             textfields.add(boo);
             foo = new Label("Slow chargers*: ");
@@ -490,6 +491,7 @@ class MenuStation {
             foo.getTooltip().setWrapText(true);
             EVLibSim.grid.add(foo, 0, 1);
             boo = new TextField(String.valueOf(currentStation.SLOW_CHARGERS));
+            boo.setDisable(true);
             EVLibSim.grid.add(boo, 1, 1);
             textfields.add(boo);
             foo = new Label("Exchange handlers*: ");
@@ -499,6 +501,7 @@ class MenuStation {
             foo.getTooltip().setWrapText(true);
             EVLibSim.grid.add(foo, 2, 1);
             boo = new TextField(String.valueOf(currentStation.getExchangeHandlers().length));
+            boo.setDisable(true);
             EVLibSim.grid.add(boo, 3, 1);
             textfields.add(boo);
             foo = new Label("Dischargers*: ");
@@ -508,6 +511,7 @@ class MenuStation {
             foo.getTooltip().setWrapText(true);
             EVLibSim.grid.add(foo, 0, 2);
             boo = new TextField(String.valueOf(currentStation.getDisChargers().length));
+            boo.setDisable(true);
             EVLibSim.grid.add(boo, 1, 2);
             textfields.add(boo);
             foo = new Label("Parking slots*: ");
@@ -517,6 +521,7 @@ class MenuStation {
             foo.getTooltip().setWrapText(true);
             EVLibSim.grid.add(foo, 2, 2);
             boo = new TextField(String.valueOf(currentStation.getParkingSlots().length));
+            boo.setDisable(true);
             EVLibSim.grid.add(boo, 3, 2);
             textfields.add(boo);
             foo = new Label("Energy sources*: ");
@@ -1115,8 +1120,8 @@ class MenuStation {
 
         //Buttons
         chargerCreationB.setOnAction(e -> {
-            Maintenance.trimTextfields();
             try {
+                Maintenance.trimTextfields();
                 Charger ch;
                 ch = new Charger(currentStation, kindOfCharging.getValue().toLowerCase());
                 currentStation.addCharger(ch);
@@ -1129,10 +1134,10 @@ class MenuStation {
             }
         });
         chargingStationCreationB.setOnAction(e -> {
-            Maintenance.trimTextfields();
-            if (Maintenance.fieldCompletionCheck())
-                return;
             try {
+                Maintenance.trimTextfields();
+                if (Maintenance.fieldCompletionCheck())
+                    return;
                 if (Maintenance.positiveOrZero(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11))
                     return;
                 for (ChargingStation station: stations)
@@ -1299,10 +1304,10 @@ class MenuStation {
             }
         });
         modifyStationB.setOnAction(e -> {
-            Maintenance.trimTextfields();
-            if (Maintenance.fieldCompletionCheck())
-                return;
             try {
+                Maintenance.trimTextfields();
+                if (Maintenance.fieldCompletionCheck())
+                    return;
                 if (Maintenance.positiveOrZero(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15))
                     return;
                 for (ChargingStation station : stations) {
@@ -1410,10 +1415,10 @@ class MenuStation {
         });
 
         policyCreation1.setOnAction(e -> {
-            Maintenance.trimTextfields();
-            if (Maintenance.fieldCompletionCheck())
-                return;
             try {
+                Maintenance.trimTextfields();
+                if (Maintenance.fieldCompletionCheck())
+                    return;
                 String text = textfields.get(1).getText().replaceAll("[^0-9,.]+", "");
                 textfields.get(1).setText(text);
                 String[] prices = textfields.get(1).getText().split(",");
@@ -1436,11 +1441,12 @@ class MenuStation {
                 Maintenance.refillBlanks();
             }
         });
+
         policyCreation2.setOnAction(e -> {
-            Maintenance.trimTextfields();
-            if (Maintenance.fieldCompletionCheck())
-                return;
             try {
+                Maintenance.trimTextfields();
+                if (Maintenance.fieldCompletionCheck())
+                    return;
                 String text = textfields.get(0).getText().replaceAll("[^0-9,.]+", "");
                 textfields.get(0).setText(text);
                 String[] spaces = textfields.get(0).getText().split(",");
@@ -1477,10 +1483,10 @@ class MenuStation {
         });
 
         batteryCreationB.setOnAction(e -> {
-            Maintenance.trimTextfields();
-            if (Maintenance.fieldCompletionCheck())
-                return;
             try {
+                Maintenance.trimTextfields();
+                if (Maintenance.fieldCompletionCheck())
+                    return;
                 if (Double.parseDouble(textfields.get(0).getText()) < Double.parseDouble(textfields.get(1).getText())) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Error");

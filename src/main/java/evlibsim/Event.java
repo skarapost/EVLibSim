@@ -698,7 +698,7 @@ class Event {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Error");
                     alert.setHeaderText(null);
-                    alert.setContentText("Plan execution failed. Please check again the text file.");
+                    alert.setContentText("Plan execution failed. Please check the text file.");
                     alert.showAndWait();
                 }
             }
@@ -706,10 +706,10 @@ class Event {
 
         //Buttons
         chargingEventCreation.setOnAction(e -> {
-            Maintenance.trimTextfields();
-            if (Maintenance.fieldCompletionCheck())
-                return;
             try {
+                Maintenance.trimTextfields();
+                if (Maintenance.fieldCompletionCheck())
+                    return;
                 if (Maintenance.positiveOrZero(1, 2, 3))
                     return;
                 if (Double.parseDouble(textfields.get(1).getText()) < Double.parseDouble(textfields.get(2).getText())) {
@@ -768,10 +768,10 @@ class Event {
             }
         });
         disChargingEventCreation.setOnAction(e -> {
-            Maintenance.trimTextfields();
-            if (Maintenance.fieldCompletionCheck())
-                return;
             try {
+                Maintenance.trimTextfields();
+                if (Maintenance.fieldCompletionCheck())
+                    return;
                 if (Maintenance.positiveOrZero(1, 2, 3))
                     return;
                 if (Double.parseDouble(textfields.get(1).getText()) < Double.parseDouble(textfields.get(2).getText())) {
@@ -829,10 +829,10 @@ class Event {
             }
         });
         exchangeEventCreation.setOnAction(e -> {
-            Maintenance.trimTextfields();
-            if (Maintenance.fieldCompletionCheck())
-                return;
             try {
+                Maintenance.trimTextfields();
+                if (Maintenance.fieldCompletionCheck())
+                    return;
                 if (Maintenance.positiveOrZero(1, 2))
                     return;
                 if (Double.parseDouble(textfields.get(1).getText()) < Double.parseDouble(textfields.get(2).getText())) {
@@ -871,20 +871,20 @@ class Event {
             }
         });
         parkingEventCreation.setOnAction(e -> {
-            Maintenance.trimTextfields();
-            for (TextField f : textfields) {
-                if (textfields.indexOf(f) == 3)
-                    continue;
-                if (f.getText().isEmpty() && !f.isDisabled()) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Error");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Please fill all the required fields.");
-                    alert.showAndWait();
-                    return;
-                }
-            }
             try {
+                Maintenance.trimTextfields();
+                for (TextField f : textfields) {
+                    if (textfields.indexOf(f) == 3)
+                        continue;
+                    if (f.getText().isEmpty() && !f.isDisabled()) {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Error");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Please fill all the required fields.");
+                        alert.showAndWait();
+                        return;
+                    }
+                }
                 if (Maintenance.positiveOrZero(1, 2, 3, 4))
                     return;
                 if (Double.parseDouble(textfields.get(1).getText()) < Double.parseDouble(textfields.get(2).getText())) {
