@@ -1,13 +1,13 @@
 package evlibsim;
 
+import java.util.*;
+import java.util.function.Predicate;
+
 import evlib.sources.*;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-
-import java.util.*;
-import java.util.function.Predicate;
 
 import static evlibsim.EVLibSim.*;
 

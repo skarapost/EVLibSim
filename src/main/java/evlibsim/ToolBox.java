@@ -36,11 +36,11 @@ class ToolBox {
     private static final Button showTotalActivity = new Button();
     static final Button totalEnergy = new Button();
     private static final javafx.scene.control.ToolBar bar = new javafx.scene.control.ToolBar();
-    private static final Image image1 = new Image(View.class.getResourceAsStream("/hist1.png"));
-    private static final Image image2 = new Image(View.class.getResourceAsStream("/hist2.png"));
-    private static final Image image3 = new Image(View.class.getResourceAsStream("/hist3.png"));
-    private static final Image image4 = new Image(View.class.getResourceAsStream("/hist4.png"));
-    private static final Image image5 = new Image(View.class.getResourceAsStream("/hist5.png"));
+    private static final Image image1 = new Image(View.class.getResourceAsStream("/fastChargings.png"));
+    private static final Image image2 = new Image(View.class.getResourceAsStream("/slowChargings.png"));
+    private static final Image image3 = new Image(View.class.getResourceAsStream("/chargings.png"));
+    private static final Image image4 = new Image(View.class.getResourceAsStream("/battery.png"));
+    private static final Image image5 = new Image(View.class.getResourceAsStream("/parking.png"));
     private static final Image image6 = new Image(View.class.getResourceAsStream("/totalActivity.png"));
     private static final Image image7 = new Image(View.class.getResourceAsStream("/energy.png"));
 
@@ -58,7 +58,7 @@ class ToolBox {
             EVLibSim.panel = "fastChargingLog";
             ObservableList<ChargingEvent> result = FXCollections.observableArrayList();
 
-            for (ChargingEvent event: ChargingEvent.chargingLog)
+            for (ChargingEvent event: ChargingEvent.getChargingLog())
                 if (event.getKindOfCharging().equals("fast"))
                     result.add(event);
 
@@ -178,7 +178,7 @@ class ToolBox {
             EVLibSim.panel = "slowChargingLog";
             ObservableList<ChargingEvent> result = FXCollections.observableArrayList();
 
-            for (ChargingEvent event: ChargingEvent.chargingLog)
+            for (ChargingEvent event: ChargingEvent.getChargingLog())
                 if (event.getKindOfCharging().equals("slow"))
                     result.add(event);
 
@@ -297,7 +297,7 @@ class ToolBox {
             refreshButton.setDisable(false);
             EVLibSim.panel = "disChargingLog";
 
-            ObservableList<DisChargingEvent> result = FXCollections.observableArrayList(DisChargingEvent.dischargingLog);
+            ObservableList<DisChargingEvent> result = FXCollections.observableArrayList(DisChargingEvent.getDischargingLog());
             TableView<DisChargingEvent> table = new TableView<>();
             table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
             table.setMaxSize(1000, 500);
@@ -407,7 +407,7 @@ class ToolBox {
             refreshButton.setDisable(false);
             EVLibSim.panel = "exchangeLog";
 
-            ObservableList<ChargingEvent> result = FXCollections.observableArrayList(ChargingEvent.exchangeLog);
+            ObservableList<ChargingEvent> result = FXCollections.observableArrayList(ChargingEvent.getExchangeLog());
             TableView<ChargingEvent> table = new TableView<>();
             table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
             table.setMaxSize(1000, 500);
@@ -502,7 +502,7 @@ class ToolBox {
 
         parkingLog.setGraphic(new ImageView(image5));
         parkingLog.setPrefSize(image5.getWidth(), image5.getHeight());
-        parkingLog.setTooltip(new Tooltip("Overview of parking/inductive charging events."));
+        parkingLog.setTooltip(new Tooltip("Overview of parking events."));
         parkingLog.getTooltip().setPrefWidth(200);
         parkingLog.getTooltip().setWrapText(true);
         parkingLog.setOnAction(e -> {
@@ -512,7 +512,7 @@ class ToolBox {
             refreshButton.setDisable(false);
             EVLibSim.panel = "parkingLog";
 
-            ObservableList<ParkingEvent> result = FXCollections.observableArrayList(ParkingEvent.parkLog);
+            ObservableList<ParkingEvent> result = FXCollections.observableArrayList(ParkingEvent.getParkLog());
             TableView<ParkingEvent> table = new TableView<>();
             table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
             table.setMaxSize(1000, 500);
@@ -634,13 +634,13 @@ class ToolBox {
 
         showTotalActivity.setGraphic(new ImageView(image6));
         showTotalActivity.setPrefSize(image6.getWidth(), image6.getHeight());
-        showTotalActivity.setTooltip(new Tooltip("Overview of the charging station."));
+        showTotalActivity.setTooltip(new Tooltip("Overview of the selected charging station."));
         showTotalActivity.getTooltip().setWrapText(true);
         showTotalActivity.setOnAction(e -> View.totalActivity.fire());
 
         totalEnergy.setGraphic(new ImageView(image7));
         totalEnergy.setPrefSize(image7.getWidth(), image7.getHeight());
-        totalEnergy.setTooltip(new Tooltip("Total energy"));
+        totalEnergy.setTooltip(new Tooltip("Total energy of the selected charging station."));
         totalEnergy.getTooltip().setWrapText(true);
         totalEnergy.setOnAction(e -> {
             if (Maintenance.stationCheck())

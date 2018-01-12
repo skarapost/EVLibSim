@@ -139,6 +139,7 @@
 .tooltip {
     -fx-background-color: #FFFFFF;
     -fx-text-fill: black;
+    -fx-show-duration: 180s;
 }
 
 /* TableView styling*/
@@ -160,10 +161,18 @@
     -fx-pref-width: 150px;
 }
 
-.customChoiceBox {
-    -fx-pref-width: 110px;
+.customChoiceBox1 {
+    -fx-pref-width: 90px;
 }
 
-.customChoiceBox .context-menu {
-    -fx-pref-width: 110px;
+.customChoiceBox1 .context-menu {
+    -fx-pref-width: 90px;
+}
+
+.customChoiceBox2 {
+    -fx-pref-width: 120px;
+}
+
+.customChoiceBox2 .context-menu {
+    -fx-pref-width: 120px;
 }

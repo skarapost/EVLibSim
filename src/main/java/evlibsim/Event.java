@@ -760,7 +760,7 @@ class Event {
                 }
                 else {
                     Maintenance.noExecution("zero energy in the charging station.");
-                    ChargingEvent.chargingLog.remove(ch);
+                    ChargingEvent.getChargingLog().remove(ch);
                 }
                 startScreen.fire();
             } catch (Exception ex) {
@@ -821,7 +821,7 @@ class Event {
                     Maintenance.queueInsertion();
                 else {
                     Maintenance.noExecution("zero energy in the charging station.");
-                    DisChargingEvent.dischargingLog.remove(dsch);
+                    DisChargingEvent.getDischargingLog().remove(dsch);
                 }
                 startScreen.fire();
             } catch (Exception ex) {
@@ -863,7 +863,7 @@ class Event {
                     Maintenance.queueInsertion();
                 else {
                     Maintenance.noExecution("not an available battery in the charging station.");
-                    ChargingEvent.exchangeLog.remove(ch);
+                    ChargingEvent.getExchangeLog().remove(ch);
                 }
                 startScreen.fire();
             } catch (Exception ex) {

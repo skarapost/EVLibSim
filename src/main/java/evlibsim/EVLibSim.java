@@ -126,8 +126,8 @@ public class EVLibSim extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
-        EVLibSim.primaryStage = primaryStage;
+    public void start(Stage primStage) throws Exception {
+        primaryStage = primStage;
         primaryStage.setTitle("EVLibSim");
         primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/electricVehicles.png")));
         Scene scene = new Scene(root);
@@ -137,9 +137,9 @@ public class EVLibSim extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        timeUnit.getStyleClass().add("customChoiceBox");
-        energyUnit.getStyleClass().add("customChoiceBox");
-        s.getStyleClass().add("customChoiceBox");
+        timeUnit.getStyleClass().add("customChoiceBox1");
+        energyUnit.getStyleClass().add("customChoiceBox1");
+        s.getStyleClass().add("customChoiceBox2");
 
         file.getItems().addAll(startScreen, new SeparatorMenuItem(), newSession, load,
                 save, saveAs, new SeparatorMenuItem(), about, rec,
@@ -370,7 +370,7 @@ public class EVLibSim extends Application {
 
         Console console = new Console();
         ta.setEditable(false);
-        PrintStream ps = new PrintStream(console, true);
+        PrintStream ps = new PrintStream(console, true, "UTF-8");
         System.setOut(ps);
 
         box1.getChildren().addAll(prices, unitPrice, disUnitPrice, exchangePrice, inductivePrice);
@@ -515,7 +515,7 @@ public class EVLibSim extends Application {
                             "ChargingTime,RemChargingTime,DischargingTime,RemDischargingTime,ParkingTime,RemParkingTime,Cost,Profit");
                     line.append(System.getProperty("line.separator"));
                     writer.write(line.toString());
-                    for (ChargingEvent event : ChargingEvent.chargingLog) {
+                    for (ChargingEvent event : ChargingEvent.getChargingLog()) {
                         line = new StringBuilder(event.getId() + "," + event.getElectricVehicle().getDriver().getName() + "," +
                                 event.getElectricVehicle().getBrand() + "," + event.getStation().getName() + "," + "charging," +
                                 event.getKindOfCharging() + "," + event.getAmountOfEnergy() + "," + event.getEnergyToBeReceived() + "," +
@@ -523,7 +523,7 @@ public class EVLibSim extends Application {
                         line.append(System.getProperty("line.separator"));
                         writer.write(line.toString());
                     }
-                    for (DisChargingEvent event : DisChargingEvent.dischargingLog) {
+                    for (DisChargingEvent event : DisChargingEvent.getDischargingLog()) {
                         line = new StringBuilder(event.getId() + "," + event.getElectricVehicle().getDriver().getName() + "," +
                                 event.getElectricVehicle().getBrand() + "," + event.getStation().getName() + ",discharging,0," +
                                 event.getAmountOfEnergy() + ",0," + event.getCondition() + ",0,0," + event.getDisChargingTime() + "," +
@@ -531,14 +531,14 @@ public class EVLibSim extends Application {
                         line.append(System.getProperty("line.separator"));
                         writer.write(line.toString());
                     }
-                    for (ChargingEvent event : ChargingEvent.exchangeLog) {
+                    for (ChargingEvent event : ChargingEvent.getExchangeLog()) {
                         line = new StringBuilder(event.getId() + "," + event.getElectricVehicle().getDriver().getName() + ","
                                 + event.getElectricVehicle().getBrand() + "," + event.getStation().getName() + ",exchange,0,0,0," + event.getCondition() + "," +
                                 event.getChargingTime() + "," + event.getRemainingChargingTime() + ",0,0,0,0," + event.getCost() + ",0");
                         line.append(System.getProperty("line.separator"));
                         writer.write(line.toString());
                     }
-                    for (ParkingEvent event : ParkingEvent.parkLog) {
+                    for (ParkingEvent event : ParkingEvent.getParkLog()) {
                         line = new StringBuilder(event.getId() + "," + event.getElectricVehicle().getDriver().getName() + "," +
                                 event.getElectricVehicle().getBrand() + "," + event.getStation().getName() + ",parking,0," +
                                 event.getAmountOfEnergy() + "," + event.getEnergyToBeReceived() + "," + event.getCondition() + ",0,0,0,0,"
@@ -617,10 +617,10 @@ public class EVLibSim extends Application {
             s.getItems().clear();
             currentStation = null;
             s.getItems().clear();
-            ChargingEvent.chargingLog.clear();
-            DisChargingEvent.dischargingLog.clear();
-            ChargingEvent.exchangeLog.clear();
-            ParkingEvent.parkLog.clear();
+            ChargingEvent.getChargingLog().clear();
+            DisChargingEvent.getDischargingLog().clear();
+            ChargingEvent.getExchangeLog().clear();
+            ParkingEvent.getParkLog().clear();
             primaryStage.setTitle("EVLibSim");
         });
 
@@ -708,7 +708,7 @@ public class EVLibSim extends Application {
         ElectricVehicle vehicle;
         int counter;
         newSession.fire();
-        try (BufferedReader in = new BufferedReader(new FileReader(selectedFile))) {
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(selectedFile), java.nio.charset.StandardCharsets.UTF_8))) {
             while ((line = in.readLine()) != null) {
                 tokens = line.split(",");
                 switch (tokens[0]) {
@@ -758,6 +758,8 @@ public class EVLibSim extends Application {
                                     break;
                                 case "Nonrenewable":
                                     st.addEnergySource(new Nonrenewable());
+                                    break;
+                                default:
                                     break;
                             }
                             st.setSpecificAmount(tokens[counter], Double.parseDouble(tokens[counter + 1]));
@@ -814,6 +816,8 @@ public class EVLibSim extends Application {
                             case "nonExecutable":
                                 event.setCondition("nonExecutable");
                                 break;
+                            default:
+                                break;
                         }
                         break;
                     case "dis":
@@ -847,6 +851,8 @@ public class EVLibSim extends Application {
                                 break;
                             case "nonExecutable":
                                 disEvent.setCondition("nonExecutable");
+                                break;
+                            default:
                                 break;
                         }
                         break;
@@ -892,6 +898,8 @@ public class EVLibSim extends Application {
                             case "nonExecutable":
                                 event.setCondition("nonExecutable");
                                 break;
+                            default:
+                                break;
                         }
                         break;
                     default:
@@ -929,12 +937,18 @@ public class EVLibSim extends Application {
                             case "nonExecutable":
                                 event1.setCondition("nonExecutable");
                                 break;
+                            default:
+                                break;
                         }
                         break;
                 }
             }
             primaryStage.setTitle("EVLibSim - [" + f.getPath() + "]");
-        } catch (Exception ex) {
+        }
+        catch(RuntimeException e) {
+            throw e;
+        }
+        catch (Exception ex) {
             newSession.fire();
             System.out.println("The file is broken");
         }
@@ -973,7 +987,7 @@ public class EVLibSim extends Application {
                 line.append(System.getProperty("line.separator"));
                 writer.write(line.toString());
             }
-            for (ChargingEvent event : ChargingEvent.chargingLog) {
+            for (ChargingEvent event : ChargingEvent.getChargingLog()) {
                 line = new StringBuilder("ch" + "," + event.getId() + "," + event.getStation().getName() + "," + event.getAmountOfEnergy() + ","
                         + event.getKindOfCharging() + "," + event.getCost() + "," + event.getEnergyToBeReceived() + ","
                         + event.getChargingTime() + "," + event.getMaxWaitingTime() + "," + event.getElectricVehicle().getDriver().getName() + "," +
@@ -984,7 +998,7 @@ public class EVLibSim extends Application {
                 line.append(System.getProperty("line.separator"));
                 writer.write(line.toString());
             }
-            for (DisChargingEvent event : DisChargingEvent.dischargingLog) {
+            for (DisChargingEvent event : DisChargingEvent.getDischargingLog()) {
                 line = new StringBuilder("dis" + "," + event.getId() + "," + event.getStation().getName() + "," + event.getAmountOfEnergy() + ","
                         + event.getProfit() + "," + event.getDisChargingTime() + "," + event.getMaxWaitingTime() +
                         "," + event.getElectricVehicle().getDriver().getName() + "," + event.getElectricVehicle().getBrand() + "," + event.getRemainingDisChargingTime()
@@ -994,7 +1008,7 @@ public class EVLibSim extends Application {
                 line.append(System.getProperty("line.separator"));
                 writer.write(line.toString());
             }
-            for (ChargingEvent event : ChargingEvent.exchangeLog) {
+            for (ChargingEvent event : ChargingEvent.getExchangeLog()) {
                 line = new StringBuilder("ex" + "," + event.getId() + "," + event.getStation().getName() + ","
                         + event.getCost() + "," + event.getChargingTime() + "," + event.getMaxWaitingTime() + ","
                         + event.getElectricVehicle().getDriver().getName() + "," + event.getElectricVehicle().getBrand() + "," + event.getRemainingChargingTime()
@@ -1004,7 +1018,7 @@ public class EVLibSim extends Application {
                 line.append(System.getProperty("line.separator"));
                 writer.write(line.toString());
             }
-            for (ParkingEvent event : ParkingEvent.parkLog) {
+            for (ParkingEvent event : ParkingEvent.getParkLog()) {
                 line = new StringBuilder("park" + "," + event.getId() + "," + event.getStation().getName() + "," + event.getParkingTime() + ","
                         + event.getAmountOfEnergy() + "," + event.getCost() + "," + event.getEnergyToBeReceived() + "," + event.getChargingTime() + ","
                         + event.getElectricVehicle().getDriver().getName() + "," + event.getElectricVehicle().getBrand() + "," + event.getRemainingChargingTime()
