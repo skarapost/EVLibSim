@@ -759,8 +759,12 @@ class Event {
                     Maintenance.queueInsertion();
                 }
                 else {
-                    Maintenance.noExecution("zero energy in the charging station.");
-                    ChargingEvent.getChargingLog().remove(ch);
+                    if (ch.getKindOfCharging().equals("fast") && currentStation.FAST_CHARGERS == 0)
+                        Maintenance.noExecution("not any available fast charger linked with the station.");
+                    else if (ch.getKindOfCharging().equals("slow") && currentStation.SLOW_CHARGERS == 0)
+                        Maintenance.noExecution("not any available slow charger linked with the station.");
+                    else
+                        Maintenance.noExecution("zero energy in the charging station.");
                 }
                 startScreen.fire();
             } catch (Exception ex) {
@@ -820,8 +824,10 @@ class Event {
                 } else if (dsch.getCondition().equals("wait"))
                     Maintenance.queueInsertion();
                 else {
-                    Maintenance.noExecution("zero energy in the charging station.");
-                    DisChargingEvent.getDischargingLog().remove(dsch);
+                    if (currentStation.getDisChargers().length == 0)
+                        Maintenance.noExecution("not any discharger linked with the station.");
+                    else
+                        Maintenance.noExecution("zero energy in the charging station.");
                 }
                 startScreen.fire();
             } catch (Exception ex) {
@@ -862,8 +868,10 @@ class Event {
                 } else if (ch.getCondition().equals("wait"))
                     Maintenance.queueInsertion();
                 else {
-                    Maintenance.noExecution("not an available battery in the charging station.");
-                    ChargingEvent.getExchangeLog().remove(ch);
+                    if (currentStation.getExchangeHandlers().length == 0)
+                        Maintenance.noExecution("not any exchange handler linked with the station.");
+                    else
+                        Maintenance.noExecution("not any battery linked with the station.");
                 }
                 startScreen.fire();
             } catch (Exception ex) {
@@ -927,7 +935,9 @@ class Event {
                     if (ch.getCondition().equals("ready")) {
                         ch.execution();
                         Maintenance.completionMessage("creation of the parking event");
-                    } else
+                    } else if (currentStation.getParkingSlots().length == 0)
+                        Maintenance.noExecution("not any parking slot linked with the station.");
+                    else
                         Maintenance.noExecution("not an available parking slot.");
                     startScreen.fire();
                 } else if (!Objects.equals(textfields.get(4).getText(), "0")) {
@@ -939,7 +949,9 @@ class Event {
                     if (ch.getCondition().equals("ready")) {
                         ch.execution();
                         Maintenance.completionMessage("creation of the parking event");
-                    } else
+                    } else if (currentStation.getParkingSlots().length == 0)
+                        Maintenance.noExecution("not any parking slot linked with the station.");
+                    else
                         Maintenance.noExecution("not an available parking slot.");
                     startScreen.fire();
                 } else {

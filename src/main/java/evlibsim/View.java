@@ -25,7 +25,7 @@ import static evlibsim.EVLibSim.*;
 
 class View {
 
-    static final MenuItem totalActivity = new MenuItem("Overview");
+    static final MenuItem totalActivity = new MenuItem("Charging station overview");
     static final MenuItem slowChargingsQueue = new MenuItem("Slow chargings");
     static final MenuItem fastChargingsQueue = new MenuItem("Fast chargings");
     static final MenuItem dischargingsQueue = new MenuItem("Dischargings");

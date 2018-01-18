@@ -25,7 +25,7 @@ import static evlibsim.EVLibSim.*;
 
 class MenuStation {
 
-    static final MenuItem newChargingStationMI = new MenuItem("New station");
+    static final MenuItem newChargingStationMI = new MenuItem("New charging station");
     private static final Menu stationM = new Menu("Station");
     private static final Menu chargersM = new Menu("Charger");
     private static final MenuItem newChargerMI = new MenuItem("New charger");
@@ -39,9 +39,9 @@ class MenuStation {
     private static final Menu parkingSlotsM = new Menu("Parking slot");
     private static final MenuItem newParkingSlotMI = new MenuItem("New parking slot");
     static final MenuItem allParkingSlotsMI = new MenuItem("All parking slots");
-    static final MenuItem modifyChargingStationMI = new MenuItem("Modify station");
+    static final MenuItem modifyChargingStationMI = new MenuItem("Modify charging station");
     private static final MenuItem newBatteryMI = new MenuItem("New battery");
-    static final MenuItem allBatteriesMI = new MenuItem("Batteries");
+    static final MenuItem allBatteriesMI = new MenuItem("All batteries");
     private static final MenuItem batteriesChargingMI = new MenuItem("Batteries charging");
     static final MenuItem policy = new MenuItem("New charging pricing policy");
     private static final Button chargingStationCreationB = new Button("Creation");
