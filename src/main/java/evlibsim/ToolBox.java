@@ -64,7 +64,7 @@ class ToolBox {
 
             TableView<ChargingEvent> table = new TableView<>();
             table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-            table.setMaxSize(1000, 500);
+            table.setMaxSize(950, 500);
 
             TableColumn<ChargingEvent, Integer> idCol = new TableColumn<>("Id");
             TableColumn<ChargingEvent, String> stationNameCol = new TableColumn<>("StationName");
@@ -184,7 +184,7 @@ class ToolBox {
 
             TableView<ChargingEvent> table = new TableView<>();
             table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-            table.setMaxSize(1000, 500);
+            table.setMaxSize(950, 500);
 
             TableColumn<ChargingEvent, Integer> idCol = new TableColumn<>("Id");
             TableColumn<ChargingEvent, String> stationNameCol = new TableColumn<>("StationName");
@@ -300,7 +300,7 @@ class ToolBox {
             ObservableList<DisChargingEvent> result = FXCollections.observableArrayList(DisChargingEvent.getDischargingLog());
             TableView<DisChargingEvent> table = new TableView<>();
             table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-            table.setMaxSize(1000, 500);
+            table.setMaxSize( 950, 500);
 
             TableColumn<DisChargingEvent, Integer> idCol = new TableColumn<>("Id");
             TableColumn<DisChargingEvent, String> stationNameCol = new TableColumn<>("StationName");
@@ -410,7 +410,7 @@ class ToolBox {
             ObservableList<ChargingEvent> result = FXCollections.observableArrayList(ChargingEvent.getExchangeLog());
             TableView<ChargingEvent> table = new TableView<>();
             table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-            table.setMaxSize(1000, 500);
+            table.setMaxSize(950, 500);
 
             TableColumn<ChargingEvent, Integer> idCol = new TableColumn<>("Id");
             TableColumn<ChargingEvent, String> stationNameCol = new TableColumn<>("StationName");
@@ -515,7 +515,7 @@ class ToolBox {
             ObservableList<ParkingEvent> result = FXCollections.observableArrayList(ParkingEvent.getParkLog());
             TableView<ParkingEvent> table = new TableView<>();
             table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-            table.setMaxSize(1000, 500);
+            table.setMaxSize(950, 500);
 
             TableColumn<ParkingEvent, Integer> idCol = new TableColumn<>("Id");
             TableColumn<ParkingEvent, String> stationNameCol = new TableColumn<>("StationName");
@@ -651,15 +651,24 @@ class ToolBox {
             EVLibSim.grid.setMaxSize(300, 300);
             Label foo;
             foo = new Label("Selected Sources");
-            foo.setStyle("-fx-font-weight: bold;");
-            grid.add(foo, 0, 0);
+            foo.setStyle("-fx-font-size: 30px;");
+            grid.add(foo, 0, 0, 2, 1);
             int c = 1;
             for(String source: currentStation.getSources()) {
-                grid.add(new Label(source + ": "), 0, c);
-                if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
-                    grid.add(new Label(String.valueOf(currentStation.getSpecificAmount(source)) + " Watts"), 1, c);
-                else
-                    grid.add(new Label(new DecimalFormat("##.###", new DecimalFormatSymbols(Locale.US)).format(currentStation.getSpecificAmount(source) / 1000) + " kiloWatts"), 1, c);
+                Label o = new Label(source + ": ");
+                o.setStyle("-fx-font-size: 20px;");
+                grid.add(o, 0, c);
+                if (energyUnit.getSelectionModel().getSelectedIndex() == 0) {
+                    Label p = new Label(String.valueOf(currentStation.getSpecificAmount(source)) + " W");
+                    p.setStyle("-fx-font-size: 20px;");
+                    grid.add(p, 1, c);
+                }
+                else {
+                    Label p = new Label(new DecimalFormat("##.###", new DecimalFormatSymbols(Locale.US)).format(currentStation.getSpecificAmount(source) / 1000) + " kW");
+                    p.setStyle("-fx-font-size: 20px;");
+                    grid.add(p, 1, c);
+
+                }
                 c++;
             }
 

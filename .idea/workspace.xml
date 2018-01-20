@@ -2,16 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0a687d2b-2b82-4f20-947b-715c90b3538d" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/compiler.xml" afterPath="$PROJECT_DIR$/.idea/compiler.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/evlibsim.iml" afterPath="$PROJECT_DIR$/evlibsim.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/evlibsim/EVLibSim.java" afterPath="$PROJECT_DIR$/src/main/java/evlibsim/EVLibSim.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/evlibsim/Event.java" afterPath="$PROJECT_DIR$/src/main/java/evlibsim/Event.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/evlibsim/MenuStation.java" afterPath="$PROJECT_DIR$/src/main/java/evlibsim/MenuStation.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/evlibsim/View.java" afterPath="$PROJECT_DIR$/src/main/java/evlibsim/View.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/EVLibSim.css" afterPath="$PROJECT_DIR$/src/main/resources/EVLibSim.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/evlibsim/ToolBox.java" afterPath="$PROJECT_DIR$/src/main/java/evlibsim/ToolBox.java" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <ignored path="$PROJECT_DIR$/.idea/" />
@@ -38,7 +30,7 @@
       <file leaf-file-name="Event.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/evlibsim/Event.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="54">
+            <state relative-caret-position="16452">
               <caret line="941" column="24" lean-forward="false" selection-start-line="941" selection-start-column="24" selection-end-line="941" selection-end-column="24" />
               <folding>
                 <marker date="1516297597308" expanded="true" signature="2460:2856" ph="{...}" />
@@ -50,7 +42,7 @@
       <file leaf-file-name="MenuStation.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/evlibsim/MenuStation.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-360">
+            <state relative-caret-position="360">
               <caret line="41" column="82" lean-forward="false" selection-start-line="41" selection-start-column="82" selection-end-line="41" selection-end-column="82" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -59,11 +51,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="EVLibSim.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="EVLibSim.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/evlibsim/EVLibSim.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1017">
-              <caret line="686" column="20" lean-forward="true" selection-start-line="686" selection-start-column="20" selection-end-line="686" selection-end-column="20" />
+            <state relative-caret-position="990">
+              <caret line="686" column="20" lean-forward="false" selection-start-line="686" selection-start-column="20" selection-end-line="686" selection-end-column="20" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -84,7 +76,7 @@
       <file leaf-file-name="Maintenance.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/evlibsim/Maintenance.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-783">
+            <state relative-caret-position="360">
               <caret line="26" column="5" lean-forward="false" selection-start-line="26" selection-start-column="5" selection-end-line="26" selection-end-column="5" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -95,11 +87,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="View.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="View.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/evlibsim/View.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="38" column="53" lean-forward="false" selection-start-line="38" selection-start-column="53" selection-end-line="38" selection-end-column="53" />
+            <state relative-caret-position="387">
+              <caret line="319" column="46" lean-forward="false" selection-start-line="319" selection-start-column="46" selection-end-line="319" selection-end-column="46" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -110,8 +102,8 @@
       <file leaf-file-name="ToolBox.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/evlibsim/ToolBox.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="8424">
-              <caret line="504" column="62" lean-forward="false" selection-start-line="504" selection-start-column="62" selection-end-line="504" selection-end-column="62" />
+            <state relative-caret-position="11227">
+              <caret line="654" column="36" lean-forward="false" selection-start-line="654" selection-start-column="36" selection-end-line="654" selection-end-column="36" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -134,7 +126,7 @@
       <file leaf-file-name="EVLibSim.css" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/resources/EVLibSim.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="153">
+            <state relative-caret-position="360">
               <caret line="32" column="21" lean-forward="false" selection-start-line="32" selection-start-column="21" selection-end-line="32" selection-end-column="21" />
               <folding />
             </state>
@@ -203,13 +195,13 @@
         <option value="$MAVEN_REPOSITORY$/evlib/evlib/1.0/evlib-1.0.jar!/evlib/station/Charger.class" />
         <option value="$PROJECT_DIR$/src/main/java/evlibsim/Maintenance.java" />
         <option value="$PROJECT_DIR$/src/main/java/evlibsim/Energy.java" />
-        <option value="$PROJECT_DIR$/src/main/java/evlibsim/ToolBox.java" />
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/main/java/evlibsim/MenuStation.java" />
-        <option value="$PROJECT_DIR$/src/main/java/evlibsim/View.java" />
         <option value="$PROJECT_DIR$/src/main/resources/EVLibSim.css" />
         <option value="$PROJECT_DIR$/src/main/java/evlibsim/Event.java" />
         <option value="$PROJECT_DIR$/src/main/java/evlibsim/EVLibSim.java" />
+        <option value="$PROJECT_DIR$/src/main/java/evlibsim/ToolBox.java" />
+        <option value="$PROJECT_DIR$/src/main/java/evlibsim/View.java" />
       </list>
     </option>
   </component>
@@ -250,7 +242,7 @@
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
-    <navigator currentView="ProjectPane" proportions="" version="1">
+    <navigator proportions="" version="1">
       <flattenPackages />
       <showMembers />
       <showModules />
@@ -263,52 +255,7 @@
       <manualOrder />
       <foldersAlwaysOnTop value="true" />
     </navigator>
-    <panes>
-      <pane id="Scope" />
-      <pane id="PackagesPane" />
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="evlibsim" type="b2602c69:ProjectViewProjectNode" />
-              <item name="EVLibSim" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="evlibsim" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-            </path>
-            <path>
-              <item name="evlibsim" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="Maven: evlib:evlib:1.0" type="70bed36:NamedLibraryElementNode" />
-            </path>
-            <path>
-              <item name="evlibsim" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="Maven: evlib:evlib:1.0" type="70bed36:NamedLibraryElementNode" />
-              <item name="evlib-1.0.jar" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="evlibsim" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="Maven: evlib:evlib:1.0" type="70bed36:NamedLibraryElementNode" />
-              <item name="evlib-1.0.jar" type="462c0819:PsiDirectoryNode" />
-              <item name="evlib" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="evlibsim" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="Maven: evlib:evlib:1.0" type="70bed36:NamedLibraryElementNode" />
-              <item name="evlib-1.0.jar" type="462c0819:PsiDirectoryNode" />
-              <item name="evlib" type="462c0819:PsiDirectoryNode" />
-              <item name="station" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-      <pane id="Scratches" />
-    </panes>
+    <panes />
   </component>
   <component name="PropertiesComponent">
     <property name="SearchEverywhereHistoryKey" value="Maven&#9;ACTION&#9;ActivateMavenProjectsToolWindow&#10;Maven Projects&#9;ACTION&#9;ActivateMavenProjectsToolWindow&#10;Maven &#9;ACTION&#9;ActivateMavenProjectsToolWindow&#10;Mav&#9;ACTION&#9;ActivateMavenProjectsToolWindow" />
@@ -497,23 +444,24 @@
       <workItem from="1515862731649" duration="4253000" />
       <workItem from="1515949168353" duration="2004000" />
       <workItem from="1516283730223" duration="118000" />
-      <workItem from="1516293651319" duration="7328000" />
+      <workItem from="1516293651319" duration="7656000" />
+      <workItem from="1516459489107" duration="36000" />
+      <workItem from="1516461009175" duration="2923000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="288439000" />
+    <option name="totallyTimeSpent" value="291726000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="55" y="112" width="1387" height="912" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="FindBugs-IDEA" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32857144" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32987013" sideWeight="0.5" order="17" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3299748" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="WINDOWED" visible="false" show_stripe_button="true" weight="0.3299639" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" x="504" y="161" width="544" height="461" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="WINDOWED" visible="false" show_stripe_button="true" weight="0.3299639" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" x="504" y="139" width="544" height="483" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.54285717" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32987013" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="CheckStyle" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32987013" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -907,16 +855,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/evlibsim/ToolBox.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="8424">
-          <caret line="504" column="62" lean-forward="false" selection-start-line="504" selection-start-column="62" selection-end-line="504" selection-end-column="62" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="828">
@@ -925,27 +863,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/evlibsim/View.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="38" column="53" lean-forward="false" selection-start-line="38" selection-start-column="53" selection-end-line="38" selection-end-column="53" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/EVLibSim.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="32" column="21" lean-forward="false" selection-start-line="32" selection-start-column="21" selection-end-line="32" selection-end-column="21" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/evlibsim/Maintenance.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-783">
+        <state relative-caret-position="360">
           <caret line="26" column="5" lean-forward="false" selection-start-line="26" selection-start-column="5" selection-end-line="26" selection-end-column="5" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -957,7 +877,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/evlibsim/Event.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="54">
+        <state relative-caret-position="16452">
           <caret line="941" column="24" lean-forward="false" selection-start-line="941" selection-start-column="24" selection-end-line="941" selection-end-column="24" />
           <folding>
             <marker date="1516297597308" expanded="true" signature="2460:2856" ph="{...}" />
@@ -969,13 +889,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-8694">
           <caret line="494" column="0" lean-forward="false" selection-start-line="494" selection-start-column="0" selection-end-line="494" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/evlibsim/MenuStation.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-360">
+        <state relative-caret-position="360">
           <caret line="41" column="82" lean-forward="false" selection-start-line="41" selection-start-column="82" selection-end-line="41" selection-end-column="82" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -985,8 +904,36 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/evlibsim/EVLibSim.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1017">
-          <caret line="686" column="20" lean-forward="true" selection-start-line="686" selection-start-column="20" selection-end-line="686" selection-end-column="20" />
+        <state relative-caret-position="990">
+          <caret line="686" column="20" lean-forward="false" selection-start-line="686" selection-start-column="20" selection-end-line="686" selection-end-column="20" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/EVLibSim.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="32" column="21" lean-forward="false" selection-start-line="32" selection-start-column="21" selection-end-line="32" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/evlibsim/ToolBox.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="11227">
+          <caret line="654" column="36" lean-forward="false" selection-start-line="654" selection-start-column="36" selection-end-line="654" selection-end-column="36" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/evlibsim/View.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="387">
+          <caret line="319" column="46" lean-forward="false" selection-start-line="319" selection-start-column="46" selection-end-line="319" selection-end-column="46" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
