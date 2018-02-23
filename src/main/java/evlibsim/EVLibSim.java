@@ -258,70 +258,70 @@ public class EVLibSim extends Application {
                 if (Objects.equals(cs.getName(), newValue)) {
                     currentStation = cs;
                     if (timeUnit.getSelectionModel().getSelectedIndex() == 0)
-                        waitTimeSlow.setText("Slow: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getWaitingTime("slow") / 1000));
+                        waitTimeSlow.setText("Slow: " + new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getWaitingTime("slow") / 1000));
                     else
-                        waitTimeSlow.setText("Slow: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getWaitingTime("slow") / 60000));
+                        waitTimeSlow.setText("Slow: " + new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getWaitingTime("slow") / 60000));
                     waitTimeSlow.setTooltip(new Tooltip("The waiting time for an available slow charger ."));
                     waitTimeSlow.getTooltip().setPrefWidth(200);
                     waitTimeSlow.getTooltip().setWrapText(true);
 
                     if (timeUnit.getSelectionModel().getSelectedIndex() == 0)
-                        waitTimeFast.setText("Fast: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getWaitingTime("fast") / 1000));
+                        waitTimeFast.setText("Fast: " + new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getWaitingTime("fast") / 1000));
                     else
-                        waitTimeFast.setText("Fast: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getWaitingTime("fast") / 60000));
+                        waitTimeFast.setText("Fast: " + new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getWaitingTime("fast") / 60000));
                     waitTimeFast.setTooltip(new Tooltip("The waiting time for an available fast charger."));
                     waitTimeFast.getTooltip().setPrefWidth(200);
                     waitTimeFast.getTooltip().setWrapText(true);
 
                     if (timeUnit.getSelectionModel().getSelectedIndex() == 0)
-                        waitTimeDis.setText("Discharging: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getWaitingTime("discharging") / 1000));
+                        waitTimeDis.setText("Discharging: " + new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getWaitingTime("discharging") / 1000));
                     else
-                        waitTimeDis.setText("Discharging: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getWaitingTime("discharging") / 60000));
+                        waitTimeDis.setText("Discharging: " + new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getWaitingTime("discharging") / 60000));
                     waitTimeDis.setTooltip(new Tooltip("The waiting time for an available discharger."));
                     waitTimeDis.getTooltip().setPrefWidth(200);
                     waitTimeDis.getTooltip().setWrapText(true);
 
                     if (timeUnit.getSelectionModel().getSelectedIndex() == 0)
-                        waitTimeEx.setText("Exchange: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getWaitingTime("exchange") / 1000));
+                        waitTimeEx.setText("Exchange: " + new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getWaitingTime("exchange") / 1000));
                     else
-                        waitTimeEx.setText("Exchange: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getWaitingTime("exchange") / 60000));
+                        waitTimeEx.setText("Exchange: " + new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getWaitingTime("exchange") / 60000));
                     waitTimeEx.setTooltip(new Tooltip("The waiting time for an available battery exchange handler."));
                     waitTimeEx.getTooltip().setPrefWidth(200);
                     waitTimeEx.getTooltip().setWrapText(true);
 
                     if (timeUnit.getSelectionModel().getSelectedIndex() == 0)
-                        waitTimePark.setText("Parking: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getWaitingTime("parking") / 1000));
+                        waitTimePark.setText("Parking: " + new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getWaitingTime("parking") / 1000));
                     else
-                        waitTimePark.setText("Parking: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getWaitingTime("parking") / 60000));
+                        waitTimePark.setText("Parking: " + new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getWaitingTime("parking") / 60000));
                     waitTimePark.setTooltip(new Tooltip("The waiting time for an available parking slot."));
                     waitTimePark.getTooltip().setPrefWidth(200);
                     waitTimePark.getTooltip().setWrapText(true);
 
                     if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
-                        unitPrice.setText("Charging: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(currentStation.getCurrentPrice()));
+                        unitPrice.setText("Charging: " + new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format(currentStation.getCurrentPrice()));
                     else
-                        unitPrice.setText("Charging: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(currentStation.getCurrentPrice() * 1000));
+                        unitPrice.setText("Charging: " + new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format(currentStation.getCurrentPrice() * 1000));
                     unitPrice.setTooltip(new Tooltip("The price of each energy unit for charging."));
                     unitPrice.getTooltip().setPrefWidth(200);
                     unitPrice.getTooltip().setWrapText(true);
 
                     if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
-                        disUnitPrice.setText("Discharging: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(currentStation.getDisUnitPrice()));
+                        disUnitPrice.setText("Discharging: " + new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format(currentStation.getDisUnitPrice()));
                     else
-                        disUnitPrice.setText("Discharging: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(currentStation.getDisUnitPrice() * 1000));
+                        disUnitPrice.setText("Discharging: " + new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format(currentStation.getDisUnitPrice() * 1000));
                     disUnitPrice.setTooltip(new Tooltip("The price of each energy unit for discharging."));
                     disUnitPrice.getTooltip().setPrefWidth(200);
                     disUnitPrice.getTooltip().setWrapText(true);
 
-                    exchangePrice.setText("Exchange: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(currentStation.getExchangePrice()));
+                    exchangePrice.setText("Exchange: " + new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format(currentStation.getExchangePrice()));
                     exchangePrice.setTooltip(new Tooltip("The price of each battery exchange operation."));
                     exchangePrice.getTooltip().setPrefWidth(200);
                     exchangePrice.getTooltip().setWrapText(true);
 
                     if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
-                        inductivePrice.setText("Inductive: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(currentStation.getInductivePrice()));
+                        inductivePrice.setText("Inductive: " + new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format(currentStation.getInductivePrice()));
                     else
-                        inductivePrice.setText("Inductive: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(currentStation.getInductivePrice() * 1000));
+                        inductivePrice.setText("Inductive: " + new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format(currentStation.getInductivePrice() * 1000));
                     inductivePrice.setTooltip(new Tooltip("The price of each energy unit for inductive charging. A vehicle can charge inductively only through a parking event."));
                     inductivePrice.getTooltip().setPrefWidth(200);
                     inductivePrice.getTooltip().setWrapText(true);
@@ -676,59 +676,59 @@ public class EVLibSim extends Application {
             } else {
                 if (timeUnit.getSelectionModel().getSelectedIndex() == 0) {
                     if (currentStation.SLOW_CHARGERS != 0)
-                        waitTimeSlow.setText("Slow: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getWaitingTime("slow") / 1000));
+                        waitTimeSlow.setText("Slow: " + new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getWaitingTime("slow") / 1000));
                     else
                         waitTimeSlow.setText("Slow: -");
                     if (currentStation.FAST_CHARGERS != 0)
-                        waitTimeFast.setText("Fast: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getWaitingTime("fast") / 1000));
+                        waitTimeFast.setText("Fast: " + new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getWaitingTime("fast") / 1000));
                     else
                         waitTimeFast.setText("Fast: -");
                     if (currentStation.getDisChargers().length != 0)
-                        waitTimeDis.setText("Discharging: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getWaitingTime("discharging") / 1000));
+                        waitTimeDis.setText("Discharging: " + new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getWaitingTime("discharging") / 1000));
                     else
                         waitTimeDis.setText("Discharging: -");
                     if (currentStation.getExchangeHandlers().length != 0)
-                        waitTimeEx.setText("Exchange: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getWaitingTime("exchange") / 1000));
+                        waitTimeEx.setText("Exchange: " + new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getWaitingTime("exchange") / 1000));
                     else
                         waitTimeEx.setText("Exchange: -");
                     if (currentStation.getParkingSlots().length != 0)
-                        waitTimePark.setText("Parking: "+ new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getWaitingTime("parking") / 1000));
+                        waitTimePark.setText("Parking: "+ new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getWaitingTime("parking") / 1000));
                     else
                         waitTimePark.setText("Parking: -");
                 }
                 else {
                     if (currentStation.SLOW_CHARGERS != 0)
-                        waitTimeSlow.setText("Slow: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getWaitingTime("slow") / 60000));
+                        waitTimeSlow.setText("Slow: " + new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getWaitingTime("slow") / 60000));
                     else
                         waitTimeSlow.setText("Slow: -");
                     if (currentStation.FAST_CHARGERS != 0)
-                        waitTimeFast.setText("Fast: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getWaitingTime("fast") / 60000));
+                        waitTimeFast.setText("Fast: " + new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getWaitingTime("fast") / 60000));
                     else
                         waitTimeFast.setText("Fast: -");
                     if (currentStation.getDisChargers().length != 0)
-                        waitTimeDis.setText("Discharging: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getWaitingTime("discharging") / 60000));
+                        waitTimeDis.setText("Discharging: " + new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getWaitingTime("discharging") / 60000));
                     else
                         waitTimeDis.setText("Discharging: -");
                     if (currentStation.getExchangeHandlers().length != 0)
-                        waitTimeEx.setText("Exchange: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getWaitingTime("exchange") / 60000));
+                        waitTimeEx.setText("Exchange: " + new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getWaitingTime("exchange") / 60000));
                     else
                         waitTimeEx.setText("Exchange: -");
                     if (currentStation.getParkingSlots().length != 0)
-                        waitTimePark.setText("Parking: "+ new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getWaitingTime("parking") / 60000));
+                        waitTimePark.setText("Parking: "+ new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getWaitingTime("parking") / 60000));
                     else
                         waitTimePark.setText("Parking: -");
                 }
                 if (energyUnit.getSelectionModel().getSelectedIndex() == 0) {
-                    unitPrice.setText("Charging: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(currentStation.getCurrentPrice()));
-                    disUnitPrice.setText("Discharging: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(currentStation.getDisUnitPrice()));
-                    exchangePrice.setText("Exchange: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(currentStation.getExchangePrice()));
-                    inductivePrice.setText("Inductive: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(currentStation.getInductivePrice()));
+                    unitPrice.setText("Charging: " + new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format(currentStation.getCurrentPrice()));
+                    disUnitPrice.setText("Discharging: " + new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format(currentStation.getDisUnitPrice()));
+                    exchangePrice.setText("Exchange: " + new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format(currentStation.getExchangePrice()));
+                    inductivePrice.setText("Inductive: " + new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format(currentStation.getInductivePrice()));
                 }
                 else {
-                    unitPrice.setText("Charging: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(currentStation.getCurrentPrice() * 1000));
-                    disUnitPrice.setText("Discharging: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(currentStation.getDisUnitPrice() * 1000));
-                    exchangePrice.setText("Exchange: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(currentStation.getExchangePrice()));
-                    inductivePrice.setText("Inductive: " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(currentStation.getInductivePrice() * 1000));
+                    unitPrice.setText("Charging: " + new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format(currentStation.getCurrentPrice() * 1000));
+                    disUnitPrice.setText("Discharging: " + new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format(currentStation.getDisUnitPrice() * 1000));
+                    exchangePrice.setText("Exchange: " + new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format(currentStation.getExchangePrice()));
+                    inductivePrice.setText("Inductive: " + new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format(currentStation.getInductivePrice() * 1000));
                 }
             }
         }));
@@ -927,7 +927,7 @@ public class EVLibSim extends Application {
                                     currentStation.joinBattery(b);
                                 } else {
                                     currentStation.joinBattery(new Battery(1500, 1500));
-                                    bat = currentStation.assignBattery(event);
+                                    currentStation.assignBattery(event);
                                 }
                                 event.setCondition("ready");
                                 event.setChargingTime(Long.parseLong(tokens[8]));
