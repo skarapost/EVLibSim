@@ -265,41 +265,23 @@ class MenuStation {
             foo.getTooltip().setPrefWidth(200);
             foo.getTooltip().setWrapText(true);
             EVLibSim.grid.add(foo, 2, 5);
-            if ((energyUnit.getSelectionModel().getSelectedIndex() == 0) && (timeUnit.getSelectionModel().getSelectedIndex() == 0)) {
-                cb1.setItems(FXCollections.observableArrayList("53.3 W/s", "13.8 W/s", "12 W/s"));
+            if (energyUnit.getSelectionModel().getSelectedIndex() == 0) {
+                cb1.setItems(FXCollections.observableArrayList("122000 W", "50000 W", "43000 W"));
                 EVLibSim.grid.add(cb1, 3, 5);
-                cb2.setItems(FXCollections.observableArrayList("6.1 W/s", "3 W/s", "1.9 W/s", "0.8 W/s"));
+                cb2.setItems(FXCollections.observableArrayList("22000 W", "11000 W", "7000 W", "3000 W"));
                 EVLibSim.grid.add(cb2, 1, 6);
-                cb3.setItems(FXCollections.observableArrayList("13.8 W/s", "6.1 W/s", "1.9 W/s"));
+                cb3.setItems(FXCollections.observableArrayList("50000 W", "22000 W", "7000 W"));
                 EVLibSim.grid.add(cb3, 3, 6);
-                cb4.setItems(FXCollections.observableArrayList("1.9 W/s", "1 W/s"));
-                EVLibSim.grid.add(cb4, 1, 7);
-            } else if ((energyUnit.getSelectionModel().getSelectedIndex() == 0) && (timeUnit.getSelectionModel().getSelectedIndex() == 1)) {
-                cb1.setItems(FXCollections.observableArrayList("2000 W/m", "833.3 W/m", "716.6 W/m"));
-                EVLibSim.grid.add(cb1, 3, 5);
-                cb2.setItems(FXCollections.observableArrayList("366.6 W/m", "183.3 W/m", "116.6 W/m", "50 W/m"));
-                EVLibSim.grid.add(cb2, 1, 6);
-                cb3.setItems(FXCollections.observableArrayList("833.3 W/m", "366.6 W/m", "116.6 W/m"));
-                EVLibSim.grid.add(cb3, 3, 6);
-                cb4.setItems(FXCollections.observableArrayList("116.6 W/m", "60 W/m"));
-                EVLibSim.grid.add(cb4, 1, 7);
-            } else if ((energyUnit.getSelectionModel().getSelectedIndex() == 1) && (timeUnit.getSelectionModel().getSelectedIndex() == 0)) {
-                cb1.setItems(FXCollections.observableArrayList("0.03 kW/s", "0.013 kW/s", "0.011 kW/s"));
-                EVLibSim.grid.add(cb1, 3, 5);
-                cb2.setItems(FXCollections.observableArrayList("0.006 kW/s", "0.003 kW/s", "0.002 kW/s", "0.0008 kW/s"));
-                EVLibSim.grid.add(cb2, 1, 6);
-                cb3.setItems(FXCollections.observableArrayList("0.013 kW/s", "0.006 kW/s", "0.002 kW/s"));
-                EVLibSim.grid.add(cb3, 3, 6);
-                cb4.setItems(FXCollections.observableArrayList("0.002 kW/s", "0.001 kW/s"));
+                cb4.setItems(FXCollections.observableArrayList("7000 W", "3600 W"));
                 EVLibSim.grid.add(cb4, 1, 7);
             } else {
-                cb1.setItems(FXCollections.observableArrayList("2 kW/m", "0.833 kW/m", "0.716 kW/m"));
+                cb1.setItems(FXCollections.observableArrayList("122 kW", "50 kW", "43 KW"));
                 EVLibSim.grid.add(cb1, 3, 5);
-                cb2.setItems(FXCollections.observableArrayList("0.366 kW/m", "0.183 kW/m", "0.116 kW/m", "0.05 kW/m"));
+                cb2.setItems(FXCollections.observableArrayList("22 kW", "11 KW", "7 kW", "3 kW"));
                 EVLibSim.grid.add(cb2, 1, 6);
-                cb3.setItems(FXCollections.observableArrayList("0.833 kW/m", "0.366 kW/m", "0.116 kW/m"));
+                cb3.setItems(FXCollections.observableArrayList("50 kW", "22 kW", "7 kW"));
                 EVLibSim.grid.add(cb3, 3, 6);
-                cb4.setItems(FXCollections.observableArrayList("0.116 kW/m", "0.06 kW/m"));
+                cb4.setItems(FXCollections.observableArrayList("7 kW", "3.6 kW"));
                 EVLibSim.grid.add(cb4, 1, 7);
             }
             cb1.getSelectionModel().selectFirst();
@@ -608,9 +590,9 @@ class MenuStation {
             foo.getTooltip().setWrapText(true);
             EVLibSim.grid.add(foo, 2, 3);
             if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
-                boo = new TextField(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(currentStation.getUnitPrice()));
+                boo = new TextField(new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format(currentStation.getUnitPrice()));
             else
-                boo = new TextField(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(currentStation.getUnitPrice() * 1000));
+                boo = new TextField(new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format(currentStation.getUnitPrice() * 1000));
             EVLibSim.grid.add(boo, 3, 3);
             textfields.add(boo);
             foo = new Label("Discharging fee*: ");
@@ -620,9 +602,9 @@ class MenuStation {
             foo.getTooltip().setWrapText(true);
             EVLibSim.grid.add(foo, 0, 4);
             if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
-                boo = new TextField(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(currentStation.getDisUnitPrice()));
+                boo = new TextField(new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format(currentStation.getDisUnitPrice()));
             else
-                boo = new TextField(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(currentStation.getDisUnitPrice() * 1000));
+                boo = new TextField(new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format(currentStation.getDisUnitPrice() * 1000));
             EVLibSim.grid.add(boo, 1, 4);
             textfields.add(boo);
             foo = new Label("Battery exchange fee*: ");
@@ -631,7 +613,7 @@ class MenuStation {
             foo.getTooltip().setPrefWidth(200);
             foo.getTooltip().setWrapText(true);
             EVLibSim.grid.add(foo, 2, 4);
-            boo = new TextField(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(currentStation.getExchangePrice()));
+            boo = new TextField(new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format(currentStation.getExchangePrice()));
             EVLibSim.grid.add(boo, 3, 4);
             textfields.add(boo);
             foo = new Label("Inductive charging fee*: ");
@@ -641,9 +623,9 @@ class MenuStation {
             foo.getTooltip().setWrapText(true);
             EVLibSim.grid.add(foo, 0, 5);
             if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
-                boo = new TextField(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(currentStation.getInductivePrice()));
+                boo = new TextField(new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format(currentStation.getInductivePrice()));
             else
-                boo = new TextField(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(currentStation.getInductivePrice() * 1000));
+                boo = new TextField(new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format(currentStation.getInductivePrice() * 1000));
             EVLibSim.grid.add(boo, 1, 5);
             textfields.add(boo);
             foo = new Label("Fast charging rate*: ");
@@ -652,14 +634,10 @@ class MenuStation {
             foo.getTooltip().setPrefWidth(200);
             foo.getTooltip().setWrapText(true);
             EVLibSim.grid.add(foo, 2, 5);
-            if ((EVLibSim.timeUnit.getSelectionModel().getSelectedIndex() == 0)&&(energyUnit.getSelectionModel().getSelectedIndex() == 0))
-                boo = new TextField(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(currentStation.getChargingRateFast() * 1000));
-            else if ((EVLibSim.timeUnit.getSelectionModel().getSelectedIndex() == 0)&&(energyUnit.getSelectionModel().getSelectedIndex() == 1))
-                boo = new TextField(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(currentStation.getChargingRateFast()));
-            else if ((EVLibSim.timeUnit.getSelectionModel().getSelectedIndex() == 1)&&(energyUnit.getSelectionModel().getSelectedIndex() == 0))
-                boo = new TextField(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(currentStation.getChargingRateFast() * 60000));
+            if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
+                boo = new TextField(new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format(currentStation.getChargingRateFast()));
             else
-                boo = new TextField(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(currentStation.getChargingRateFast() * 60));
+                boo = new TextField(new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format(currentStation.getChargingRateFast() / 1000));
             EVLibSim.grid.add(boo, 3, 5);
             textfields.add(boo);
             foo = new Label("Slow charging rate*: ");
@@ -668,14 +646,10 @@ class MenuStation {
             foo.getTooltip().setPrefWidth(200);
             foo.getTooltip().setWrapText(true);
             EVLibSim.grid.add(foo, 0, 6);
-            if ((EVLibSim.timeUnit.getSelectionModel().getSelectedIndex() == 0)&&(energyUnit.getSelectionModel().getSelectedIndex() == 0))
-                boo = new TextField(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(currentStation.getChargingRateSlow() * 1000));
-            else if ((EVLibSim.timeUnit.getSelectionModel().getSelectedIndex() == 0)&&(energyUnit.getSelectionModel().getSelectedIndex() == 1))
-                boo = new TextField(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(currentStation.getChargingRateSlow()));
-            else if ((EVLibSim.timeUnit.getSelectionModel().getSelectedIndex() == 1)&&(energyUnit.getSelectionModel().getSelectedIndex() == 0))
-                boo = new TextField(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(currentStation.getChargingRateSlow() * 60000));
+            if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
+                boo = new TextField(new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format(currentStation.getChargingRateSlow()));
             else
-                boo = new TextField(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(currentStation.getChargingRateSlow() * 60));
+                boo = new TextField(new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format(currentStation.getChargingRateSlow() / 1000));
             EVLibSim.grid.add(boo, 1, 6);
             textfields.add(boo);
             foo = new Label("Discharging rate*: ");
@@ -684,14 +658,10 @@ class MenuStation {
             foo.getTooltip().setPrefWidth(200);
             foo.getTooltip().setWrapText(true);
             EVLibSim.grid.add(foo, 2, 6);
-            if ((EVLibSim.timeUnit.getSelectionModel().getSelectedIndex() == 0)&&(energyUnit.getSelectionModel().getSelectedIndex() == 0))
-                boo = new TextField(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(currentStation.getDisChargingRate() * 1000));
-            else if ((EVLibSim.timeUnit.getSelectionModel().getSelectedIndex() == 0)&&(energyUnit.getSelectionModel().getSelectedIndex() == 1))
-                boo = new TextField(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(currentStation.getDisChargingRate()));
-            else if ((EVLibSim.timeUnit.getSelectionModel().getSelectedIndex() == 1)&&(energyUnit.getSelectionModel().getSelectedIndex() == 0))
-                boo = new TextField(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(currentStation.getDisChargingRate() * 60000));
+            if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
+                boo = new TextField(new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format(currentStation.getDisChargingRate()));
             else
-                boo = new TextField(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(currentStation.getDisChargingRate() * 60));
+                boo = new TextField(new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format(currentStation.getDisChargingRate() / 1000));
             EVLibSim.grid.add(boo, 3, 6);
             textfields.add(boo);
             foo = new Label("Inductive charging rate*: ");
@@ -700,14 +670,10 @@ class MenuStation {
             foo.getTooltip().setPrefWidth(200);
             foo.getTooltip().setWrapText(true);
             EVLibSim.grid.add(foo, 0, 7);
-            if ((EVLibSim.timeUnit.getSelectionModel().getSelectedIndex() == 0)&&(energyUnit.getSelectionModel().getSelectedIndex() == 0))
-                boo = new TextField(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(currentStation.getInductiveRate() * 1000));
-            else if ((EVLibSim.timeUnit.getSelectionModel().getSelectedIndex() == 0)&&(energyUnit.getSelectionModel().getSelectedIndex() == 1))
-                boo = new TextField(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(currentStation.getInductiveRate()));
-            else if ((EVLibSim.timeUnit.getSelectionModel().getSelectedIndex() == 1)&&(energyUnit.getSelectionModel().getSelectedIndex() == 0))
-                boo = new TextField(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(currentStation.getInductiveRate() * 60000));
+            if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
+                boo = new TextField(new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format(currentStation.getInductiveRate()));
             else
-                boo = new TextField(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(currentStation.getInductiveRate() * 60));
+                boo = new TextField(new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format(currentStation.getInductiveRate() / 1000));
             EVLibSim.grid.add(boo, 1, 7);
             textfields.add(boo);
             foo = new Label("Energy storage update*: ");
@@ -740,9 +706,9 @@ class MenuStation {
             EVLibSim.grid.add(fooboo, 2, 8);
 
             if (EVLibSim.timeUnit.getSelectionModel().getSelectedIndex() == 0)
-                boo = new TextField(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getUpdateSpace() / 1000));
+                boo = new TextField(new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getUpdateSpace() / 1000));
             else
-                boo = new TextField(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getUpdateSpace() / 60000));
+                boo = new TextField(new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getUpdateSpace() / 60000));
             if (!currentStation.getUpdateMode()) {
                 boo.setDisable(true);
                 boo.setText("");
@@ -757,9 +723,9 @@ class MenuStation {
             foo.getTooltip().setWrapText(true);
             EVLibSim.grid.add(foo, 0, 9);
             if (EVLibSim.timeUnit.getSelectionModel().getSelectedIndex() == 0)
-                boo = new TextField(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getTimeOfExchange() / 1000));
+                boo = new TextField(new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getTimeOfExchange() / 1000));
             else
-                boo = new TextField(new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getTimeOfExchange() / 60000));
+                boo = new TextField(new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format((double) currentStation.getTimeOfExchange() / 60000));
             EVLibSim.grid.add(boo, 1, 9);
             textfields.add(boo);
             Predicate buttonPredicate = b -> (b != EVLibSim.cancel);
@@ -1204,47 +1170,30 @@ class MenuStation {
                 }
                 ChargingStation st;
                 st = new ChargingStation(textfields.get(0).getText());
-                if ((energyUnit.getSelectionModel().getSelectedIndex() == 0)&&(EVLibSim.timeUnit.getSelectionModel().getSelectedIndex() == 0)) {
+                if ((energyUnit.getSelectionModel().getSelectedIndex() == 0)) {
                     st.setUnitPrice(Double.parseDouble(textfields.get(6).getText()));
                     st.setDisUnitPrice(Double.parseDouble(textfields.get(7).getText()));
                     st.setExchangePrice(Double.parseDouble(textfields.get(8).getText()));
                     st.setInductivePrice(Double.parseDouble(textfields.get(9).getText()));
-                    st.setChargingRateFast(Double.parseDouble(cb1.getValue().replaceAll("[^0-9.]","")) / 1000);
-                    st.setChargingRateSlow(Double.parseDouble(cb2.getValue().replaceAll("[^0-9.]","")) / 1000);
-                    st.setDisChargingRate(Double.parseDouble(cb3.getValue().replaceAll("[^0-9.]","")) / 1000);
-                    st.setInductiveChargingRate(Double.parseDouble(cb4.getValue().replaceAll("[^0-9.]","")) / 1000);
-                    st.setTimeofExchange((long)Double.parseDouble(textfields.get(11).getText()) * 1000);
-                } else if ((energyUnit.getSelectionModel().getSelectedIndex() == 0)&&(EVLibSim.timeUnit.getSelectionModel().getSelectedIndex() == 1)) {
-                    st.setUnitPrice(Double.parseDouble(textfields.get(6).getText()));
-                    st.setDisUnitPrice(Double.parseDouble(textfields.get(7).getText()));
-                    st.setExchangePrice(Double.parseDouble(textfields.get(8).getText()));
-                    st.setInductivePrice(Double.parseDouble(textfields.get(9).getText()));
-                    st.setChargingRateFast(Double.parseDouble(cb1.getValue().replaceAll("[^0-9.]","")) / 60000);
-                    st.setChargingRateSlow(Double.parseDouble(cb2.getValue().replaceAll("[^0-9.]","")) / 60000);
-                    st.setDisChargingRate(Double.parseDouble(cb3.getValue().replaceAll("[^0-9.]","")) / 60000);
-                    st.setInductiveChargingRate(Double.parseDouble(cb4.getValue().replaceAll("[^0-9.]","")) / 60000);
-                    st.setTimeofExchange((long)Double.parseDouble(textfields.get(11).getText()) * 60000);
-                } else if ((energyUnit.getSelectionModel().getSelectedIndex() == 1)&&(EVLibSim.timeUnit.getSelectionModel().getSelectedIndex() == 0)) {
-                    st.setUnitPrice(Double.parseDouble(textfields.get(6).getText()) / 1000);
-                    st.setDisUnitPrice(Double.parseDouble(textfields.get(7).getText()) / 1000);
-                    st.setExchangePrice(Double.parseDouble(textfields.get(8).getText()) / 1000);
-                    st.setInductivePrice(Double.parseDouble(textfields.get(9).getText()) / 1000);
                     st.setChargingRateFast(Double.parseDouble(cb1.getValue().replaceAll("[^0-9.]","")));
                     st.setChargingRateSlow(Double.parseDouble(cb2.getValue().replaceAll("[^0-9.]","")));
                     st.setDisChargingRate(Double.parseDouble(cb3.getValue().replaceAll("[^0-9.]","")));
                     st.setInductiveChargingRate(Double.parseDouble(cb4.getValue().replaceAll("[^0-9.]","")));
-                    st.setTimeofExchange((long)Double.parseDouble(textfields.get(11).getText()) * 1000);
                 } else {
                     st.setUnitPrice(Double.parseDouble(textfields.get(6).getText()) / 1000);
                     st.setDisUnitPrice(Double.parseDouble(textfields.get(7).getText()) / 1000);
-                    st.setExchangePrice(Double.parseDouble(textfields.get(8).getText()) / 1000);
+                    st.setExchangePrice(Double.parseDouble(textfields.get(8).getText()));
                     st.setInductivePrice(Double.parseDouble(textfields.get(9).getText()) / 1000);
-                    st.setChargingRateFast(Double.parseDouble(cb1.getValue().replaceAll("[^0-9.]","")) / 60);
-                    st.setChargingRateSlow(Double.parseDouble(cb2.getValue().replaceAll("[^0-9.]","")) / 60);
-                    st.setDisChargingRate(Double.parseDouble(cb3.getValue().replaceAll("[^0-9.]","")) / 60);
-                    st.setInductiveChargingRate(Double.parseDouble(cb4.getValue().replaceAll("[^0-9.]","")) / 60);
-                    st.setTimeofExchange((long)Double.parseDouble(textfields.get(11).getText()) * 60000);
+                    st.setChargingRateFast(Double.parseDouble(cb1.getValue().replaceAll("[^0-9.]","")) * 1000);
+                    st.setChargingRateSlow(Double.parseDouble(cb2.getValue().replaceAll("[^0-9.]","")) * 1000);
+                    st.setDisChargingRate(Double.parseDouble(cb3.getValue().replaceAll("[^0-9.]","")) * 1000);
+                    st.setInductiveChargingRate(Double.parseDouble(cb4.getValue().replaceAll("[^0-9.]","")) * 1000);
                 }
+                if (timeUnit.getSelectionModel().getSelectedIndex() == 0) {
+                    st.setTimeofExchange((long)Double.parseDouble(textfields.get(11).getText()) * 1000);
+                }
+                else
+                    st.setTimeofExchange((long)Double.parseDouble(textfields.get(11).getText()) * 60000);
                 if(update.getSelectionModel().getSelectedIndex() == 1) {
                     st.setAutomaticUpdateMode(true);
                     if (EVLibSim.timeUnit.getSelectionModel().getSelectedIndex() == 0)
@@ -1323,47 +1272,29 @@ class MenuStation {
                     }
                 }
                 currentStation.setName(textfields.get(0).getText());
-                if ((energyUnit.getSelectionModel().getSelectedIndex() == 0) && (EVLibSim.timeUnit.getSelectionModel().getSelectedIndex() == 0)) {
+                if (energyUnit.getSelectionModel().getSelectedIndex() == 0) {
                     currentStation.setUnitPrice(Double.parseDouble(textfields.get(6).getText()));
                     currentStation.setDisUnitPrice(Double.parseDouble(textfields.get(7).getText()));
                     currentStation.setExchangePrice(Double.parseDouble(textfields.get(8).getText()));
                     currentStation.setInductivePrice(Double.parseDouble(textfields.get(9).getText()));
-                    currentStation.setChargingRateFast(Double.parseDouble(textfields.get(10).getText()) / 1000);
-                    currentStation.setChargingRateSlow(Double.parseDouble(textfields.get(11).getText()) / 1000);
-                    currentStation.setDisChargingRate(Double.parseDouble(textfields.get(12).getText()) / 1000);
-                    currentStation.setInductiveChargingRate(Double.parseDouble(textfields.get(13).getText()) / 1000);
-                    currentStation.setTimeofExchange((long) Double.parseDouble(textfields.get(15).getText()) * 1000);
-                } else if ((energyUnit.getSelectionModel().getSelectedIndex() == 0) && (EVLibSim.timeUnit.getSelectionModel().getSelectedIndex() == 1)) {
-                    currentStation.setUnitPrice(Double.parseDouble(textfields.get(6).getText()));
-                    currentStation.setDisUnitPrice(Double.parseDouble(textfields.get(7).getText()));
-                    currentStation.setExchangePrice(Double.parseDouble(textfields.get(8).getText()));
-                    currentStation.setInductivePrice(Double.parseDouble(textfields.get(9).getText()));
-                    currentStation.setChargingRateFast(Double.parseDouble(textfields.get(10).getText()) / 60000);
-                    currentStation.setChargingRateSlow(Double.parseDouble(textfields.get(11).getText()) / 60000);
-                    currentStation.setDisChargingRate(Double.parseDouble(textfields.get(12).getText()) / 60000);
-                    currentStation.setInductiveChargingRate(Double.parseDouble(textfields.get(13).getText()) / 60000);
-                    currentStation.setTimeofExchange((long) Double.parseDouble(textfields.get(15).getText()) * 60000);
-                } else if ((energyUnit.getSelectionModel().getSelectedIndex() == 1) && (EVLibSim.timeUnit.getSelectionModel().getSelectedIndex() == 0)) {
-                    currentStation.setUnitPrice(Double.parseDouble(textfields.get(6).getText()) / 1000);
-                    currentStation.setDisUnitPrice(Double.parseDouble(textfields.get(7).getText()) / 1000);
-                    currentStation.setExchangePrice(Double.parseDouble(textfields.get(8).getText()) / 1000);
-                    currentStation.setInductivePrice(Double.parseDouble(textfields.get(9).getText()) / 1000);
                     currentStation.setChargingRateFast(Double.parseDouble(textfields.get(10).getText()));
                     currentStation.setChargingRateSlow(Double.parseDouble(textfields.get(11).getText()));
                     currentStation.setDisChargingRate(Double.parseDouble(textfields.get(12).getText()));
                     currentStation.setInductiveChargingRate(Double.parseDouble(textfields.get(13).getText()));
-                    currentStation.setTimeofExchange((long) Double.parseDouble(textfields.get(15).getText()) * 1000);
                 } else {
                     currentStation.setUnitPrice(Double.parseDouble(textfields.get(6).getText()) / 1000);
                     currentStation.setDisUnitPrice(Double.parseDouble(textfields.get(7).getText()) / 1000);
-                    currentStation.setExchangePrice(Double.parseDouble(textfields.get(8).getText()) / 1000);
+                    currentStation.setExchangePrice(Double.parseDouble(textfields.get(8).getText()));
                     currentStation.setInductivePrice(Double.parseDouble(textfields.get(9).getText()) / 1000);
-                    currentStation.setChargingRateFast(Double.parseDouble(textfields.get(10).getText()) / 60);
-                    currentStation.setChargingRateSlow(Double.parseDouble(textfields.get(11).getText()) / 60);
-                    currentStation.setDisChargingRate(Double.parseDouble(textfields.get(12).getText()) / 60);
-                    currentStation.setInductiveChargingRate(Double.parseDouble(textfields.get(13).getText()) / 60);
-                    currentStation.setTimeofExchange((long) Double.parseDouble(textfields.get(15).getText()) * 60000);
+                    currentStation.setChargingRateFast(Double.parseDouble(textfields.get(10).getText()) * 1000);
+                    currentStation.setChargingRateSlow(Double.parseDouble(textfields.get(11).getText()) * 1000);
+                    currentStation.setDisChargingRate(Double.parseDouble(textfields.get(12).getText()) * 1000);
+                    currentStation.setInductiveChargingRate(Double.parseDouble(textfields.get(13).getText()) * 1000);
                 }
+                if (timeUnit.getSelectionModel().getSelectedIndex() == 0)
+                    currentStation.setTimeofExchange((long) Double.parseDouble(textfields.get(15).getText()) * 1000);
+                else
+                    currentStation.setTimeofExchange((long) Double.parseDouble(textfields.get(15).getText()) * 60000);
                 energies.forEach(w -> {
                     if (!Arrays.asList(currentStation.getSources()).contains(w)) {
                         switch (w) {

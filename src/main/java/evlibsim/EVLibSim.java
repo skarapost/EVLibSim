@@ -56,7 +56,7 @@ public class EVLibSim extends Application {
     private static final Label energyUnitLabel = new Label("Energy unit: ");
     private static final Label stationLabel = new Label("Station: ");
     static final ChoiceBox<String> timeUnit = new ChoiceBox<>(FXCollections.observableArrayList("Second", "Minute"));
-    static final ChoiceBox<String> energyUnit = new ChoiceBox<>(FXCollections.observableArrayList("Watt", "KiloWatt"));
+    static final ChoiceBox<String> energyUnit = new ChoiceBox<>(FXCollections.observableArrayList("Wh", "KWh"));
     static final ChoiceBox<String> s = new ChoiceBox<>();
     //File menu item
     private static final Menu file = new Menu("File");
@@ -500,7 +500,7 @@ public class EVLibSim extends Application {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Information");
             alert.setHeaderText(null);
-            alert.setContentText("Creator: Karapostolakis Sotirios\nemail: skarapos@outlook.com\nYear: 2017");
+            alert.setContentText("Creator: Karapostolakis Sotirios\nemail: skarapos@outlook.com\nYear: 2018");
             alert.showAndWait();
         });
 
@@ -953,7 +953,6 @@ public class EVLibSim extends Application {
                         event1.setId(Integer.parseInt(tokens[1]));
                         event1.setCost(Double.parseDouble(tokens[5]));
                         event1.setEnergyToBeReceived(Double.parseDouble(tokens[6]));
-                        event1.setChargingTime(Long.parseLong(tokens[7]));
                         event1.getElectricVehicle().setBattery(
                                 new Battery(Double.parseDouble(tokens[14]), Double.parseDouble(tokens[15])));
                         event1.getElectricVehicle().getBattery().setId(Integer.parseInt(tokens[13]));
@@ -967,7 +966,6 @@ public class EVLibSim extends Application {
                                 currentStation.assignParkingSlot(event1);
                                 event1.setCondition("ready");
                                 event1.setChargingTime(Long.parseLong(tokens[10]));
-                                event1.setParkingTime(Long.parseLong(tokens[11]));
                                 event1.execution();
                                 break;
                             case "parking":
@@ -1061,12 +1059,20 @@ public class EVLibSim extends Application {
                 writer.write(line.toString());
             }
             for (ParkingEvent event : ParkingEvent.getParkLog()) {
-                line = new StringBuilder("park" + "," + event.getId() + "," + event.getStation().getName() + "," + event.getParkingTime() + ","
+                if (event.getCondition().equals("charging"))
+                    line = new StringBuilder("park" + "," + event.getId() + "," + event.getStation().getName() + "," + event.getParkingTime() + ","
                         + event.getAmountOfEnergy() + "," + event.getCost() + "," + event.getEnergyToBeReceived() + "," + event.getChargingTime() + ","
                         + event.getElectricVehicle().getDriver().getName() + "," + event.getElectricVehicle().getBrand() + "," + event.getRemainingChargingTime()
-                        + "," + event.getRemainingParkingTime() + "," + event.getCondition() + "," + event.getElectricVehicle().getBattery().getId() + "," + event.getElectricVehicle().getBattery().getRemAmount() + "," + event.getElectricVehicle().getBattery().getCapacity() + ","
+                        + "," + (event.getParkingTime() - event.getChargingTime() + event.getRemainingChargingTime()) + "," + event.getCondition() + "," + event.getElectricVehicle().getBattery().getId() + "," + event.getElectricVehicle().getBattery().getRemAmount() + "," + event.getElectricVehicle().getBattery().getCapacity() + ","
                         + event.getElectricVehicle().getBattery().getMaxNumberOfChargings() + "," + event.getElectricVehicle().getBattery().getNumberOfChargings() + "," +
                         event.getElectricVehicle().getDriver().getId());
+                else
+                    line = new StringBuilder("park" + "," + event.getId() + "," + event.getStation().getName() + "," + event.getParkingTime() + ","
+                            + event.getAmountOfEnergy() + "," + event.getCost() + "," + event.getEnergyToBeReceived() + "," + event.getChargingTime() + ","
+                            + event.getElectricVehicle().getDriver().getName() + "," + event.getElectricVehicle().getBrand() + "," + event.getRemainingChargingTime()
+                            + "," + event.getRemainingParkingTime() + "," + event.getCondition() + "," + event.getElectricVehicle().getBattery().getId() + "," + event.getElectricVehicle().getBattery().getRemAmount() + "," + event.getElectricVehicle().getBattery().getCapacity() + ","
+                            + event.getElectricVehicle().getBattery().getMaxNumberOfChargings() + "," + event.getElectricVehicle().getBattery().getNumberOfChargings() + "," +
+                            event.getElectricVehicle().getDriver().getId());
                 line.append(System.getProperty("line.separator"));
                 writer.write(line.toString());
             }

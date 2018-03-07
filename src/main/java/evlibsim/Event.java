@@ -139,9 +139,9 @@ class Event {
                 inside1.setPadding(new Insets(10, 10, 10, 10));
                 inside1.setSpacing(20);
                 if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
-                    tempStations.forEach(temp -> inside1.getChildren().add(new Label(temp.getName() + ": " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(temp.getTotalEnergy()))));
+                    tempStations.forEach(temp -> inside1.getChildren().add(new Label(temp.getName() + ": " + new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format(temp.getTotalEnergy()))));
                 else
-                    tempStations.forEach(temp -> inside1.getChildren().add(new Label(temp.getName() + ": " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(temp.getTotalEnergy() / 1000))));
+                    tempStations.forEach(temp -> inside1.getChildren().add(new Label(temp.getName() + ": " + new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format(temp.getTotalEnergy() / 1000))));
                 VBox inside2 = new VBox();
                 inside2.setMinSize(100, 30);
                 inside2.setMaxSize(100, 30);
@@ -162,9 +162,9 @@ class Event {
                 inside3.setPadding(new Insets(10, 10, 10, 10));
                 inside3.setSpacing(20);
                 if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
-                    tempStations.forEach(temp -> inside3.getChildren().add(new Label(temp.getName() + ": " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(temp.getCurrentPrice()))));
+                    tempStations.forEach(temp -> inside3.getChildren().add(new Label(temp.getName() + ": " + new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format(temp.getCurrentPrice()))));
                 else
-                    tempStations.forEach(temp -> inside3.getChildren().add(new Label(temp.getName() + ": " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(temp.getCurrentPrice() * 1000))));
+                    tempStations.forEach(temp -> inside3.getChildren().add(new Label(temp.getName() + ": " + new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format(temp.getCurrentPrice() * 1000))));
                 VBox inside4 = new VBox();
                 inside4.setMinSize(100, 30);
                 inside4.setMaxSize(100, 30);
@@ -185,9 +185,9 @@ class Event {
                 inside5.setPadding(new Insets(10, 10, 10, 10));
                 inside5.setSpacing(20);
                 if (timeUnit.getSelectionModel().getSelectedIndex() == 0)
-                    tempStations.forEach(temp -> inside5.getChildren().add(new Label(temp.getName() + ": " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(temp.getWaitingTime("slow") / 1000))));
+                    tempStations.forEach(temp -> inside5.getChildren().add(new Label(temp.getName() + ": " + new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format(temp.getWaitingTime("slow") / 1000))));
                 else
-                    tempStations.forEach(temp -> inside5.getChildren().add(new Label(temp.getName() + ": " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(temp.getWaitingTime("slow") / 60000))));
+                    tempStations.forEach(temp -> inside5.getChildren().add(new Label(temp.getName() + ": " + new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format(temp.getWaitingTime("slow") / 60000))));
                 VBox inside6 = new VBox();
                 inside6.setMinSize(100, 30);
                 inside6.setMaxSize(100, 30);
@@ -208,9 +208,9 @@ class Event {
                 inside7.setPadding(new Insets(10, 10, 10, 10));
                 inside7.setSpacing(20);
                 if (timeUnit.getSelectionModel().getSelectedIndex() == 0)
-                    tempStations.forEach(temp -> inside7.getChildren().add(new Label(temp.getName() + ": " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(temp.getWaitingTime("fast") / 1000))));
+                    tempStations.forEach(temp -> inside7.getChildren().add(new Label(temp.getName() + ": " + new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format(temp.getWaitingTime("fast") / 1000))));
                 else
-                    tempStations.forEach(temp -> inside7.getChildren().add(new Label(temp.getName() + ": " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(temp.getWaitingTime("fast") / 60000))));
+                    tempStations.forEach(temp -> inside7.getChildren().add(new Label(temp.getName() + ": " + new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format(temp.getWaitingTime("fast") / 60000))));
                 VBox inside8 = new VBox();
                 inside8.setMinSize(100, 30);
                 inside8.setMaxSize(100, 30);
@@ -317,9 +317,9 @@ class Event {
                 inside1.setPadding(new Insets(10, 10, 10, 10));
                 inside1.setSpacing(20);
                 if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
-                    tempStations.forEach(temp -> inside1.getChildren().add(new Label(temp.getName() + ": " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(temp.getTotalEnergy()))));
+                    tempStations.forEach(temp -> inside1.getChildren().add(new Label(temp.getName() + ": " + new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format(temp.getTotalEnergy()))));
                 else
-                    tempStations.forEach(temp -> inside1.getChildren().add(new Label(temp.getName() + ": " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(temp.getTotalEnergy() / 1000))));
+                    tempStations.forEach(temp -> inside1.getChildren().add(new Label(temp.getName() + ": " + new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format(temp.getTotalEnergy() / 1000))));
                 VBox inside2 = new VBox();
                 inside2.setMaxSize(100, 30);
                 inside2.setMinSize(100, 30);
@@ -340,9 +340,9 @@ class Event {
                 inside3.setPadding(new Insets(10, 10, 10, 10));
                 inside3.setSpacing(20);
                 if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
-                    tempStations.forEach(temp -> inside3.getChildren().add(new Label(temp.getName() + ": " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(temp.getDisUnitPrice()))));
+                    tempStations.forEach(temp -> inside3.getChildren().add(new Label(temp.getName() + ": " + new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format(temp.getDisUnitPrice()))));
                 else
-                    tempStations.forEach(temp -> inside3.getChildren().add(new Label(temp.getName() + ": " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(temp.getDisUnitPrice() * 1000))));
+                    tempStations.forEach(temp -> inside3.getChildren().add(new Label(temp.getName() + ": " + new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format(temp.getDisUnitPrice() * 1000))));
                 VBox inside4 = new VBox();
                 inside4.setMaxSize(100, 30);
                 inside4.setMinSize(100, 30);
@@ -363,9 +363,9 @@ class Event {
                 inside5.setPadding(new Insets(10, 10, 10, 10));
                 inside5.setSpacing(20);
                 if (timeUnit.getSelectionModel().getSelectedIndex() == 0)
-                    tempStations.forEach(temp -> inside5.getChildren().add(new Label(temp.getName() + ": " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(temp.getWaitingTime("discharging") / 1000))));
+                    tempStations.forEach(temp -> inside5.getChildren().add(new Label(temp.getName() + ": " + new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format(temp.getWaitingTime("discharging") / 1000))));
                 else
-                    tempStations.forEach(temp -> inside5.getChildren().add(new Label(temp.getName() + ": " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(temp.getWaitingTime("discharging") / 60000))));
+                    tempStations.forEach(temp -> inside5.getChildren().add(new Label(temp.getName() + ": " + new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format(temp.getWaitingTime("discharging") / 60000))));
                 VBox inside6 = new VBox();
                 inside6.setMaxSize(100, 30);
                 inside6.setMinSize(100, 30);
@@ -464,7 +464,7 @@ class Event {
                 inside1.setStyle("-fx-background-color:#F0F1F3; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
                 inside1.setPadding(new Insets(10, 10, 10, 10));
                 inside1.setSpacing(20);
-                tempStations.forEach(temp -> inside1.getChildren().add(new Label(temp.getName() + ": " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(temp.getBatteries().length))));
+                tempStations.forEach(temp -> inside1.getChildren().add(new Label(temp.getName() + ": " + new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format(temp.getBatteries().length))));
                 VBox inside2 = new VBox();
                 inside2.setMaxSize(100, 30);
                 inside2.setMinSize(100, 30);
@@ -484,7 +484,7 @@ class Event {
                 inside3.setStyle("-fx-background-color:#F0F1F3; -fx-border-radius: 0 5 5 5; -fx-background-radius: 0 5 5 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);");
                 inside3.setPadding(new Insets(10, 10, 10, 10));
                 inside3.setSpacing(20);
-                tempStations.forEach(temp -> inside3.getChildren().add(new Label(temp.getName() + ": " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(temp.getExchangePrice()))));
+                tempStations.forEach(temp -> inside3.getChildren().add(new Label(temp.getName() + ": " + new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format(temp.getExchangePrice()))));
                 VBox inside4 = new VBox();
                 inside4.setMaxSize(100, 30);
                 inside4.setMinSize(100, 30);
@@ -505,9 +505,9 @@ class Event {
                 inside5.setPadding(new Insets(10, 10, 10, 10));
                 inside5.setSpacing(20);
                 if (timeUnit.getSelectionModel().getSelectedIndex() == 0)
-                    tempStations.forEach(temp -> inside5.getChildren().add(new Label(temp.getName() + ": " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(temp.getWaitingTime("exchange") / 1000))));
+                    tempStations.forEach(temp -> inside5.getChildren().add(new Label(temp.getName() + ": " + new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format(temp.getWaitingTime("exchange") / 1000))));
                 else
-                    tempStations.forEach(temp -> inside5.getChildren().add(new Label(temp.getName() + ": " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(temp.getWaitingTime("exchange") / 60000))));
+                    tempStations.forEach(temp -> inside5.getChildren().add(new Label(temp.getName() + ": " + new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format(temp.getWaitingTime("exchange") / 60000))));
                 VBox inside6 = new VBox();
                 inside6.setMaxSize(100, 30);
                 inside6.setMinSize(100, 30);
@@ -625,9 +625,9 @@ class Event {
                 inside1.setPadding(new Insets(10, 10, 10, 10));
                 inside1.setSpacing(20);
                 if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
-                    tempStations.forEach(temp -> inside1.getChildren().add(new Label(temp.getName() + ": " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(temp.getTotalEnergy()))));
+                    tempStations.forEach(temp -> inside1.getChildren().add(new Label(temp.getName() + ": " + new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format(temp.getTotalEnergy()))));
                 else
-                    tempStations.forEach(temp -> inside1.getChildren().add(new Label(temp.getName() + ": " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(temp.getTotalEnergy() / 1000))));
+                    tempStations.forEach(temp -> inside1.getChildren().add(new Label(temp.getName() + ": " + new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format(temp.getTotalEnergy() / 1000))));
                 VBox inside2 = new VBox();
                 inside2.setMaxSize(100, 30);
                 inside2.setMinSize(100, 30);
@@ -648,9 +648,9 @@ class Event {
                 inside3.setPadding(new Insets(10, 10, 10, 10));
                 inside3.setSpacing(20);
                 if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
-                    tempStations.forEach(temp -> inside3.getChildren().add(new Label(temp.getName() + ": " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(temp.getInductivePrice()))));
+                    tempStations.forEach(temp -> inside3.getChildren().add(new Label(temp.getName() + ": " + new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format(temp.getInductivePrice()))));
                 else
-                    tempStations.forEach(temp -> inside3.getChildren().add(new Label(temp.getName() + ": " + new DecimalFormat("##.##", new DecimalFormatSymbols(Locale.US)).format(temp.getInductivePrice() * 1000))));
+                    tempStations.forEach(temp -> inside3.getChildren().add(new Label(temp.getName() + ": " + new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format(temp.getInductivePrice() * 1000))));
                 VBox inside4 = new VBox();
                 inside4.setMaxSize(100, 30);
                 inside4.setMinSize(100, 30);
