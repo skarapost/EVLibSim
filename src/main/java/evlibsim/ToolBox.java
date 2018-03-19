@@ -47,7 +47,7 @@ class ToolBox {
     private static void createLogButtons() {
         fastChargingLog.setGraphic(new ImageView(image1));
         fastChargingLog.setPrefSize(image1.getWidth(), image1.getHeight());
-        fastChargingLog.setTooltip(new Tooltip("Overview of events for fast charging."));
+        fastChargingLog.setTooltip(new Tooltip("Overview of events for fast or partial charging."));
         fastChargingLog.getTooltip().setPrefWidth(200);
         fastChargingLog.getTooltip().setWrapText(true);
         fastChargingLog.setOnAction(e -> {
@@ -74,7 +74,7 @@ class ToolBox {
             TableColumn<ChargingEvent, String> brandCol = new TableColumn<>("Brand");
             TableColumn<ChargingEvent, Number> chargingTimeCol = new TableColumn<>("ChargTime");
             TableColumn<ChargingEvent, Number> remChargingTimeCol = new TableColumn<>("RemCharTime");
-            TableColumn<ChargingEvent, Double> costCol = new TableColumn<>("Cost");
+            TableColumn<ChargingEvent, Number> costCol = new TableColumn<>("Cost");
 
             table.getColumns().addAll(idCol, nameCol, brandCol, stationNameCol,askingAmountCol, energyToBeReceivedCol, chargingTimeCol, remChargingTimeCol, costCol);
 
@@ -98,7 +98,7 @@ class ToolBox {
                 chargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getChargingTime() / 60000))));
                 remChargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getRemainingChargingTime() / 60000))));
             }
-            costCol.setCellValueFactory(new PropertyValueFactory<>("cost"));
+            costCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format(p.getValue().getCost()))));
 
             table.setItems(result);
 
@@ -130,9 +130,14 @@ class ToolBox {
                                     + "-fx-control-inner-background-alt: rgba(0,128,0,0.5);";
                             setStyle(style);
                             break;
+                        case "interrupted":
+                            style = "-fx-control-inner-background: rgba(255, 176, 60, 0.8);"
+                                    + "-fx-control-inner-background-alt: rgba(255, 176, 60, 0.8);";
+                            setStyle(style);
+                            break;
                         default:
-                            style = "-fx-control-inner-background: rgba(255, 69, 0, 0.8);"
-                                    + "-fx-control-inner-background-alt: rgba(255, 69, 0, 0.8);";
+                            style = "-fx-control-inner-background: rgba(110,255,240,0.8);"
+                                    + "-fx-control-inner-background-alt: rgba(110,255,240,0.8);";
                             setStyle(style);
                             break;
                     }
@@ -151,10 +156,12 @@ class ToolBox {
             green.setGraphic(new Rectangle(10, 10, Color.rgb(0, 128, 0, 0.5)));
             Label red = new Label("NonExecutable");
             red.setGraphic(new Rectangle(10, 10, Color.rgb(255, 69, 0, 0.8)));
-            legend.getChildren().addAll(white, blue, yellow, green, red);
+            Label orange = new Label("Interrupted");
+            orange.setGraphic(new Rectangle(10, 10, Color.rgb(255, 176, 60, 0.8)));
+            legend.getChildren().addAll(white, blue, yellow, green, red, orange);
             legend.getStyleClass().add("legendBox");
 
-            Text headLine = new Text("Total of Fast Charging Events");
+            Text headLine = new Text("Total of Fast and Partial Charging Events");
             headLine.setStyle("-fx-font-family: Lato; -fx-font-size: 19; -fx-font-weight: bold;");
 
             VBox tableBox = new VBox();
@@ -194,7 +201,7 @@ class ToolBox {
             TableColumn<ChargingEvent, String> brandCol = new TableColumn<>("Brand");
             TableColumn<ChargingEvent, Number> chargingTimeCol = new TableColumn<>("ChargTime");
             TableColumn<ChargingEvent, Number> remChargingTimeCol = new TableColumn<>("RemCharTime");
-            TableColumn<ChargingEvent, Double> costCol = new TableColumn<>("Cost");
+            TableColumn<ChargingEvent, Number> costCol = new TableColumn<>("Cost");
 
             table.getColumns().addAll(idCol, nameCol, brandCol, stationNameCol,askingAmountCol, energyToBeReceivedCol, chargingTimeCol, remChargingTimeCol, costCol);
 
@@ -218,7 +225,7 @@ class ToolBox {
                 chargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getChargingTime() / 60000))));
                 remChargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getRemainingChargingTime() / 60000))));
             }
-            costCol.setCellValueFactory(new PropertyValueFactory<>("cost"));
+            costCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format(p.getValue().getCost()))));
 
             table.setItems(result);
 
@@ -309,7 +316,7 @@ class ToolBox {
             TableColumn<DisChargingEvent, String> brandCol = new TableColumn<>("Brand");
             TableColumn<DisChargingEvent, Number> disChargingTimeCol = new TableColumn<>("DisChargTime");
             TableColumn<DisChargingEvent, Number> remDisCharTimeCol = new TableColumn<>("RemDisTime");
-            TableColumn<DisChargingEvent, Double> profitCol = new TableColumn<>("Profit");
+            TableColumn<DisChargingEvent, Number> profitCol = new TableColumn<>("Profit");
 
             table.getColumns().addAll(idCol, nameCol, brandCol, stationNameCol,amountOfEnergyCol, disChargingTimeCol, remDisCharTimeCol, profitCol);
 
@@ -329,7 +336,7 @@ class ToolBox {
                 disChargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getDisChargingTime() / 60000))));
                 remDisCharTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getRemainingDisChargingTime() / 60000))));
             }
-            profitCol.setCellValueFactory(new PropertyValueFactory<>("profit"));
+            profitCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format(p.getValue().getProfit()))));
             table.setItems(result);
 
             table.setRowFactory(tv -> new TableRow<DisChargingEvent>() {
@@ -418,7 +425,7 @@ class ToolBox {
             TableColumn<ChargingEvent, String> brandCol = new TableColumn<>("Brand");
             TableColumn<ChargingEvent, Number> chargingTimeCol = new TableColumn<>("ChargTime");
             TableColumn<ChargingEvent, Number> remCharTimeCol = new TableColumn<>("RemCharTime");
-            TableColumn<ChargingEvent, Double> costCol = new TableColumn<>("Cost");
+            TableColumn<ChargingEvent, Number> costCol = new TableColumn<>("Cost");
 
             table.getColumns().addAll(idCol, nameCol, brandCol, stationNameCol, chargingTimeCol, remCharTimeCol, costCol);
 
@@ -434,7 +441,7 @@ class ToolBox {
                 chargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getChargingTime() / 60000))));
                 remCharTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getRemainingChargingTime() / 60000))));
             }
-            costCol.setCellValueFactory(new PropertyValueFactory<>("cost"));
+            costCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format(p.getValue().getCost()))));
             table.setItems(result);
 
             table.setRowFactory(tv -> new TableRow<ChargingEvent>() {
@@ -527,7 +534,7 @@ class ToolBox {
             TableColumn<ParkingEvent, Number> remParkTimeCol = new TableColumn<>("RemParkTime");
             TableColumn<ParkingEvent, Number> chargingTimeCol = new TableColumn<>("ChargTime");
             TableColumn<ParkingEvent, Number> remCharTimeCol = new TableColumn<>("RemCharTime");
-            TableColumn<ParkingEvent, Double> costCol = new TableColumn<>("Cost");
+            TableColumn<ParkingEvent, Number> costCol = new TableColumn<>("Cost");
 
             table.getColumns().addAll(idCol, nameCol, brandCol, stationNameCol, askingAmountCol,
                     energyToBeReceivedCol, parkingTimeCol, remParkTimeCol, chargingTimeCol, remCharTimeCol, costCol);
@@ -556,7 +563,7 @@ class ToolBox {
                 parkingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getParkingTime() / 60000))));
                 remParkTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getRemainingParkingTime() / 60000))));
             }
-            costCol.setCellValueFactory(new PropertyValueFactory<>("cost"));
+            costCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format(p.getValue().getCost()))));
             table.setItems(result);
 
             table.setRowFactory(tv -> new TableRow<ParkingEvent>() {

@@ -985,9 +985,6 @@ public class EVLibSim extends Application {
             }
             primaryStage.setTitle("EVLibSim - [" + f.getPath() + "]");
         }
-        catch(RuntimeException e) {
-            throw e;
-        }
         catch (Exception ex) {
             newSession.fire();
             System.out.println("The file is broken");

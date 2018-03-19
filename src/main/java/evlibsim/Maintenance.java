@@ -14,7 +14,7 @@ class Maintenance {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setHeaderText(null);
-                alert.setContentText("Please fill all the required fields.");
+                alert.setContentText("Please fill in all the required fields.");
                 alert.showAndWait();
                 return true;
             }
@@ -34,7 +34,7 @@ class Maintenance {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Error");
                     alert.setHeaderText(null);
-                    alert.setContentText("Please fill with positive numbers or zero.");
+                    alert.setContentText("Please fill in with positive numbers or zero.");
                     alert.showAndWait();
                     return true;
                 }
@@ -50,7 +50,7 @@ class Maintenance {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Error");
                     alert.setHeaderText(null);
-                    alert.setContentText("Please fill with positive numbers or zero.");
+                    alert.setContentText("Please fill with positive numbers or zero values.");
                     alert.showAndWait();
                     return true;
                 }
@@ -124,7 +124,7 @@ class Maintenance {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setHeaderText(null);
-        alert.setContentText("Please fill in the blanks with valid values.");
+        alert.setContentText("Please fill in with valid values.");
         alert.showAndWait();
     }
 }
