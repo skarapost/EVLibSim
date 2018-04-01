@@ -3,6 +3,7 @@ package evlibsim;
 import evlib.station.*;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -11,7 +12,6 @@ import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.chart.*;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
@@ -71,14 +71,14 @@ class View {
                 return btnCell;
             });
 
-            TableColumn<ChargingEvent, Integer> idCol = new TableColumn<>("Id");
+            TableColumn<ChargingEvent, Number> idCol = new TableColumn<>("Id");
             TableColumn<ChargingEvent, String> nameCol = new TableColumn<>("Name");
             TableColumn<ChargingEvent, String> brandCol = new TableColumn<>("Brand");
             TableColumn<ChargingEvent, Number> askingAmountCol = new TableColumn<>("EnergyAmount");
             TableColumn<ChargingEvent, Number> maxWaitingTimeCol = new TableColumn<>("MaxWaitingTime");
             table.getColumns().addAll(idCol, nameCol, brandCol, askingAmountCol, maxWaitingTimeCol, executionCol);
 
-            idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+            idCol.setCellValueFactory(p -> new SimpleIntegerProperty(p.getValue().getId()));
             nameCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getDriver().getName()));
             brandCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getBrand()));
             if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
@@ -121,14 +121,14 @@ class View {
                 return btnCell;
             });
 
-            TableColumn<ChargingEvent, Integer> idCol = new TableColumn<>("Id");
+            TableColumn<ChargingEvent, Number> idCol = new TableColumn<>("Id");
             TableColumn<ChargingEvent, String> nameCol = new TableColumn<>("Name");
             TableColumn<ChargingEvent, String> brandCol = new TableColumn<>("Brand");
             TableColumn<ChargingEvent, Number> askingAmountCol = new TableColumn<>("EnergyAmount");
             TableColumn<ChargingEvent, Number> maxWaitingTimeCol = new TableColumn<>("MaxWaitingTime");
             table.getColumns().addAll(idCol, nameCol, brandCol, askingAmountCol, maxWaitingTimeCol, executionCol);
 
-            idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+            idCol.setCellValueFactory(p -> new SimpleIntegerProperty(p.getValue().getId()));
             nameCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getDriver().getName()));
             brandCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getBrand()));
             if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
@@ -171,14 +171,14 @@ class View {
                 return btnCell;
             });
 
-            TableColumn<DisChargingEvent, Integer> idCol = new TableColumn<>("Id");
+            TableColumn<DisChargingEvent, Number> idCol = new TableColumn<>("Id");
             TableColumn<DisChargingEvent, String> nameCol = new TableColumn<>("Name");
             TableColumn<DisChargingEvent, String> brandCol = new TableColumn<>("Brand");
             TableColumn<DisChargingEvent, Number> askingAmountCol = new TableColumn<>("EnergyAmount");
             TableColumn<DisChargingEvent, Number> maxWaitingTimeCol = new TableColumn<>("MaxWaitingTime");
             table.getColumns().addAll(idCol, nameCol, brandCol, askingAmountCol, maxWaitingTimeCol, executionCol);
 
-            idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+            idCol.setCellValueFactory(p -> new SimpleIntegerProperty(p.getValue().getId()));
             nameCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getDriver().getName()));
             brandCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getBrand()));
             if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
@@ -221,13 +221,13 @@ class View {
                 return btnCell;
             });
 
-            TableColumn<ChargingEvent, Integer> idCol = new TableColumn<>("Id");
+            TableColumn<ChargingEvent, Number> idCol = new TableColumn<>("Id");
             TableColumn<ChargingEvent, String> nameCol = new TableColumn<>("Name");
             TableColumn<ChargingEvent, String> brandCol = new TableColumn<>("Brand");
             TableColumn<ChargingEvent, Number> maxWaitingTimeCol = new TableColumn<>("MaxWaitingTime");
             table.getColumns().addAll(idCol, nameCol, brandCol, maxWaitingTimeCol, executionCol);
 
-            idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+            idCol.setCellValueFactory(p -> new SimpleIntegerProperty(p.getValue().getId()));
             nameCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getDriver().getName()));
             brandCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getBrand()));
             if (EVLibSim.timeUnit.getSelectionModel().getSelectedIndex() == 0)
@@ -485,7 +485,7 @@ class View {
             TableView<ChargingEvent> table = new TableView<>();
             table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-            TableColumn<ChargingEvent, Integer> idCol = new TableColumn<>("Id");
+            TableColumn<ChargingEvent, Number> idCol = new TableColumn<>("Id");
             TableColumn<ChargingEvent, String> nameCol = new TableColumn<>("Name");
             TableColumn<ChargingEvent, String> brandCol = new TableColumn<>("Brand");
             TableColumn<ChargingEvent, Number> askingAmountCol = new TableColumn<>("EnergyAmount");
@@ -497,7 +497,7 @@ class View {
             table.getColumns().addAll(idCol, nameCol, brandCol, askingAmountCol, energyToBeReceivedCol, kindCol, maxWaitingTimeCol, chargingTimeCol,
                     elapseTimeCol);
 
-            idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+            idCol.setCellValueFactory(p -> new SimpleIntegerProperty(p.getValue().getId()));
             nameCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getDriver().getName()));
             brandCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getBrand()));
             if (energyUnit.getSelectionModel().getSelectedIndex() == 0) {
@@ -508,7 +508,7 @@ class View {
                 askingAmountCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format(p.getValue().getAmountOfEnergy() / 1000))));
                 energyToBeReceivedCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format(p.getValue().getEnergyToBeReceived() / 1000))));
             }
-            kindCol.setCellValueFactory(new PropertyValueFactory<>("kindOfCharging"));
+            kindCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getKindOfCharging()));
             if (EVLibSim.timeUnit.getSelectionModel().getSelectedIndex() == 0) {
                 chargingTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getChargingTime() / 1000))));
                 elapseTimeCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format((double) p.getValue().getRemainingChargingTime() / 1000))));
@@ -536,7 +536,7 @@ class View {
                 if ((ch.getDisChargingEvent() != null) && ch.getDisChargingEvent().getCondition().equals("discharging"))
                     result.add(ch.getDisChargingEvent());
             TableView<DisChargingEvent> table = new TableView<>();
-            TableColumn<DisChargingEvent, Integer> idCol = new TableColumn<>("Id");
+            TableColumn<DisChargingEvent, Number> idCol = new TableColumn<>("Id");
             TableColumn<DisChargingEvent, String> nameCol = new TableColumn<>("Name");
             TableColumn<DisChargingEvent, String> brandCol = new TableColumn<>("Brand");
             TableColumn<DisChargingEvent, Number> amountOfEnergyCol = new TableColumn<>("EnergyAmount");
@@ -545,7 +545,7 @@ class View {
             TableColumn<DisChargingEvent, Number> elapsedDisChargingTimeCol = new TableColumn<>("RemDisChargTime");
             table.getColumns().addAll(idCol, nameCol, brandCol, amountOfEnergyCol, disChargingTimeCol, maxWaitingTimeCol, elapsedDisChargingTimeCol);
 
-            idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+            idCol.setCellValueFactory(p -> new SimpleIntegerProperty(p.getValue().getId()));
             nameCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getDriver().getName()));
             brandCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getBrand()));
             if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
@@ -580,7 +580,7 @@ class View {
                 if ((ch.getChargingEvent() != null) && ch.getChargingEvent().getCondition().equals("swapping"))
                     result.add(ch.getChargingEvent());
             TableView<ChargingEvent> table = new TableView<>();
-            TableColumn<ChargingEvent, Integer> idCol = new TableColumn<>("Id");
+            TableColumn<ChargingEvent, Number> idCol = new TableColumn<>("Id");
             TableColumn<ChargingEvent, String> nameCol = new TableColumn<>("Name");
             TableColumn<ChargingEvent, String> brandCol = new TableColumn<>("Brand");
             TableColumn<ChargingEvent, Number> maxWaitingTimeCol = new TableColumn<>("MaxWait");
@@ -588,7 +588,7 @@ class View {
             TableColumn<ChargingEvent, Number> elapsedExchangeTimeCol = new TableColumn<>("RemChargTime");
             table.getColumns().addAll(idCol, nameCol, brandCol, chargingTimeCol, maxWaitingTimeCol, elapsedExchangeTimeCol);
 
-            idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+            idCol.setCellValueFactory(p -> new SimpleIntegerProperty(p.getValue().getId()));
             nameCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getDriver().getName()));
             brandCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getBrand()));
             if (EVLibSim.timeUnit.getSelectionModel().getSelectedIndex() == 0) {
@@ -618,7 +618,7 @@ class View {
                 if ((ch.getParkingEvent() != null) && (ch.getParkingEvent().getCondition().equals("parking") || ch.getParkingEvent().getCondition().equals("charging")))
                     result.add(ch.getParkingEvent());
             TableView<ParkingEvent> table = new TableView<>();
-            TableColumn<ParkingEvent, Integer> idCol = new TableColumn<>("Id");
+            TableColumn<ParkingEvent, Number> idCol = new TableColumn<>("Id");
             TableColumn<ParkingEvent, String> nameCol = new TableColumn<>("Name");
             TableColumn<ParkingEvent, String> brandCol = new TableColumn<>("Brand");
             TableColumn<ParkingEvent, Number> askingAmountCol = new TableColumn<>("AskingAmount");
@@ -629,7 +629,7 @@ class View {
             TableColumn<ParkingEvent, Number> elapsedChargingTimeCol = new TableColumn<>("RemChargTime");
             table.getColumns().addAll(idCol, nameCol, brandCol, askingAmountCol, energyToBeReceivedCol, parkingTimeCol,
                     chargingTimeCol, elapsedParkingTimeCol, elapsedChargingTimeCol);
-            idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+            idCol.setCellValueFactory(p -> new SimpleIntegerProperty(p.getValue().getId()));
             nameCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getDriver().getName()));
             brandCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getBrand()));
             if (energyUnit.getSelectionModel().getSelectedIndex() == 0) {

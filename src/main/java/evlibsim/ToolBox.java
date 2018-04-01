@@ -4,6 +4,7 @@ import evlib.station.ChargingEvent;
 import evlib.station.DisChargingEvent;
 import evlib.station.ParkingEvent;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -66,7 +67,7 @@ class ToolBox {
             table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
             table.setMaxSize(950, 500);
 
-            TableColumn<ChargingEvent, Integer> idCol = new TableColumn<>("Id");
+            TableColumn<ChargingEvent, Number> idCol = new TableColumn<>("Id");
             TableColumn<ChargingEvent, String> stationNameCol = new TableColumn<>("StationName");
             TableColumn<ChargingEvent, Number> askingAmountCol = new TableColumn<>("AskedEnergy");
             TableColumn<ChargingEvent, Number> energyToBeReceivedCol = new TableColumn<>("ReceivedEnergy");
@@ -78,7 +79,7 @@ class ToolBox {
 
             table.getColumns().addAll(idCol, nameCol, brandCol, stationNameCol,askingAmountCol, energyToBeReceivedCol, chargingTimeCol, remChargingTimeCol, costCol);
 
-            idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+            idCol.setCellValueFactory(p -> new SimpleIntegerProperty(p.getValue().getId()));
             stationNameCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getStation().getName()));
             if (energyUnit.getSelectionModel().getSelectedIndex() == 0) {
                 askingAmountCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format(p.getValue().getAmountOfEnergy()))));
@@ -193,7 +194,7 @@ class ToolBox {
             table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
             table.setMaxSize(950, 500);
 
-            TableColumn<ChargingEvent, Integer> idCol = new TableColumn<>("Id");
+            TableColumn<ChargingEvent, Number> idCol = new TableColumn<>("Id");
             TableColumn<ChargingEvent, String> stationNameCol = new TableColumn<>("StationName");
             TableColumn<ChargingEvent, Number> askingAmountCol = new TableColumn<>("AskedEnergy");
             TableColumn<ChargingEvent, Number> energyToBeReceivedCol = new TableColumn<>("ReceivedEnergy");
@@ -205,7 +206,7 @@ class ToolBox {
 
             table.getColumns().addAll(idCol, nameCol, brandCol, stationNameCol,askingAmountCol, energyToBeReceivedCol, chargingTimeCol, remChargingTimeCol, costCol);
 
-            idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+            idCol.setCellValueFactory(p -> new SimpleIntegerProperty(p.getValue().getId()));
             stationNameCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getStation().getName()));
             if (energyUnit.getSelectionModel().getSelectedIndex() == 0) {
                 askingAmountCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format(p.getValue().getAmountOfEnergy()))));
@@ -309,7 +310,7 @@ class ToolBox {
             table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
             table.setMaxSize( 950, 500);
 
-            TableColumn<DisChargingEvent, Integer> idCol = new TableColumn<>("Id");
+            TableColumn<DisChargingEvent, Number> idCol = new TableColumn<>("Id");
             TableColumn<DisChargingEvent, String> stationNameCol = new TableColumn<>("StationName");
             TableColumn<DisChargingEvent, Number> amountOfEnergyCol = new TableColumn<>("GivenAmount");
             TableColumn<DisChargingEvent, String> nameCol = new TableColumn<>("Name");
@@ -320,7 +321,7 @@ class ToolBox {
 
             table.getColumns().addAll(idCol, nameCol, brandCol, stationNameCol,amountOfEnergyCol, disChargingTimeCol, remDisCharTimeCol, profitCol);
 
-            idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+            idCol.setCellValueFactory(p -> new SimpleIntegerProperty(p.getValue().getId()));
             stationNameCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getStation().getName()));
             if (energyUnit.getSelectionModel().getSelectedIndex() == 0)
                 amountOfEnergyCol.setCellValueFactory(p -> new SimpleDoubleProperty(Double.parseDouble(new DecimalFormat("####.####", new DecimalFormatSymbols(Locale.US)).format(p.getValue().getAmountOfEnergy()))));
@@ -419,7 +420,7 @@ class ToolBox {
             table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
             table.setMaxSize(950, 500);
 
-            TableColumn<ChargingEvent, Integer> idCol = new TableColumn<>("Id");
+            TableColumn<ChargingEvent, Number> idCol = new TableColumn<>("Id");
             TableColumn<ChargingEvent, String> stationNameCol = new TableColumn<>("StationName");
             TableColumn<ChargingEvent, String> nameCol = new TableColumn<>("Name");
             TableColumn<ChargingEvent, String> brandCol = new TableColumn<>("Brand");
@@ -429,7 +430,7 @@ class ToolBox {
 
             table.getColumns().addAll(idCol, nameCol, brandCol, stationNameCol, chargingTimeCol, remCharTimeCol, costCol);
 
-            idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+            idCol.setCellValueFactory(p -> new SimpleIntegerProperty(p.getValue().getId()));
             stationNameCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getStation().getName()));
             brandCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getBrand()));
             nameCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getDriver().getName()));
@@ -524,7 +525,7 @@ class ToolBox {
             table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
             table.setMaxSize(950, 500);
 
-            TableColumn<ParkingEvent, Integer> idCol = new TableColumn<>("Id");
+            TableColumn<ParkingEvent, Number> idCol = new TableColumn<>("Id");
             TableColumn<ParkingEvent, String> stationNameCol = new TableColumn<>("StationName");
             TableColumn<ParkingEvent, String> nameCol = new TableColumn<>("Name");
             TableColumn<ParkingEvent, String> brandCol = new TableColumn<>("Brand");
@@ -539,7 +540,7 @@ class ToolBox {
             table.getColumns().addAll(idCol, nameCol, brandCol, stationNameCol, askingAmountCol,
                     energyToBeReceivedCol, parkingTimeCol, remParkTimeCol, chargingTimeCol, remCharTimeCol, costCol);
 
-            idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+            idCol.setCellValueFactory(p -> new SimpleIntegerProperty(p.getValue().getId()));
             stationNameCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getStation().getName()));
             nameCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getDriver().getName()));
             brandCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getElectricVehicle().getBrand()));

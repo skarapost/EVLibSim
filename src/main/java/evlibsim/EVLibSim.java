@@ -630,6 +630,7 @@ public class EVLibSim extends Application {
             DisChargingEvent.getDischargingLog().clear();
             ChargingEvent.getExchangeLog().clear();
             ParkingEvent.getParkLog().clear();
+            f = null;
             primaryStage.setTitle("EVLibSim");
         });
 
